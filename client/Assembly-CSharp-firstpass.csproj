@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C5B06BC7-015C-0B97-4968-941D30033D35}</ProjectGuid>
+    <ProjectGuid>{3A1B43A0-276E-34FB-197E-1ACDE9001A0F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
@@ -52,18 +52,14 @@
      <Compile Include="Assets\Plugins\Pixelplacement\iTween\iTween.cs" />
      <Compile Include="Assets\Plugins\WebSocket\WebSocket.cs" />
      <None Include="Assets\DOTween-4\DOTween50.xml" />
-     <None Include="Assets\Photon Unity Networking\Demos\MarcoPolo-Tutorial\marcopolo-readme.txt" />
      <None Include="Assets\Photon Unity Networking\link.xml" />
      <None Include="Assets\DOTween-4\readme.txt" />
      <None Include="Assets\Plugins\Photon3Unity3D.xml" />
      <None Include="Assets\Plugins\release_history.txt" />
      <None Include="Assets\DOTween-4\DOTween46.xml" />
-     <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
      <None Include="Assets\Plugins\Pixelplacement\iTween\ReadMe!\ReadMe!.txt" />
-     <None Include="Assets\Photon Unity Networking\Demos\Shared Assets\Skin\3dText.shader" />
      <None Include="Assets\Photon Unity Networking\readme.txt" />
      <None Include="Assets\DOTween-4\DOTween43.xml" />
-     <None Include="Assets\Photon Unity Networking\Demos\DemoRockPaperScissors\Assets\OpenSans\Apache License.txt" />
      <None Include="Assets\Photon Unity Networking\changelog.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
@@ -84,22 +80,22 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
  <Reference Include="DOTween">
- <HintPath>/Users/nic1207/Mahjong-master/Assets/DOTween-4/DOTween.dll</HintPath>
+ <HintPath>/Users/nic1207/17mj/client/Assets/DOTween-4/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="DOTween43">
- <HintPath>/Users/nic1207/Mahjong-master/Assets/DOTween-4/DOTween43.dll</HintPath>
+ <HintPath>/Users/nic1207/17mj/client/Assets/DOTween-4/DOTween43.dll</HintPath>
  </Reference>
  <Reference Include="DOTween46">
- <HintPath>/Users/nic1207/Mahjong-master/Assets/DOTween-4/DOTween46.dll</HintPath>
+ <HintPath>/Users/nic1207/17mj/client/Assets/DOTween-4/DOTween46.dll</HintPath>
  </Reference>
  <Reference Include="DOTween50">
- <HintPath>/Users/nic1207/Mahjong-master/Assets/DOTween-4/DOTween50.dll</HintPath>
+ <HintPath>/Users/nic1207/17mj/client/Assets/DOTween-4/DOTween50.dll</HintPath>
  </Reference>
  <Reference Include="Photon3Unity3D">
- <HintPath>/Users/nic1207/Mahjong-master/Assets/Plugins/Photon3Unity3D.dll</HintPath>
+ <HintPath>/Users/nic1207/17mj/client/Assets/Plugins/Photon3Unity3D.dll</HintPath>
  </Reference>
  <Reference Include="websocket-sharp">
- <HintPath>/Users/nic1207/Mahjong-master/Assets/Plugins/WebSocket/websocket-sharp.dll</HintPath>
+ <HintPath>/Users/nic1207/17mj/client/Assets/Plugins/WebSocket/websocket-sharp.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

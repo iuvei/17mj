@@ -320,7 +320,7 @@ namespace com.Desktop
 				if (_activePlayer != null && _activePlayer.photonPlayer.ID != _lastMonPaiPlayerID) {
 					_activePlayer.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 					//Debug.LogError ("[s] 4.doMoPai("+_activePlayer.photonPlayer.NickName+")");
-					Debug.Log("xxxxxx_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
+					//Debug.Log("xxxxxx_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
 					int GotID = getMahjongPai ();
 					string name = Mahjong.getName (GotID);
 					_lastMonPaiPlayerID = _activePlayer.photonPlayer.ID;

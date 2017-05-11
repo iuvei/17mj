@@ -214,7 +214,7 @@ namespace com.Desktop
 						GameObject d = Instantiate(Resources.Load("MahJong/" + 0) as GameObject);
 						d.name = 0 + "";
 						d.transform.SetParent(p.mahPlayer.plane_keep.transform);
-						d.transform.localScale = Vector3.one;//new Vector3 (0.7f, 0.7f, 0.7f);
+						d.transform.localScale = Vector3.one;
 						d.transform.localRotation = Quaternion.identity;
 					}
 				}
@@ -267,7 +267,7 @@ namespace com.Desktop
 				GameObject g = plane_keep.transform.Find(mahID + "").gameObject;
 				g.name = mahID + "";
 				g.transform.SetParent(plane_abandan.transform);
-				g.transform.localScale = Vector3.one;//new Vector3 (0.7f, 0.7f, 0.7f);
+				g.transform.localScale = Vector3.one;
 				g.GetComponent<MahJongObject>().CanCilcked = false;
 				//state = PLAYERSTATE.WAITING;
 				//AskActiveNext ();
@@ -315,7 +315,7 @@ namespace com.Desktop
 				//d.transform.localRotation = Quaternion.identity;
 				d.GetComponent<MahJongObject>().CanCilcked = false;
 				d.transform.SetParent(plane_abandan.transform);
-				d.transform.localScale = Vector3.one;//new Vector3 (0.7f, 0.7f, 0.7f);
+				d.transform.localScale = Vector3.one;
 				d.transform.localRotation = Quaternion.identity;
 			}
 		}
@@ -445,22 +445,30 @@ namespace com.Desktop
 
 					//amah.gameObject.transform.SetParent (plane_pon.transform);
 					Transform t1 = plane_abandan.transform.FindChild (mahID + "");
-					if(t1!=null)
+					if (t1 != null) {
 						t1.SetParent (plane_pon.transform);
+						t1.localScale = Vector3.one;
+					}
 					Transform t2 = plane_keep.transform.FindChild (mahID + "");
-					if(t2!=null)
+					if (t2 != null) {
 						t2.SetParent (plane_pon.transform);
+						t2.localScale = Vector3.one;
+					}
 					Transform t3 = plane_keep.transform.FindChild (mahID + "");
-					if(t3!=null)
+					if (t3 != null) {
 						t3.SetParent (plane_pon.transform);
+						t3.localScale = Vector3.one;
+					}
 				}
                 //HideMenu();
             }
             else
             {
 				Transform t1 = plane_abandan.transform.FindChild (mahID + "");
-				if(t1!=null)
+				if (t1 != null) {
 					t1.SetParent (plane_pon.transform);
+					t1.localScale = Vector3.one;
+				}
                 for (int i = 0; i < 2; i++)
                 {
 
@@ -468,7 +476,7 @@ namespace com.Desktop
 					GameObject d = Instantiate(Resources.Load("MahJong/" + mahID) as GameObject);
 					d.name = mahID + "";
                     d.transform.SetParent(plane_pon.transform);
-                    d.transform.localScale = Vector3.one;
+					d.transform.localScale = Vector3.one;
                     d.transform.localRotation = Quaternion.identity;
 
                     MahJongObject mahObj = d.GetComponent<MahJongObject>();
@@ -521,54 +529,72 @@ namespace com.Desktop
 					switch (chitype) {
 					case 1://0,+1, +2
 						keepedMah.Remove (mahID);
-						keepedMah.Remove (mahID+1);
-						keepedMah.Remove (mahID+2);
+						keepedMah.Remove (mahID + 1);
+						keepedMah.Remove (mahID + 2);
 						ponMah.Add (mahID);
-						ponMah.Add (mahID+1);
-						ponMah.Add (mahID+2);
+						ponMah.Add (mahID + 1);
+						ponMah.Add (mahID + 2);
 						t1 = plane_abandan.transform.FindChild (mahID + "");
-						if(t1!=null)
+						if (t1 != null) {
 							t1.SetParent (plane_pon.transform);
-						t2 = plane_keep.transform.FindChild (mahID+1 + "");
-						if(t2!=null)
+							t1.localScale = Vector3.one;
+						}
+						t2 = plane_keep.transform.FindChild (mahID + 1 + "");
+						if (t2 != null) {
 							t2.SetParent (plane_pon.transform);
-						t3 = plane_keep.transform.FindChild (mahID+2 + "");
-						if(t3!=null)
+							t2.localScale = Vector3.one;
+						}
+						t3 = plane_keep.transform.FindChild (mahID + 2 + "");
+						if (t3 != null) {
 							t3.SetParent (plane_pon.transform);
+							t3.localScale = Vector3.one;
+						}
 						break;
 					case 2://-1,0,+1
-						keepedMah.Remove (mahID-1);
+						keepedMah.Remove (mahID - 1);
 						keepedMah.Remove (mahID);
-						keepedMah.Remove (mahID+1);
-						ponMah.Add (mahID-1);
+						keepedMah.Remove (mahID + 1);
+						ponMah.Add (mahID - 1);
 						ponMah.Add (mahID);
-						ponMah.Add (mahID+1);
+						ponMah.Add (mahID + 1);
 						t1 = plane_abandan.transform.FindChild (mahID + "");
-						if(t1!=null)
+						if (t1 != null) {
 							t1.SetParent (plane_pon.transform);
-						t2 = plane_keep.transform.FindChild (mahID-1 + "");
-						if(t2!=null)
+							t1.localScale = Vector3.one;
+						}
+						t2 = plane_keep.transform.FindChild (mahID - 1 + "");
+						if (t2 != null) {
 							t2.SetParent (plane_pon.transform);
-						t3 = plane_keep.transform.FindChild (mahID+1 + "");
-						if(t3!=null)
+							t2.localScale = Vector3.one;
+						}
+						t3 = plane_keep.transform.FindChild (mahID + 1 + "");
+						if (t3 != null) {
 							t3.SetParent (plane_pon.transform);
+							t3.localScale = Vector3.one;
+						}
 						break;
 					case 3://-2,-1, 0
-						keepedMah.Remove (mahID-2);
-						keepedMah.Remove (mahID-1);
+						keepedMah.Remove (mahID - 2);
+						keepedMah.Remove (mahID - 1);
 						keepedMah.Remove (mahID);
-						ponMah.Add (mahID-2);
-						ponMah.Add (mahID-1);
+						ponMah.Add (mahID - 2);
+						ponMah.Add (mahID - 1);
 						ponMah.Add (mahID);
 						t1 = plane_abandan.transform.FindChild (mahID + "");
-						if(t1!=null)
+						if (t1 != null) {
 							t1.SetParent (plane_pon.transform);
-						t2 = plane_keep.transform.FindChild (mahID-1 + "");
-						if(t2!=null)
+							t1.localScale = Vector3.one;
+						}
+						t2 = plane_keep.transform.FindChild (mahID - 1 + "");
+						if (t2 != null) {
 							t2.SetParent (plane_pon.transform);
-						t3 = plane_keep.transform.FindChild (mahID-2 + "");
-						if(t3!=null)
+							t2.localScale = Vector3.one;
+						}
+						t3 = plane_keep.transform.FindChild (mahID - 2 + "");
+						if (t3 != null) {
 							t3.SetParent (plane_pon.transform);
+							t3.localScale = Vector3.one;
+						}
 						break;
 					}
 				}
@@ -652,6 +678,7 @@ namespace com.Desktop
 					t1 = plane_abandan.transform.FindChild (mahID + "");
 					if (t1 != null) {
 						t1.SetParent (plane_pon.transform);
+						t1.transform.localScale = Vector3.one;
 					}
 
 					//移除手牌
@@ -692,25 +719,32 @@ namespace com.Desktop
 					ponMah.Add (mahID);
 					ponMah.Add (mahID);
 					Transform t1 = plane_abandan.transform.FindChild (mahID + "");
-					if(t1!=null)
+					if (t1 != null) {
 						t1.SetParent (plane_pon.transform);
+						t1.transform.localScale = Vector3.one;
+					}
 
 					Transform t2 = plane_keep.transform.FindChild (mahID + "");
-					if(t2!=null)
+					if (t2 != null) {
 						t2.SetParent (plane_pon.transform);
-					
+						t2.transform.localScale = Vector3.one;
+					}
 					Transform t3 = plane_keep.transform.FindChild (mahID + "");
-					if(t3!=null)
+					if (t3 != null) {
 						t3.SetParent (plane_pon.transform);
-					
+						t3.transform.localScale = Vector3.one;
+					}
 					Transform t4 = plane_keep.transform.FindChild (mahID + "");
-					if(t4!=null)
+					if (t4 != null) {
 						t4.SetParent (plane_pon.transform);
+						t4.transform.localScale = Vector3.one;
+					}
 				}
             } else {
 				Transform t1 = plane_abandan.transform.FindChild (mahID + "");
 				if (t1 != null) {
 					t1.SetParent (plane_pon.transform);
+					t1.transform.localScale = Vector3.one;
 				}
 
                 for (int i = 0; i < 3; i++)
@@ -718,7 +752,7 @@ namespace com.Desktop
 					GameObject d = Instantiate(Resources.Load("MahJong/" + mahID) as GameObject);
 					d.name = mahID + "";
                     d.transform.SetParent(plane_pon.transform);
-                    d.transform.localScale = Vector3.one;
+					d.transform.localScale = Vector3.one;
                     d.transform.localRotation = Quaternion.identity;
 
                     MahJongObject mahObj = d.GetComponent<MahJongObject>();

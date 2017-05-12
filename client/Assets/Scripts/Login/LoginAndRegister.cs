@@ -35,6 +35,7 @@ namespace Script.Login
 			Server = "c5b5a1f4-dd16-4b2d-93dc-c494b2ed41f2";
             peer = new PhotonPeer(this, ConnectionProtocol.Udp);
             peer.Connect(address, Server);
+			AudioManager.Instance.PlayBGM ("BGM_Login");
         }
 
         public void LoginCLick()

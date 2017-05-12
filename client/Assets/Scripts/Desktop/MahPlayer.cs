@@ -264,22 +264,26 @@ namespace com.Desktop
 				keepedMah.Remove(mahID);
 				abandanedMah.Add(mahID);
 
-				GameObject g = plane_keep.transform.Find(mahID + "").gameObject;
-				g.name = mahID + "";
-				g.transform.SetParent(plane_abandan.transform);
-				g.transform.localScale = Vector3.one;
-				g.GetComponent<MahJongObject>().CanCilcked = false;
-				//state = PLAYERSTATE.WAITING;
-				//AskActiveNext ();
+				Transform t1 = plane_keep.transform.Find (mahID + "");
+				if (t1 != null) {
+					GameObject g = t1.gameObject;
+					g.name = mahID + "";
+					g.transform.SetParent (plane_abandan.transform);
+					g.transform.localScale = Vector3.one;
+					g.GetComponent<MahJongObject> ().CanCilcked = false;
+				
+					//state = PLAYERSTATE.WAITING;
+					//AskActiveNext ();
 
-				MahJongObject mah = g.GetComponent<MahJongObject> ();
-				mah.ID = mahID;
-				mah.CanCilcked = true;
-				mah.player = this;
+					MahJongObject mah = g.GetComponent<MahJongObject> ();
+					mah.ID = mahID;
+					mah.CanCilcked = true;
+					mah.player = this;
 
-				gotMah = mah;
+					gotMah = mah;
 
-				SetGotMahPosition ();
+					SetGotMahPosition ();
+				}
 				//GameManager.Instance.abandonMah = g.GetComponent<MahJongObject>();
 
 				//PhotonNetwork.RaiseEvent((byte)GameCommand.DAPAICODE, mahID, true, null);
@@ -423,6 +427,7 @@ namespace com.Desktop
 
 		public void handleDaPai(int mahID)
 		{
+			this.state = PLAYERSTATE.WAITING;//更改為摸牌狀態
 			//Debug.LogError ("[s] "+this.photonPlayer.NickName+".handleDaPai("+mahID+")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);

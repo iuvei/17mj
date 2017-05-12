@@ -32,16 +32,18 @@ namespace com.Desktop
         /// <summary>
         /// 牌的ID
         /// 1-9 -> 筒
-        /// 11-19 -> 条
-        /// 21 22 24 -> 中發白
+        /// 11-19 -> 條
+		/// 21-29 ->萬
+        /// 31 32 33 34 35 36 37-> 中發白東南西北
         /// </summary>
         //private int[] ID = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17 };
 		private int[] ID0 = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8};
 		private int[] ID1 = { 9, 9, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17 };
-		private int[] ID2 = {18, 18, 19, 19, 21, 21, 22, 22, 23, 23};
+		private int[] ID2 = {18, 18, 19, 19, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26,
+			27, 27, 28, 28, 29, 29, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37};
 		//private int[] ID1 = { 18, 19, 21, 22, 23 };
 		private static string[] ccame = {
-			"", "紅中", "發財", "白板"
+			"", "紅中", "發財", "白板", "東風", "南風", "西風", "北風"
 		};
         //private List<int> _list = new List<int>();
 		private Queue<int> _list = new Queue<int>();
@@ -140,7 +142,9 @@ namespace com.Desktop
 			} else if (id > 10 && id < 20) {
 				name = (id-10) + "條";
 			} else if (id > 20 && id < 30) {
-				name = ccame[(id-20)];
+				name = (id-20) + "萬";
+			} else if (id > 30 && id < 40) {
+				name = ccame[(id-30)];
 			}
 			return name;
 		}

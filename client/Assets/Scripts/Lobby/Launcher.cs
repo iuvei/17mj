@@ -25,6 +25,8 @@ namespace com.Lobby
 
 		public GameObject loadingPanel;
 
+		public GameObject settingPanel;
+
         //房间列表
         public RectTransform LobbyPanel;
 
@@ -44,6 +46,7 @@ namespace com.Lobby
 		private string _roomname = string.Empty;
 		private byte _roommax = 2;
         private bool isConnecting;
+		private string BGM_name = "BGM_Lobby";
         #endregion
 
         private void Awake()
@@ -88,7 +91,7 @@ namespace com.Lobby
         {
 			setProcess (0.1f);
             Connect();
-
+			AudioManager.Instance.PlayBGM (BGM_name);
             SetPlayerName();
 
             lobbyPanel.transform.DOScaleY(1, 1f);
@@ -107,7 +110,7 @@ namespace com.Lobby
             if (PhotonNetwork.connected)
             {
 				setProcess (1.0f);
-                Debug.Log("Connected");
+                //Debug.Log("Connected");
 				if (loadingPanel) {
 					loadingPanel.SetActive (false);
 				}
@@ -346,6 +349,34 @@ namespace com.Lobby
 				Text tt = waitroomPanel.transform.Find ("RoomText").GetComponent<Text> ();
 				tt.text = _roomname + " "+Players.Count + " / " + _roommax;
 			}
+		}
+
+		public void ShowSetting()
+		{
+			if (settingPanel) {
+				settingPanel.SetActive(true);
+			}
+		}
+
+		public void HideSetting()
+		{
+			if (settingPanel) {
+				settingPanel.SetActive(false);
+			}
+		}
+
+		public void MuteBGM(bool value)
+		{
+			if (value) {
+				AudioManager.Instance.PlayBGM (BGM_name);
+			} else {
+				AudioManager.Instance.StopBGM ();
+			}
+		}
+
+		public void unMuteBGM()
+		{
+			//AudioManager.Instance.PlayBGM ();
 		}
 
     }

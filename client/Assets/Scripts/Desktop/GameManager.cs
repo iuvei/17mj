@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace com.Desktop
 {
-    public class GameManager : MonoBehaviour
+	public class GameManager : Photon.MonoBehaviour
     {
         private static GameManager _instance = null;
 
@@ -51,7 +51,8 @@ namespace com.Desktop
         /// </summary>
         //public MahJongObject abandonMah;
 		private int abanMahId = 0;
-		private int _lastMonPaiPlayerID = -1;
+		private int _lastMoPaiPlayerID = -1;
+		private int _lastDaPaiPlayerID = -1;
 		private int MaxWaitTime = 30;
 		private int _remainTime = 0;
 
@@ -72,17 +73,29 @@ namespace com.Desktop
                 Destroy(gameObject);
             }
 
-            PhotonNetwork.OnEventCall += OnEvent;
+			if (!PhotonNetwork.connected)
+			{
+				// We must be connected to a photon server! Back to main menu
+				//Application.LoadLevel(Application.loadedLevel - 1);
+				SceneManager.LoadScene("Game");
+				return;
+			}
+
+			PhotonNetwork.isMessageQueueRunning = true;
+
+            //PhotonNetwork.OnEventCall += OnEvent;
         }
 
         void Start()
         {
+			//AudioManager.Instance.PlayBGM ("BGM_Playing");
             //只有主机有发牌的权利
             if (!PhotonNetwork.isMasterClient)
             {
 				//Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
                 return;
             }
+			AudioManager.Instance.PlayBGM ("BGM_Playing");
 			//Debug.Log ("Start()");
             //0.关联Photon玩家 与 Unity中的玩家
             doBundlePlauer();
@@ -99,6 +112,29 @@ namespace com.Desktop
             //4.設定開始玩家
 			setActivePlayer(players[0]);
         }
+
+		public void OnDisconnectedFromPhoton()
+		{
+			Debug.Log("OnDisconnectedFromPhoton");
+
+			// Back to main menu        
+			//Application.LoadLevel(Application.loadedLevelName);
+		}
+
+		public void OnPhotonPlayerConnected(PhotonPlayer player)
+		{
+			Debug.Log("OnPhotonPlayerConnected: " + player.NickName);
+		}
+
+		public void OnPhotonPlayerDisconnected(PhotonPlayer player)
+		{
+			Debug.Log("OnPlayerDisconneced: " + player.NickName);
+			//Debug.Log (PhotonNetwork.playerList.Length);
+			//OverPanel.gameObject.SetActive(true);
+			if (PhotonNetwork.playerList.Length < 2) {
+				Back ();
+			}
+		}
 
         private void doShuffleMah()
         {
@@ -271,27 +307,10 @@ namespace com.Desktop
 				return;
 			} else {
 				if (mid != 0) {
-					//PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
-					//if (photonPlayer != null && photonPlayer.mahPlayer != null) {
-					//	photonPlayer.mahPlayer.handleDaPai (mid);
-					//}
-					if (_activePlayer != null && _activePlayer.photonPlayer.ID==playerid) {
+					if (_activePlayer != null && _activePlayer.photonPlayer.ID==playerid && _activePlayer.photonPlayer.ID != _lastDaPaiPlayerID) {
+						_lastDaPaiPlayerID = _activePlayer.photonPlayer.ID;
 						_activePlayer.handleDaPai (mid);
-						//int GotID = getMahjongPai (isfirst);
-						//string name = Mahjong.getName (GotID);
-						//_lastMonPaiPlayerID = _activePlayer.photonPlayer.ID;
-						//Debug.LogError ("[s] 4.doMoPai(GotID="+GotID+", isfirst="+isfirst+")");
-						//Debug.Log ("[s] "+_activePlayer.name+" 摸到了 "+name+"("+GotID+")");
-						//_activePlayer.putPaiToKeep (GotID, isfirst);
-						//_activePlayer = players[0];
-						//if (_activePlayer != null) {
-						//	_activePlayer.actived = true;
-						//	_activePlayer.GetMahJong (true);
-						//}
-					} else {
-						//if (xlocalPlayer != null) {
-						//	xlocalPlayer.mahPlayer.HideMenu ();
-						//}
+						_lastDaPaiPlayerID = _activePlayer.photonPlayer.ID;
 					}
 				}
 			}
@@ -317,13 +336,13 @@ namespace com.Desktop
 				//Debug.LogError ("[s] 4.doMoPai()");
 				//players[0].GetMahJong(true);
 				//setActivePlayer(players[0]);
-				if (_activePlayer != null && _activePlayer.photonPlayer.ID != _lastMonPaiPlayerID) {
+				if (_activePlayer != null && _activePlayer.photonPlayer.ID != _lastMoPaiPlayerID) {
 					_activePlayer.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 					//Debug.LogError ("[s] 4.doMoPai("+_activePlayer.photonPlayer.NickName+")");
 					//Debug.Log("xxxxxx_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
 					int GotID = getMahjongPai ();
 					string name = Mahjong.getName (GotID);
-					_lastMonPaiPlayerID = _activePlayer.photonPlayer.ID;
+					_lastMoPaiPlayerID = _activePlayer.photonPlayer.ID;
 					//Debug.LogError ("[s] 4.doMoPai(GotID="+GotID+", isfirst="+isfirst+")");
 					Debug.LogError ("[s] 4. doMoPai("+_activePlayer.photonPlayer.NickName+", GotID="+GotID+")");
 					//Debug.Log ("[s] "+_activePlayer.name+" 摸到了 "+name+"("+GotID+")");
@@ -368,7 +387,8 @@ namespace com.Desktop
 			_activePlayer.state = PLAYERSTATE.PLAYING;
 			int[] param = { _activePlayer.photonPlayer.ID };
 			photonView.RPC("ShowActivePlayer", PhotonTargets.All, param);
-			_lastMonPaiPlayerID = -1;
+			_lastMoPaiPlayerID = -1;
+			_lastDaPaiPlayerID = -1;
 			//StopCoroutine ("AutoChangeActivePlayerCo");
 			StartCoroutine (AutoChangeActivePlayerCo());
 			//doMoPai (isfirst);
@@ -531,7 +551,7 @@ namespace com.Desktop
 			//bool isfirst = (bool)param[2];
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			string pname = Mahjong.getName (pai_id);
-			if (photonPlayer.IsLocal) {
+			if (photonPlayer!=null && photonPlayer.IsLocal) {
 				Debug.LogError ("[RPC] 你摸牌 " + pname + "[" + pai_id + "](" +photonPlayer.NickName+")");
 				//photonPlayer.mahPlayer.HideMenu ();
 			} else {
@@ -555,9 +575,12 @@ namespace com.Desktop
 			if (photonPlayer!=null && photonPlayer.IsLocal) {
 				Debug.LogError ("[RPC] 你出牌 " + pai_name + "(" + pai_id + ")("+photonPlayer.NickName+")");
 				photonPlayer.mahPlayer.HideMenu ();
+				Speak(pai_id);
 			} else {
 				Debug.LogError ("[RPC] " + photonPlayer.NickName + "出牌 " + pai_name + "(" + pai_id + ")");
+				Speak(pai_id);
 			}
+			playDaiPaiSound ();
 			//PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			photonPlayer.mahPlayer.outPaiFromKeep (pai_id);
 
@@ -579,9 +602,11 @@ namespace com.Desktop
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer!=null && photonPlayer.IsLocal) {
 				Debug.LogError ("[RPC] 你喊碰 " + pai_name + "(" + pai_id + ")("+photonPlayer.NickName+")");
+				playPonSound ();
 				photonPlayer.mahPlayer.HideMenu ();
 			} else {
 				Debug.LogError ("[RPC] " + photonPlayer.NickName + "喊碰 " + pai_name + "(" + pai_id + ")");
+				playPonSound ();
 			}
 			photonPlayer.mahPlayer.collectPonPai (pai_id);
 		}
@@ -599,8 +624,10 @@ namespace com.Desktop
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer!=null && photonPlayer.IsLocal) {
 				Debug.LogError ("[RPC] 你喊槓 " + pai_name + "(" + pai_id + ")("+photonPlayer.NickName+")");
+				playGanSound ();
 				photonPlayer.mahPlayer.HideMenu ();
 			} else {
+				playGanSound ();
 				Debug.LogError ("[RPC] " + photonPlayer.NickName + "喊槓 " + pai_name + "(" + pai_id + ")");
 			}
 			photonPlayer.mahPlayer.collectGanPai (pai_id);
@@ -620,9 +647,11 @@ namespace com.Desktop
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer!=null && photonPlayer.IsLocal) {
 				Debug.LogError ("[RPC] 你喊吃 " + pai_name + "(" + pai_id + ")("+photonPlayer.NickName+")");
+				playChiSound ();
 				photonPlayer.mahPlayer.HideMenu ();
 			} else {
 				Debug.LogError ("[RPC] " + photonPlayer.NickName + "喊吃 " + pai_name + "(" + pai_id + ")");
+				playChiSound ();
 			}
 			photonPlayer.mahPlayer.collectChiPai (pai_id, chitype);
 		}
@@ -639,11 +668,14 @@ namespace com.Desktop
             text.text = "玩家" + photonPlayer.NickName + " 胡牌了!";
 			if (photonPlayer.IsLocal) {
 				Debug.LogError ("[RPC] 你贏了 ");
+				playWinSound ();
 			} else {
 				Debug.LogError ("[RPC] "+photonPlayer.NickName+"贏了 ");
+				playWinSound ();
 			}
         }
 
+		/*
         private void OnEvent(byte eventcode, object content, int senderid)
         {
 			if (eventcode == (byte)GameCommand.ONEMORETIME)
@@ -652,6 +684,7 @@ namespace com.Desktop
                 OneMoreMahjong();
             }
         }
+        */
 
         public void OneMoreMahjong()
         {
@@ -716,8 +749,64 @@ namespace com.Desktop
         {
 			Debug.Log ("Back()");
             PhotonNetwork.LeaveRoom();
-            SceneManager.LoadScene("Game");
+            //SceneManager.LoadScene("Game");
         }
+
+		public void OnLeftRoom()
+		{
+			Debug.Log("OnLeftRoom (local)");
+			SceneManager.LoadScene("Game");
+			// back to main menu        
+			//Application.LoadLevel(Application.loadedLevelName);
+		}
+
+		public void Speak(int id) {
+			//if (!PhotonNetwork.isMasterClient) {
+			//	return;
+			//}
+			AudioManager.Instance.PlaySE ("g_"+id);
+		}
+
+		private void playDaiPaiSound() {
+			//if (!PhotonNetwork.isMasterClient) {
+			//	return;
+			//}
+			AudioManager.Instance.PlaySE ("da1");
+		}
+
+		private void playPonSound() {
+			//if (!PhotonNetwork.isMasterClient) {
+			//	return;
+			//}
+			AudioManager.Instance.PlaySE ("g_pon");
+		}
+
+		private void playChiSound() {
+			//if (!PhotonNetwork.isMasterClient) {
+			//	return;
+			//}
+			//AudioManager.Instance.PlaySE ("");
+			AudioManager.Instance.PlaySE ("g_gang");
+		}
+
+		private void playGanSound() {
+			//if (!PhotonNetwork.isMasterClient) {
+			//	return;
+			//}
+			AudioManager.Instance.PlaySE ("g_gang");
+		}
+
+		private void playWinSound() {
+			//if (!PhotonNetwork.isMasterClient) {
+			//	return;
+			//}
+			AudioManager.Instance.PlaySE ("g_hu");
+		}
+
+		public void Mute()
+		{
+			AudioManager.Instance.Mute ();
+		}
 
     }
 }

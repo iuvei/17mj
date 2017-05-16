@@ -49,11 +49,11 @@ public class AudioManager : MonoBehaviour
     }
 
 	private void loadAllSoundResources() {
-		Debug.Log ("載入所有音效資源");
+		//Debug.Log ("[c] 載入所有音效資源");
 		object[] bgmList = Resources.LoadAll(BGM_PATH);
-		Debug.Log ("載入背景音樂檔:"+bgmList.Length);
+		//Debug.Log ("[c] 載入背景音樂檔:"+bgmList.Length);
 		object[] seList = Resources.LoadAll(SE_PATH);
-		Debug.Log ("載入音效檔:"+seList.Length);
+		//Debug.Log ("[c] 載入音效檔:"+seList.Length);
 
 		foreach ( AudioClip bgm in bgmList ) {
 			//Debug.Log ("bgm="+bgm.name);

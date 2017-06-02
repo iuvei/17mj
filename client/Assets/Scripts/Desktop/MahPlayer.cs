@@ -558,17 +558,17 @@ namespace com.Desktop
 					ponMah.Add (mahID);
 					//amahname = Mahjong.getName (mahID);
 					//amah.gameObject.transform.SetParent (plane_pon.transform);
-					Transform t1 = plane_abandan.transform.FindChild (mahID + "");
+					Transform t1 = plane_abandan.transform.Find (mahID + "");
 					if (t1 != null) {
 						t1.SetParent (plane_pon.transform);
 						t1.localScale = Vector3.one;
 					}
-					Transform t2 = plane_keep.transform.FindChild (mahID + "");
+					Transform t2 = plane_keep.transform.Find (mahID + "");
 					if (t2 != null) {
 						t2.SetParent (plane_pon.transform);
 						t2.localScale = Vector3.one;
 					}
-					Transform t3 = plane_keep.transform.FindChild (mahID + "");
+					Transform t3 = plane_keep.transform.Find (mahID + "");
 					if (t3 != null) {
 						t3.SetParent (plane_pon.transform);
 						t3.localScale = Vector3.one;
@@ -583,7 +583,7 @@ namespace com.Desktop
 				ponMah.Add (mahID);
 				ponMah.Add (mahID);
 				ponMah.Add (mahID);
-				Transform t1 = plane_abandan.transform.FindChild (mahID + "");
+				Transform t1 = plane_abandan.transform.Find (mahID + "");
 				if (t1 != null) {
 					t1.SetParent (plane_pon.transform);
 					t1.localScale = Vector3.one;
@@ -681,17 +681,17 @@ namespace com.Desktop
 						ponMah.Add (mahID);
 						ponMah.Add ((mahID + 1));
 						ponMah.Add ((mahID + 2));
-						t1 = plane_abandan.transform.FindChild (mahID + "");
+						t1 = plane_abandan.transform.Find (mahID + "");
 						if (t1 != null) {
 							t1.SetParent (plane_pon.transform);
 							t1.localScale = Vector3.one;
 						}
-						t2 = plane_keep.transform.FindChild (mahID + 1 + "");
+						t2 = plane_keep.transform.Find (mahID + 1 + "");
 						if (t2 != null) {
 							t2.SetParent (plane_pon.transform);
 							t2.localScale = Vector3.one;
 						}
-						t3 = plane_keep.transform.FindChild (mahID + 2 + "");
+						t3 = plane_keep.transform.Find (mahID + 2 + "");
 						if (t3 != null) {
 							t3.SetParent (plane_pon.transform);
 							t3.localScale = Vector3.one;
@@ -704,17 +704,17 @@ namespace com.Desktop
 						ponMah.Add ((mahID - 1));
 						ponMah.Add (mahID);
 						ponMah.Add ((mahID + 1));
-						t1 = plane_abandan.transform.FindChild (mahID + "");
+						t1 = plane_abandan.transform.Find (mahID + "");
 						if (t1 != null) {
 							t1.SetParent (plane_pon.transform);
 							t1.localScale = Vector3.one;
 						}
-						t2 = plane_keep.transform.FindChild (mahID - 1 + "");
+						t2 = plane_keep.transform.Find (mahID - 1 + "");
 						if (t2 != null) {
 							t2.SetParent (plane_pon.transform);
 							t2.localScale = Vector3.one;
 						}
-						t3 = plane_keep.transform.FindChild (mahID + 1 + "");
+						t3 = plane_keep.transform.Find (mahID + 1 + "");
 						if (t3 != null) {
 							t3.SetParent (plane_pon.transform);
 							t3.localScale = Vector3.one;
@@ -727,17 +727,17 @@ namespace com.Desktop
 						ponMah.Add ((mahID - 2));
 						ponMah.Add ((mahID - 1));
 						ponMah.Add (mahID);
-						t1 = plane_abandan.transform.FindChild (mahID + "");
+						t1 = plane_abandan.transform.Find (mahID + "");
 						if (t1 != null) {
 							t1.SetParent (plane_pon.transform);
 							t1.localScale = Vector3.one;
 						}
-						t2 = plane_keep.transform.FindChild (mahID - 1 + "");
+						t2 = plane_keep.transform.Find (mahID - 1 + "");
 						if (t2 != null) {
 							t2.SetParent (plane_pon.transform);
 							t2.localScale = Vector3.one;
 						}
-						t3 = plane_keep.transform.FindChild (mahID - 2 + "");
+						t3 = plane_keep.transform.Find (mahID - 2 + "");
 						if (t3 != null) {
 							t3.SetParent (plane_pon.transform);
 							t3.localScale = Vector3.one;
@@ -835,7 +835,7 @@ namespace com.Desktop
 					keepedMah.RemoveAt (0);
 					keepedMah.RemoveAt (0);
 
-					t1 = plane_abandan.transform.FindChild (mahID + "");
+					t1 = plane_abandan.transform.Find (mahID + "");
 					if (t1 != null) {
 						t1.SetParent (plane_pon.transform);
 						t1.transform.localScale = Vector3.one;
@@ -879,30 +879,30 @@ namespace com.Desktop
             {
 				if (mahID > 0) {
 					//显示杠了的牌
-					Transform t1 = plane_abandan.transform.FindChild (mahID + "");
+					Transform t1 = plane_abandan.transform.Find (mahID + "");
 					if (t1 != null) {
 						t1.SetParent (plane_pon.transform);
 						t1.transform.localScale = Vector3.one;
 					}
 
-					Transform t2 = plane_keep.transform.FindChild (mahID + "");
+					Transform t2 = plane_keep.transform.Find (mahID + "");
 					if (t2 != null) {
 						t2.SetParent (plane_pon.transform);
 						t2.transform.localScale = Vector3.one;
 					}
-					Transform t3 = plane_keep.transform.FindChild (mahID + "");
+					Transform t3 = plane_keep.transform.Find (mahID + "");
 					if (t3 != null) {
 						t3.SetParent (plane_pon.transform);
 						t3.transform.localScale = Vector3.one;
 					}
-					Transform t4 = plane_keep.transform.FindChild (mahID + "");
+					Transform t4 = plane_keep.transform.Find (mahID + "");
 					if (t4 != null) {
 						t4.SetParent (plane_pon.transform);
 						t4.transform.localScale = Vector3.one;
 					}
 				}
             } else {
-				Transform t1 = plane_abandan.transform.FindChild (mahID + "");
+				Transform t1 = plane_abandan.transform.Find (mahID + "");
 				if (t1 != null) {
 					t1.SetParent (plane_pon.transform);
 					t1.transform.localScale = Vector3.one;

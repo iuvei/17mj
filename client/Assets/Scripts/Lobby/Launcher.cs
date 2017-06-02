@@ -82,9 +82,10 @@ namespace com.Lobby
             //#关键
             //这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
             PhotonNetwork.automaticallySyncScene = true;
-			if (loadingPanel) {
-				loadingPanel.SetActive (true);
-			}
+            if (loadingPanel)
+            {
+                loadingPanel.SetActive(true);
+            }
         }
 
         void Start()

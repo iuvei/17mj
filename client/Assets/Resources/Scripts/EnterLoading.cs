@@ -9,7 +9,10 @@ public class EnterLoading : MonoBehaviour {
     public Text loadText;
     public Image loadImage;
 
-    //public Image guideImage;
+    public bool _autoToNextScene = false; // 是否載入完自動切換場景
+    public bool _fadeOutBGM = false;      // 切換場景前是否要淡出背景音樂
+
+    //public Image guideImage;          //遊戲教學圖片輪播
     //public Sprite[] guideImages;
     //private int guideImageNum;
     //private int guideImageIndex = 0;
@@ -67,10 +70,16 @@ public class EnterLoading : MonoBehaviour {
             yield return null;
         }
 
-        GetComponent<SoundEffect>().FadeOut();     //背景音樂淡出
-        yield return new WaitForSeconds(1.0f);
+        while (!_autoToNextScene)
+            yield return new WaitForSeconds(1);
+
+        if (_fadeOutBGM) {  //背景音樂淡出
+            GetComponent<SoundEffect>().FadeOut();     
+            yield return new WaitForSeconds(1.0f);
+        }
+
         GetComponent<Animator>().SetBool("EnterLoadingDone", true);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         async.allowSceneActivation = true;  //進入下一場景
     }
@@ -86,5 +95,4 @@ public class EnterLoading : MonoBehaviour {
     //    guideImageIndex += 1;
     //    guideImage.sprite = guideImages[guideImageIndex % guideImageNum];
     //}
-    
 }

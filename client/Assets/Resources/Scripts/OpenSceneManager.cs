@@ -50,9 +50,11 @@ public class OpenSceneManager : MonoBehaviour {
     //遊戲流程
     IEnumerator PlayOP()
     {
+        EnterLoading.instance.StartLoading(); //讀取下一場景
+
         yield return new WaitForSeconds(0.1f);     
         foxGameLogoAnim.SetTrigger("FoxGameLogo"); // 01-出現 FoxGame
-        yield return new WaitForSeconds(3.3f);     
+        yield return new WaitForSeconds(3.3f);
 
         _17LogoMovCtrl.enabled = true;             // 02-播放17玩麻將 片頭動畫
         yield return new WaitForSeconds(5.2f);
@@ -61,8 +63,12 @@ public class OpenSceneManager : MonoBehaviour {
         _17LogoMovCtrl.gameObject.SetActive(false);
 
         flowLightLogo.SetActive(true);             // 04-流光Logo&開始介面
-        _17LogoPanelAnim.SetTrigger("_17LogoPanel");
-        _StartBtn.enabled = true;
+        //_17LogoPanelAnim.SetTrigger("_17LogoPanel");
+
+        if(_StartBtn)
+            _StartBtn.enabled = true;
+
+        EnterLoading.instance._autoToNextScene = true;
     }
 
     //點擊 START
@@ -72,7 +78,8 @@ public class OpenSceneManager : MonoBehaviour {
         _StartBtnAnim.SetTrigger("PressScreen");
         _17LogoPanelAnim.SetTrigger("screenFadeOut");
 
-        StartCoroutine("StartLoading"); //讀取下一場景
+        //StartCoroutine("StartLoading"); //讀取下一場景
+        EnterLoading.instance._autoToNextScene = true;
     }
 
     IEnumerator StartLoading() {

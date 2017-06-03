@@ -824,7 +824,7 @@ namespace com.Desktop
 		public void OnLeftRoom()
 		{
 			Debug.Log("OnLeftRoom (local)");
-			SceneManager.LoadScene("Game");
+			SceneManager.LoadScene("02.Lobby");
 			// back to main menu        
 			//Application.LoadLevel(Application.loadedLevelName);
 		}

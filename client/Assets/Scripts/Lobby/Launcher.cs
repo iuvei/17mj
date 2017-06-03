@@ -284,7 +284,7 @@ namespace com.Lobby
             }
 			//Debug.LogError ("[s] StartGame()");
 			if (PhotonNetwork.playerList.Length >= 2) {
-				PhotonNetwork.LoadLevel ("Desktop");
+				PhotonNetwork.LoadLevel ("03.Room");
 			} else {
 				Debug.Log ("[s] PhotonNetwork.playerList.Length <2");
 			}

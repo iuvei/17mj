@@ -12,6 +12,7 @@ public class MyPluginPostProcessBuild
 	[PostProcessBuild]
 	public static void ChangeXcodePlist(BuildTarget buildTarget, string pathToBuiltProject)
 	{
+		#if UNITY_5 && (UNITY_IOS || UNITY_TVOS)
 		if ( buildTarget == BuildTarget.iOS )
 		{
 			// Get plist
@@ -35,5 +36,6 @@ public class MyPluginPostProcessBuild
 			// Write to file
 			File.WriteAllText(plistPath, plist.WriteToString());
 		}
+		#endif
 	}
 }

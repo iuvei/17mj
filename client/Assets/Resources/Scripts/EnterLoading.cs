@@ -9,7 +9,7 @@ public class EnterLoading : MonoBehaviour {
     public Text loadText;
     public Image loadImage;
 
-    public bool _autoToNextScene = false; // 是否載入完自動切換場景
+    //public bool _autoToNextScene = true; // 是否載入完自動切換場景
     public bool _fadeOutBGM = false;      // 切換場景前是否要淡出背景音樂
 
     //public Image guideImage;          //遊戲教學圖片輪播
@@ -17,7 +17,7 @@ public class EnterLoading : MonoBehaviour {
     //private int guideImageNum;
     //private int guideImageIndex = 0;
 
-    void Start() {
+    void Awake() {
         instance = this;
 
         if (_sceneName == "")
@@ -70,16 +70,13 @@ public class EnterLoading : MonoBehaviour {
             yield return null;
         }
 
-        while (!_autoToNextScene)
-            yield return new WaitForSeconds(1);
-
+        yield return new WaitForSeconds(1);
         if (_fadeOutBGM) {  //背景音樂淡出
             GetComponent<SoundEffect>().FadeOut();     
             yield return new WaitForSeconds(1.0f);
         }
-
         GetComponent<Animator>().SetBool("EnterLoadingDone", true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         async.allowSceneActivation = true;  //進入下一場景
     }

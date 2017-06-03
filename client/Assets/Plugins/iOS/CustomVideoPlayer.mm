@@ -444,7 +444,7 @@ static void* _ObservePlayerItemContext = (void*)0x2;
         
         
         // if we have changed audio route and due to current category apple decided to pause playback - resume automatically
-        if(_AudioRouteWasChanged )
+        if(_AudioRouteWasChanged)
         {
             _AudioRouteWasChanged = false;
             [_player setRate: 1.0f]; // _player.rate = 1.0f;

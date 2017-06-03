@@ -2,7 +2,9 @@
 using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Collections;
+#if UNITY_5 && (UNITY_IOS || UNITY_TVOS)
 using UnityEditor.iOS.Xcode;
+#endif
 using System.IO;
 
 public class MyPluginPostProcessBuild

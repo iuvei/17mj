@@ -18,13 +18,6 @@ string MessageFromIosReceivingMethodNameVariable;
 //----------------------------------------------Show Or Hide Recording-------------------------------------------------------------------
 // if isSowRecording is true then recording will be shown in recording view and if false then recording will be hideen
 	[DllImport("__Internal")]
-	private static extern void _tapRecord ();
-	public static void TapRecord(){
-		#if !UNITY_EDITOR && UNITY_IOS
-		_tapRecord ();
-		#endif
-	}
-	[DllImport("__Internal")]
 	private static extern void _startRecord ();
 	public static void StartRecord(){
 		#if !UNITY_EDITOR && UNITY_IOS

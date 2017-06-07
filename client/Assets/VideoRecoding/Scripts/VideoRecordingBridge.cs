@@ -11,7 +11,7 @@ string MessageFromIosReceivingMethodNameVariable;
 	[DllImport("__Internal")]
 	private static extern void _initRecord ();
 	public static void InitRecord(){
-		#if !UNITY_EDITOR
+		#if !UNITY_EDITOR && UNITY_IOS
 		_initRecord ();
 		#endif
 	}
@@ -31,5 +31,5 @@ string MessageFromIosReceivingMethodNameVariable;
 		_stopRecord ();
 		#endif
 	}
-#endif
+	#endif
 }

@@ -128,9 +128,9 @@ namespace com.Desktop
 			//Debug.Log("MahJong.OnEvent( " + eventcode+")");
 			if (eventcode == (byte)GameCommand.SHUFFLECODE)
             {
-				Debug.LogError("MahJong.OnEvent(GameCommand.SHUFFLECODE)");
+				//Debug.LogError("MahJong.OnEvent(GameCommand.SHUFFLECODE)");
                 allMah = new List<int>((int[])content);
-				Debug.LogError ("allMah.Count="+allMah.Count);
+				//Debug.LogError ("allMah.Count="+allMah.Count);
             }
         }
         */

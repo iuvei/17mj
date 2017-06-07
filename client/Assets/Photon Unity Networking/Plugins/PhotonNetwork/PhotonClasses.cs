@@ -1059,7 +1059,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            Debug.LogError("Error: you cannot read this stream that you are writing!");
+            //Debug.LogError("Error: you cannot read this stream that you are writing!");
             return null;
         }
 

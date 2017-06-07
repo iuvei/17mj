@@ -231,7 +231,7 @@ namespace com.Desktop
         /// </summary>
 		public void fromMoToKeep(int GotID)
         {
-			Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
+			//Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
 			//int GotID = GameManager.Instance.getMahjongPai(isfirst);
 			if (photonPlayer.IsLocal) {
 				Transform t1 = plane_mo.transform.Find (GotID + "");
@@ -256,7 +256,7 @@ namespace com.Desktop
 		public void fromMoToAban(int GotID)
 		{
 			//Debug.LogError ("[c] "+this.name+".putPaiToKeep(id="+GotID+",isfirst="+isfirst+")");
-			Debug.LogError ("[c] "+this.name+".fromMoToAban(id="+GotID+")");
+			//Debug.LogError ("[c] "+this.name+".fromMoToAban(id="+GotID+")");
 			//int GotID = GameManager.Instance.getMahjongPai(isfirst);
 			if (photonPlayer.IsLocal) {
 				Transform t1 = plane_mo.transform.Find (GotID + "");
@@ -392,7 +392,7 @@ namespace com.Desktop
 					g.transform.localRotation = Quaternion.identity;
 				}
 				if (moMahId > 0) {
-					Debug.Log ("moMahId > 0");
+					//Debug.Log ("moMahId > 0");
 					Transform t2 = plane_mo.transform.Find (moMahId + "");
 					if (t2 != null) {
 						GameObject g = t2.gameObject;
@@ -872,7 +872,7 @@ namespace com.Desktop
 
 		public void collectGanPai(int mahID)
 		{
-			Debug.LogError ("[RPC] collectGanPai(" + mahID + ")");
+			//Debug.LogError ("[RPC] collectGanPai(" + mahID + ")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
             if (photonPlayer.IsLocal)

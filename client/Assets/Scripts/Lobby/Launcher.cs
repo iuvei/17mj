@@ -237,16 +237,16 @@ namespace com.Lobby
         /// <summary>
         /// 创建房间
         /// </summary>
-        public void CreateARoom()
+        public void CreateRoom()
         {
-			Debug.Log ("CreateARoom()");
+			Debug.Log ("CreateRoom()");
             if (PhotonNetwork.connected)
             {
 				_roomname = "mj_room";
                 //创建房间成功
 				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))
                 {
-					Debug.Log("Launcher.CreateARoom() 成功");
+					Debug.Log("Launcher.CreateRoom() 成功");
 
                     StartCoroutine(GetInRoom());
                 }

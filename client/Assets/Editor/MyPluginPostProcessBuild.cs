@@ -30,11 +30,22 @@ public class MyPluginPostProcessBuild
 
 			// background modes
 			PlistElementArray bgModes = rootDict.CreateArray("UIBackgroundModes");
-			bgModes.AddString("location");
-			bgModes.AddString("fetch");
+			bgModes.AddString("remote-notification");
+			//bgModes.AddString("location");
+			//bgModes.AddString("fetch");
 
 			// Write to file
 			File.WriteAllText(plistPath, plist.WriteToString());
+
+			string projPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
+			PBXProject proj = new PBXProject();
+			proj.ReadFromString(File.ReadAllText(projPath));
+
+			string target = proj.TargetGuidByName("Unity-iPhone");
+
+			proj.SetBuildProperty(target, "ENABLE_BITCODE", "NO");
+
+			File.WriteAllText(projPath, proj.WriteToString());
 		}
 		#endif
 	}

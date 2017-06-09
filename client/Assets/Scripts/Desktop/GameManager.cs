@@ -93,11 +93,12 @@ namespace com.Desktop
             //只有主机有发牌的权利
             if (!PhotonNetwork.isMasterClient)
             {
+				VideoRecordingBridge.StartPlay ("rtmp://192.168.20.178:1935/mj17/myStream");
 				//Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
                 return;
             }
 
-			VideoRecordingBridge.InitRecord ();
+			//VideoRecordingBridge.InitRecord ();
 			VideoRecordingBridge.StartRecord ();
 
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
@@ -120,7 +121,7 @@ namespace com.Desktop
 
 		public void OnDisconnectedFromPhoton()
 		{
-			//Debug.Log("OnDisconnectedFromPhoton");
+			Debug.LogError("OnDisconnectedFromPhoton");
 
 			// Back to main menu        
 			//Application.LoadLevel(Application.loadedLevelName);
@@ -128,7 +129,7 @@ namespace com.Desktop
 
 		public void OnPhotonPlayerConnected(PhotonPlayer player)
 		{
-			//Debug.Log("OnPhotonPlayerConnected: " + player.NickName);
+			Debug.Log("OnPhotonPlayerConnected: " + player.NickName);
 		}
 
 		public void OnPhotonPlayerDisconnected(PhotonPlayer player)
@@ -822,6 +823,7 @@ namespace com.Desktop
         {
 			//Debug.Log ("Back()");
 			VideoRecordingBridge.StopRecord ();
+			VideoRecordingBridge.StopPlay ();
             PhotonNetwork.LeaveRoom();
             //SceneManager.LoadScene("Game");
         }
@@ -830,6 +832,7 @@ namespace com.Desktop
 		{
 			//Debug.Log("OnLeftRoom (local)");
 			VideoRecordingBridge.StopRecord ();
+			VideoRecordingBridge.StopPlay ();
 			SceneManager.LoadScene("02.Lobby");
 			// back to main menu        
 			//Application.LoadLevel(Application.loadedLevelName);

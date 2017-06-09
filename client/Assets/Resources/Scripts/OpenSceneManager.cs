@@ -49,16 +49,16 @@ public class OpenSceneManager : MonoBehaviour {
     {
         if (EnterLoading.instance)
         {
-            EnterLoading.instance.StartLoading(); //讀取下一場景
+            //EnterLoading.instance.StartLoading(); //讀取下一場景
 
             //while (!EnterLoading.instance.LoadedDone)
             //    yield return new WaitForSeconds(1f);
         }
  
-        foxGameLogoAnim.SetTrigger("FoxGameLogo"); // 01-出現 FoxGame
+        //foxGameLogoAnim.SetTrigger("FoxGameLogo"); // 01-出現 FoxGame
         yield return new WaitForSeconds(3.3f);
 
-        _17logoSequence.SetActive(true);           // 02-播放17玩麻將 序列動畫       
+        //_17logoSequence.SetActive(true);           // 02-播放17玩麻將 序列動畫       
         yield return new WaitForSeconds(5.2f);
 
         _17logoSequence.SetActive(false);          //03 - 停止17玩麻將 序列動畫       

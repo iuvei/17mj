@@ -9,15 +9,6 @@ string MessageFromIosReceivingMethodNameVariable;
 //----------------------------------------------Show Recording-------------------------------------------------------------------
 	#if UNITY_IOS || UNITY_ANDROID
 	[DllImport("__Internal")]
-	private static extern void _initRecord ();
-	public static void InitRecord(){
-		#if !UNITY_EDITOR && UNITY_IOS
-		_initRecord ();
-		#endif
-	}
-//----------------------------------------------Show Or Hide Recording-------------------------------------------------------------------
-// if isSowRecording is true then recording will be shown in recording view and if false then recording will be hideen
-	[DllImport("__Internal")]
 	private static extern void _startRecord ();
 	public static void StartRecord(){
 		#if !UNITY_EDITOR && UNITY_IOS
@@ -30,6 +21,21 @@ string MessageFromIosReceivingMethodNameVariable;
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopRecord ();
 		#endif
+	}
+		
+	[DllImport("__Internal")]
+	private static extern void _startPlay (string str);
+	public static void StartPlay(string str){
+	#if !UNITY_EDITOR && UNITY_IOS
+	_startPlay (str);
+	#endif
+	}
+	[DllImport("__Internal")]
+	private static extern void _stopPlay ();
+	public static void StopPlay(){
+	#if !UNITY_EDITOR && UNITY_IOS
+	_stopPlay ();
+	#endif
 	}
 	#endif
 }

@@ -5,29 +5,24 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class OpenSceneManager : MonoBehaviour {
-    public Transform foxGameLogo;          // FoxGame 商標
-    public GameObject _17logoSequence;     // 片頭動畫序列動畫
-    public Transform _17logoStartPanel;    // 版權分級介面
+
+    public Transform _17NewTitle;  // 片頭動畫
     public GameObject enterLoadingPanel;   // 讀取畫面
 
-    private Animator foxGameLogoAnim;
-    private Animator _17LogoPanelAnim;
+    private Animator _17LogoAnim;
+    private Transform _17logoStartPanel;    // 版權分級介面
     private GameObject flowLightLogo;      // 流光Logo
     private Animator _StartBtnAnim;        // START按鈕動畫
     private Button _StartBtn;
 
     void Start () {
-        if (!foxGameLogo)
-            Debug.LogError("No found FoxGameLogoPanel");
-        else
-            foxGameLogoAnim = foxGameLogo.GetComponent<Animator>();
 
-        if (!_17logoStartPanel)
-            Debug.LogError("No found 17 Logo panel");
+        if (!_17NewTitle)
+            Debug.LogError("No found 17 Title Panel");
         else {
-            _17LogoPanelAnim = _17logoStartPanel.GetComponent<Animator>();
-            _StartBtnAnim = _17logoStartPanel.Find("Panel/StartButton/ScaleBtnText").gameObject.GetComponent<Animator>();
-            flowLightLogo = _17logoStartPanel.Find("FlowLightImg").gameObject;
+            _17LogoAnim = _17NewTitle.GetComponent<Animator>();
+            _17logoStartPanel = _17NewTitle.Find("StartInfoPanel");
+            _StartBtnAnim = _17NewTitle.Find("StartInfoPanel/StartButton/ScaleBtnText").gameObject.GetComponent<Animator>();
         }
 
         if (!_StartBtnAnim)
@@ -38,9 +33,6 @@ public class OpenSceneManager : MonoBehaviour {
         if (!enterLoadingPanel)
             Debug.LogError("No found Loading panel");
 
-        if (!_17logoSequence)
-            Debug.LogError("No found 17logo Sequence");
-
         StartCoroutine("PlayOP");  //開始
     }
 
@@ -49,27 +41,19 @@ public class OpenSceneManager : MonoBehaviour {
     {
         if (EnterLoading.instance)
         {
-            //EnterLoading.instance.StartLoading(); //讀取下一場景
+            EnterLoading.instance.StartLoading(); //讀取下一場景
 
             //while (!EnterLoading.instance.LoadedDone)
             //    yield return new WaitForSeconds(1f);
         }
- 
-        //foxGameLogoAnim.SetTrigger("FoxGameLogo"); // 01-出現 FoxGame
-        yield return new WaitForSeconds(3.3f);
 
-        //_17logoSequence.SetActive(true);           // 02-播放17玩麻將 序列動畫       
-        yield return new WaitForSeconds(5.2f);
+        yield return new WaitForSeconds(6f);
 
-        _17logoSequence.SetActive(false);          //03 - 停止17玩麻將 序列動畫       
 
-        flowLightLogo.SetActive(true);             // 04-流光Logo&開始介面
-        _17LogoPanelAnim.SetTrigger("_17LogoPanel");
+        if (_StartBtn)
+            _StartBtn.enabled = true;
 
-        //if(_StartBtn)
-        //    _StartBtn.enabled = true;
-
-        //EnterLoading.instance._autoToNextScene = true;
+        EnterLoading.instance._autoToNextScene = true;
     }
 
     //點擊 START
@@ -84,9 +68,13 @@ public class OpenSceneManager : MonoBehaviour {
 
         _StartBtnAnim.SetTrigger("PressScreen");
         //_17LogoPanelAnim.SetTrigger("screenFadeOut");
-
+        
         //StartCoroutine("StartLoading"); //讀取下一場景
-        //EnterLoading.instance._autoToNextScene = true;
+
+        //if (EnterLoading.instance) {
+        //    EnterLoading.instance._autoToNextScene = true;
+        //    EnterLoading.instance.StartLoading(); //讀取下一場景
+        //}   
     }
 
     IEnumerator StartLoading() {

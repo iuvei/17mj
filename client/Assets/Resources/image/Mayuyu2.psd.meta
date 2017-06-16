@@ -1,0 +1,182 @@
+fileFormatVersion: 2
+guid: 4d71025088cda094db075690d013f808
+timeCreated: 1497403126
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Mayuyu2_Body
+    21300002: Mayuyu2_ArmL
+    21300004: Mayuyu2_HandL
+    21300006: Mayuyu2_HandR
+    21300008: Mayuyu2_ArmR
+    21300010: Mayuyu2_LegR
+    21300012: Mayuyu2_footR
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mayuyu2_Body
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 60
+        width: 331
+        height: 1376
+      alignment: 9
+      pivot: {x: 0.55882895, y: 0.57783324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Mayuyu2_ArmL
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 1176
+        width: 108
+        height: 203
+      alignment: 9
+      pivot: {x: 0.14596388, y: 0.724901}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Mayuyu2_HandL
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 1176
+        width: 86
+        height: 268
+      alignment: 9
+      pivot: {x: 0.40505058, y: 0.1182415}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Mayuyu2_HandR
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 840
+        width: 133
+        height: 284
+      alignment: 9
+      pivot: {x: 0.80511564, y: 0.08637377}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Mayuyu2_ArmR
+      rect:
+        serializedVersion: 2
+        x: 844
+        y: 875
+        width: 69
+        height: 213
+      alignment: 9
+      pivot: {x: 0.3349123, y: 0.86098254}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Mayuyu2_LegR
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 420
+        width: 206
+        height: 328
+      alignment: 9
+      pivot: {x: 0.39303797, y: 0.8358869}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Mayuyu2_footR
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 152
+        width: 421
+        height: 212
+      alignment: 9
+      pivot: {x: 0.88927585, y: 0.30063635}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

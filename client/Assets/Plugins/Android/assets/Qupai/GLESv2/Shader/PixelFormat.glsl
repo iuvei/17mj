@@ -1,0 +1,28 @@
+
+#define PIXEL_FORMAT_YCbCr  0
+#define PIXEL_FORMAT_YCrCb  1
+#define PIXEL_FORMAT_RGBA   2
+#define PIXEL_FORMAT_BGRA   3
+#define PIXEL_FORMAT_ARGB   4
+#define PIXEL_FORMAT_ABGR   5
+
+#define PIXEL_FORMAT_CbCr   6
+#define PIXEL_FORMAT_CrCb   7
+#define PIXEL_FORMAT_Y      8
+
+
+#define COLOR_MATRIX_NONE   0
+#define COLOR_MATRIX_BT601  1
+#define COLOR_MATRIX_BT709  2
+#define COLOR_MATRIX_PC601  3
+#define COLOR_MATRIX_PC709  4
+
+
+#define PIXEL_LAYOUT_PACKED         0
+#define PIXEL_LAYOUT_PLANAR         1
+#define PIXEL_LAYOUT_SEMIPLANAR     2
+
+#define CHROMA_SUBSAMPLING_444      0
+#define CHROMA_SUBSAMPLING_422      1
+#define CHROMA_SUBSAMPLING_420      2
+

@@ -62,5 +62,15 @@ public class VideoRecordingBridge {
 		live.CallStatic("PlayStop");
 		#endif
 	}
-	#endif
+
+    public static void REConnect()
+    {
+#if !UNITY_EDITOR && UNITY_IOS
+#elif !UNITY_EDITOR && UNITY_ANDROID
+		setup();
+		live.CallStatic("PlayStart");
+#endif
+    }
+
+#endif
 }

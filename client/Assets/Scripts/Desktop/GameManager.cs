@@ -119,6 +119,12 @@ namespace com.Desktop
 			setActivePlayer(players[0]);
         }
 
+        public void onLivePlayREConnect()
+        {
+            VideoRecordingBridge.REConnect();
+        }
+
+
 		public void OnDisconnectedFromPhoton()
 		{
 			Debug.LogError("OnDisconnectedFromPhoton");

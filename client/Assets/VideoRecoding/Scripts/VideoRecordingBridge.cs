@@ -11,8 +11,11 @@ public class VideoRecordingBridge {
     #if UNITY_IOS
 	[DllImport("__Internal")]
 	private static extern void _startRecord ();
+	[DllImport("__Internal")]
 	private static extern void _stopRecord ();
+	[DllImport("__Internal")]
 	private static extern void _startPlay (string str);
+	[DllImport("__Internal")]
 	private static extern void _stopPlay ();
 	#elif UNITY_ANDROID
 	private static AndroidJavaObject live = null;

@@ -14,7 +14,6 @@ public class DelayAnimation : MonoBehaviour {
             anim.gameObject.SetActive(false);
             Invoke("TurnOnAnim", _delaySec);
         }
-            
     }
 
     private void TurnOnAnim() {

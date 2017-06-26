@@ -17,21 +17,24 @@ namespace com.Desktop
 		void Awake()
 		{
 			if (image != null) {
-				image.enabled = false;
-			}
+                //image.enabled = false;
+                gameObject.SetActive(false);
+            }
 		}
 
         public void Show()
         {
 			//Debug.Log (this.name+".Show()");
 			if (time > 0) {
-				image.enabled = true;
-				if (Remain != null) {
+				//image.enabled = true;
+                gameObject.SetActive(true);
+                if (Remain != null) {
 					Remain.text = time.ToString ();
 				}
 			} else {
-				image.enabled = false;
-				if (Remain != null) {
+				//image.enabled = false;
+                gameObject.SetActive(false);
+                if (Remain != null) {
 					Remain.text = string.Empty;
 				}
 			}
@@ -60,8 +63,9 @@ namespace com.Desktop
 
         public void Hide()
         {
-			//Debug.Log (this.name+".Hide()");
-            image.enabled = false;
+            //Debug.Log (this.name+".Hide()");
+            //image.enabled = false;
+            gameObject.SetActive(false);
         }
     }
 }

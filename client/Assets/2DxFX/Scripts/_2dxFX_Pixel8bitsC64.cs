@@ -4,7 +4,6 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -27,17 +26,9 @@ public class _2dxFX_Pixel8bitsC64 : MonoBehaviour
 	Material tempMaterial;
 
 	Material defaultMaterial;
-	Image CanvasImage;
 
-	void Awake()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
-	}
 	void Start ()
-	{  
+	{ 
 		ShaderChange = 0;
 	}
 
@@ -47,23 +38,12 @@ public class _2dxFX_Pixel8bitsC64 : MonoBehaviour
 	}
 
 	void Update()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}		
+	{	
 		if ((ShaderChange == 0) && (ForceMaterial != null)) 
 		{
 			ShaderChange=1;
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 			ForceMaterial.hideFlags = HideFlags.None;
 			ForceMaterial.shader=Shader.Find(shader);
 			ActiveChange=false;
@@ -74,115 +54,51 @@ public class _2dxFX_Pixel8bitsC64 : MonoBehaviour
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 			ShaderChange=0;
 		}
 		
 		#if UNITY_EDITOR
-		string dfname = "";
-		if(this.gameObject.GetComponent<SpriteRenderer>() != null) dfname=this.GetComponent<Renderer>().sharedMaterial.shader.name;
-		if(this.gameObject.GetComponent<Image>() != null) 
-		{
-			Image img = this.gameObject.GetComponent<Image>();
-			if (img.material==null)	dfname="Sprites/Default";
-		}
-		if (dfname == "Sprites/Default")
+		if (GetComponent<Renderer>().sharedMaterial.shader.name == "Sprites/Default")
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				Image img = this.gameObject.GetComponent<Image>();
-				if (img.material==null) CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 		}
 		#endif
 		
 		if (ActiveChange)
 		{
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Size", _Size);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Offset", _Offset);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Offset2", _Offset2);
-            this.GetComponent<SpriteRenderer>().sprite.texture.mipMapBias = -10;
-            this.GetComponent<SpriteRenderer>().sprite.texture.filterMode = FilterMode.Point;
-
-            }
-            else if(this.gameObject.GetComponent<Image>() != null)
-			{
-			CanvasImage.material.SetFloat("_Alpha", 1-_Alpha);
-			CanvasImage.material.SetFloat("_Size", _Size);
-			CanvasImage.material.SetFloat("_Offset", _Offset);
-			CanvasImage.material.SetFloat("_Offset2", _Offset2);
-			}
-			
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Size", _Size);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Offset", _Offset);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Offset2", _Offset2);
 		}
 	
 	}
 	
 	void OnDestroy()
 	{
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
 		if ((Application.isPlaying == false) && (Application.isEditor == true)) {
 			
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			
 			if (gameObject.activeSelf && defaultMaterial!=null) {
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
+				GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+				GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
-		}	
 		}
 	}
 	void OnDisable()
 	{ 
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (gameObject.activeSelf && defaultMaterial!=null) {
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
+			GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+			GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 		}		
 	}
 	
 	void OnEnable()
 	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (defaultMaterial == null) {
 			defaultMaterial = new Material(Shader.Find("Sprites/Default"));
 			 
@@ -193,27 +109,13 @@ public class _2dxFX_Pixel8bitsC64 : MonoBehaviour
 			ActiveChange=true;
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 		}
 		else
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 		}
 		
 	}
@@ -230,7 +132,6 @@ public class _2dxFX_Pixel8bitsC64_Editor : Editor
 	
 	public void OnEnable()
 	{
-		
 		m_object = new SerializedObject(targets);
 	}
 	

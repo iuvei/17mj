@@ -38,6 +38,7 @@ public class SetupSettingsUI : MonoBehaviour {
 		} else {
 			this.sound_volume = .0f;
 		}
+
 		Debug.Log ("SetupSettingsUI loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
 	}
 
@@ -65,7 +66,7 @@ public class SetupSettingsUI : MonoBehaviour {
 
 	public void BGMValueChange()
 	{
-		Debug.Log(BGM_Silder.value);
+		//Debug.Log(BGM_Silder.value);
 		if (BGM_Silder.value > 0)
 			BGM_Toggle.isOn = true;
 		//else
@@ -95,5 +96,7 @@ public class SetupSettingsUI : MonoBehaviour {
 	{
 		Debug.Log("Sound_Toggle.isOn="+Sound_Toggle.isOn);
 		AudioManager.Instance.ControlSound (Sound_Toggle.isOn);
+		loadPLayerPrefs ();
+		init_slider ();
 	}
 }

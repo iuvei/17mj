@@ -365,20 +365,5 @@ namespace com.Lobby
 				settingPanel.SetActive(false);
 			}
 		}
-
-		public void MuteBGM(bool value)
-		{
-			if (value) {
-				AudioManager.Instance.PlayBGM (BGM_name);
-			} else {
-				AudioManager.Instance.StopBGM ();
-			}
-		}
-
-		public void unMuteBGM()
-		{
-			//AudioManager.Instance.PlayBGM ();
-		}
-
     }
 }

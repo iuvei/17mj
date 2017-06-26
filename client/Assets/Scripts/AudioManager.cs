@@ -15,7 +15,10 @@ public class AudioManager : MonoBehaviour
 	private List<AudioSource> seSources = new List<AudioSource>( );
 	private Dictionary<string , AudioClip> bgmDict = new Dictionary<string , AudioClip>( );
 	private Dictionary<string , AudioClip> seDict = new Dictionary<string , AudioClip>( );
-	private float _nowvolume = 0.5f;
+	private float sound_volume = 0.1f;
+	private float bgm_volume = 0.1f;
+	private bool bgm_enabled = false;
+	private bool sound_enabled = false;
 
 
 	#region Singleton
@@ -37,16 +40,38 @@ public class AudioManager : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
         }
+
+		loadPLayerPrefs ();
+
 		//create audio sources
 		this.bgmSource = this.gameObject.GetComponent<AudioSource>( );
 		if (this.bgmSource == null) {
 			this.bgmSource = this.gameObject.AddComponent<AudioSource> ();
 		}
-		this.bgmSource.volume = 0.3f;
+		this.bgmSource.volume = this.bgm_volume;
 		this.bgmSource.loop = true;
 		
 		loadAllSoundResources ();
     }
+
+	private void loadPLayerPrefs() {
+		//this.bgm_volume = PlayerPrefs.GetFloat ("BGM_Volume");
+		//this.sound_volume = PlayerPrefs.GetFloat ("Sound_Volume");
+		this.bgm_enabled = PlayerPrefExtension.GetBool ("BGM_enabled");
+		if (this.bgm_enabled) {
+			this.bgm_volume = PlayerPrefs.GetFloat ("BGM_Volume");
+		} else {
+			this.bgm_volume = .0f;
+		}
+			
+		this.sound_enabled = PlayerPrefExtension.GetBool ("Sound_enabled");
+		if (this.sound_enabled) {
+			this.sound_volume = PlayerPrefs.GetFloat ("Sound_Volume");
+		} else {
+			this.sound_volume = .0f;
+		}
+		Debug.Log ("AudioManager loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
+	}
 
 	private void loadAllSoundResources() {
 		//Debug.Log ("[c] 載入所有音效資源");
@@ -75,7 +100,7 @@ public class AudioManager : MonoBehaviour
 				return;
 			}
 			source = this.gameObject.AddComponent<AudioSource>( );
-			source.volume = this._nowvolume;
+			source.volume = this.sound_volume;
 			this.seSources.Add(source);
 		}
 		source.clip = this.seDict[seName];
@@ -89,6 +114,7 @@ public class AudioManager : MonoBehaviour
 	public void PlayBGM(string bgmName) {
 		if ( !this.bgmDict.ContainsKey(bgmName) ) throw new ArgumentException(bgmName + " not found" , "bgmName");
 		if ( this.bgmSource.clip == this.bgmDict[bgmName] ) return;
+		//if (!this.bgm_enabled)return;
 		this.bgmSource.Stop( );
 		this.bgmSource.clip = this.bgmDict[bgmName];
 		this.bgmSource.Play( );
@@ -102,15 +128,65 @@ public class AudioManager : MonoBehaviour
 		this.bgmSource.clip = null;
 	}
 
+	/*
+	public void MuteSound() {
+		this.sound_volume = .0f;
+		this.seSources.ForEach(s => s.volume = this.sound_volume);
+	}
+
+	public void unMuteSound() {
+		this.sound_volume = 1.0f;
+		this.seSources.ForEach(s => s.volume = this.sound_volume);
+	}
+	*/
+
+	public void ControlBGM(bool isOn) {
+		if (isOn) {
+			this.bgm_volume = PlayerPrefs.GetFloat ("BGM_Volume");
+			this.bgmSource.volume = this.bgm_volume;
+		} else {
+			this.bgm_volume = .0f;
+			this.bgmSource.volume = this.bgm_volume;
+		}
+		PlayerPrefExtension.SetBool("BGM_enabled", isOn);
+	}
+
+	public void ControlSound(bool isOn) {
+		if (isOn) {
+			this.sound_volume = PlayerPrefs.GetFloat ("Sound_Volume");
+			this.seSources.ForEach(s => s.volume = this.sound_volume);
+		} else {
+			this.sound_volume = .0f;
+			this.seSources.ForEach(s => s.volume = this.sound_volume);
+		}
+		PlayerPrefExtension.SetBool("Sound_enabled", isOn);
+	}
+
+	//public void unMuteBGM() {
+	//	this.bgm_volume = 1.0f;
+	//	this.bgmSource.volume = this.bgm_volume;
+	//}
+
+	public void ChangeSoundVolume(float _volume) {
+		this.sound_volume = _volume;
+		this.seSources.ForEach(s => s.volume = this.sound_volume);
+		PlayerPrefs.SetFloat ("Sound_Volume", this.sound_volume);
+	}
+
+	public void ChangeBGMVolume(float _volume) {
+		Debug.Log ("ChangeBGMVolume("+_volume+")");
+		this.bgm_volume = _volume;
+		this.bgmSource.volume = this.bgm_volume;
+		PlayerPrefs.SetFloat ("BGM_Volume", this.bgm_volume);
+	}
+
 	public void Mute() {
-		this._nowvolume = .0f;
-		this.bgmSource.volume = this._nowvolume;
-		this.seSources.ForEach(s => s.volume = this._nowvolume);
+		//MuteSound ();
+		//MuteBGM ();
 	}
 
 	public void unMute() {
-		this._nowvolume = .5f;
-		this.bgmSource.volume = this._nowvolume;
-		this.seSources.ForEach(s => s.volume = this._nowvolume);
+		//unMuteSound ();
+		//unMuteBGM ();
 	}
 }

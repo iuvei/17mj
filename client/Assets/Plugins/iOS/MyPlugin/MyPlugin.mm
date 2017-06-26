@@ -50,6 +50,7 @@ static dispatch_once_t _onceToken;
     self.myTextView = [[UITextView alloc] initWithFrame:CGRectMake(300, 0, 300, 150)];
     self.myTextView.text = @"...";
     self.myTextView.backgroundColor = [UIColor whiteColor];
+    self.myTextView.layer.opacity = 0.5;
     //some other setup like setting the font for the UITextView...
     [_rootView addSubview:self.myTextView];
     
@@ -108,7 +109,7 @@ static dispatch_once_t _onceToken;
     self.mShowView.layer.anchorPoint = CGPointMake(1.5, 0.5);
     [self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
     [self.mShowView setBackgroundColor:[UIColor greenColor]];
-    [_rootView insertSubview: self.mShowView atIndex: 0];
+    [_rootView insertSubview: self.mShowView atIndex: -1];
     //[_rootView addSubview:self.mShowView];
     
     //[self initPlayer];
@@ -367,8 +368,8 @@ static dispatch_once_t _onceToken;
     self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 1.5);
     
     //self.liveSession.previewView.layer.cornerRadius = self.liveSession.previewView.bounds.size.height /2;
-    //self.liveSession.previewView.layer.masksToBounds = YES;
-    //self.liveSession.previewView.layer.borderWidth = 1;
+    self.liveSession.previewView.layer.masksToBounds = YES;
+    self.liveSession.previewView.layer.borderWidth = 1;
     //self.liveSession.previewView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     //[self.view addSubview:[self.liveSession previewView]];
     
@@ -386,7 +387,8 @@ static dispatch_once_t _onceToken;
     
     //5. 非常重要
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_rootView addSubview: [self.liveSession previewView]];
+        //[_rootView addSubview: [self.liveSession previewView]];
+        [_rootView insertSubview:[self.liveSession previewView] atIndex:0];
     });
     
     //dispatch_async(dispatch_get_main_queue(), ^{

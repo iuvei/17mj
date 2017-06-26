@@ -4,7 +4,6 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,27 +23,19 @@ public class _2dxFX_PatternAdditive : MonoBehaviour
 	[HideInInspector] public float _OffsetY;
 	
 	[HideInInspector] public bool _AutoScrollX;
-	[HideInInspector] [Range(-3,3)]public float _AutoScrollSpeedX;
+	[HideInInspector] [Range(0, 10)]public float _AutoScrollSpeedX;
 	[HideInInspector] public bool _AutoScrollY;
-	[HideInInspector] [Range(-3,3)] public float _AutoScrollSpeedY;
+	[HideInInspector] [Range(0, 10)] public float _AutoScrollSpeedY;
 	[HideInInspector]  private float _AutoScrollCountX;
 	[HideInInspector]  private float _AutoScrollCountY;
 
 	[HideInInspector] public int ShaderChange=0;
 	Material tempMaterial;
 	Material defaultMaterial;
-	Image CanvasImage;
 
 	
-	void Awake()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
-	}
 	void Start ()
-	{  
+	{ 
 		ShaderChange = 0;
 	}
 
@@ -54,23 +45,12 @@ public class _2dxFX_PatternAdditive : MonoBehaviour
 	}
 
 	void Update()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}		
+	{	
 		if ((ShaderChange == 0) && (ForceMaterial != null)) 
 		{
 			ShaderChange=1;
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 			ForceMaterial.hideFlags = HideFlags.None;
 			ForceMaterial.shader=Shader.Find(shader);
 			ActiveChange=false;
@@ -81,108 +61,51 @@ public class _2dxFX_PatternAdditive : MonoBehaviour
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 			ShaderChange=0;
 		}
 		
 		#if UNITY_EDITOR
-		string dfname = "";
-		if(this.gameObject.GetComponent<SpriteRenderer>() != null) dfname=this.GetComponent<Renderer>().sharedMaterial.shader.name;
-		if(this.gameObject.GetComponent<Image>() != null) 
-		{
-			Image img = this.gameObject.GetComponent<Image>();
-			if (img.material==null)	dfname="Sprites/Default";
-		}
-		if (dfname == "Sprites/Default")
+		if (GetComponent<Renderer>().sharedMaterial.shader.name == "Sprites/Default")
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				Image img = this.gameObject.GetComponent<Image>();
-				if (img.material==null) CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 		}
 		#endif
 		if (ActiveChange)
 		{
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-			
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
 
 			if ((_AutoScrollX == false) && (_AutoScrollY == false))
 			{
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_OffsetX);
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_OffsetY);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_OffsetX);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_OffsetY);
 			}
 			
 			if ((_AutoScrollX == true) && (_AutoScrollY == false))
 			{
 				_AutoScrollCountX+=_AutoScrollSpeedX*Time.deltaTime;
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_AutoScrollCountX);
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_OffsetY);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_AutoScrollCountX);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_OffsetY);
 			}
 			if ((_AutoScrollX == false) && (_AutoScrollY == true))
 			{
 				_AutoScrollCountY+=_AutoScrollSpeedY*Time.deltaTime;
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_OffsetX);
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_AutoScrollCountY);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_OffsetX);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_AutoScrollCountY);
 			}
 			if ((_AutoScrollX == true) && (_AutoScrollY == true))
 			{
 				_AutoScrollCountX+=_AutoScrollSpeedX*Time.deltaTime;
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_AutoScrollCountX);
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetX",_AutoScrollCountX);
 				_AutoScrollCountY+=_AutoScrollSpeedY*Time.deltaTime;
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_AutoScrollCountY);
-			}
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-			CanvasImage.material.SetFloat("_Alpha", 1-_Alpha);
-
-			if ((_AutoScrollX == false) && (_AutoScrollY == false))
-			{
-				CanvasImage.material.SetFloat("_OffsetX",_OffsetX);
-				CanvasImage.material.SetFloat("_OffsetY",_OffsetY);
-			}
-			
-			if ((_AutoScrollX == true) && (_AutoScrollY == false))
-			{
-				_AutoScrollCountX+=_AutoScrollSpeedX*Time.deltaTime;
-				CanvasImage.material.SetFloat("_OffsetX",_AutoScrollCountX);
-				CanvasImage.material.SetFloat("_OffsetY",_OffsetY);
-			}
-			if ((_AutoScrollX == false) && (_AutoScrollY == true))
-			{
-				_AutoScrollCountY+=_AutoScrollSpeedY*Time.deltaTime;
-				CanvasImage.material.SetFloat("_OffsetX",_OffsetX);
-				CanvasImage.material.SetFloat("_OffsetY",_AutoScrollCountY);
-			}
-			if ((_AutoScrollX == true) && (_AutoScrollY == true))
-			{
-				_AutoScrollCountX+=_AutoScrollSpeedX*Time.deltaTime;
-				CanvasImage.material.SetFloat("_OffsetX",_AutoScrollCountX);
-				_AutoScrollCountY+=_AutoScrollSpeedY*Time.deltaTime;
-				CanvasImage.material.SetFloat("_OffsetY",_AutoScrollCountY);
-			}
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_OffsetY",_AutoScrollCountY);
 			}
 			if (_AutoScrollCountX > 1) _AutoScrollCountX = 0;
 			if (_AutoScrollCountX < -1) _AutoScrollCountX = 0;
 			if (_AutoScrollCountY > 1) _AutoScrollCountY = 0;
 			if (_AutoScrollCountY < -1) _AutoScrollCountY = 0;
-		
 		}
 
 		
@@ -190,10 +113,6 @@ public class _2dxFX_PatternAdditive : MonoBehaviour
 	
 	void OnDestroy()
 	{
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
 		if ((Application.isPlaying == false) && (Application.isEditor == true)) {
 
 			if (ForceMaterial != null && tempMaterial!=null)
@@ -202,48 +121,24 @@ public class _2dxFX_PatternAdditive : MonoBehaviour
 			}
 
 			if (gameObject.activeSelf) {
-				if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
+				GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+				GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 			}
 		}
 	}
 	void OnDisable()
 	{ 
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (ForceMaterial!=null && tempMaterial!=null)
 		{ 
 			DestroyImmediate(tempMaterial);
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
+			GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+			GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 		}
 
 	}
 
 	void OnEnable()
 	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 
 		defaultMaterial = new Material(Shader.Find("Sprites/Default"));
 		 
@@ -253,32 +148,18 @@ public class _2dxFX_PatternAdditive : MonoBehaviour
 			ActiveChange=true;
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 		}
 		else
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 		}
 		if (__MainTex2)	
 		{
 			__MainTex2.wrapMode= TextureWrapMode.Repeat;
-			this.GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
+			GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
 		}
 	}
 }
@@ -294,7 +175,6 @@ public class _2dxFX_PatternAdditive_Editor : Editor
 	
 	public void OnEnable()
 	{
-		
 		m_object = new SerializedObject(targets);
 	}
 	

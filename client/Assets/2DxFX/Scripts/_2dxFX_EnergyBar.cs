@@ -4,7 +4,6 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,7 +18,7 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 	private string shader = "2DxFX/Standard/EnergyBar";
 
 	[HideInInspector] [Range(0, 1)] public float _Alpha = 1f;
-	[HideInInspector] [Range(0f, 1f)] public float BarProgress = 0.5f;
+	[HideInInspector] [Range(0f, 1f)] public float BarProgress = 1f;
 	[HideInInspector] [Range(0.9f, 1f)] public float _Value2 = 0.975f;
 	[HideInInspector] [Range(0f, 0.5f)] public float _Value3 = 0.5f;
 	[HideInInspector] [Range(0f, 1f)] public float _Value4 = 1.0f;
@@ -28,16 +27,8 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 	[HideInInspector] public int ShaderChange=0;
 	Material tempMaterial;
 	Material defaultMaterial;
-	Image CanvasImage;
-	void Awake()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
-	}
 	void Start ()
-	{  
+	{ 
 		ShaderChange = 0;
 	}
 
@@ -47,11 +38,7 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 	}
 
 	void Update()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}		
+	{	
 		if (BarProgress > 1) BarProgress = 1;
 		if (BarProgress < 0) BarProgress = 0;
 
@@ -59,14 +46,7 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 		{
 			ShaderChange=1;
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 			ForceMaterial.hideFlags = HideFlags.None;
 			ForceMaterial.shader=Shader.Find(shader);
 			
@@ -77,118 +57,54 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 			ShaderChange=0;
 		}
 		
 		#if UNITY_EDITOR
-		string dfname = "";
-		if(this.gameObject.GetComponent<SpriteRenderer>() != null) dfname=this.GetComponent<Renderer>().sharedMaterial.shader.name;
-		if(this.gameObject.GetComponent<Image>() != null) 
-		{
-			Image img = this.gameObject.GetComponent<Image>();
-			if (img.material==null)	dfname="Sprites/Default";
-		}
-		if (dfname == "Sprites/Default")
+		if (GetComponent<Renderer>().sharedMaterial.shader.name == "Sprites/Default")
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				Image img = this.gameObject.GetComponent<Image>();
-				if (img.material==null)
-				{
-				CanvasImage.material = ForceMaterial;
-				}
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 		}
 		#endif
 		if (ActiveChange)
 		{
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value1", BarProgress);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value2", 1-_Value2);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value3", 1-_Value3);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value4", _Value4);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value5", _Value5);
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-			CanvasImage.material.SetFloat("_Alpha", 1-_Alpha);
-			CanvasImage.material.SetFloat("_Value1", BarProgress);
-			CanvasImage.material.SetFloat("_Value2", 1-_Value2);
-			CanvasImage.material.SetFloat("_Value3", 1-_Value3);
-			CanvasImage.material.SetFloat("_Value4", _Value4);
-			CanvasImage.material.SetFloat("_Value5", _Value5);
-			}
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value1", BarProgress);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value2", 1-_Value2);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value3", 1-_Value3);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value4", _Value4);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value5", _Value5);
+
 		}
 		
 	}
 	
 	void OnDestroy()
 	{
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
 		if ((Application.isPlaying == false) && (Application.isEditor == true)) {
 			
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			
 			if (gameObject.activeSelf && defaultMaterial!=null) {
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
+				GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+				GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
-		}	
 		}
 	}
 	void OnDisable()
 	{ 
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (gameObject.activeSelf && defaultMaterial!=null) 
 		{
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
+			GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+			GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 		}		
 	}
 	
 	void OnEnable()
 	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (defaultMaterial == null) 
 		{
 			defaultMaterial = new Material(Shader.Find("Sprites/Default"));
@@ -200,14 +116,7 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 			ActiveChange=true;
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 
 
 
@@ -217,14 +126,7 @@ public class _2dxFX_EnergyBar : MonoBehaviour
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 
 		}
 		
@@ -242,7 +144,6 @@ public class _2dxFX_EnergyBar_Editor : Editor
 	
 	public void OnEnable()
 	{
-		 
 		m_object = new SerializedObject(targets);
 	}
 	

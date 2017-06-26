@@ -4,7 +4,6 @@
 
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,46 +23,28 @@ public class _2dxFX_Shiny_Reflect : MonoBehaviour
 	[HideInInspector] [Range(0.05f, 1f)] public float LightSize = 0.5f;
 	[HideInInspector] public bool UseShinyCurve = true;
 	[HideInInspector] public AnimationCurve ShinyLightCurve;
-
 	[HideInInspector] [Range(0, 32)] public float AnimationSpeedReduction = 3f;
 	[HideInInspector] [Range(0f, 2f)] public float Intensity = 1.0f;
 	[HideInInspector] [Range(0f, 1f)] public float OnlyLight = 0.0f;
 	[HideInInspector] [Range(-1f, 1f)] public float LightBump = 0.05f;
 	private float ShinyLightCurveTime;
-	
+
 
 	
 	[HideInInspector] public int ShaderChange=0;
 	Material tempMaterial;
 
 	Material defaultMaterial;
-	Image CanvasImage;
 
 	
-	void Awake()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
-	}
 	void Start ()
-	{  
+	{ 
 		__MainTex2 = Resources.Load ("_2dxFX_Gradient") as Texture2D;
 		ShaderChange = 0;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-					this.GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-					CanvasImage.material.SetTexture ("_MainTex2", __MainTex2);
-			}
+		GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
 
 		// VS AnimationCurve To C# for ShinyLightCurve
 		// Put this code on 'Start' or 'Awake' fonction
-		if (ShinyLightCurve==null) ShinyLightCurve = new AnimationCurve ();
-
 		if (ShinyLightCurve.length == 0) 
 		{
 			ShinyLightCurve.AddKey (7.780734E-06f, -0.4416301f);
@@ -111,24 +92,13 @@ public class _2dxFX_Shiny_Reflect : MonoBehaviour
 	}
 
 	void Update()
-	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}		
+	{	
 
 		if ((ShaderChange == 0) && (ForceMaterial != null)) 
 		{
 			ShaderChange=1;
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 			ForceMaterial.hideFlags = HideFlags.None;
 			ForceMaterial.shader=Shader.Find(shader);
 			
@@ -139,143 +109,66 @@ public class _2dxFX_Shiny_Reflect : MonoBehaviour
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 			ShaderChange=0;
 		}
 		
 		#if UNITY_EDITOR
-		string dfname = "";
-		if(this.gameObject.GetComponent<SpriteRenderer>() != null) dfname=this.GetComponent<Renderer>().sharedMaterial.shader.name;
-		if(this.gameObject.GetComponent<Image>() != null) 
-		{
-			Image img = this.gameObject.GetComponent<Image>();
-			if (img.material==null)	dfname="Sprites/Default";
-		}
-		if (dfname == "Sprites/Default")
+		if (GetComponent<Renderer>().sharedMaterial.shader.name == "Sprites/Default")
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				Image img = this.gameObject.GetComponent<Image>();
-				if (img.material==null) CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 			__MainTex2 = Resources.Load ("_2dxFX_Gradient") as Texture2D;
-				if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-					this.GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-					Image img = this.gameObject.GetComponent<Image>();
-				if (img.material==null) CanvasImage.material.SetTexture ("_MainTex2", __MainTex2);
-			}
+			GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
 		}
 		#endif
 		if (ActiveChange)
 		{
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
-			if (UseShinyCurve)
-			{
-				if (ShinyLightCurve!=null) this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Distortion", ShinyLightCurve.Evaluate(ShinyLightCurveTime));
-				ShinyLightCurveTime += (Time.deltaTime/8)*AnimationSpeedReduction;
-			}
-			else
-			{
-				this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Distortion", Light);
-			}
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Alpha", 1-_Alpha);
 
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value2", LightSize);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value3", Intensity);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value4", OnlyLight);
-			this.GetComponent<Renderer>().sharedMaterial.SetFloat("_Value5", LightBump);
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-			CanvasImage.material.SetFloat("_Alpha", 1-_Alpha);
-			if (UseShinyCurve)
-			{
-				CanvasImage.material.SetFloat("_Distortion", ShinyLightCurve.Evaluate(ShinyLightCurveTime));
-				ShinyLightCurveTime += (Time.deltaTime/8)*AnimationSpeedReduction;
-			}
-			else
-			{
-				CanvasImage.material.SetFloat("_Distortion", Light);
-			}
 
-			CanvasImage.material.SetFloat("_Value2", LightSize);
-			CanvasImage.material.SetFloat("_Value3", Intensity);
-			CanvasImage.material.SetFloat("_Value4", OnlyLight);
-			CanvasImage.material.SetFloat("_Value5", LightBump);
-			}
 			
+			if (UseShinyCurve)
+			{
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_Distortion", ShinyLightCurve.Evaluate(ShinyLightCurveTime));
+				ShinyLightCurveTime += (Time.deltaTime/8)*AnimationSpeedReduction;
+			}
+			else
+			{
+				GetComponent<Renderer>().sharedMaterial.SetFloat("_Distortion", Light);
+			}
+
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value2", LightSize);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value3", Intensity);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value4", OnlyLight);
+			GetComponent<Renderer>().sharedMaterial.SetFloat("_Value5", LightBump);
 		}
 		
 	}
 	
 	void OnDestroy()
 	{
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		}
 		if ((Application.isPlaying == false) && (Application.isEditor == true)) {
 			
 			if (tempMaterial!=null) DestroyImmediate(tempMaterial);
 			
 			if (gameObject.activeSelf && defaultMaterial!=null) {
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
+				GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+				GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
-		}	
 		}
 	}
 	void OnDisable()
 	{ 
-	if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (gameObject.activeSelf && defaultMaterial!=null) {
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = defaultMaterial;
-				this.GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = defaultMaterial;
-				CanvasImage.material.hideFlags = HideFlags.None;
-			}
+			GetComponent<Renderer>().sharedMaterial = defaultMaterial;
+			GetComponent<Renderer>().sharedMaterial.hideFlags = HideFlags.None;
 		}		
 	}
 	
 	void OnEnable()
 	{
-		if (this.gameObject.GetComponent<Image> () != null) 
-		{
-			if (CanvasImage==null) CanvasImage = this.gameObject.GetComponent<Image> ();
-		} 
 		if (defaultMaterial == null) {
 			defaultMaterial = new Material(Shader.Find("Sprites/Default"));
 			 
@@ -286,42 +179,21 @@ public class _2dxFX_Shiny_Reflect : MonoBehaviour
 			ActiveChange=true;
 			tempMaterial = new Material(Shader.Find(shader));
 			tempMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = tempMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = tempMaterial;
 			__MainTex2 = Resources.Load ("_2dxFX_Gradient") as Texture2D;
 		}
 		else 
 		{
 			ForceMaterial.shader=Shader.Find(shader);
 			ForceMaterial.hideFlags = HideFlags.None;
-			if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-				this.GetComponent<Renderer>().sharedMaterial = ForceMaterial;
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-				CanvasImage.material = ForceMaterial;
-			}
+			GetComponent<Renderer>().sharedMaterial = ForceMaterial;
 			__MainTex2 = Resources.Load ("_2dxFX_Gradient") as Texture2D;
 		}
 		
 		if (__MainTex2)	
 		{
 			__MainTex2.wrapMode= TextureWrapMode.Repeat;
-				if(this.gameObject.GetComponent<SpriteRenderer>() != null)
-			{
-					this.GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
-			}
-			else if(this.gameObject.GetComponent<Image>() != null)
-			{
-					CanvasImage.material.SetTexture ("_MainTex2", __MainTex2);
-			}
+			GetComponent<Renderer>().sharedMaterial.SetTexture ("_MainTex2", __MainTex2);
 		}
 
 
@@ -340,7 +212,6 @@ public class _2dxFX_Shiny_Reflect_Editor : Editor
 	
 	public void OnEnable()
 	{
-		
 		m_object = new SerializedObject(targets);
 	}
 	
@@ -351,7 +222,7 @@ public class _2dxFX_Shiny_Reflect_Editor : Editor
 		
 		_2dxFX_Shiny_Reflect _2dxScript = (_2dxFX_Shiny_Reflect)target;
 	
-		Texture2D icon = Resources.Load ("2dxfxinspector-anim") as Texture2D;
+		Texture2D icon = Resources.Load ("2dxfxinspector") as Texture2D;
 		if (icon)
 		{
 			Rect r;

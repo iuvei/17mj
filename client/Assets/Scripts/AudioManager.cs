@@ -11,10 +11,10 @@ public class AudioManager : MonoBehaviour
 	private const string BGM_PATH = "Sounds/BGM";
 	private const string SE_PATH = "Sounds/SE";
 	public int MaxSE = 10;
-	private AudioSource bgmSource = null;
-	private List<AudioSource> seSources = new List<AudioSource>( );
-	private Dictionary<string , AudioClip> bgmDict = new Dictionary<string , AudioClip>( );
-	private Dictionary<string , AudioClip> seDict = new Dictionary<string , AudioClip>( );
+	public AudioSource bgmSource = null;
+	public List<AudioSource> seSources = new List<AudioSource>( );
+	public Dictionary<string , AudioClip> bgmDict = new Dictionary<string , AudioClip>( );
+	public Dictionary<string , AudioClip> seDict = new Dictionary<string , AudioClip>( );
 	private float sound_volume = 0.1f;
 	private float bgm_volume = 0.1f;
 	private bool bgm_enabled = false;
@@ -124,6 +124,7 @@ public class AudioManager : MonoBehaviour
 		return this.bgmSource.clip.length;
 	}
 	public void StopBGM() {
+		Debug.Log ("StopBGM()");
 		this.bgmSource.Stop( );
 		this.bgmSource.clip = null;
 	}
@@ -141,24 +142,15 @@ public class AudioManager : MonoBehaviour
 	*/
 
 	public void ControlBGM(bool isOn) {
-		if (isOn) {
-			this.bgm_volume = PlayerPrefs.GetFloat ("BGM_Volume");
-			this.bgmSource.volume = this.bgm_volume;
-		} else {
-			this.bgm_volume = .0f;
-			this.bgmSource.volume = this.bgm_volume;
-		}
+		Debug.Log ("ControlBGM("+isOn+")");
+		this.bgmSource.mute = !isOn;
+		this.bgm_enabled = isOn;
 		PlayerPrefExtension.SetBool("BGM_enabled", isOn);
 	}
 
 	public void ControlSound(bool isOn) {
-		if (isOn) {
-			this.sound_volume = PlayerPrefs.GetFloat ("Sound_Volume");
-			this.seSources.ForEach(s => s.volume = this.sound_volume);
-		} else {
-			this.sound_volume = .0f;
-			this.seSources.ForEach(s => s.volume = this.sound_volume);
-		}
+		this.sound_enabled = isOn;
+		this.seSources.ForEach(s => s.mute = !isOn);
 		PlayerPrefExtension.SetBool("Sound_enabled", isOn);
 	}
 
@@ -175,9 +167,21 @@ public class AudioManager : MonoBehaviour
 
 	public void ChangeBGMVolume(float _volume) {
 		Debug.Log ("ChangeBGMVolume("+_volume+")");
-		this.bgm_volume = _volume;
-		this.bgmSource.volume = this.bgm_volume;
-		PlayerPrefs.SetFloat ("BGM_Volume", this.bgm_volume);
+		if (_volume > 0) {
+			this.bgm_volume = _volume;
+			this.bgmSource.volume = this.bgm_volume;
+			PlayerPrefs.SetFloat ("BGM_Volume", this.bgm_volume);
+			PlayerPrefExtension.SetBool("BGM_enabled", true);
+		}
+		/*
+		if (this.bgm_volume > 0) {
+			if (!this.bgm_enabled) {
+				this.bgm_enabled = true;
+				PlayerPrefExtension.SetBool ("Sound_enabled", this.bgm_enabled);
+				loadPLayerPrefs ();
+			}
+		}
+		*/
 	}
 
 	public void Mute() {

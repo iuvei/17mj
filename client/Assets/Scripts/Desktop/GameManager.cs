@@ -40,6 +40,9 @@ namespace com.Desktop
         //通讯插件
         public PhotonView photonView;
 
+        //吃碰牌特效
+        public Nagieffect nagiEffectPlayerA;
+        public Nagieffect nagiEffectPlayerB;
         #region 
         /// <summary>
         /// 骰子数
@@ -659,12 +662,14 @@ namespace com.Desktop
 					//Debug.LogError ("[RPC] 你(" + photonPlayer.NickName + ")喊了碰 " + pai_name + "(" + i + "+" + j + ")");
 					playPonSound ();
 					photonPlayer.mahPlayer.HideMenu ();
-				} else {
+                    nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.PON);
+                } else {
 					i = photonPlayer.mahPlayer.keepedMah.Count;
 					j = photonPlayer.mahPlayer.ponMah.Count;
 					//Debug.LogError ("[RPC] " + photonPlayer.NickName + "喊了碰 " + pai_name + "(" + i + "+" + j + ")");
 					playPonSound ();
-				}
+                    nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PON);
+                }
 			}
 		}
 
@@ -695,12 +700,14 @@ namespace com.Desktop
 					//Debug.LogError ("[RPC] 你(" + photonPlayer.NickName + ")喊槓 " + pai_name + "(" + i + "+" + j + ")");
 					playGanSound ();
 					photonPlayer.mahPlayer.HideMenu ();
-				} else {
+                    nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.GAN);
+                } else {
 					i = photonPlayer.mahPlayer.keepedMah.Count;
 					j = photonPlayer.mahPlayer.ponMah.Count;
 					//Debug.LogError ("[RPC] " + photonPlayer.NickName + "喊槓 " + pai_name + "(" + i + "+" + j + ")");
 					playGanSound ();
-				}
+                    nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.GAN);
+                }
 				photonPlayer.mahPlayer.collectGanPai (pai_id);
 			}
 		}
@@ -727,12 +734,14 @@ namespace com.Desktop
 					//Debug.LogError ("[RPC] 你(" + photonPlayer.NickName + ")喊吃 " + pai_name + "(" + i + "+" + j + ")");
 					playChiSound ();
 					photonPlayer.mahPlayer.HideMenu ();
-				} else {
+                    nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.CHI);
+                } else {
 					i = photonPlayer.mahPlayer.keepedMah.Count;
 					j = photonPlayer.mahPlayer.ponMah.Count;
 					//Debug.LogError ("[RPC] " + photonPlayer.NickName + "喊吃 " + pai_name + "(" + i + "+" + j + ")");
 					playChiSound ();
-				}
+                    nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.CHI);
+                }
 			}
 		}
 
@@ -749,10 +758,12 @@ namespace com.Desktop
 			if (photonPlayer.IsLocal) {
 				//Debug.LogError ("[RPC] 你贏了 ");
 				playWinSound ();
-			} else {
+                nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.HU);
+            } else {
 				//Debug.LogError ("[RPC] "+photonPlayer.NickName+"贏了 ");
 				playWinSound ();
-			}
+                nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PAU);
+            }
         }
 
 		/*

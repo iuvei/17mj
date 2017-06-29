@@ -7,24 +7,28 @@ public class Nagieffect : MonoBehaviour {
     public GameObject _pon;  //碰
     public GameObject _gan;  //槓
     public GameObject _tin;  //聽
-    public GameObject _hu;   //胡
     public GameObject _pau;  //放槍
+    public GameObject _hu;   //胡
+    public GameObject _tsumo; //自摸
+    public GameObject nagiEffect;
+    public GameObject winEffect;
 
-    public enum NagiType {CHI,PON,GAN,TIN,HU,PAU}
+    public enum NagiType {CHI,PON,GAN,TIN,HU,PAU,TSUMO}
+
     private GameObject _ob;
+    private GameObject _mainOb;
 
     void Start () {
-
-        if (!_chi || !_pon || !_gan || !_tin || !_hu || !_pau)
+        if ( !_chi || !_pon || !_gan || !_tin || !_pau)
             Debug.Log("No found correspond effect gameobject.");
 
-        gameObject.SetActive(false);
-	}
+        HideAll();
+    }
 
     public void ShowNagi(NagiType _type) {
         StopAllCoroutines();
         HideAll();
-        gameObject.SetActive(false);
+        _mainOb = nagiEffect;
 
         switch (_type) {
             case NagiType.CHI:
@@ -39,30 +43,59 @@ public class Nagieffect : MonoBehaviour {
             case NagiType.TIN:
                 _ob = _tin;
                 break;
-            case NagiType.HU:
-                _ob = _hu;
-                break;
             case NagiType.PAU:
                 _ob = _pau;
                 break;
+            case NagiType.HU:
+                _ob = _hu;
+                _mainOb = winEffect;
+                break;
+            case NagiType.TSUMO:
+                _ob = _tsumo;
+                _mainOb = winEffect;
+                break;
         }
         _ob.SetActive(true);
-        gameObject.SetActive(true);
+        _mainOb.SetActive(true);
         StartCoroutine(HideNagi(_ob));
     }
 
-    IEnumerator HideNagi(GameObject _ob) {
-        yield return new WaitForSeconds(2.3f);
+    public void ShowWin(NagiType _type)
+    {
+        StopAllCoroutines();
+        HideAll();
+
+        if (_type == NagiType.TSUMO)
+            _ob = _tsumo;
+        if (_type == NagiType.HU)
+            _ob = _hu;
+
+        _ob.SetActive(true);
+        winEffect.SetActive(true);
+        StartCoroutine(HideNagi(_ob));
+    }
+
+    IEnumerator HideNagi(GameObject _ob)
+    {
+        if (_ob == _pau || _ob == _tsumo || _ob == _hu)
+            yield return new WaitForSeconds(8f);
+        else
+            yield return new WaitForSeconds(2.3f);
+
         _ob.SetActive(false);
-        gameObject.SetActive(false);
+        winEffect.SetActive(false);
+        nagiEffect.SetActive(false);
     }
 
     private void HideAll() {
+        winEffect.SetActive(false);
+        nagiEffect.SetActive(false);
         _chi.SetActive(false);
         _pon.SetActive(false);
         _gan.SetActive(false);
         _tin.SetActive(false);
         _hu.SetActive(false);
         _pau.SetActive(false);
+        _tsumo.SetActive(false);
     }
 }

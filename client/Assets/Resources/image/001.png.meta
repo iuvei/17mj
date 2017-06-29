@@ -1,15 +1,18 @@
 fileFormatVersion: 2
-guid: 9544b058642d30247a20d7ea7bd90ffb
-timeCreated: 1498641097
+guid: 8cf7797cca137694aa3e34cef15fc3e8
+timeCreated: 1498641813
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: img_hu_0
-    21300002: img_hu_1
-    21300004: img_hu_2
-    21300006: img_hu_3
-    21300008: img_hu_4
-    21300010: img_hu_5
+    21300000: 001_0
+    21300002: 001_1
+    21300004: 001_2
+    21300006: 001_3
+    21300008: 001_4
+    21300010: 001_5
+    21300012: 001_6
+    21300014: 001_7
+    21300016: 001_8
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -84,78 +87,117 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: img_hu_0
+      name: 001_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 0
         width: 532
         height: 433
       alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 437
+        width: 532
+        height: 231
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: img_hu_1
+      name: 001_2
       rect:
         serializedVersion: 2
-        x: 56
-        y: 287
+        x: 0
+        y: 683
+        width: 278
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_3
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 685
+        width: 95
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_4
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 875
+        width: 49
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_5
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 876
+        width: 54
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_6
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 779
+        width: 72
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_7
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 786
+        width: 56
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 001_8
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 779
         width: 53
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: img_hu_2
-      rect:
-        serializedVersion: 2
-        x: 146
-        y: 350
-        width: 55
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: img_hu_3
-      rect:
-        serializedVersion: 2
-        x: 233
-        y: 361
-        width: 75
-        height: 65
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: img_hu_4
-      rect:
-        serializedVersion: 2
-        x: 345
-        y: 333
-        width: 53
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: img_hu_5
-      rect:
-        serializedVersion: 2
-        x: 417
-        y: 285
-        width: 48
-        height: 47
+        height: 53
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

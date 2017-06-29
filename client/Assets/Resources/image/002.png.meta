@@ -1,15 +1,21 @@
 fileFormatVersion: 2
-guid: 9544b058642d30247a20d7ea7bd90ffb
-timeCreated: 1498641097
+guid: b0bc57c626436e34c90a21be2d344f5d
+timeCreated: 1498705013
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: img_hu_0
-    21300002: img_hu_1
-    21300004: img_hu_2
-    21300006: img_hu_3
-    21300008: img_hu_4
-    21300010: img_hu_5
+    21300000: 002_0
+    21300002: 002_1
+    21300004: 002_2
+    21300006: 002_3
+    21300008: 002_4
+    21300010: 002_5
+    21300012: 002_6
+    21300014: 002_7
+    21300016: 002_8
+    21300018: 002_9
+    21300020: 002_10
+    21300022: 002_11
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -84,80 +90,158 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: img_hu_0
+      name: 002_0
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 171
+        width: 770
+        height: 469
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_1
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 770
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_2
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 241
+        width: 93
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 532
-        height: 433
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 352
+        width: 278
+        height: 288
+      alignment: 9
+      pivot: {x: 0.99496406, y: 0.4904446}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: img_hu_1
+      name: 002_4
       rect:
         serializedVersion: 2
-        x: 56
-        y: 287
-        width: 53
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 278
+        y: 352
+        width: 278
+        height: 288
+      alignment: 9
+      pivot: {x: 0.00008639329, y: 0.50000024}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: img_hu_2
+      name: 002_5
       rect:
         serializedVersion: 2
-        x: 146
-        y: 350
-        width: 55
+        x: 148
+        y: 281
+        width: 51
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_6
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 286
+        width: 51
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_7
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 281
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_8
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 283
+        width: 68
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_9
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 289
+        width: 56
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 002_10
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 282
+        width: 50
         height: 50
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: img_hu_3
+      name: 002_11
       rect:
         serializedVersion: 2
-        x: 233
-        y: 361
-        width: 75
-        height: 65
+        x: 654
+        y: 266
+        width: 54
+        height: 52
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: img_hu_4
-      rect:
-        serializedVersion: 2
-        x: 345
-        y: 333
-        width: 53
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: img_hu_5
-      rect:
-        serializedVersion: 2
-        x: 417
-        y: 285
-        width: 48
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

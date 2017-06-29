@@ -9,9 +9,9 @@ public class TestCallNagi : MonoBehaviour {
     public bool _callTin = false;
     public bool _callHu = false;
     public bool _callPau = false;
+    public bool _callTsumo = false;
 
     public Nagieffect nagiEffect;
-
 
     void Update() {
         if (_callChi) {
@@ -43,6 +43,12 @@ public class TestCallNagi : MonoBehaviour {
             nagiEffect.ShowNagi(Nagieffect.NagiType.PAU);
             _callPau = false;
         }
-            
+
+        if (_callTsumo)
+        {
+            nagiEffect.ShowNagi(Nagieffect.NagiType.TSUMO);
+            _callTsumo = false;
+        }
+
     }
 }

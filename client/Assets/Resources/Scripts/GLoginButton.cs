@@ -12,17 +12,19 @@ public class GLoginButton : MonoBehaviour {
     private static AndroidJavaObject currentActivity = null;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+    void Awake () {
+        var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
+        login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
+        login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
+    }
     void Start () {
         Button btn = GetComponent<Button>();
         btn.onClick.AddListener(delegate
         {
             GLogin();
         });
-
-        var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
-        login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
     }
 
     private void GLogin()
@@ -34,6 +36,9 @@ public class GLoginButton : MonoBehaviour {
     public void OnConnected(string name)
     {
         Debug.Log("OnConnected() = " + name);
+        //Debug.Log("doLogin1(" + fbMail + " " + fbId + ")");
+        //YkiApi.Login("1", mail, fbId, waitServerStatusCallback);
+        //StartCoroutine(CheckServerStatus(LoginUI.Instance.LoginCallback));
     }
 
 #endif     

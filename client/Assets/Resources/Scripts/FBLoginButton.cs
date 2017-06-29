@@ -7,6 +7,8 @@ using System.Collections;
 
 public class FBLoginButton : MonoBehaviour {
 
+    public Text _logText;
+
     private string fbId = string.Empty;
     private string fbMail = string.Empty;
 
@@ -16,8 +18,12 @@ public class FBLoginButton : MonoBehaviour {
             FB.ActivateApp();
             var perms = new List<string>() { "public_profile", "email", "user_friends" };
             FB.LogInWithReadPermissions(perms, AuthCallback);
+            //Debug.Log("Awake FB.IsInitialized");
+            _logText.text = "Awake FB.IsInitialized";
         } else {
             FB.Init(OnFBInitComplete, OnHideUnity);
+            //Debug.Log("Awake FB.Is NOT Initialized");
+            _logText.text = "Awake FB.Is NOT Initialized0";
         }
     }
 
@@ -43,11 +49,13 @@ public class FBLoginButton : MonoBehaviour {
                 fbId = aToken.UserId;
                 FB.API("/me/picture", HttpMethod.GET, FBPhotoCallback);
                 FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
+                _logText.text += "\n OnFBInitComplete > FB.IsInitialized >　FB.IsLoggedIn";
             }
         }
         else
         {
             Debug.Log("Failed to Initialize the Facebook SDK");
+            _logText.text += "\n Failed to Initialize the Facebook SDK";
         }
     }
 
@@ -63,11 +71,13 @@ public class FBLoginButton : MonoBehaviour {
             //}
             //headMesh.GetComponent<Renderer>().material.mainTexture = result.Texture;
         }
+        _logText.text += "\n FBPhotoCallback()";
     }
 
     private void OnHideUnity(bool isGameShown)
     {
         //"Success - Check log for details";
+        _logText.text += "\n  OnHideUnity";
     }
 
     private void FBLogin()
@@ -89,14 +99,20 @@ public class FBLoginButton : MonoBehaviour {
                 i++;            
             FB.API("/me/picture", HttpMethod.GET, FBPhotoCallback);
             FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
+            _logText.text += "\n AuthCallback >　FB.IsLoggedIn";
         }
         else
         {
             Debug.Log("User cancelled login");
+            _logText.text += "\n AuthCallback > User cancelled login";
         }
     }
 
-    private void FBLogout()
+    public void clearLog() {
+        _logText.text = "";
+    }
+
+    public void FBLogout()
     {
         FB.LogOut();
     }
@@ -117,6 +133,8 @@ public class FBLoginButton : MonoBehaviour {
             fbMail = dict["email"].ToString();
         }
         doLogin1();
+
+        _logText.text += "\n FBUserCallBack()";
     }
 
     public void doLogin1()
@@ -124,6 +142,10 @@ public class FBLoginButton : MonoBehaviour {
         Debug.Log("doLogin1(" + fbMail + " " + fbId + ")");
         //YkiApi.Login("1", mail, fbId, waitServerStatusCallback);
         //StartCoroutine(CheckServerStatus(LoginUI.Instance.LoginCallback));
+
+        _logText.text += "\n doLogin1";
+
+        UIManager.instance.StartSetEnterLoading();
     }
 
    

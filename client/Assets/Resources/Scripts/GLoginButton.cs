@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Collections;
 
 public class GLoginButton : MonoBehaviour {
+    public Text _logText;
+
     private string gId = string.Empty;
     private string gMail = string.Empty;
     private static AndroidJavaObject login = null;
@@ -18,6 +20,7 @@ public class GLoginButton : MonoBehaviour {
         var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
+        _logText.text = "Awake GLogin";
     }
     void Start () {
         Button btn = GetComponent<Button>();
@@ -39,6 +42,8 @@ public class GLoginButton : MonoBehaviour {
         //Debug.Log("doLogin1(" + fbMail + " " + fbId + ")");
         //YkiApi.Login("1", mail, fbId, waitServerStatusCallback);
         //StartCoroutine(CheckServerStatus(LoginUI.Instance.LoginCallback));
+        UIManager.instance.StartSetEnterLoading();
+        _logText.text += " \n OnConnected() "+ name;
     }
 
 #endif     

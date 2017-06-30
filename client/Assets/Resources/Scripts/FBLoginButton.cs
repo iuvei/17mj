@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Facebook.MiniJSON;
 using System.Collections;
 
+
+
 public class FBLoginButton : MonoBehaviour {
 
     public Text _logText;

@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.Collections;
+
 
 public class GLoginButton : MonoBehaviour {
     public Text _logText;
@@ -13,28 +10,38 @@ public class GLoginButton : MonoBehaviour {
     private static AndroidJavaObject login = null;
     private static AndroidJavaObject currentActivity = null;
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-    void Awake () {
-        var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
-        login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
-        login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
-        _logText.text = "Awake GLogin";
-    }
+
     void Start () {
         Button btn = GetComponent<Button>();
         btn.onClick.AddListener(delegate
         {
             GLogin();
         });
+#if UNITY_ANDROID
+        var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
+        login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
+        login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
+        _logText.text = "Awake GLogin";
+#endif
     }
 
     private void GLogin()
     {
         Debug.Log("GLogin()");
+#if UNITY_ANDROID
         login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
+#endif
     }   
+
+    public void GLoginOut()
+    {
+        Debug.Log("GLoginOut()");
+#if UNITY_ANDROID
+        login.CallStatic("LoginOut");
+#endif
+    }
 
     public void OnConnected(string name)
     {
@@ -46,5 +53,4 @@ public class GLoginButton : MonoBehaviour {
         _logText.text += " \n OnConnected() "+ name;
     }
 
-#endif     
 }

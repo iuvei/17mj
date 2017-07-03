@@ -116,7 +116,9 @@ public class FBLoginButton : MonoBehaviour {
 
     public void FBLogout()
     {
+        Debug.Log("FBLogout");
         FB.LogOut();
+        FB.Init(OnFBInitComplete, OnHideUnity);
     }
 
     void FBUserCallBack(IResult result)

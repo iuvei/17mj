@@ -190,7 +190,7 @@ namespace com.Lobby
 			//SetPlayerName();
 			this.Players = PhotonNetwork.playerList.ToList ();
 			UpdateRoomInfo ();
-            StartCoroutine(GetInRoom());
+            //StartCoroutine(GetInRoom());
 			/*
             Text[] ts = playersPanel.GetComponentsInChildren<Text>();
             foreach (Text t in ts)
@@ -247,13 +247,12 @@ namespace com.Lobby
 			Debug.Log ("CreateRoom()");
             if (PhotonNetwork.connected)
             {
-				_roomname = "mj_room";
+				_roomname = PhotonNetwork.playerName;
                 //创建房间成功
 				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))
                 {
 					Debug.Log("Launcher.CreateRoom() 成功");
-
-                    StartCoroutine(GetInRoom());
+                    StartCoroutine(ChangeRoom());
                 }
             }
         }
@@ -359,6 +358,13 @@ namespace com.Lobby
 				waitroomPanel.transform.DOScaleY (1, 1f);
 			}
         }
+
+		IEnumerator ChangeRoom()
+		{
+			Debug.Log ("ChangeRoom()");
+			yield return new WaitForSeconds (1f);
+			PhotonNetwork.LoadLevel ("03.Room");
+		}
 
 		IEnumerator reloadRoomlist()
 		{

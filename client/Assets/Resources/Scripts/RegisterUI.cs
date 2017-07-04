@@ -8,6 +8,14 @@ using System.Text.RegularExpressions;
 public class RegisterUI : MonoBehaviour {
     static public RegisterUI Instance;
 
+    public enum ServerStatus
+    {
+        None = 0,
+        Connecting = 1,
+        ConnectSuccess = 2,
+        ConnectFailed = 3
+    }
+
     public InputField RegisterName;     // 註冊頁 暱稱
     public InputField RegisterAccount;  // 註冊頁 帳號(信箱)
     public InputField RegisterPass1;   // 註冊頁 密碼
@@ -18,6 +26,10 @@ public class RegisterUI : MonoBehaviour {
 
     public string[] _canNickName; //罐頭暱稱
     private string _defaultNickName = "大島柚子"; //預設暱稱
+
+    private ServerStatus _serverStatus = ServerStatus.None;
+    private string _serverResult = string.Empty;
+
 
     void Awake()
     {
@@ -80,9 +92,7 @@ public class RegisterUI : MonoBehaviour {
             {
                 //檢查暱稱
                 registerNickName = CheckNickName();
-
-                //接註冊API(registerMail, registerPass1, registerNickName, RegisterCallback)
-                Debug.Log("要接註冊API");
+                doLogin(registerMail, registerPass1, registerNickName, RegisterCallback);
             }
         }
     }
@@ -94,15 +104,39 @@ public class RegisterUI : MonoBehaviour {
         {
             RegisterHint_Account.GetComponentInChildren<Text>().text = "此帳號已存在";
             RegisterHint_Account.SetActive(true);
-            //Debug.Log("註冊失敗! " + result);
+            Debug.Log("Failed! " + result);
+            _serverStatus = ServerStatus.ConnectFailed;
+            _serverResult = result;
         }
         else
         {
-            //Debug.Log("註冊成功! " + result);
+            Debug.Log("ConnectSuccess! " + result);
             UIManager.instance.ExitRegisterPage(); //離開註冊頁面
-
+            _serverStatus = ServerStatus.ConnectSuccess;
+            _serverResult = result;
             ResetAllInput();
         }
+    }
+
+    public IEnumerator CheckServerStatus(MJApi.RequestCallBack callback)
+    {
+        while (_serverStatus == ServerStatus.None || _serverStatus == ServerStatus.Connecting)
+            yield return null;
+        if (callback != null)
+        {
+            if (_serverStatus == ServerStatus.ConnectSuccess)
+                callback(WebExceptionStatus.Success, _serverResult);
+            else if (_serverStatus == ServerStatus.ConnectFailed)
+                callback(WebExceptionStatus.ConnectFailure, _serverResult);
+        }
+        StopCoroutine("CheckServerStatus");
+    }
+
+    public void doLogin(string mail, string pass, string name, MJApi.RequestCallBack callback)
+    {
+        _serverStatus = ServerStatus.Connecting;
+        MJApi.AddMember(mail, pass, name, RegisterCallback);
+        StartCoroutine(CheckServerStatus(callback));
     }
 
     public void ResetAllInput() {
@@ -139,4 +173,5 @@ public class RegisterUI : MonoBehaviour {
         targetHint.gameObject.SetActive(false);
         targetHint.GetComponentInParent<InputField>().ActivateInputField();
     }
+
 }

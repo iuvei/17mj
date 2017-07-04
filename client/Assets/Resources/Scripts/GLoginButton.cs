@@ -17,7 +17,7 @@ public class GLoginButton : MonoBehaviour {
         {
             GLogin();
         });
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
         var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");

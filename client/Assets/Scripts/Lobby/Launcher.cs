@@ -27,11 +27,15 @@ namespace com.Lobby
 
 		public GameObject settingPanel;
 
+		public GameObject roomlistPanel;
+
         //房间列表
         public RectTransform LobbyPanel;
 
         //玩家列表
         public RectTransform playersPanel;
+
+		public RectTransform rListPanel;
 
         //退出房间按钮
         public Button btnExit;
@@ -47,6 +51,7 @@ namespace com.Lobby
 		private byte _roommax = 2;
         private bool isConnecting;
 		private string BGM_name = "BGM_Lobby";
+		private List<Button> buttons = new List<Button>();
         #endregion
 
         private void Awake()
@@ -185,7 +190,7 @@ namespace com.Lobby
 			//SetPlayerName();
 			this.Players = PhotonNetwork.playerList.ToList ();
 			UpdateRoomInfo ();
-            StartCoroutine(GetInRoom());
+            //StartCoroutine(GetInRoom());
 			/*
             Text[] ts = playersPanel.GetComponentsInChildren<Text>();
             foreach (Text t in ts)
@@ -242,16 +247,45 @@ namespace com.Lobby
 			Debug.Log ("CreateRoom()");
             if (PhotonNetwork.connected)
             {
-				_roomname = "mj_room";
+				_roomname = PhotonNetwork.playerName;
                 //创建房间成功
 				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))
                 {
 					Debug.Log("Launcher.CreateRoom() 成功");
-
-                    StartCoroutine(GetInRoom());
+                    StartCoroutine(ChangeRoom());
                 }
             }
         }
+
+		/// <summary>
+		/// 顯示房間列表
+		/// </summary>
+		public void ShowRoomList()
+		{
+			Debug.Log ("GetRoomList()");
+			if (roomlistPanel) {
+				roomlistPanel.SetActive (true);
+				//Debug.Log ("CreateRoom()");
+				StartCoroutine(reloadRoomlist());
+			}
+		}
+
+		/// <summary>
+		/// Hides the room list.
+		/// </summary>
+		public void HideRoomList()
+		{
+			Debug.Log ("HideRoomList()");
+			if (buttons.Count > 0) {
+				foreach (Button bu in buttons) {
+					Destroy (bu.gameObject);
+				}
+				buttons.Clear ();
+			}
+			if (roomlistPanel) {
+				roomlistPanel.SetActive (false);
+			}
+		}
 
 		/// <summary>
 		/// 加入或者建立房間
@@ -297,11 +331,13 @@ namespace com.Lobby
         IEnumerator ExitRoom()
         {
 			Debug.Log ("ExitRoom()");
-            waitroomPanel.transform.DOScaleY(0, 0.8f);
-			PhotonNetwork.LeaveRoom();
-			yield return new WaitForSeconds(1);
-			waitroomPanel.SetActive(false);
-			this.Players.Clear ();
+			if (waitroomPanel) {
+				waitroomPanel.transform.DOScaleY (0, 0.8f);
+				PhotonNetwork.LeaveRoom ();
+				yield return new WaitForSeconds (1);
+				waitroomPanel.SetActive (false);
+				this.Players.Clear ();
+			}
             //PhotonNetwork.LeaveRoom();
 			//
             //yield return new WaitForSeconds(1f);
@@ -314,12 +350,54 @@ namespace com.Lobby
         /// <returns></returns>
         IEnumerator GetInRoom()
         {
-			//Debug.Log ("GetInRoom()");
+			Debug.Log ("GetInRoom()");
             //lobbyPanel.transform.DOScaleY(0,.8f);
-			waitroomPanel.SetActive(true);
-            yield return new WaitForSeconds(1f);
-			waitroomPanel.transform.DOScaleY(1, 1f);
+			if (waitroomPanel) {
+				waitroomPanel.SetActive (true);
+				yield return new WaitForSeconds (1f);
+				waitroomPanel.transform.DOScaleY (1, 1f);
+			}
         }
+
+		IEnumerator ChangeRoom()
+		{
+			Debug.Log ("ChangeRoom()");
+			yield return new WaitForSeconds (1f);
+			PhotonNetwork.LoadLevel ("03.Room");
+		}
+
+		IEnumerator reloadRoomlist()
+		{
+			Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
+			if (hint) {
+				hint.gameObject.SetActive (true);
+				hint.text = "載入中...";
+			}
+			//hint.gameObject.SetActive (false);
+			yield return new WaitForSeconds(1.0f);
+
+			if (PhotonNetwork.connected) {
+				RoomInfo[] lists = PhotonNetwork.GetRoomList ();
+				if (lists.Length > 0) {
+					foreach (RoomInfo ri in lists) {
+						GameObject g = GameObject.Instantiate (Resources.Load ("Lobby/RoomItem") as GameObject);
+						g.transform.parent = rListPanel;
+						g.transform.localScale = Vector3.one;
+						g.transform.localPosition = Vector3.zero;
+						Text txt = g.GetComponentInChildren<Text> ();
+						txt.text = ri.Name;
+					}
+					if (hint) {
+						hint.gameObject.SetActive (false);
+					}
+				} else {
+					if (hint) {
+						hint.text = "目前沒有任何人開桌...";
+						//hint.gameObject.SetActive (false);
+					}
+				}
+			}
+		}
 
 		public void setProcess(float t)
 		{

@@ -7,8 +7,9 @@ public class TestCallNagi : MonoBehaviour {
     public bool _callPon = false;
     public bool _callGan = false;
     public bool _callTin = false;
-    public bool _callHu = false;
+    public bool _callHuSmall = false;
     public bool _callPau = false;
+    public bool _callHu = false;
     public bool _callTsumo = false;
 
     public Nagieffect nagiEffect;
@@ -34,8 +35,14 @@ public class TestCallNagi : MonoBehaviour {
             _callTin = false;
         }
            
-        if (_callHu) {
+        if (_callHuSmall) {
             nagiEffect.ShowNagi(Nagieffect.NagiType.HU);
+            _callHuSmall = false;
+        }
+
+        if (_callHu)
+        {
+            nagiEffect.ShowNagi(Nagieffect.NagiType.HU2);
             _callHu = false;
         }
 

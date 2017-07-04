@@ -103,6 +103,9 @@ namespace com.Desktop
         {
             //注册RaiseEvent事件函数
             //PhotonNetwork.OnEventCall += OnEventCall;
+
+            //吃碰槓胡面板隱藏
+            btnPon.transform.parent.parent.gameObject.SetActive(false);
         }
         /// <summary>
         /// 事件绑定
@@ -442,10 +445,12 @@ namespace com.Desktop
 		/// <param name="MahID">胡牌的ID</param>
 		public void AskWin()
 		{
-			//Debug.Log ("[c] AskWin()");
-			int[] param = { photonPlayer.ID };
-			photonView.RPC("WinPai", PhotonTargets.MasterClient, param);
-			HideMenu ();
+            //Debug.Log ("[c] AskWin()");
+            //int[] param = { photonPlayer.ID };
+            //photonView.RPC("WinPai", PhotonTargets.MasterClient, param); 
+            int[] param = { (int)GameCommand.WINPAI, photonPlayer.ID };
+            photonView.RPC("SendRequestToServer", PhotonTargets.MasterClient, param);
+            HideMenu ();
 		}
 
 		/// <summary>
@@ -479,6 +484,7 @@ namespace com.Desktop
 		{
 			//Debug.Log ("[c] AskPon()");
 			int[] param = { (int)GameCommand.PONPAI, photonPlayer.ID };
+            Debug.Log("param = "+ param);
 			photonView.RPC ("SendRequestToServer", PhotonTargets.MasterClient, param);
 			HideMenu ();
 		}
@@ -930,6 +936,16 @@ namespace com.Desktop
                 }
 
             }
+        }
+
+        public void handleWin(int mahID)
+        {
+            //Debug.LogError ("[s] handleWin(" + mahID + ")");
+            string amahname = string.Empty;
+            amahname = Mahjong.getName(mahID);
+            this.state = PLAYERSTATE.WAITING;
+            int[] param = { photonPlayer.ID, mahID };
+            photonView.RPC("WinPai", PhotonTargets.AllBuffered, param);
         }
 
         /// <summary>

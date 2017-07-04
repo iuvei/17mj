@@ -38,6 +38,7 @@ public class GLoginButton : MonoBehaviour {
     public void GLoginOut()
     {
         Debug.Log("GLoginOut()");
+        _logText.text += " \n GLoginOut ";
 #if UNITY_ANDROID
         login.CallStatic("LoginOut");
 #endif

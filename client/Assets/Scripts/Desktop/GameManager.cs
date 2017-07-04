@@ -43,6 +43,11 @@ namespace com.Desktop
         //吃碰牌特效
         public Nagieffect nagiEffectPlayerA;
         public Nagieffect nagiEffectPlayerB;
+
+        //畫面過場控制
+        public Animator AllCanvasAnim; // 過場移入
+        public Animator GameInfoAnim;  //局風顯示
+
         #region 
         /// <summary>
         /// 骰子数
@@ -105,9 +110,56 @@ namespace com.Desktop
 			VideoRecordingBridge.StartRecord ();
 
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
-			//Debug.Log ("Start()");
+            //Debug.Log ("Start()");
+
             //0.关联Photon玩家 与 Unity中的玩家
             doBundlePlauer();
+
+            //1.洗牌
+            //doShuffleMah();
+
+            //2.摇骰子
+            //doDice();
+
+            //3.发牌
+            //doDealingMahs();
+
+            //4.設定開始玩家
+            //setActivePlayer(players[0]);
+        }
+
+        // 邀請玩麻將
+        public void ClickInvatePlay() {
+
+            //只有副机有邀請的權利
+            if (PhotonNetwork.isMasterClient)
+            {
+                return;
+            }
+
+            photonView.RPC("StartMahjong", PhotonTargets.All, null);
+        }
+
+        [PunRPC]
+        private void StartMahjong()
+        {
+            LayoutStart(); //畫面移入
+
+            //Debug.LogError ("[RPC] StartMahjong()");
+
+            //RestView();
+
+            //只有主机有发牌的权利
+            if (!PhotonNetwork.isMasterClient)
+            {
+                return;
+            }
+
+            StartCoroutine("ReadyPlay");
+        }
+
+        IEnumerator ReadyPlay() {
+            yield return new WaitForSeconds(5f);
 
             //1.洗牌
             doShuffleMah();
@@ -119,7 +171,7 @@ namespace com.Desktop
             doDealingMahs();
 
             //4.設定開始玩家
-			setActivePlayer(players[0]);
+            setActivePlayer(players[0]);
         }
 
         public void onLivePlayREConnect()
@@ -314,8 +366,28 @@ namespace com.Desktop
 			}
 		}
 
+        //處理玩家胡牌
+        public void doHandleWin(int playerid)
+        {
+            if (!PhotonNetwork.isMasterClient)
+            {
+                //Debug.Log ("Server Exec Only!! doHandledWin()");
+                return;
+            }
+            else
+            {
+                if (abanMahId != 0)
+                {
+                    PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
+                    if (photonPlayer != null && photonPlayer.mahPlayer != null)
+                    {
+                        photonPlayer.mahPlayer.handleWin(abanMahId);
+                    }
+                }
+            }
+        }
 
-		public void doHandleDaPai(int playerid, int mid) {
+        public void doHandleDaPai(int playerid, int mid) {
 			//Debug.LogError ("[s] doHandleDaPai("+playerid+", "+mid+")");
 			if (!PhotonNetwork.isMasterClient) {
 				//Debug.LogError ("Server Exec Only!! doHandleDaPai()");
@@ -473,7 +545,11 @@ namespace com.Desktop
 				int mid = (int)param[2];
 				doHandleDaPai(player_id, mid);
 				break;
-			}
+            case (int)GameCommand.WINPAI:
+                player_id = (int)param[1];
+                doHandleWin(player_id);
+                break;
+            }
 		}
 
 		/*
@@ -751,22 +827,36 @@ namespace com.Desktop
         {
 			//Debug.Log ("[RPC] 贏牌()");
             Text text = OverPanel.GetComponentInChildren<Text>();
-            OverPanel.gameObject.SetActive(true);
+            //OverPanel.gameObject.SetActive(true);
+            //nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PAU);
+            StartCoroutine(_OverPanel(5f));
 
             PhotonPlayer photonPlayer = PhotonPlayer.Find(param[0]);
             text.text = "玩家" + photonPlayer.NickName + " 胡牌了!";
 			if (photonPlayer.IsLocal) {
 				//Debug.LogError ("[RPC] 你贏了 ");
 				playWinSound ();
-                nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.HU);
+                nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.HU2);
+                nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PAU);
             } else {
 				//Debug.LogError ("[RPC] "+photonPlayer.NickName+"贏了 ");
 				playWinSound ();
-                nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PAU);
+                nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.PAU);
+                nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.HU);
             }
         }
 
-		/*
+        private IEnumerator _OverPanel(float time = 0.1f)
+        {
+            if (time > 0)
+            {
+                yield return new WaitForSeconds(time);
+            }
+
+            OverPanel.gameObject.SetActive(true);
+        }
+
+        /*
         private void OnEvent(byte eventcode, object content, int senderid)
         {
 			if (eventcode == (byte)GameCommand.ONEMORETIME)
@@ -905,5 +995,20 @@ namespace com.Desktop
 			AudioManager.Instance.Mute ();
 		}
 
+        private void LayoutStart()
+        {
+            AllCanvasAnim.SetBool("GameStart", true);
+            Invoke("ShowInfo", 0.45f);
+        }
+
+        public void ShowInfo()
+        {
+            GameInfoAnim.SetTrigger("ShowInfo");
+        }
+
+        public void GameStop()
+        {
+            AllCanvasAnim.SetBool("GameStart", false);
+        }
     }
 }

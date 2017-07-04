@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Nagieffect : MonoBehaviour {
-    public GameObject _chi;  //吃
-    public GameObject _pon;  //碰
-    public GameObject _gan;  //槓
-    public GameObject _tin;  //聽
-    public GameObject _pau;  //放槍
-    public GameObject _hu;   //胡
+    public GameObject _chi;     //吃
+    public GameObject _pon;     //碰
+    public GameObject _gan;     //槓
+    public GameObject _tin;     //聽
+    public GameObject _pau;     //放槍
+    public GameObject _huSmall; //胡(對家)
+    public GameObject _hu;    //胡
     public GameObject _tsumo; //自摸
     public GameObject nagiEffect;
     public GameObject winEffect;
 
-    public enum NagiType {CHI,PON,GAN,TIN,HU,PAU,TSUMO}
+    public enum NagiType {CHI,PON,GAN,TIN,HU,HU2,PAU,TSUMO}
 
     private GameObject _ob;
     private GameObject _mainOb;
@@ -47,6 +48,9 @@ public class Nagieffect : MonoBehaviour {
                 _ob = _pau;
                 break;
             case NagiType.HU:
+                _ob = _huSmall;
+                break;
+            case NagiType.HU2:
                 _ob = _hu;
                 _mainOb = winEffect;
                 break;
@@ -60,25 +64,11 @@ public class Nagieffect : MonoBehaviour {
         StartCoroutine(HideNagi(_ob));
     }
 
-    public void ShowWin(NagiType _type)
-    {
-        StopAllCoroutines();
-        HideAll();
-
-        if (_type == NagiType.TSUMO)
-            _ob = _tsumo;
-        if (_type == NagiType.HU)
-            _ob = _hu;
-
-        _ob.SetActive(true);
-        winEffect.SetActive(true);
-        StartCoroutine(HideNagi(_ob));
-    }
 
     IEnumerator HideNagi(GameObject _ob)
     {
         if (_ob == _pau || _ob == _tsumo || _ob == _hu)
-            yield return new WaitForSeconds(8f);
+            yield return new WaitForSeconds(5f);
         else
             yield return new WaitForSeconds(2.3f);
 

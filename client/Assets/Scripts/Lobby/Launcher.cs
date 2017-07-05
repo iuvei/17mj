@@ -29,6 +29,10 @@ namespace com.Lobby
 
 		public GameObject roomlistPanel;
 
+        public GameObject shopPanel;
+
+        public GameObject depositPanel;
+
         //房间列表
         public RectTransform LobbyPanel;
 
@@ -443,5 +447,41 @@ namespace com.Lobby
 				settingPanel.SetActive(false);
 			}
 		}
+
+        public void ClickDespoit()
+        {
+            if (depositPanel)
+            {
+                depositPanel.transform.DOMoveY(-11, 0, true);
+                depositPanel.transform.DOMoveY(0, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        public void ExitDespoit()
+        {
+            if (depositPanel)
+            {
+                depositPanel.transform.DOMoveY(0, 0, true);
+                depositPanel.transform.DOMoveY(-11, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        public void ClickShop()
+        {
+            if (shopPanel)
+            {
+                shopPanel.transform.DOMoveX(-19.5f, 0, true);
+                shopPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        public void ExitShop()
+        {
+            if (shopPanel)
+            {
+                shopPanel.transform.DOMoveX(0, 0, true);
+                shopPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
     }
 }

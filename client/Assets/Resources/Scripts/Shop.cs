@@ -99,7 +99,7 @@ public class Shop : MonoBehaviour {
     }
 
     private void Caculate() {
-        _popupBuyItemTotal.text = String.Format("{0:0,0}", (currentNum * currentPrice));
+        _popupBuyItemTotal.text = string.Format("{0:0,0}", (currentNum * currentPrice));
     }
     public void ChangeCurrentNum() {
         if (!Int32.TryParse(_popupBuyItemNum.text, out currentNum))

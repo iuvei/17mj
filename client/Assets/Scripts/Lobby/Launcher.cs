@@ -33,6 +33,11 @@ namespace com.Lobby
 
         public GameObject depositPanel;
 
+        public GameObject bagPanel;
+        public Transform bagItemTarget;
+        public GameObject bagItemPrefab;
+        public GameObject bagEmpty;
+
         //房间列表
         public RectTransform LobbyPanel;
 
@@ -483,5 +488,80 @@ namespace com.Lobby
                 shopPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
             }
         }
+
+        public void ClickBag()
+        {
+            foreach (Transform child in bagItemTarget)
+                Destroy(child.gameObject);
+
+            //玩家的背包資料
+            List<ItemInfo> itemInfos = loadItemData();
+            itemInfos.Clear();
+
+            if (itemInfos.Count == 0)
+            {
+                if (bagEmpty)
+                    bagEmpty.SetActive(true);
+            }
+            else {
+                if (bagEmpty)
+                    bagEmpty.SetActive(false);
+
+                foreach (ItemInfo info in itemInfos)
+                {
+                    GameObject go = Instantiate(bagItemPrefab);
+                    BagItemInfo bagInfo = go.GetComponent<BagItemInfo>();
+                    bagInfo.setInfo(info);
+
+                    go.transform.SetParent(bagItemTarget);
+                    RectTransform rectT = go.GetComponent<RectTransform>();
+                    rectT.localPosition = Vector3.zero;
+                    rectT.localScale = Vector3.one;
+                }
+            }
+
+            if (bagPanel)
+            {
+                bagPanel.transform.DOMoveX(-19.5f, 0, true);
+                bagPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        public void ExitBag()
+        {
+            if (bagPanel)
+            {
+                bagPanel.transform.DOMoveX(0, 0, true);
+                bagPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        private List<ItemInfo> loadItemData() {
+            ItemInfos itemInfos = new ItemInfos();
+            ItemInfo data1 = new ItemInfo();
+            data1.Id = 1;
+            data1.Name = "渡假別墅";
+            data1.Num = 1;
+            data1.Path2D = 1;
+            itemInfos.dataList.Add(data1);
+
+            ItemInfo data2 = new ItemInfo();
+            data2.Id = 2;
+            data2.Name = "金元寶";
+            data2.Num = 3;
+            data2.Path2D = 2;
+            itemInfos.dataList.Add(data2);
+
+            ItemInfo data3 = new ItemInfo();
+            data3.Id = 3;
+            data3.Name = "I-RIMO鑽戒";
+            data3.Num = 4;
+            data3.Path2D = 3;
+            itemInfos.dataList.Add(data3);
+            
+            return itemInfos.dataList;
+        }
+
+
     }
 }

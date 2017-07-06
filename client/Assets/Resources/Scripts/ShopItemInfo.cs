@@ -5,6 +5,4 @@ using UnityEngine;
 public class ShopItemInfo : MonoBehaviour {
     public string ItemName;
     public int ItemPrice;
-
-
 }

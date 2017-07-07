@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace com.Lobby
 {
@@ -28,6 +29,7 @@ namespace com.Lobby
 		public GameObject settingPanel;
 
 		public GameObject roomlistPanel;
+        public GameObject roomlistPopupSetting;
 
         public GameObject shopPanel;
 
@@ -35,8 +37,6 @@ namespace com.Lobby
 
         public GameObject bagPanel;
         public Transform bagItemTarget;
-        public GameObject bagItemPrefab;
-        public GameObject bagEmpty;
 
         //房间列表
         public RectTransform LobbyPanel;
@@ -61,6 +61,7 @@ namespace com.Lobby
         private bool isConnecting;
 		private string BGM_name = "BGM_Lobby";
 		private List<Button> buttons = new List<Button>();
+        private Text hint;
         #endregion
 
         private void Awake()
@@ -112,6 +113,8 @@ namespace com.Lobby
             lobbyPanel.transform.DOScaleY(1, 1f);
             btnExit.onClick.AddListener(delegate { StartCoroutine(ExitRoom()); });
             btnStart.onClick.AddListener(delegate { StartGame(); });
+
+            hint = rListPanel.parent.GetComponentInChildren<Text>();
         }
 
         /// <summary>
@@ -284,7 +287,10 @@ namespace com.Lobby
 		/// </summary>
 		public void HideRoomList()
 		{
-			Debug.Log ("HideRoomList()");
+            foreach (Transform child in rListPanel)
+                Destroy(child.gameObject);
+
+            Debug.Log ("HideRoomList()");
 			if (buttons.Count > 0) {
 				foreach (Button bu in buttons) {
 					Destroy (bu.gameObject);
@@ -377,7 +383,7 @@ namespace com.Lobby
 
 		IEnumerator reloadRoomlist()
 		{
-			Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
+			//Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
 			if (hint) {
 				hint.gameObject.SetActive (true);
 				hint.text = "載入中...";
@@ -491,12 +497,14 @@ namespace com.Lobby
 
         public void ClickBag()
         {
+            GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
+
             foreach (Transform child in bagItemTarget)
                 Destroy(child.gameObject);
 
             //玩家的背包資料
             List<ItemInfo> itemInfos = loadItemData();
-            itemInfos.Clear();
+            //itemInfos.Clear(); //刪光光測試
 
             if (itemInfos.Count == 0)
             {
@@ -509,7 +517,8 @@ namespace com.Lobby
 
                 foreach (ItemInfo info in itemInfos)
                 {
-                    GameObject go = Instantiate(bagItemPrefab);
+                    //GameObject go = Instantiate(bagItemPrefab);
+                    GameObject go = GameObject.Instantiate(Resources.Load("Prefab/bagItem") as GameObject);
                     BagItemInfo bagInfo = go.GetComponent<BagItemInfo>();
                     bagInfo.setInfo(info);
 
@@ -562,6 +571,88 @@ namespace com.Lobby
             return itemInfos.dataList;
         }
 
+        public void RoomListToggleFollow(bool isOn)
+        {
+            GameObject roomlistEmpty = roomlistPanel.transform.Find("empty").gameObject;
+            if (roomlistEmpty)
+                roomlistEmpty.SetActive(isOn);
+        }
+
+        public void RoomListToggleAll(bool isOn)
+        {
+            foreach (Transform child in rListPanel)
+                Destroy(child.gameObject);
+
+            if (isOn) {
+                StartCoroutine(reloadRoomlist());
+            }
+            else
+            {
+                StopCoroutine(reloadRoomlist());
+                if (hint) {
+                    hint.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        public void ShowRoomListSetting()
+        {
+            GameObject popupBG = roomlistPanel.transform.Find("popupBG").gameObject;
+            if (popupBG) {
+                popupBG.SetActive(true);
+                popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+            }
+            roomlistPopupSetting.transform.DOScale(Vector3.zero, 0);
+            roomlistPopupSetting.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+        }
+
+        public void HideRoomListSetting()
+        {
+            GameObject popupBG = roomlistPanel.transform.Find("popupBG").gameObject;
+            if (popupBG)
+            {
+                popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                StartCoroutine(HideGameObject(popupBG, 0.3f));
+            }
+
+            ChangeRoomListSetting();
+            roomlistPopupSetting.transform.DOScale(Vector3.one, 0);
+            roomlistPopupSetting.transform.DOScale(Vector3.zero, 0.1f).SetEase(Ease.InSine);
+        }
+
+        IEnumerator HideGameObject(GameObject go, float _time)
+        {
+            if (_time > 0)
+                yield return new WaitForSeconds(_time);
+
+            if (go)
+                go.SetActive(false);
+        }
+
+        public void ClickToWatchRoom() {
+            Toggle myToggle = roomlistPanel.transform.Find("Panel_title/Title/btn_all").gameObject.GetComponent<Toggle>();
+            if (myToggle)
+                myToggle.isOn = true;
+        }
+
+        public void ChangeRoomListSetting()
+        {
+            Text _text = roomlistPanel.transform.Find("BtnFilter/Text").GetComponent<Text>();
+            Toggle[] tgSec = roomlistPopupSetting.transform.Find("sec").GetComponentsInChildren<Toggle>();
+            Toggle[] tgType = roomlistPopupSetting.transform.Find("type").GetComponentsInChildren<Toggle>();
+
+            foreach (Toggle tg in tgSec)
+            {
+                if (tg.isOn)
+                    _text.text = "出牌" + tg.transform.Find("Background/Label").GetComponent<Text>().text;
+            }
+
+            foreach (Toggle tg in tgType)
+            {
+                if (tg.isOn)
+                    _text.text += "、" + tg.transform.Find("Background/Label").GetComponent<Text>().text;
+            }
+        }
 
     }
 }

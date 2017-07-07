@@ -31,7 +31,7 @@ public class Shop : MonoBehaviour {
     public void ClickShopBuy()
     {
         
-        ShopItemInfo _info = EventSystem.current.currentSelectedGameObject.transform.parent.gameObject.GetComponent<ShopItemInfo>();
+        ShopItemInfo _info = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItemInfo>();
         Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);
         currentNum = 1;
         currentPrice = _info.ItemPrice;

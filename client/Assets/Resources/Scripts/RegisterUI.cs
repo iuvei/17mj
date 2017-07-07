@@ -99,7 +99,7 @@ public class RegisterUI : MonoBehaviour {
                 registerNickName = CheckNickName();
                 string id = GetUniqueKey(24);
                 string stype = "C";
-                string mail = "c&" + registerMail;
+                string mail = "C&" + registerMail;
                 Button btn = RegisterBtn.GetComponent<Button>();
                 btn.interactable = false;
                 MJApi.AddMember(id, mail, registerPass1, registerNickName, stype, RegisterCallback);

@@ -54,7 +54,7 @@ public class LoginUI : MonoBehaviour {
             //PlayerPrefs.SetString ("USERNAME", userName);
             //PlayerPrefs.SetString ("USERPASS", userPass);
 
-            MJApi.Login("0", userName, userPass, LoginCallback);
+            MJApi.Login("C", userName, userPass, LoginCallback);
         }
 	}
 

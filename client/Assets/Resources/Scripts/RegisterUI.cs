@@ -1,20 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Net;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Text;
 
 public class RegisterUI : MonoBehaviour {
     static public RegisterUI Instance;
-
-    public enum ServerStatus
-    {
-        None = 0,
-        Connecting = 1,
-        ConnectSuccess = 2,
-        ConnectFailed = 3
-    }
 
     public InputField RegisterName;     // 註冊頁 暱稱
     public InputField RegisterAccount;  // 註冊頁 帳號(信箱)
@@ -23,13 +14,10 @@ public class RegisterUI : MonoBehaviour {
     public GameObject RegisterHint_Account;   // 註冊頁 帳號錯誤提示
     public GameObject RegisterHint_Pass1;     // 註冊頁 密碼錯誤提示
     public GameObject RegisterHint_Pass2;     // 註冊頁 第二密碼錯誤提示
+    public GameObject RegisterBtn;
 
     public string[] _canNickName; //罐頭暱稱
     private string _defaultNickName = "大島柚子"; //預設暱稱
-
-    private ServerStatus _serverStatus = ServerStatus.None;
-    private string _serverResult = string.Empty;
-
 
     void Awake()
     {
@@ -53,6 +41,23 @@ public class RegisterUI : MonoBehaviour {
             Debug.Log("No found Register Hint_Password2");
 
         ResetAllInput();
+    }
+
+    public static string GetUniqueKey(int maxSize)
+    {
+        char[] chars = new char[62];
+        chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+        byte[] data = new byte[1];
+        RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider();
+        crypto.GetNonZeroBytes(data);
+        data = new byte[maxSize];
+        crypto.GetNonZeroBytes(data);
+        StringBuilder result = new StringBuilder(maxSize);
+        foreach (byte b in data)
+        {
+            result.Append(chars[b % (chars.Length)]);
+        }
+        return result.ToString();
     }
 
     //註冊頁-確定鈕
@@ -92,7 +97,12 @@ public class RegisterUI : MonoBehaviour {
             {
                 //檢查暱稱
                 registerNickName = CheckNickName();
-                doLogin(registerMail, registerPass1, registerNickName, RegisterCallback);
+                string id = GetUniqueKey(24);
+                string stype = "C";
+                string mail = "c&" + registerMail;
+                Button btn = RegisterBtn.GetComponent<Button>();
+                btn.interactable = false;
+                MJApi.AddMember(id, mail, registerPass1, registerNickName, stype, RegisterCallback);
             }
         }
     }
@@ -104,39 +114,17 @@ public class RegisterUI : MonoBehaviour {
         {
             RegisterHint_Account.GetComponentInChildren<Text>().text = "此帳號已存在";
             RegisterHint_Account.SetActive(true);
-            Debug.Log("Failed! " + result);
-            _serverStatus = ServerStatus.ConnectFailed;
-            _serverResult = result;
+            //Debug.Log("Failed! " + result);
         }
         else
         {
-            Debug.Log("ConnectSuccess! " + result);
+            //Debug.Log("ConnectSuccess! " + result);
+            //result = token, need save
             UIManager.instance.ExitRegisterPage(); //離開註冊頁面
-            _serverStatus = ServerStatus.ConnectSuccess;
-            _serverResult = result;
             ResetAllInput();
         }
-    }
-
-    public IEnumerator CheckServerStatus(MJApi.RequestCallBack callback)
-    {
-        while (_serverStatus == ServerStatus.None || _serverStatus == ServerStatus.Connecting)
-            yield return null;
-        if (callback != null)
-        {
-            if (_serverStatus == ServerStatus.ConnectSuccess)
-                callback(WebExceptionStatus.Success, _serverResult);
-            else if (_serverStatus == ServerStatus.ConnectFailed)
-                callback(WebExceptionStatus.ConnectFailure, _serverResult);
-        }
-        StopCoroutine("CheckServerStatus");
-    }
-
-    public void doLogin(string mail, string pass, string name, MJApi.RequestCallBack callback)
-    {
-        _serverStatus = ServerStatus.Connecting;
-        MJApi.AddMember(mail, pass, name, RegisterCallback);
-        StartCoroutine(CheckServerStatus(callback));
+        Button btn = RegisterBtn.GetComponent<Button>();
+        btn.interactable = true;
     }
 
     public void ResetAllInput() {

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Net;
-using System.Text.RegularExpressions;
 
 public class LoginUI : MonoBehaviour {
     public static LoginUI Instance;
@@ -55,8 +54,7 @@ public class LoginUI : MonoBehaviour {
             //PlayerPrefs.SetString ("USERNAME", userName);
             //PlayerPrefs.SetString ("USERPASS", userPass);
 
-            //接登入API(userName, userPass, LoginCallback)
-            Debug.Log("要接登入API");
+            MJApi.Login("0", userName, userPass, LoginCallback);
         }
 	}
 

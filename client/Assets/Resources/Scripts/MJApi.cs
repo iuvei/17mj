@@ -51,13 +51,13 @@ public static class MJApi
         return dst;
     }
 
-    public static void AddMember(string mail, string pass, string name, RequestCallBack callback)
+    public static void AddMember(string id, string mail, string pass, string name, string stype, RequestCallBack callback)
     {
         string api = "V1/addMember";
         string auth = "Bearer " + secretKey;
         string method = "POST";
         name = StringToUnicode(name);
-        string pdata = "[{\"Mail\":\"" + mail + "\", \"Pass\":\"" + pass + "\", \"Name\":\"" + name + "\"}]";
+        string pdata = "[{\"ID\":\"" + id + "\",\"Mail\":\"" + mail + "\", \"Pass\":\"" + pass + "\", \"Name\":\"" + name + "\", \"SType\":\"" + stype + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 

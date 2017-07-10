@@ -31,7 +31,12 @@ namespace com.Lobby
 		public GameObject roomlistPanel;
         public GameObject roomlistPopupSetting;
 
+        public GameObject createPopupPanel;
+
         public GameObject shopPanel;
+        public Transform shopItemTarget;
+        public RectTransform popupBuy;
+        public RectTransform popupSad;
 
         public GameObject depositPanel;
 
@@ -56,19 +61,32 @@ namespace com.Lobby
         #endregion
 
         #region PRIVATE 
-		private string _roomname = string.Empty;
+        private string _roomname = string.Empty;
 		private byte _roommax = 2;
         private bool isConnecting;
 		private string BGM_name = "BGM_Lobby";
 		private List<Button> buttons = new List<Button>();
         private Text hint;
+        private int[] _createRoomTypeIndex = new int[] {0,0,0};
+        private string[] _createRoomChipType = new string[] { "200 / 100","500 / 200","1000 / 500"};
+        private string[] _createRoomCircleType = new string[] { "1 圈", "2 圈" };
+        private string[] _createRoomTimeType = new string[] { "3 秒", "5 秒", "7 秒" };
+        private string[][] _createRoomType;
+        private Text _popupBuyItemName;
+        private Text _popupBuyItemPrice;
+        private InputField _popupBuyItemNum;
+        private Text _popupBuyItemTotal;
+        private int currentNum = 1;
+        private int currentPrice;
         #endregion
 
         private void Awake()
         {
+            ShopInit();
+
             //#不重要
             //强制Log等级为全部
-			PhotonNetwork.logLevel = PhotonLogLevel.ErrorsOnly;
+            PhotonNetwork.logLevel = PhotonLogLevel.ErrorsOnly;
 
 			string[] ran_names = {
 				"雲盤金城武",
@@ -90,9 +108,11 @@ namespace com.Lobby
 			int idx = UnityEngine.Random.Range(0, ran_names.Length-1 );
 			PhotonNetwork.playerName = ran_names[idx];
 
+            _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
+
             //#关键
             //我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
-            PhotonNetwork.autoJoinLobby = true;
+        PhotonNetwork.autoJoinLobby = true;
 
             //#关键
             //这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
@@ -504,7 +524,7 @@ namespace com.Lobby
 
             //玩家的背包資料
             List<ItemInfo> itemInfos = loadItemData();
-            //itemInfos.Clear(); //刪光光測試
+            //itemInfos.Clear(); //清空
 
             if (itemInfos.Count == 0)
             {
@@ -545,6 +565,7 @@ namespace com.Lobby
             }
         }
 
+        //讀取背包資料
         private List<ItemInfo> loadItemData() {
             ItemInfos itemInfos = new ItemInfos();
             ItemInfo data1 = new ItemInfo();
@@ -652,6 +673,257 @@ namespace com.Lobby
                 if (tg.isOn)
                     _text.text += "、" + tg.transform.Find("Background/Label").GetComponent<Text>().text;
             }
+        }
+
+        public void ClickCreateAdd(int _type) {
+            CreateRoomSetting(_type, true);
+        }
+
+        public void ClickCreateSubtract(int _type)
+        {
+            CreateRoomSetting(_type, false);
+        }
+
+        private void CreateRoomSetting(int _type, bool isAdd) {
+            string _targetP = "";
+            string[] _targetType = new string[] { };
+
+            if (_type == 0)
+            {
+                _targetP = "Chip";
+            }
+            else if (_type == 1)
+            {
+                _targetP = "Circle";
+            }
+            else if (_type == 2)
+            {
+                _targetP = "Time";
+            }
+
+            Text _text = createPopupPanel.transform.Find("content/" + _targetP + "/numBg/Text").GetComponent<Text>();
+
+            if (isAdd)
+                _createRoomTypeIndex[_type] = (_createRoomTypeIndex[_type] + 1 > _createRoomType[_type].Length - 1) ? 0 : _createRoomTypeIndex[_type] + 1;
+            else
+                _createRoomTypeIndex[_type] = (_createRoomTypeIndex[_type] - 1 < 0) ? _createRoomType[_type].Length - 1 : _createRoomTypeIndex[_type] - 1;
+
+            if (_text)
+                _text.text = _createRoomType[_type][_createRoomTypeIndex[_type]];
+        }
+
+        public void ClickConfirmCreateRoom() {
+            for (int i = 0; i < _createRoomType.Length ; i++)
+            {
+                //Debug.Log("開房設定: " + _createRoomType[i][_createRoomTypeIndex[i]] + " ; ");
+            }
+
+            CreateRoom();
+        }
+
+
+        public void ShowCreatRoomSetting()
+        {
+            GameObject popupBG = createPopupPanel.transform.parent.Find("popupBG").gameObject;
+            if (popupBG)
+            {
+                popupBG.SetActive(true);
+                popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+            }
+            createPopupPanel.transform.DOScale(Vector3.zero, 0);
+            createPopupPanel.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+        }
+
+        public void HideCreatRoomSetting()
+        {
+            GameObject popupBG = createPopupPanel.transform.parent.Find("popupBG").gameObject;
+            if (popupBG)
+            {
+                popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                StartCoroutine(HideGameObject(popupBG, 0.3f));
+            }
+
+            ChangeRoomListSetting();
+            createPopupPanel.transform.DOScale(Vector3.one, 0);
+            createPopupPanel.transform.DOScale(Vector3.zero, 0.1f).SetEase(Ease.InSine);
+        }
+
+
+        private void ShopInit()
+        {
+            if (popupBuy)
+            {
+                _popupBuyItemName = popupBuy.Find("content/Item/name").GetComponent<Text>();
+                _popupBuyItemPrice = popupBuy.Find("content/Price/price").GetComponent<Text>();
+                _popupBuyItemNum = popupBuy.Find("content/Num/num").GetComponent<InputField>();
+                _popupBuyItemTotal = popupBuy.Find("content/Total/total").GetComponent<Text>();
+            }
+
+            BirtnShopItem();
+        }
+
+        public void ClickShopBuy()
+        {
+            GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
+            ShopItemInfo _info = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItemInfo>();
+            //Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);
+            currentNum = 1;
+            currentPrice = _info.Price;
+            _popupBuyItemName.text = _info.Name;
+            _popupBuyItemPrice.text = String.Format("{0:0,0}", currentPrice);
+            _popupBuyItemNum.text = currentNum.ToString();
+            _popupBuyItemTotal.text = String.Format("{0:0,0}", currentPrice);
+
+            if (popupBuy)
+            {
+                if (popupBG) {
+                    popupBG.SetActive(true);
+                    popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+                }
+                popupBuy.transform.DOScale(Vector3.zero, 0);
+                popupBuy.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            }
+        }
+
+        public void ExitShopBuy()
+        {
+            GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
+
+            if (popupBuy)
+            {
+                popupBuy.transform.DOScale(Vector3.one, 0);
+                popupBuy.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InSine);
+                if (popupBG) {
+                    popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                    StartCoroutine(HideGameObject(popupBG, 0.3f));
+                }
+            }
+        }
+
+        public void ClickShopAdd()
+        {
+            if (currentNum < 99)
+            {
+                currentNum++;
+                _popupBuyItemNum.text = currentNum.ToString();
+                ShopCaculate();
+            }
+        }
+
+        public void ClickShopSubtract()
+        {
+            if (currentNum > 1)
+            {
+                currentNum--;
+                _popupBuyItemNum.text = currentNum.ToString();
+                ShopCaculate();
+            }
+        }
+
+        public void GoShopSaid()
+        {
+            popupSad.transform.DOScale(Vector3.zero, 0);
+            popupSad.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBack);
+        }
+
+        public void ExitShopSad()
+        {
+            popupSad.transform.DOScale(Vector3.one, 0);
+            popupSad.transform.DOScale(Vector3.zero, 0.1f).SetEase(Ease.InSine);
+        }
+
+        private void ShopCaculate()
+        {
+            _popupBuyItemTotal.text = string.Format("{0:0,0}", (currentNum * currentPrice));
+        }
+
+        public void ChangeCurrentNum()
+        {
+            if (!Int32.TryParse(_popupBuyItemNum.text, out currentNum))
+            {
+                _popupBuyItemNum.text = "1";
+                currentNum = 1;
+            }
+            else
+                currentNum = Int32.Parse(_popupBuyItemNum.text);
+
+            if (currentNum < 1)
+            {
+                _popupBuyItemNum.text = "1";
+                currentNum = 1;
+            }
+
+            if (currentNum > 99)
+            {
+                currentNum = 99;
+            }
+
+            ShopCaculate();
+        }
+
+        public void BirtnShopItem()
+        {
+            foreach (Transform child in shopItemTarget)
+                Destroy(child.gameObject);
+
+            List<ShopItemInfo> shopItemInfos = loadShopData();
+            foreach (ShopItemInfo info in shopItemInfos)
+            {
+                GameObject go = GameObject.Instantiate(Resources.Load("Prefab/shopItem") as GameObject);
+                ShopItemInfo shopInfo = go.GetComponent<ShopItemInfo>();
+                shopInfo.setInfo(info);
+
+                shopInfo.Name = info.Name;
+                shopInfo.Price = info.Price;
+                go.transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate{ ClickShopBuy();});
+
+                go.transform.SetParent(shopItemTarget);
+                RectTransform rectT = go.GetComponent<RectTransform>();
+                rectT.localPosition = Vector3.zero;
+                rectT.localScale = Vector3.one;
+            }
+        }
+
+        private List<ShopItemInfo> loadShopData()
+        {
+            ShopItemInfos itemInfos = new ShopItemInfos();
+            ShopItemInfo data1 = new ShopItemInfo();
+            data1.Name = "渡假別墅";
+            data1.Path2D = 1;
+            data1.Price = 20000;
+            itemInfos.dataList.Add(data1);
+
+            ShopItemInfo data2 = new ShopItemInfo();
+            data2.Name = "高級腕錶";
+            data2.Path2D = 2;
+            data2.Price = 15000;
+            itemInfos.dataList.Add(data2);
+
+            ShopItemInfo data3 = new ShopItemInfo();
+            data3.Name = "金元寶";
+            data3.Path2D = 3;
+            data3.Price = 5000;
+            itemInfos.dataList.Add(data3);
+
+            ShopItemInfo data4 = new ShopItemInfo();
+            data4.Name = "I-RIMO鑽戒";
+            data4.Path2D = 4;
+            data4.Price = 65000;
+            itemInfos.dataList.Add(data4);
+
+            ShopItemInfo data5 = new ShopItemInfo();
+            data5.Name = "高級房車";
+            data5.Path2D = 5;
+            data5.Price = 25000;
+            itemInfos.dataList.Add(data5);
+
+            ShopItemInfo data6 = new ShopItemInfo();
+            data6.Name = "香奈兒包";
+            data6.Path2D = 6;
+            data6.Price = 10000;
+            itemInfos.dataList.Add(data6);
+
+            return itemInfos.dataList;
         }
 
     }

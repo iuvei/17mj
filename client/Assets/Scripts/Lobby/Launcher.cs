@@ -27,6 +27,7 @@ namespace com.Lobby
 		public GameObject loadingPanel;
 
 		public GameObject settingPanel;
+        public RectTransform settingSign;
 
 		public GameObject roomlistPanel;
         public GameObject roomlistPopupSetting;
@@ -42,6 +43,8 @@ namespace com.Lobby
 
         public GameObject bagPanel;
         public Transform bagItemTarget;
+
+        public RectTransform[] toolbarBtns;
 
         //房间列表
         public RectTransform LobbyPanel;
@@ -82,8 +85,6 @@ namespace com.Lobby
 
         private void Awake()
         {
-            ShopInit();
-
             //#不重要
             //强制Log等级为全部
             PhotonNetwork.logLevel = PhotonLogLevel.ErrorsOnly;
@@ -107,8 +108,6 @@ namespace com.Lobby
 			};
 			int idx = UnityEngine.Random.Range(0, ran_names.Length-1 );
 			PhotonNetwork.playerName = ran_names[idx];
-
-            _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
 
             //#关键
             //我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
@@ -135,6 +134,10 @@ namespace com.Lobby
             btnStart.onClick.AddListener(delegate { StartGame(); });
 
             hint = rListPanel.parent.GetComponentInChildren<Text>();
+
+            ShopInit();
+            _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
+            SettingRotation();
         }
 
         /// <summary>
@@ -295,11 +298,15 @@ namespace com.Lobby
 		public void ShowRoomList()
 		{
 			Debug.Log ("GetRoomList()");
-			if (roomlistPanel) {
+            if (roomlistPanel) {
 				roomlistPanel.SetActive (true);
-				//Debug.Log ("CreateRoom()");
-				StartCoroutine(reloadRoomlist());
-			}
+
+                if (CurrIsToggleAll())
+                {
+                    //Debug.Log ("CreateRoom()");
+                    StartCoroutine(reloadRoomlist());
+                }
+            }
 		}
 
 		/// <summary>
@@ -616,6 +623,17 @@ namespace com.Lobby
             }
         }
 
+        private bool CurrIsToggleAll() {
+            Toggle toggleAll = roomlistPanel.transform.Find("Panel_title/Title/btn_all").GetComponent<Toggle>();
+            if (toggleAll)
+            {
+                return toggleAll.isOn ? true : false;
+            }
+            else {
+                return false;
+            }
+        }
+
         public void ShowRoomListSetting()
         {
             GameObject popupBG = roomlistPanel.transform.Find("popupBG").gameObject;
@@ -651,7 +669,7 @@ namespace com.Lobby
         }
 
         public void ClickToWatchRoom() {
-            Toggle myToggle = roomlistPanel.transform.Find("Panel_title/Title/btn_all").gameObject.GetComponent<Toggle>();
+            Toggle myToggle = roomlistPanel.transform.Find("Panel_title/Title/btn_all").GetComponent<Toggle>();
             if (myToggle)
                 myToggle.isOn = true;
         }
@@ -690,15 +708,15 @@ namespace com.Lobby
 
             if (_type == 0)
             {
-                _targetP = "Chip";
+                _targetP = "Chip";   // 底台
             }
             else if (_type == 1)
             {
-                _targetP = "Circle";
+                _targetP = "Circle"; // 圈數
             }
             else if (_type == 2)
             {
-                _targetP = "Time";
+                _targetP = "Time";   // 秒數
             }
 
             Text _text = createPopupPanel.transform.Find("content/" + _targetP + "/numBg/Text").GetComponent<Text>();
@@ -758,7 +776,6 @@ namespace com.Lobby
                 _popupBuyItemNum = popupBuy.Find("content/Num/num").GetComponent<InputField>();
                 _popupBuyItemTotal = popupBuy.Find("content/Total/total").GetComponent<Text>();
             }
-
             BirtnShopItem();
         }
 
@@ -926,5 +943,19 @@ namespace com.Lobby
             return itemInfos.dataList;
         }
 
+        private void SettingRotation() {
+            //設定頁齒輪動畫
+            if (settingSign) {
+                settingSign.DORotateQuaternion(Quaternion.Euler(0, 0, 30), 1f).SetEase(Ease.InElastic).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //底部頁籤動畫
+            //if (toolbarBtns.Length != 0) {
+            //    for (int i = 0; i < toolbarBtns.Length; i++)
+            //    {
+            //        toolbarBtns[i].DOLocalMoveY(-1, 1, false).SetDelay(i*0.3f).SetLoops(-1, LoopType.Yoyo); //.SetRelative()
+            //    }
+            //}
+        }
     }
 }

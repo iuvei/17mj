@@ -44,6 +44,8 @@ namespace com.Lobby
         public GameObject bagPanel;
         public Transform bagItemTarget;
 
+        public GameObject rankPanel;
+
         public RectTransform[] toolbarBtns;
 
         //房间列表
@@ -956,6 +958,25 @@ namespace com.Lobby
             //        toolbarBtns[i].DOLocalMoveY(-1, 1, false).SetDelay(i*0.3f).SetLoops(-1, LoopType.Yoyo); //.SetRelative()
             //    }
             //}
+        }
+
+        //---
+        public void ClickRank()
+        {
+            if (rankPanel)
+            {
+                rankPanel.transform.DOMoveX(-19.5f, 0, true);
+                rankPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        public void ExitRank()
+        {
+            if (rankPanel)
+            {
+                rankPanel.transform.DOMoveX(0, 0, true);
+                rankPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+            }
         }
     }
 }

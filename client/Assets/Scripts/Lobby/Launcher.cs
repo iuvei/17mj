@@ -45,6 +45,8 @@ namespace com.Lobby
         public Transform bagItemTarget;
 
         public GameObject rankPanel;
+        public Transform rankItemTarget;
+        public Scrollbar rankScrollbar;
 
         public RectTransform[] toolbarBtns;
 
@@ -963,6 +965,9 @@ namespace com.Lobby
         //---
         public void ClickRank()
         {
+
+            BirtnRankItem();
+
             if (rankPanel)
             {
                 rankPanel.transform.DOMoveX(-19.5f, 0, true);
@@ -977,6 +982,147 @@ namespace com.Lobby
                 rankPanel.transform.DOMoveX(0, 0, true);
                 rankPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
             }
+        }
+
+        public void BirtnRankItem()
+        {
+            foreach (Transform child in rankItemTarget)
+                Destroy(child.gameObject);
+
+            List<RankItemInfo> rankItemInfos = loadRankData();
+            foreach (RankItemInfo info in rankItemInfos)
+            {
+                GameObject go = GameObject.Instantiate(Resources.Load("Prefab/rankItem") as GameObject);
+                RankItem rankItem = go.GetComponent<RankItem>();
+                rankItem.setInfo(info);
+
+                go.transform.SetParent(rankItemTarget);
+                RectTransform rectT = go.GetComponent<RectTransform>();
+                rectT.localPosition = Vector3.zero;
+                rectT.localScale = Vector3.one;
+            }
+        }
+
+        private List<RankItemInfo> loadRankData()
+        {
+            RankItemInfos itemInfos = new RankItemInfos();
+            RankItemInfo data1 = new RankItemInfo();
+            data1.Rank = 1;
+            //data1.Photo = 1;
+            data1.Name = "萱萱寶貝";
+            data1.Lv = 192;
+            data1.Win = 1223;
+            data1.Lose = 5;
+            data1.Probability = 76.9f;
+            itemInfos.dataList.Add(data1);
+
+            RankItemInfo data2 = new RankItemInfo();
+            data2.Rank = 2;
+            //data2.Photo = 2;
+            data2.Name = "萌萌小野兔Q妹";
+            data2.Lv = 188;
+            data2.Win = 8392;
+            data2.Lose = 129;
+            data2.Probability = 94.1f;
+            itemInfos.dataList.Add(data2);
+
+            RankItemInfo data3 = new RankItemInfo();
+            data3.Rank = 3;
+            //data3.Photo = 3;
+            data3.Name = "飛炫北鼻萱萱";
+            data3.Lv = 220;
+            data3.Win = 3223;
+            data3.Lose = 215;
+            data3.Probability = 88.9f;
+            itemInfos.dataList.Add(data3);
+
+            RankItemInfo data4 = new RankItemInfo();
+            data4.Rank = 4;
+            //data4.Photo = 4;
+            data4.Name = "大老闆抽雪茄";
+            data4.Lv = 109;
+            data4.Win = 291;
+            data4.Lose = 9;
+            data4.Probability = 87.1f;
+            itemInfos.dataList.Add(data4);
+
+            RankItemInfo data5 = new RankItemInfo();
+            data5.Rank = 5;
+            //data1.Photo = 5;
+            data5.Name = "永遠第五人";
+            data5.Lv = 79;
+            data5.Win = 542;
+            data5.Lose = 12;
+            data5.Probability = 69.3f;
+            itemInfos.dataList.Add(data5);
+
+            return itemInfos.dataList;
+        }
+
+        public void ReadyToLoadNextRank() {
+            int num = rankItemTarget.childCount;
+            CanvasGroup empty = rankPanel.transform.Find("empty").GetComponent<CanvasGroup>();
+
+            if (rankScrollbar.value == 0) {
+                if (num < 20)
+                {
+                    List<RankItemInfo> rankItemInfos = loadNextRankData(num);
+                    foreach (RankItemInfo info in rankItemInfos)
+                    {
+                        GameObject go = GameObject.Instantiate(Resources.Load("Prefab/rankItem") as GameObject);
+                        RankItem rankItem = go.GetComponent<RankItem>();
+                        rankItem.setInfo(info);
+
+                        go.transform.SetParent(rankItemTarget);
+                        RectTransform rectT = go.GetComponent<RectTransform>();
+                        rectT.localPosition = Vector3.zero;
+                        rectT.localScale = Vector3.one;
+                    }
+                }
+                else {
+                    empty.DOKill();
+                    empty.DOFade(1, 0.5f);
+                    empty.DOFade(0, 0.2f).SetDelay(1.2f);
+                }
+            }
+
+        }
+
+        private List<RankItemInfo> loadNextRankData(int cuurTotal) {
+            RankItemInfos itemInfos = new RankItemInfos();
+
+            string[] ran_names = {
+                "雲盤金城武",
+                "高雄彭玉燕",
+                "鼓山張學友",
+                "唐山綾波零",
+                "成大金城武",
+                "韓國林志穎",
+                "釜山林志玲",
+                "左營林志玲",
+                "太極張三豐",
+                "三民陳金城",
+                "台南李炳輝",
+                "彰化波多野",
+                "屏東張韶涵",
+                "台北郭金發",
+                "基隆日本橋"
+            };
+            
+            for (int i = 0; i < 10; i++)
+            {
+                RankItemInfo data1 = new RankItemInfo();
+                data1.Rank = cuurTotal + i + 1;
+                //data1.Photo = 1;
+                data1.Name = ran_names[UnityEngine.Random.Range(0, ran_names.Length - 1)];
+                data1.Lv = UnityEngine.Random.Range(1,500);
+                data1.Win = UnityEngine.Random.Range(80, 2000);
+                data1.Lose = UnityEngine.Random.Range(10, 800);
+                data1.Probability = UnityEngine.Random.Range(10f, 50f);
+                itemInfos.dataList.Add(data1);
+            }
+
+            return itemInfos.dataList;
         }
     }
 }

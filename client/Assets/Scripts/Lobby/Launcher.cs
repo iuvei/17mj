@@ -28,27 +28,27 @@ namespace com.Lobby
 
 		public GameObject settingPanel;
         public RectTransform settingSign;
+        public GameObject settingDropdown;
+        public GameObject settingPanelNew;
 
-		public GameObject roomlistPanel;
+        public GameObject roomlistPanel;
         public GameObject roomlistPopupSetting;
 
         public GameObject createPopupPanel;
 
         public GameObject shopPanel;
-        public Transform shopItemTarget;
+        public Transform  shopItemTarget;
         public RectTransform popupBuy;
         public RectTransform popupSad;
 
         public GameObject depositPanel;
 
         public GameObject bagPanel;
-        public Transform bagItemTarget;
+        public Transform  bagItemTarget;
 
         public GameObject rankPanel;
-        public Transform rankItemTarget;
-        public Scrollbar rankScrollbar;
-
-        public RectTransform[] toolbarBtns;
+        public Transform  rankItemTarget;
+        public Scrollbar  rankScrollbar;
 
         //房间列表
         public RectTransform LobbyPanel;
@@ -85,6 +85,11 @@ namespace com.Lobby
         private Text _popupBuyItemTotal;
         private int currentNum = 1;
         private int currentPrice;
+        private GameObject recordPanel;
+        private GameObject gamePanel;
+        private GameObject profilePanel;
+        private GameObject depositRecoPanel;
+        private GameObject coinRecoPanel;
         #endregion
 
         private void Awake()
@@ -140,6 +145,7 @@ namespace com.Lobby
             hint = rListPanel.parent.GetComponentInChildren<Text>();
 
             ShopInit();
+            SettingInit();
             _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
             SettingRotation();
         }
@@ -478,16 +484,19 @@ namespace com.Lobby
 
 		public void ShowSetting()
 		{
-			if (settingPanel) {
-				settingPanel.SetActive(true);
-			}
-		}
+			//if (settingPanel) {
+			//	settingPanel.SetActive(true);
+			//}
+
+            ClickSetting();
+
+        }
 
 		public void HideSetting()
 		{
-			if (settingPanel) {
-				settingPanel.SetActive(false);
-			}
+			//if (settingPanel) {
+			//	settingPanel.SetActive(false);
+			//}
 		}
 
         public void ClickDespoit()
@@ -952,14 +961,6 @@ namespace com.Lobby
             if (settingSign) {
                 settingSign.DORotateQuaternion(Quaternion.Euler(0, 0, 30), 1f).SetEase(Ease.InElastic).SetLoops(-1, LoopType.Yoyo);
             }
-
-            //底部頁籤動畫
-            //if (toolbarBtns.Length != 0) {
-            //    for (int i = 0; i < toolbarBtns.Length; i++)
-            //    {
-            //        toolbarBtns[i].DOLocalMoveY(-1, 1, false).SetDelay(i*0.3f).SetLoops(-1, LoopType.Yoyo); //.SetRelative()
-            //    }
-            //}
         }
 
         //---
@@ -1124,5 +1125,117 @@ namespace com.Lobby
 
             return itemInfos.dataList;
         }
+
+        public void ClickSetting() {
+            Transform dropDown = settingDropdown.transform.Find("dropDown");
+            GameObject popupBG = settingDropdown.transform.Find("bg").gameObject;
+            Time.timeScale = 0;
+
+            if (popupBG)
+            {
+                popupBG.SetActive(true);
+                popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f).SetUpdate(true);
+            }
+
+            if (dropDown) {
+                dropDown.DOMoveY(9.5f, 0, true);
+                dropDown.DOMoveY(5.4f, 0.3f, true).SetEase(Ease.InSine).SetUpdate(true);
+            }
+        }
+
+        public void ExitSetting()
+        {
+            Transform dropDown = settingDropdown.transform.Find("dropDown");
+            GameObject popupBG = settingDropdown.transform.Find("bg").gameObject;
+            Time.timeScale = 1;
+            if (popupBG)
+            {
+                popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                StartCoroutine(HideGameObject(popupBG, 0.3f));
+            }
+
+            if (dropDown)
+            {
+                dropDown.DOMoveY(5.4f, 0, true);
+                dropDown.DOMoveY(9.5f, 0.3f, true).SetEase(Ease.InSine); ;
+            }
+        }
+
+        public void ShowSettingLayout()
+        {
+            if (settingPanelNew)
+            {
+                settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
+                settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
+
+                ExitSetting();
+            }
+        }
+
+        public void HideSettingLayout()
+        {
+            if (settingPanelNew)
+            {
+                settingPanelNew.transform.DOMoveX(0, 0, true);
+                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
+            }
+        }
+
+        public void SettingToggle(bool isOn)
+        {
+            string _target = EventSystem.current.currentSelectedGameObject.name;
+            //Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+
+            profilePanel.SetActive(false);
+            gamePanel.SetActive(false);
+            recordPanel.SetActive(false);
+
+            if (isOn)
+            {
+                switch (_target)
+                {
+                    case "Btn_prof": //個人資訊頁
+                        profilePanel.SetActive(true);
+                        break;
+                    case "Btn_game"://遊戲設定頁
+                        gamePanel.SetActive(true);
+                        break;
+                    case "Btn_reco": //紀錄查詢頁
+                        recordPanel.SetActive(true);
+                        break;
+                }
+            }
+        }
+
+        public void RecordToggle()
+        {
+            string _target = EventSystem.current.currentSelectedGameObject.name;
+            //Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+
+            depositRecoPanel.SetActive(false);
+            coinRecoPanel.SetActive(false);
+
+            switch (_target)
+            {
+                case "Btn_coinReco": //儲值紀錄頁
+                    coinRecoPanel.SetActive(true);
+                    break;
+                case "Btn_depositReco"://遊戲幣紀錄頁
+                    depositRecoPanel.SetActive(true);
+                    break;
+            }
+        }
+
+        private void SettingInit() {
+            profilePanel = settingPanelNew.transform.Find("Profile").gameObject;
+            gamePanel = settingPanelNew.transform.Find("Game").gameObject;
+            recordPanel = settingPanelNew.transform.Find("Record").gameObject;
+
+            if (recordPanel) {
+                depositRecoPanel = recordPanel.transform.Find("Panel_depositReco").gameObject;
+                coinRecoPanel = recordPanel.transform.Find("Panel_coinReco").gameObject;
+            }
+        }
+
     }
 }

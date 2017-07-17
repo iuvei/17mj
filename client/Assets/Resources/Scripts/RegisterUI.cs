@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Net;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Text;
 
 public class RegisterUI : MonoBehaviour {
     static public RegisterUI Instance;
@@ -15,6 +14,7 @@ public class RegisterUI : MonoBehaviour {
     public GameObject RegisterHint_Account;   // 註冊頁 帳號錯誤提示
     public GameObject RegisterHint_Pass1;     // 註冊頁 密碼錯誤提示
     public GameObject RegisterHint_Pass2;     // 註冊頁 第二密碼錯誤提示
+    public GameObject RegisterBtn;
 
     public string[] _canNickName; //罐頭暱稱
     private string _defaultNickName = "大島柚子"; //預設暱稱
@@ -41,6 +41,23 @@ public class RegisterUI : MonoBehaviour {
             Debug.Log("No found Register Hint_Password2");
 
         ResetAllInput();
+    }
+
+    public static string GetUniqueKey(int maxSize)
+    {
+        char[] chars = new char[62];
+        chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+        byte[] data = new byte[1];
+        RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider();
+        crypto.GetNonZeroBytes(data);
+        data = new byte[maxSize];
+        crypto.GetNonZeroBytes(data);
+        StringBuilder result = new StringBuilder(maxSize);
+        foreach (byte b in data)
+        {
+            result.Append(chars[b % (chars.Length)]);
+        }
+        return result.ToString();
     }
 
     //註冊頁-確定鈕
@@ -80,9 +97,12 @@ public class RegisterUI : MonoBehaviour {
             {
                 //檢查暱稱
                 registerNickName = CheckNickName();
-
-                //接註冊API(registerMail, registerPass1, registerNickName, RegisterCallback)
-                Debug.Log("要接註冊API");
+                string id = GetUniqueKey(24);
+                string stype = "C";
+                string mail = "C&" + registerMail;
+                Button btn = RegisterBtn.GetComponent<Button>();
+                btn.interactable = false;
+                MJApi.AddMember(id, mail, registerPass1, registerNickName, stype, RegisterCallback);
             }
         }
     }
@@ -94,15 +114,17 @@ public class RegisterUI : MonoBehaviour {
         {
             RegisterHint_Account.GetComponentInChildren<Text>().text = "此帳號已存在";
             RegisterHint_Account.SetActive(true);
-            //Debug.Log("註冊失敗! " + result);
+            //Debug.Log("Failed! " + result);
         }
         else
         {
-            //Debug.Log("註冊成功! " + result);
+            //Debug.Log("ConnectSuccess! " + result);
+            //result = token, need save
             UIManager.instance.ExitRegisterPage(); //離開註冊頁面
-
             ResetAllInput();
         }
+        Button btn = RegisterBtn.GetComponent<Button>();
+        btn.interactable = true;
     }
 
     public void ResetAllInput() {
@@ -139,4 +161,5 @@ public class RegisterUI : MonoBehaviour {
         targetHint.gameObject.SetActive(false);
         targetHint.GetComponentInParent<InputField>().ActivateInputField();
     }
+
 }

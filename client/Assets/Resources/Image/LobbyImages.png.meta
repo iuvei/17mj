@@ -1,0 +1,896 @@
+fileFormatVersion: 2
+guid: 3137a49bd7d3f7e4db054229dea4d9ad
+timeCreated: 1499745587
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: create.title
+    21300002: create.num.bg
+    21300004: ic_coin
+    21300006: shop_glow
+    21300008: deposit_lattice2
+    21300010: bt_close_popup
+    21300012: deposit_c1
+    21300014: LobbyImages_7
+    21300016: game-finished-02
+    21300018: LobbyImages_9
+    21300020: LobbyImages_10
+    21300022: LobbyImages_11
+    21300024: deposit_c3
+    21300026: bag_empty_goshop
+    21300028: shop_redbar
+    21300030: toolbar_bg1
+    21300032: bt_cancelGoDeposite
+    21300034: bag-itembg
+    21300036: bt_ok_goDeposite
+    21300038: create.open
+    21300040: toolbar_bg2
+    21300042: toolbar_bg_light
+    21300044: ic_table_open
+    21300046: LobbyImages_23
+    21300048: deposit_c2
+    21300050: bag_item_num
+    21300052: ic_table_join
+    21300054: user_photo
+    21300056: LobbyImages_28
+    21300058: LobbyImages_29
+    21300060: deposit_c6
+    21300062: deposit_botton_bar
+    21300064: LobbyImages_32
+    21300066: shop_itembg
+    21300068: btn_more
+    21300070: btn_less
+    21300072: spotL
+    21300074: bt_close
+    21300076: creat.add
+    21300078: ic_shop
+    21300080: ic_rank
+    21300082: ic_bag
+    21300084: ic_setting2
+    21300086: deposit_c5
+    21300088: LobbyImages_44
+    21300090: ic_deposit
+    21300092: ic_activity
+    21300094: create.subtract
+    21300096: LobbyImages_48
+    21300098: LobbyImages_49
+    21300100: empty_btn_bg
+    21300102: bt_ok_buy
+    21300104: deposit_c4
+    21300106: img_heart_big
+    21300108: settings02
+    21300110: shockwave_fullrays2
+    21300112: spotlightObj
+    21300114: user_info_bg
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: create.title
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1857
+        width: 920
+        height: 160
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: create.num.bg
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 1898
+        width: 605
+        height: 119
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_coin
+      rect:
+        serializedVersion: 2
+        x: 1531
+        y: 1972
+        width: 46
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: shop_glow
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 1340
+        width: 861
+        height: 344
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_lattice2
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 1517
+        width: 514
+        height: 380
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_close_popup
+      rect:
+        serializedVersion: 2
+        x: 1439
+        y: 1488
+        width: 125
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_c1
+      rect:
+        serializedVersion: 2
+        x: 1347
+        y: 1417
+        width: 84
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_7
+      rect:
+        serializedVersion: 2
+        x: 1428
+        y: 1512
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: game-finished-02
+      rect:
+        serializedVersion: 2
+        x: 861
+        y: 1022
+        width: 482
+        height: 490
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_9
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 1416
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_10
+      rect:
+        serializedVersion: 2
+        x: 1428
+        y: 1416
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_11
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 1208
+        width: 768
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_c3
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 1065
+        width: 224
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bag_empty_goshop
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1040
+        width: 829
+        height: 159
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: shop_redbar
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 930
+        width: 475
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: toolbar_bg1
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 702
+        width: 398
+        height: 168
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_cancelGoDeposite
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 754
+        width: 438
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bag-itembg
+      rect:
+        serializedVersion: 2
+        x: 1305
+        y: 715
+        width: 280
+        height: 250
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_ok_goDeposite
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 794
+        width: 438
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: create.open
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 658
+        width: 438
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: toolbar_bg2
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 539
+        width: 384
+        height: 161
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: toolbar_bg_light
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 591
+        width: 384
+        height: 161
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_table_open
+      rect:
+        serializedVersion: 2
+        x: 1228
+        y: 349
+        width: 358
+        height: 368
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 287
+        width: 358
+        height: 368
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_c2
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 439
+        width: 156
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bag_item_num
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 433
+        width: 220
+        height: 104
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_table_join
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 220
+        width: 358
+        height: 368
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: user_photo
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 295
+        width: 116
+        height: 136
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_28
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 428
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_29
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 332
+        width: 8
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_c6
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 333
+        width: 342
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_botton_bar
+      rect:
+        serializedVersion: 2
+        x: 1186
+        y: 265
+        width: 355
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_32
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 332
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: shop_itembg
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 17
+        width: 270
+        height: 269
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: btn_more
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 225
+        width: 106
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: btn_less
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 225
+        width: 106
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: spotL
+      rect:
+        serializedVersion: 2
+        x: 1188
+        y: 4
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_close
+      rect:
+        serializedVersion: 2
+        x: 1444
+        y: 136
+        width: 125
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: creat.add
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 108
+        width: 112
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_shop
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 118
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_rank
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 120
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_bag
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 118
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_setting2
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 138
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_c5
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 8
+        width: 248
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_44
+      rect:
+        serializedVersion: 2
+        x: 824
+        y: 100
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_deposit
+      rect:
+        serializedVersion: 2
+        x: 831
+        y: 18
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ic_activity
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 18
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: create.subtract
+      rect:
+        serializedVersion: 2
+        x: 1444
+        y: 20
+        width: 102
+        height: 119
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_48
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 8
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: LobbyImages_49
+      rect:
+        serializedVersion: 2
+        x: 824
+        y: 8
+        width: 8
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: empty_btn_bg
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1690
+        width: 875
+        height: 165
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_ok_buy
+      rect:
+        serializedVersion: 2
+        x: 865
+        y: 891
+        width: 438
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: deposit_c4
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 966
+        width: 223
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: img_heart_big
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 10
+        width: 306
+        height: 277
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: settings02
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1743
+        width: 144
+        height: 154
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: shockwave_fullrays2
+      rect:
+        serializedVersion: 2
+        x: 1442
+        y: 1611
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: spotlightObj
+      rect:
+        serializedVersion: 2
+        x: 1349
+        y: 1158
+        width: 229
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: user_info_bg
+      rect:
+        serializedVersion: 2
+        x: 478
+        y: 871
+        width: 384
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

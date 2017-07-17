@@ -26,7 +26,7 @@ namespace com.Lobby
 
 		public GameObject loadingPanel;
 
-		public GameObject settingPanel;
+		//public GameObject settingPanel;
         public RectTransform settingSign;
         public GameObject settingDropdown;
         public GameObject settingPanelNew;
@@ -85,6 +85,9 @@ namespace com.Lobby
         private Text _popupBuyItemTotal;
         private int currentNum = 1;
         private int currentPrice;
+        private GameObject childSetting;
+        private GameObject childSettingService;
+        private GameObject childSettingRule;
         private GameObject recordPanel;
         private GameObject gamePanel;
         private GameObject profilePanel;
@@ -484,11 +487,11 @@ namespace com.Lobby
 
 		public void ShowSetting()
 		{
-			//if (settingPanel) {
-			//	settingPanel.SetActive(true);
-			//}
+            //if (settingPanel) {
+            //	settingPanel.SetActive(true);
+            //}
 
-            ClickSetting();
+            ShowSettingDropdown();
 
         }
 
@@ -557,7 +560,6 @@ namespace com.Lobby
 
                 foreach (ItemInfo info in itemInfos)
                 {
-                    //GameObject go = Instantiate(bagItemPrefab);
                     GameObject go = GameObject.Instantiate(Resources.Load("Prefab/bagItem") as GameObject);
                     BagItemInfo bagInfo = go.GetComponent<BagItemInfo>();
                     bagInfo.setInfo(info);
@@ -1126,7 +1128,7 @@ namespace com.Lobby
             return itemInfos.dataList;
         }
 
-        public void ClickSetting() {
+        public void ShowSettingDropdown() {
             Transform dropDown = settingDropdown.transform.Find("dropDown");
             GameObject popupBG = settingDropdown.transform.Find("bg").gameObject;
             Time.timeScale = 0;
@@ -1163,6 +1165,30 @@ namespace com.Lobby
 
         public void ShowSettingLayout()
         {
+            string _target = EventSystem.current.currentSelectedGameObject.name;
+
+            childSetting.SetActive(false);
+            childSettingService.SetActive(false);
+            childSettingRule.SetActive(false);
+
+            switch (_target)
+            {
+                case "Btn_setting": //設定頁
+                    childSetting.SetActive(true);
+                    break;
+                case "Btn_service"://客服頁
+                    if (childSettingService)
+                    {
+                        InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
+                        _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+                        childSettingService.SetActive(true);
+                    }            
+                    break;
+                case "Btn_rules": //條款頁
+                    childSettingRule.SetActive(true);
+                    break;
+            }
+
             if (settingPanelNew)
             {
                 settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
@@ -1227,14 +1253,27 @@ namespace com.Lobby
         }
 
         private void SettingInit() {
-            profilePanel = settingPanelNew.transform.Find("Profile").gameObject;
-            gamePanel = settingPanelNew.transform.Find("Game").gameObject;
-            recordPanel = settingPanelNew.transform.Find("Record").gameObject;
+            childSetting = settingPanelNew.transform.Find("Setting").gameObject;
 
-            if (recordPanel) {
-                depositRecoPanel = recordPanel.transform.Find("Panel_depositReco").gameObject;
-                coinRecoPanel = recordPanel.transform.Find("Panel_coinReco").gameObject;
+            if (childSetting) {
+                profilePanel = childSetting.transform.Find("Profile").gameObject;
+                gamePanel = childSetting.transform.Find("Game").gameObject;
+                recordPanel = childSetting.transform.Find("Record").gameObject;
+
+                if (recordPanel)
+                {
+                    depositRecoPanel = recordPanel.transform.Find("Panel_depositReco").gameObject;
+                    coinRecoPanel = recordPanel.transform.Find("Panel_coinReco").gameObject;
+                }
             }
+
+            childSettingService = settingPanelNew.transform.Find("Service").gameObject;
+            if (childSettingService) {
+                InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
+                _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+            }
+            childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
+
         }
 
     }

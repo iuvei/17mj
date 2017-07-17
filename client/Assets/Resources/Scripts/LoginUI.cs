@@ -28,8 +28,7 @@ public class LoginUI : MonoBehaviour {
         if (!ClubLoginHint_Account)
             Debug.Log("No found Login LoginHint_Account");
         if (!ClubLoginHint_Password)
-            Debug.Log("No found Login LoginHint_Password");
-
+            Debug.Log("No found Login LoginHint_Password");            
         // [自動登入] 若前次成功登入 這次則自動填入
         //ClubLoginAccount.text = PlayerPrefs.GetString ("USERNAME");
         //ClubLoginPass.text = PlayerPrefs.GetString ("USERPASS");
@@ -50,11 +49,7 @@ public class LoginUI : MonoBehaviour {
             ClubLoginHint_Account.GetComponentInChildren<Text>().text = "帳號格式錯誤";
             ClubLoginHint_Account.SetActive (true);
 		} else {
-            //儲存此次帳密
-            //PlayerPrefs.SetString ("USERNAME", userName);
-            //PlayerPrefs.SetString ("USERPASS", userPass);
-
-            MJApi.Login("C", userName, userPass, LoginCallback);
+            //MJApi.Login(userName, userPass, LoginCallback);
         }
 	}
 
@@ -64,9 +59,8 @@ public class LoginUI : MonoBehaviour {
             ClubLoginHint_Password.GetComponentInChildren<Text> ().text = "登入失敗: 輸入資訊錯誤";
             ClubLoginHint_Password.SetActive (true);
             //Debug.Log("登入失敗: 輸入資訊錯誤");		
-		} else {	
-
-			//Debug.Log ("登入成功! Token= "+ result);
+		} else {
+            //Debug.Log ("登入成功! Token= "+ result);
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
         }
 	}
@@ -75,5 +69,15 @@ public class LoginUI : MonoBehaviour {
     public void ClickHintBlock(Button targetHint) {
         targetHint.gameObject.SetActive(false);
         targetHint.GetComponentInParent<InputField>().ActivateInputField();
+    }
+
+    public void Logout()
+    {
+        CryptoPrefs.DeleteKey("USERPHOTO");
+        CryptoPrefs.DeleteKey("USERNAME");
+        CryptoPrefs.DeleteKey("USERLEVEL");
+        CryptoPrefs.DeleteKey("USERCOIN");
+        CryptoPrefs.DeleteKey("USERONLINE");
+        CryptoPrefs.DeleteKey("USERTOKEN");
     }
 }

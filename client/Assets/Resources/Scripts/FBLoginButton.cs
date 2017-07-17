@@ -4,8 +4,8 @@ using Facebook.Unity;
 using System.Collections.Generic;
 using Facebook.MiniJSON;
 using System.Collections;
-
-
+using System;
+using System.Net;
 
 public class FBLoginButton : MonoBehaviour {
 
@@ -13,8 +13,13 @@ public class FBLoginButton : MonoBehaviour {
 
     private string fbId = string.Empty;
     private string fbMail = string.Empty;
+    private string fbPhoto = string.Empty;
+    private string sName = string.Empty;
 
     void Awake () {
+        sName = CryptoPrefs.GetString("USERNAME");
+        fbPhoto = CryptoPrefs.GetString("USERPHOTO");
+
         if (FB.IsInitialized)
         {
             FB.ActivateApp();
@@ -49,7 +54,8 @@ public class FBLoginButton : MonoBehaviour {
             {
                 var aToken = AccessToken.CurrentAccessToken;
                 fbId = aToken.UserId;
-                FB.API("/me/picture", HttpMethod.GET, FBPhotoCallback);
+                if (string.IsNullOrEmpty(fbPhoto))
+                    FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, FBPhotoCallback);
                 FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
                 _logText.text += "\n OnFBInitComplete > FB.IsInitialized >　FB.IsLoggedIn";
             }
@@ -66,20 +72,14 @@ public class FBLoginButton : MonoBehaviour {
         Debug.Log("FBPhotoCallback()");
         if (string.IsNullOrEmpty(result.Error) && result.Texture != null)
         {
-            //this.profilePic = result.Texture;
-            //Sprite s = Sprite.Create(this.profilePic, new Rect(0, 0, this.profilePic.width, this.profilePic.height), Vector2.zero);
-            //if (head != null) {
-            //	head.sprite = s;
-            //}
-            //headMesh.GetComponent<Renderer>().material.mainTexture = result.Texture;
+            string stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
+            CryptoPrefs.SetString("USERPHOTO", stringData);
         }
         _logText.text += "\n FBPhotoCallback()";
     }
 
     private void OnHideUnity(bool isGameShown)
     {
-        //"Success - Check log for details";
-        _logText.text += "\n  OnHideUnity";
     }
 
     private void FBLogin()
@@ -98,8 +98,9 @@ public class FBLoginButton : MonoBehaviour {
             Debug.Log("userid=" + aToken.UserId);
             int i = 0;
             foreach (string perm in aToken.Permissions)
-                i++;            
-            FB.API("/me/picture", HttpMethod.GET, FBPhotoCallback);
+                i++;
+            if (string.IsNullOrEmpty(fbPhoto))
+                FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, FBPhotoCallback);
             FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
             _logText.text += "\n AuthCallback >　FB.IsLoggedIn";
         }
@@ -118,36 +119,82 @@ public class FBLoginButton : MonoBehaviour {
     {
         Debug.Log("FBLogout");
         FB.LogOut();
+        CryptoPrefs.DeleteKey("USERPHOTO");
+        CryptoPrefs.DeleteKey("USERNAME");
+        CryptoPrefs.DeleteKey("USERLEVEL");
+        CryptoPrefs.DeleteKey("USERCOIN");
+        CryptoPrefs.DeleteKey("USERONLINE");
+        CryptoPrefs.DeleteKey("USERTOKEN");
         _logText.text += "\n FBLogout";
     }
+
+    private void LoginCallback(WebExceptionStatus status, string result)
+    {
+        if (status != WebExceptionStatus.Success)
+        {
+            Debug.Log("Failed! " + result);
+        }
+        else
+        {
+            //Debug.Log("ConnectSuccess!" + result);
+            string uName = string.Empty;
+            string uToken = string.Empty;
+            string uLevel = string.Empty;
+            string uCoin = string.Empty;
+
+            IDictionary dict = Json.Deserialize(result) as IDictionary;
+            Debug.Log(" dict = " + dict);
+            if (dict["Name"] != null)
+            {
+                uName = dict["Name"].ToString();
+                CryptoPrefs.SetString("USERNAME", uName);
+            }
+            if (dict["Token"] != null)
+            {
+                uToken = dict["Token"].ToString();
+                CryptoPrefs.SetString("USERTOKEN", uToken);
+            }
+            if (dict["Level"] != null)
+            {
+                uLevel = dict["Level"].ToString();
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
+            }
+            if (dict["Coin"] != null)
+            {
+                uCoin = dict["Coin"].ToString();
+                CryptoPrefs.SetString("USERCOIN", uCoin);
+            }
+        }
+    }
+
 
     void FBUserCallBack(IResult result)
     {
         Debug.Log("UserCallBack()");
         IDictionary dict = Json.Deserialize(result.RawResult) as IDictionary;
-        //if (dict["name"]!=null) {
-        //	fbname =dict ["name"].ToString(); // 取得用戶名稱
-        //}
-        //if (nickname != null) {
-        //	nickname.text = fbname;
-        //}
-
+        if (dict["name"] != null && string.IsNullOrEmpty(sName))
+            sName = dict["name"].ToString();
         if (dict["email"] != null)
-        {
             fbMail = dict["email"].ToString();
-        }
-        doLogin1();
-
+        doLogin();
         _logText.text += "\n FBUserCallBack()";
     }
 
-    public void doLogin1()
+    public void doLogin()
     {
-        Debug.Log("doLogin1(" + fbMail + " " + fbId + ")");
-        //YkiApi.Login("1", mail, fbId, waitServerStatusCallback);
-        //StartCoroutine(CheckServerStatus(LoginUI.Instance.LoginCallback));
+        string stype = "F";
+        string token = CryptoPrefs.GetString("USERTOKEN");
 
-        _logText.text += "\n doLogin1";
+        if (string.IsNullOrEmpty(token))
+        {
+            MJApi.AddMember(fbId, fbMail, "1", sName, stype, LoginCallback);
+        }
+        else
+        {
+            MJApi.Login(stype, fbMail, token, LoginCallback);
+        }
+
+        _logText.text += "\n doLogin";
 
         UIManager.instance.StartSetEnterLoading();
     }

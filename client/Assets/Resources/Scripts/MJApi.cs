@@ -10,12 +10,12 @@ public static class MJApi
     private static string serverUrl = "https://192.168.22.19:8000/";
     private static string secretKey = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvbywbdGABb46cGzeevCMQU2LXvornsNkScfeCS9BmZ0KkebfYTvgvfLwUpl0QjR4LL5hHOYzaHxGQcVfvvY2wtiPRRMxGqhxVq";
 
-    public static void Login(string type, string mail, string pass, RequestCallBack callback)
+    public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
     {
         string api = "V1/login";
         string auth = "Bearer " + secretKey;
         string method = "POST";
-        string pdata = "[{\"Mail\":\"" + mail + "\", \"Type\":\"" + type + "\", \"Pass\":\"" + pass + "\"}]";
+        string pdata = "[{\"Type\":\"" + sType + "\", \"Mail\":\"" + mail + "\", \"TnPass\":\"" + tnPass + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 

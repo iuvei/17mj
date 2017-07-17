@@ -22,22 +22,29 @@ namespace com.Desktop
             }
 		}
 
-        public void Show()
+		public void Show(float t)
         {
 			//Debug.Log (this.name+".Show()");
 			if (time > 0) {
-				//image.enabled = true;
-                gameObject.SetActive(true);
-                if (Remain != null) {
+				if (Remain != null) {
 					Remain.text = time.ToString ();
 				}
-			} else {
+				//image.enabled = true;
+                gameObject.SetActive(true);
+                //if (Remain != null) {
+				//	Remain.text = time.ToString ();
+				//}
+				Invoke ("Hide", t);
+			}
+			/*
+			else {
 				//image.enabled = false;
                 gameObject.SetActive(false);
                 if (Remain != null) {
 					Remain.text = string.Empty;
 				}
 			}
+			*/
             //StartCoroutine(ShowTimer(time));
         }
 		/*
@@ -65,6 +72,9 @@ namespace com.Desktop
         {
             //Debug.Log (this.name+".Hide()");
             //image.enabled = false;
+			if (Remain != null) {
+				Remain.text = string.Empty;
+			}
             gameObject.SetActive(false);
         }
     }

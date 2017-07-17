@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace com.Desktop
 {
-	public class GameManager : Photon.MonoBehaviour
+	public class GameManager : Photon.PunBehaviour
     {
         private static GameManager _instance = null;
 
@@ -26,7 +27,8 @@ namespace com.Desktop
         /// <summary>
         /// 所有玩家的集合
         /// </summary>
-        public List<MahPlayer> players;
+		public List<MahPlayer> Users = new List<MahPlayer>();
+		//public List<MahPlayer> users;
 
 		//public PhotonPlayer xlocalPlayer;
 
@@ -45,8 +47,11 @@ namespace com.Desktop
         public Nagieffect nagiEffectPlayerB;
 
         //畫面過場控制
-        public Animator AllCanvasAnim; // 過場移入
-        public Animator GameInfoAnim;  //局風顯示
+		public RectTransform AllCanvas;
+		public RectTransform VideoCanvas;
+		public GameObject GameInfo;
+        //public Animator AllCanvasAnim; // 過場移入
+        //public Animator GameInfoAnim;  //局風顯示
 
         #region 
         /// <summary>
@@ -58,12 +63,16 @@ namespace com.Desktop
         /// 牌面上被打出去的牌
         /// </summary>
         //public MahJongObject abandonMah;
-		private int abanMahId = 0;
+		private int _lastDaPai = 0;
 		//private int moMahId = 0;
 		private int _lastMoPaiPlayerID = -1;
 		private int _lastDaPaiPlayerID = -1;
 		private int MaxWaitTime = 30;
 		private int _remainTime = 0;
+		private string _gameVersion = "1.0";
+		private int _targetid = 0;
+		private int _currentIndex = 0;
+		private bool _isgameover = false;
 
         public Image OverPanel;
 
@@ -84,16 +93,75 @@ namespace com.Desktop
 
 			if (!PhotonNetwork.connected)
 			{
+				
 				// We must be connected to a photon server! Back to main menu
 				//Application.LoadLevel(Application.loadedLevel - 1);
-				SceneManager.LoadScene("02.Lobby");
-				return;
+				//SceneManager.LoadScene("02.Lobby");
+				//return;
+				Connect();
 			}
 
 			PhotonNetwork.isMessageQueueRunning = true;
 
             //PhotonNetwork.OnEventCall += OnEvent;
         }
+
+		private void Connect()
+		{
+			//isConnecting = true;
+			//setProcess (0.1f);
+			//已經連接上了服務器
+			if (PhotonNetwork.connected)
+			{
+				//setProcess (1.0f);
+				//Debug.Log("Connected");
+				//if (loadingPanel) {
+				//	loadingPanel.SetActive (false);
+				//}
+			}
+			else
+			{
+				//setProcess (0.7f);
+				PhotonNetwork.ConnectUsingSettings(_gameVersion);
+				//我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
+				PhotonNetwork.autoJoinLobby = true;
+
+				//#关键
+				//这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
+				PhotonNetwork.automaticallySyncScene = true;
+			}
+		}
+
+		/// <summary>
+		/// 成功连接到大厅
+		/// </summary>
+		public override void OnConnectedToPhoton()
+		{
+			//Debug.Log ("OnConnectedToPhoton()");
+			base.OnConnectedToPhoton();
+			//setProcess (1.0f);
+			//if (loadingPanel) {
+			//loadingPanel.SetActive (false);
+			//}
+		}
+
+		public override void OnJoinedLobby()
+		{
+			//Debug.Log ("OnJoinedLobby()");
+			if (PhotonNetwork.room == null) {
+				
+				if (PhotonNetwork.CreateRoom(PhotonNetwork.playerName, new RoomOptions { MaxPlayers = 100 }, null))
+				{
+					//Debug.Log("CreateRoom() 成功 ! roomname="+PhotonNetwork.playerName);
+					//StartCoroutine(ChangeRoom());
+				}
+			}
+		}
+
+		private void OnFailedToConnect(NetworkConnectionError error)
+		{
+			//Debug.Log("fail to Connect");
+		}
 
         void Start()
         {
@@ -111,39 +179,29 @@ namespace com.Desktop
 
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
             //Debug.Log ("Start()");
-
-            //0.关联Photon玩家 与 Unity中的玩家
-            doBundlePlauer();
-
-            //1.洗牌
-            //doShuffleMah();
-
-            //2.摇骰子
-            //doDice();
-
-            //3.发牌
-            //doDealingMahs();
-
-            //4.設定開始玩家
-            //setActivePlayer(players[0]);
         }
 
         // 邀請玩麻將
         public void ClickInvatePlay() {
-
+			LayoutStart(); //畫面移入
+			this._isgameover = false;
             //只有副机有邀請的權利
-            if (PhotonNetwork.isMasterClient)
-            {
-                return;
-            }
+            //if (PhotonNetwork.isMasterClient)
+            //{
+			//	Debug.Log ("!PhotonNetwork.isMasterClient");
+            //    return;
+            //}
+			StartCoroutine("ReadyPlay");
 
-            photonView.RPC("StartMahjong", PhotonTargets.All, null);
+            //photonView.RPC("StartMahjong", PhotonTargets.All, null);
+
         }
 
         [PunRPC]
         private void StartMahjong()
         {
-            LayoutStart(); //畫面移入
+			Debug.Log ("[RPC] StartMahjong()");
+            //LayoutStart(); //畫面移入
 
             //Debug.LogError ("[RPC] StartMahjong()");
 
@@ -152,26 +210,27 @@ namespace com.Desktop
             //只有主机有发牌的权利
             if (!PhotonNetwork.isMasterClient)
             {
+				Debug.Log ("!PhotonNetwork.isMasterClient");
                 return;
             }
-
+			_currentIndex = 0;
             StartCoroutine("ReadyPlay");
         }
 
         IEnumerator ReadyPlay() {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(1.0f);
+
+			//0.Game init
+			doGameInit();
 
             //1.洗牌
             doShuffleMah();
 
-            //2.摇骰子
-            doDice();
-
-            //3.发牌
-            doDealingMahs();
+            //2.發牌
+			doDispatchPai();
 
             //4.設定開始玩家
-            setActivePlayer(players[0]);
+			setActivePlayer(Users[_currentIndex]);
         }
 
         public void onLivePlayREConnect()
@@ -212,9 +271,31 @@ namespace com.Desktop
         /// <summary>
         /// 绑定玩家与photonplayer
         /// </summary>
-        private void doBundlePlauer()
+        private void doGameInit()
         {
-			//Debug.LogError ("[s] 0.doBundlePlauer()");
+			//Debug.LogError ("[s] 0.doGameInit()");
+			if (PhotonNetwork.playerList.Length > 0 && PhotonNetwork.playerList.Length < 2) {
+				//Debug.Log ("單機模式");
+				//單機模式 第一個是自己 第二個是AI
+				Users[0].photonPlayer = PhotonNetwork.player;
+				Users[0].isAI = false;
+				Users[0].autoPlay = true;//for test
+				PhotonNetwork.player.mahPlayer = Users [0];
+				Users[1].photonPlayer = null;
+				Users[1].isAI = true;
+			} else {
+				//對戰模式 第一個是自己 第二個是對戰玩家
+				Users[0].photonPlayer = PhotonNetwork.player;
+				Users[0].isAI = false;
+				//PhotonNetwork.playerList.
+				PhotonPlayer pp = PhotonPlayer.Find(this._targetid);
+				Users[1].photonPlayer = pp;
+				Users[1].isAI = false;
+
+			}
+
+			_currentIndex = 0;
+			/*
             //按照 ABCD的顺序传photonplayer.ID
             int[] ids = new int[2];
 
@@ -240,6 +321,7 @@ namespace com.Desktop
             //Debug.LogError(PhotonNetwork.player.mahPlayer.gameObject.name);
 
             photonView.RPC("BundlePlayer", PhotonTargets.Others, ids);
+			*/
         }
 
         /// <summary>
@@ -249,8 +331,9 @@ namespace com.Desktop
         [PunRPC]
         public void BundlePlayer(int[] ids)
         {
-			//Debug.LogError ("[RPC] BundlePlayer()");
-            int ppindex = 0;
+			Debug.LogError ("[RPC] BundlePlayer("+ids+")");
+            /*
+			int ppindex = 0;
             for (int i = 0; i < ids.Length; i++)
             {
                 if (PhotonNetwork.player.ID == ids[i])
@@ -267,6 +350,7 @@ namespace com.Desktop
                 PhotonPlayer.Find(ids[ppindex]).mahPlayer = players[i];
             }
             //Debug.LogError(PhotonNetwork.player.mahPlayer.gameObject.name);
+            */
         }
 
         /// <summary>
@@ -285,12 +369,31 @@ namespace com.Desktop
         /// <summary>
         /// 发牌
         /// </summary>
-        void doDealingMahs()
+		void doDispatchPai()
         {
-			//Debug.LogError ("[s] 3.系統發牌(玩家數:"+PhotonNetwork.playerList.Length+")");
+			//Debug.LogError ("[s] 2.doDispatchPai(玩家數="+PhotonNetwork.playerList.Length+")");
 			List<int> mahm = new List<int>();
+			int i = 0;
+			foreach (MahPlayer mp in Users) {
+				if (mp == null)
+					continue;
+				mp.keepedMah.Clear ();
+				mp.ponMah.Clear ();
+				mp.abandanedMah.Clear ();
+				mahm.Clear ();
+				for (int j = 0; j < Mahjong.MAXPAI; j++)
+				{
+					int pai_id = mahJong.allMah.Dequeue();
+					mahm.Add(pai_id);
+				}
+				photonView.RPC ("dispatchPai", PhotonTargets.All, i, mahm.ToArray ());
+				i++;
+			}
+			/*
             foreach (PhotonPlayer p in PhotonNetwork.playerList)
             {
+				if (p.mahPlayer == null)
+					continue;
 				p.mahPlayer.keepedMah.Clear ();
 				p.mahPlayer.ponMah.Clear ();
 				p.mahPlayer.abandanedMah.Clear ();
@@ -303,6 +406,7 @@ namespace com.Desktop
 				}
 				photonView.RPC("dispatchPai", PhotonTargets.AllBuffered, p.ID, mahm.ToArray());
             }
+            */
         }
 
 		private void doHandleNext() {
@@ -310,9 +414,12 @@ namespace com.Desktop
 				//Debug.Log("Server Exec Only!! doHandleNext()");
 				return;
 			} 
+			//Debug.LogError("[s] doHandleNext()");
+			_currentIndex++;
+			_currentIndex = _currentIndex % Users.Count;
 			//Debug.LogError ("[s] doHandleNext()");
 			//StartCoroutine (doHandleNextCo(time));
-			MahPlayer next = _activePlayer.nextPlayer;
+			MahPlayer next = Users[_currentIndex]; //_activePlayer.nextPlayer;
 			setActivePlayer (next);
 		}
 
@@ -328,10 +435,26 @@ namespace com.Desktop
 				//Debug.Log ("Server Exec Only!! doHandlePon()");
 				return;
 			} else {
-				if (abanMahId != 0) {
-					PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
-					if (photonPlayer != null && photonPlayer.mahPlayer != null) {
-						photonPlayer.mahPlayer.handlePon (abanMahId);
+				if (_lastDaPai != 0) {
+					MahPlayer mplayer =  Users.Find (x => x.ID.Equals (playerid));
+					if (mplayer) {
+						mplayer.handlePon (_lastDaPai);
+					}
+				}
+			}
+		}
+
+		//處理要求代打
+		public void doHandleAutoPlay (int playerid, bool auto) {
+			if (!PhotonNetwork.isMasterClient) {
+				//Debug.Log ("Server Exec Only!! doHandlePon()");
+				return;
+			} else {
+				//Debug.Log ("doHandleAutoPlay("+playerid+", "+auto+")");
+				if (playerid >= 0) {
+					MahPlayer mplayer =  Users.Find (x => x.ID.Equals (playerid));
+					if (mplayer) {
+						mplayer.handleAskAutoPlay (auto);
 					}
 				}
 			}
@@ -343,11 +466,17 @@ namespace com.Desktop
 				//Debug.Log ("Server Exec Only!! doHandleGan()");
 				return;
 			} else {
-				if (abanMahId != 0) {
+				if (_lastDaPai != 0) {
+					MahPlayer mplayer =  Users.Find (x => x.ID.Equals (playerid));
+					if (mplayer) {
+						mplayer.handleGan (_lastDaPai);
+					}
+					/*
 					PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
 					if (photonPlayer != null && photonPlayer.mahPlayer != null) {
 						photonPlayer.mahPlayer.handleGan (abanMahId);
 					}
+					*/
 				}
 			}
 		}
@@ -357,18 +486,25 @@ namespace com.Desktop
 				//Debug.Log ("Server Exec Only!! doHandleChi()");
 				return;
 			} else {
-				if (abanMahId != 0) {
+				if (_lastDaPai != 0) {
+					MahPlayer mplayer =  Users.Find (x => x.ID.Equals (playerid));
+					if (mplayer) {
+						mplayer.handleChi (_lastDaPai);
+					}
+					/*
 					PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
 					if (photonPlayer != null && photonPlayer.mahPlayer != null) {
 						photonPlayer.mahPlayer.handleChi (abanMahId);
 					}
+					*/
 				}
 			}
 		}
 
         //處理玩家胡牌
         public void doHandleWin(int playerid)
-        {
+		{
+			//Debug.Log ("doHandleWin("+playerid+")");
             if (!PhotonNetwork.isMasterClient)
             {
                 //Debug.Log ("Server Exec Only!! doHandledWin()");
@@ -376,14 +512,15 @@ namespace com.Desktop
             }
             else
             {
-                if (abanMahId != 0)
-                {
-                    PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
-                    if (photonPlayer != null && photonPlayer.mahPlayer != null)
-                    {
-                        photonPlayer.mahPlayer.handleWin(abanMahId);
-                    }
-                }
+				this._isgameover = true;
+				//Debug.Log ("abanMahId="+abanMahId);
+                //if (abanMahId != 0)
+                //{
+				MahPlayer mplayer =  Users.Find (x => x.ID.Equals (playerid));
+				if (mplayer) {
+					mplayer.handleWin (_lastDaPai);
+				}
+                //}
             }
         }
 
@@ -394,10 +531,10 @@ namespace com.Desktop
 				return;
 			} else {
 				if (mid != 0) {
-					if (_activePlayer != null && _activePlayer.photonPlayer.ID==playerid && _activePlayer.photonPlayer.ID != _lastDaPaiPlayerID) {
-						_lastDaPaiPlayerID = _activePlayer.photonPlayer.ID;
+					if (_activePlayer != null && _activePlayer.ID==playerid && _activePlayer.ID != _lastDaPaiPlayerID) {
+						_lastDaPaiPlayerID = _activePlayer.ID;
+						_lastDaPai = mid;
 						_activePlayer.handleDaPai (mid);
-						_lastDaPaiPlayerID = _activePlayer.photonPlayer.ID;
 					}
 				}
 			}
@@ -406,11 +543,12 @@ namespace com.Desktop
         //摸牌
 		public void doHandleMoPai()
 		{
+			Debug.Log ("doHandleMoPai()");
 			//yield return new WaitForSeconds(isfirst);
-			StartCoroutine(_MoPaiCo(.0f));
+			StartCoroutine(_MoPaiCo(0));
 		}
 
-		private IEnumerator _MoPaiCo(float time = 0.1f) {
+		public IEnumerator _MoPaiCo(float time = 0.1f) {
 
 			if (time > 0) {
 				yield return new WaitForSeconds (time);
@@ -423,108 +561,191 @@ namespace com.Desktop
 				//Debug.LogError ("[s] 4.doMoPai()");
 				//players[0].GetMahJong(true);
 				//setActivePlayer(players[0]);
-				if (_activePlayer != null && _activePlayer.photonPlayer.ID != _lastMoPaiPlayerID) {
+				if (_activePlayer != null && _activePlayer.ID != _lastMoPaiPlayerID) {
 					//_activePlayer.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 					//Debug.LogError ("[s] 4.doMoPai("+_activePlayer.photonPlayer.NickName+")");
 					//Debug.Log("xxxxxx_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
 					int GotID = getMahjongPai ();
+					if (GotID <= 0) {
+						photonView.RPC ("GameOver", PhotonTargets.All, null);
+						yield break;
+					}
+					//Debug.Log ("mopai"+GotID);
 					string name = Mahjong.getName (GotID);
-					_lastMoPaiPlayerID = _activePlayer.photonPlayer.ID;
+					_lastMoPaiPlayerID = _activePlayer.ID;
 					//keepedMah.Add (GotID);
 					//Debug.LogError ("[s] 4.doMoPai(GotID="+GotID+", isfirst="+isfirst+")");
 					//Debug.LogError ("[s] 4. doMoPai("+_activePlayer.photonPlayer.NickName+", GotID="+GotID+")");
-					_activePlayer.handleMoPai (GotID);
+					_activePlayer.handleMoPai (GotID, getRemainPai());
 					//Debug.Log ("[s] "+_activePlayer.name+" 摸到了 "+name+"("+GotID+")");
 					//object[] param = { GotID, _activePlayer.photonPlayer.ID };
 					//photonView.RPC ("MoPai", PhotonTargets.All, param);
-				} else {
-					//if (xlocalPlayer != null) {
-					//	xlocalPlayer.mahPlayer.HideMenu ();
-					//}
 				}
 			}
         }
 
 		private void setActivePlayer(MahPlayer player) {
-			//Debug.LogError ("[s] setActivePlayer("+player.photonPlayer.NickName+")");
+			Debug.LogError ("[s] 輪到("+player.name+")");
 			//int[] param = { photonPlayer.ID };
 			//photonView.RPC("ShowTimer", PhotonTargets.All, param);
-			if (_activePlayer) {
+			MahPlayer _prevPlayer = _activePlayer;
+			//_remainTime = 0;
+			if (_prevPlayer!=null) {
 				int max = 0;
 				//Debug.Log ("******************_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
-				max = _activePlayer.keepedMah.Count-1;
+				max = _prevPlayer.keepedMah.Count-1;
 				//Debug.LogError ("max="+max);
-				if (_activePlayer.state == PLAYERSTATE.PLAYING) {//如果是正在做決策狀態, 先摸牌 再打牌
+				if (_prevPlayer.state == PLAYERSTATE.PLAYING) {//如果是什麼都沒做, 先摸牌 再打牌
 					doHandleMoPai ();//摸牌
-					max = _activePlayer.keepedMah.Count-1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);//打牌
+					max = _prevPlayer.keepedMah.Count-1;
+					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
 				}
-				else if (_activePlayer.state == PLAYERSTATE.MOPAING) {//如果是摸牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count-1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				else if (_prevPlayer.state == PLAYERSTATE.MOPAING) {//如果是摸完牌, 直接打牌
+					max = _prevPlayer.keepedMah.Count-1;
+					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
 				}
-				else if (_activePlayer.state == PLAYERSTATE.CHIPAING) {//如果是吃牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count-1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				else if (_prevPlayer.state == PLAYERSTATE.CHIPAING) {//如果是吃牌狀態, 直接打牌
+					max = _prevPlayer.keepedMah.Count-1;
+					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
 				}
-				else if (_activePlayer.state == PLAYERSTATE.PONPAING) {//如果是碰牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count-1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				else if (_prevPlayer.state == PLAYERSTATE.PONPAING) {//如果是碰牌狀態, 直接打牌
+					max = _prevPlayer.keepedMah.Count-1;
+					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
 				}
-				else if (_activePlayer.state == PLAYERSTATE.GANPAING) {//如果是槓牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count-1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				else if (_prevPlayer.state == PLAYERSTATE.GANPAING) {//如果是槓牌狀態, 直接打牌
+					max = _prevPlayer.keepedMah.Count-1;
+					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
 				}
-				_activePlayer.state = PLAYERSTATE.WAITING;//更改狀態為完成狀態
+				_prevPlayer.state = PLAYERSTATE.WAITING;//更改狀態為完成狀態
 			}
 			_activePlayer = player;
 			_activePlayer.actived = false;
 			_activePlayer.state = PLAYERSTATE.PLAYING;
-			int[] param = { _activePlayer.photonPlayer.ID };
+			int[] param = { _currentIndex };
 			photonView.RPC("ShowActivePlayer", PhotonTargets.All, param);
 			_lastMoPaiPlayerID = -1;
 			_lastDaPaiPlayerID = -1;
 			//StopCoroutine ("AutoChangeActivePlayerCo");
-			StartCoroutine (AutoChangeActivePlayerCo());
+
+			if (_activePlayer != null && (_activePlayer.isAI||_activePlayer.autoPlay)) {
+				StartCoroutine (AutoDaPai ());//自動代打
+			} else {
+				StartCoroutine (AutoChangeActivePlayerCo ());
+			}
+			//StartCoroutine (AutoChangeActivePlayerCo ());
 			//doMoPai (isfirst);
+		}
+
+		private IEnumerator AutoDaPai()
+		{
+			if (_activePlayer != null) {
+				if (this._isgameover)
+					yield break;
+				yield return StartCoroutine( _activePlayer.doAiThink (this._lastDaPai));
+				/*
+				int max = 0;
+				int rnd = UnityEngine.Random.Range(2, 10);
+				_remainTime = MaxWaitTime;
+				while (_remainTime>MaxWaitTime-rnd) {
+					yield return new WaitForSeconds (1);
+					_remainTime--;
+					if (this._isgameover)
+						yield break;
+					//Debug.Log ("waitTime="+_waitTime);
+					int[] param = { _remainTime, _currentIndex };
+					photonView.RPC ("RemainTime", PhotonTargets.All, param);
+				}
+				//yield return new WaitForSeconds (rnd);
+				if (_activePlayer.state == PLAYERSTATE.PLAYING) {//如果是什麼都沒做, 先摸牌 再打牌
+					yield return StartCoroutine (_MoPaiCo (0));//摸牌
+					//yield return new WaitForSeconds (1);
+					max = _activePlayer.keepedMah.Count - 1;
+					//Debug.Log ("max="+max+", "+_activePlayer.keepedMah [max]);
+					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				} else if (_activePlayer.state == PLAYERSTATE.MOPAING) {//如果是摸完牌, 直接打牌
+					max = _activePlayer.keepedMah.Count - 1;
+					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				} else if (_activePlayer.state == PLAYERSTATE.CHIPAING) {//如果是吃牌狀態, 直接打牌
+					max = _activePlayer.keepedMah.Count - 1;
+					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				} else if (_activePlayer.state == PLAYERSTATE.PONPAING) {//如果是碰牌狀態, 直接打牌
+					max = _activePlayer.keepedMah.Count - 1;
+					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				} else if (_activePlayer.state == PLAYERSTATE.GANPAING) {//如果是槓牌狀態, 直接打牌
+					max = _activePlayer.keepedMah.Count - 1;
+					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
+				}
+				_activePlayer.state = PLAYERSTATE.WAITING;//更改狀態為完成狀態
+				*/
+				//yield return new WaitForSeconds (1);
+				if (getRemainPai()> 0) {
+					doHandleNext ();
+				} else {
+					photonView.RPC ("GameOver", PhotonTargets.All, null);
+				}
+			}
 		}
 
 		private IEnumerator AutoChangeActivePlayerCo()
 		{
+			if (this._isgameover)
+				yield break;
 			_remainTime = MaxWaitTime;
 			while (_remainTime>0) {
+				if (this._isgameover)
+					yield break;
 				yield return new WaitForSeconds (1);
 				_remainTime--;
 				//Debug.Log ("waitTime="+_waitTime);
-				int[] param = { _remainTime, _activePlayer.photonPlayer.ID };
+				int[] param = { _remainTime, _currentIndex };
 				photonView.RPC ("RemainTime", PhotonTargets.All, param);
 			}
-			doHandleNext ();
+			//if (_activePlayer != null && mahJong.allMah.Count > 0) {
+			if (getRemainPai() > 0) {
+				doHandleNext ();
+			} else {
+				photonView.RPC ("GameOver", PhotonTargets.All, null);
+			}
 			//StopCoroutine ("AutoChangeActivePlayerCo");
 		}
 
 		public int getMahjongPai()
 		{
+			int remain = getRemainPai ();
+
 			//牌光了 游戏结束
-			if (mahJong.allMah.Count == 0)
+			if (remain == 0)
 			{
-				photonView.RPC("GameOver", PhotonTargets.All, null);
-				return 0;
+				//photonView.RPC("GameOver", PhotonTargets.All, null);
+				return -1;
 			}
-			int ID = 0;
+			int ID = -1;
 			ID = mahJong.allMah.Dequeue ();
+			//Debug.LogError ("getMahjongPai(id="+ID+", remain="+remain+")");
 			return ID;
 		}
 
-		[PunRPC]
-		private void SendRequestToServer(int[] param)
+		public int getRemainPai()
 		{
-			int index = (int)param[0];
+			int remain = 0;
+			if (mahJong != null && mahJong.allMah != null) {
+				remain = mahJong.allMah.Count;
+			}
+			return remain;
+		}
+
+		[PunRPC]
+		private void SendRequestToServer(object[] param)
+		{
+			//Debug.Log ("SendRequestToServer()");
+			int gcmd = (int)param[0];
 			int player_id = -1;
-			switch(index) {
-			//case (int)GameCommand.ACTIVENEXT:
-				//doActiveNext ();
-			//	break;
+			switch(gcmd) {
+			case (int)GameCommand.AUTOPLAY:
+				player_id = (int)param[1];
+				bool auto = (bool)param[2];
+				doHandleAutoPlay (player_id, auto);
+				break;
 			case (int)GameCommand.MOPAI:
 				doHandleMoPai ();
 				break;
@@ -547,6 +768,7 @@ namespace com.Desktop
 				break;
             case (int)GameCommand.WINPAI:
                 player_id = (int)param[1];
+				//bool xx = (bool)param[2];
                 doHandleWin(player_id);
                 break;
             }
@@ -575,50 +797,80 @@ namespace com.Desktop
 		private void dispatchPai(object[] param)
 		{
 			//Debug.LogError ("[RPC] 發牌()");
-			int id = (int)param[0];
+			int idx = (int)param[0];
 			int[] content = (int[])param [1];
-			//Debug.LogError ("[RPC] 發牌("+id+":"+content.Length+")");
-
-			PhotonPlayer photonPlayer = PhotonPlayer.Find(id);
-			if (photonPlayer != null && photonPlayer.mahPlayer != null) {
-				List<int> mahs = new List<int>(content);
-				if (photonPlayer.IsLocal) {
-					photonPlayer.mahPlayer.keepedMah = mahs;
-					//Debug.LogError ("[RPC] 系統發牌給你("+photonPlayer.NickName+"), 張數:" + content.Length);
-					photonPlayer.mahPlayer.ShowPAI ();
-				} else {
-					photonPlayer.mahPlayer.keepedMah = mahs;
-					//Debug.LogError ("[RPC] 系統發牌給" + photonPlayer.NickName + ", 張數:" + content.Length);
-					//foreach(int mid in mahs) {
-					//	Debug.Log ("[c] "+mid);
-					//}
-				}
-				//for (int i = 0; i < 13 * 4; i++)
-				//{
-				//	mahJong.allMah.RemoveAt(0);
-				//}
-				//photonPlayer.mahPlayer.timer.time = 10;
-				//photonPlayer.mahPlayer.timer.Show ();
+			//Debug.LogError ("[RPC] 發牌(id="+idx+", content.length="+content.Length+")");
+			List<int> mahs = new List<int> (content);
+			//Debug.LogError ("[RPC] 系統發牌 (idx=" + idx + "), 張數:" + content.Length);
+			if (idx < Users.Count) {
+				Users [idx].clearPAI ();
+				Users [idx].keepedMah = mahs;
+				Users [idx].ShowPAI ();
 			}
+			/*
+			if (Users[idx] == PhotonNetwork.player.ID) {
+				//PhotonPlayer photonPlayer = PhotonPlayer.Find (id);
+				//if (photonPlayer != null && photonPlayer.mahPlayer != null) {
+				//List<int> mahs = new List<int> (content);
+				//if (photonPlayer.IsLocal) {
+				//photonPlayer.mahPlayer.keepedMah = mahs;
+				Users[idx].keepedMah = mahs;
+				Debug.LogError ("[RPC] 系統發牌 (idx=" + idx + "), 張數:" + content.Length);
+				PhotonNetwork.player.mahPlayer.ShowPAI ();
+				//	} else {
+				//		photonPlayer.mahPlayer.keepedMah = mahs;
+				//		Debug.LogError ("[RPC] 系統發牌給" + photonPlayer.NickName + ", 張數:" + content.Length);
+				//	}
+				//}
+			} else {
+				//id = Users [0].photonPlayer.ID;
+				//Users [0].photonPlayer
+				PhotonPlayer photonPlayer = PhotonPlayer.Find (id);
+				if (photonPlayer != null) {
+					photonPlayer.mahPlayer.keepedMah = mahs;
+					Debug.LogError ("[RPC] 系統發牌給" + photonPlayer.NickName + ", 張數:" + content.Length);
+				} else {
+					Users[1].keepedMah = mahs;
+					Debug.LogError ("[RPC] 系統發牌給AI, 張數:" + content.Length);
+				}
+			}
+			*/
 		}
 		
 		[PunRPC]
 		private void RemainTime(int[] param)
 		{
 			int rtime = (int)param[0];
-			int pid = (int)param[1];
-			//Debug.LogError ("[RPC] id="+pid+", RemainTime=" + rtime);
-			PhotonPlayer photonPlayer = PhotonPlayer.Find(pid);
-			if (photonPlayer != null && photonPlayer.mahPlayer != null) {
-				photonPlayer.mahPlayer.timer.time = rtime;
-				photonPlayer.mahPlayer.timer.Show ();
+			int idx = (int)param[1];
+			//Debug.LogError ("[RPC] idx="+idx+", RemainTime=" + rtime);
+			//PhotonPlayer photonPlayer = PhotonPlayer.Find(pid);
+			MahPlayer mahPlayer = Users[idx];
+			if (mahPlayer != null) {
+				mahPlayer.timer.time = rtime;
+				mahPlayer.timer.Show (1.0f);
 			}
 		}
         [PunRPC]
 		void ShowActivePlayer(int[] param)
         {
-			int id = (int)param[0];
-			//Debug.LogError ("[RPC] 顯示玩家(id="+id+")");
+			int idx = (int)param[0];
+			//Debug.LogError ("[RPC] 輪到玩家(idx="+idx+")");
+			//foreach (MahPlayer player in Users) {
+				
+			//}
+			MahPlayer mahPlayer = Users[idx];
+			//if(mahPlayer.isAI)
+			//	Debug.LogError ("[RPC] 輪到電腦"+mahPlayer.name);
+			//else
+			//	Debug.LogError ("[RPC] 輪到玩家"+mahPlayer.name);
+			//Debug.LogError ("[RPC] 輪到你了!!!("+photonPlayer.NickName+")");
+			if (idx == 0) {
+				if(mahPlayer!=null && !(mahPlayer.isAI||mahPlayer.autoPlay))
+					mahPlayer.checkPai (_lastDaPai, false);
+			}
+			mahPlayer.timer.time = 30;
+			mahPlayer.timer.Show (0.5f);
+			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(id);
 
             foreach (PhotonPlayer player in PhotonNetwork.playerList)
@@ -636,7 +888,7 @@ namespace com.Desktop
 				//photonPlayer.mahPlayer.timer.time = 30;
 				photonPlayer.mahPlayer.timer.Show ();
 			}
-
+			*/
         }
 		/// <summary>
 		/// 摸牌.
@@ -647,10 +899,34 @@ namespace com.Desktop
 		{
 			int player_id = (int)param[0];
 			int pai_id = (int)param[1];
+			int remain_pai_count = (int)param[2];
 			int i = 0;
 			int j = 0;
+			string pname = Mahjong.getName (pai_id);
+
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer) {
+				if (mplayer.ID == 1) {
+					if (!PhotonNetwork.player.IsMasterClient) {
+						mplayer.keepedMah.Add (pai_id);
+					}
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "摸牌 " + pname + "(" + i + "+" + j + ")");
+					mplayer.createPaiToMo (pai_id);
+				} else {
+					//mplayer.keepedMah.Add (0);
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "摸牌 " + pname + "(" + i + "+" + j + ")");
+					mplayer.createPaiToMo (0);
+				}
+				//Debug.Log("剩餘 "+remain_pai_count+"");
+				mplayer.HideMenu ();
+			}
 			//moMahId = pai_id;
 			//bool isfirst = (bool)param[2];
+			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			string pname = Mahjong.getName (pai_id);
 			if (photonPlayer != null) {
@@ -670,6 +946,7 @@ namespace com.Desktop
 				}
 				photonPlayer.mahPlayer.HideMenu ();
 			}
+			*/
 		}
 
 		/// <summary>
@@ -684,6 +961,31 @@ namespace com.Desktop
 			int i = 0;
 			int j = 0;
 			string pai_name = Mahjong.getName (pai_id);
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer) {
+				if (mplayer.ID == 1) {
+					if (!PhotonNetwork.player.IsMasterClient) {
+						mplayer.keepedMah.Remove (pai_id);
+					}
+					mplayer.DaPaiToAban (pai_id);
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "(" + i + "+" + j + ")");
+					mplayer.HideMenu ();
+					Speak (pai_id);
+				} else {
+					if (!PhotonNetwork.player.IsMasterClient) {
+						mplayer.keepedMah.RemoveAt (0);
+					}
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "(" + i + "+" + j + ")");
+					mplayer.DaPaiToAban (pai_id);
+					Speak (pai_id);
+				}
+				playDaiPaiSound ();
+			}
+			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer != null) {
 				if (photonPlayer.IsLocal) {
@@ -706,8 +1008,9 @@ namespace com.Desktop
 				//PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 				//photonPlayer.mahPlayer.outPaiFromKeep (pai_id);
 			}
+			*/
 
-			abanMahId = pai_id;
+			//abanMahId = pai_id;
 			this._remainTime = 1;
 			//doHandleNext ();
 		}
@@ -724,6 +1027,25 @@ namespace com.Desktop
 			int i = 0;
 			int j = 0;
 			string pai_name = Mahjong.getName (pai_id);
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer) {
+				mplayer.collectPonPai (pai_id);
+				if (mplayer.ID == 1) {
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] 你(" + mplayer.name + ")喊了碰 " + pai_name + "(" + i + "+" + j + ")");
+					playPonSound ();
+					mplayer.HideMenu ();
+					nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.PON);
+				} else {
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "喊了碰 " + pai_name + "(" + i + "+" + j + ")");
+					playPonSound ();
+					nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PON);
+				}
+			}
+			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer != null) {
 				photonPlayer.mahPlayer.collectPonPai (pai_id);
@@ -747,6 +1069,7 @@ namespace com.Desktop
                     nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PON);
                 }
 			}
+			*/
 		}
 
 		/// <summary>
@@ -761,6 +1084,33 @@ namespace com.Desktop
 			int i = 0;
 			int j = 0;
 			string pai_name = Mahjong.getName (pai_id);
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer) {
+				mplayer.collectGanPai (pai_id);
+				if (mplayer.ID == 1) {
+					mplayer.keepedMah.Remove (pai_id);
+					mplayer.keepedMah.Remove (pai_id);
+					mplayer.keepedMah.Remove (pai_id);
+					mplayer.ponMah.Add (pai_id);
+					mplayer.ponMah.Add (pai_id);
+					mplayer.ponMah.Add (pai_id);
+					mplayer.ponMah.Add (pai_id);
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "喊槓 " + pai_name + "(" + i + "+" + j + ")");
+					playGanSound ();
+					mplayer.HideMenu ();
+					nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.GAN);
+				} else {
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "喊槓 " + pai_name + "(" + i + "+" + j + ")");
+					playGanSound ();
+					nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.GAN);
+				}
+				//mplayer.collectGanPai (pai_id);
+			}
+			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer != null) {
 				if (photonPlayer.IsLocal) {
@@ -786,6 +1136,7 @@ namespace com.Desktop
                 }
 				photonPlayer.mahPlayer.collectGanPai (pai_id);
 			}
+			*/
 		}
 
 		/// <summary>
@@ -801,6 +1152,25 @@ namespace com.Desktop
 			int i = 0;
 			int j = 0;
 			string pai_name = Mahjong.getName (pai_id);
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer) {
+				mplayer.collectChiPai (pai_id, chitype);
+				if (mplayer.ID == 1) {
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "喊吃 " + pai_name + "(" + i + "+" + j + ")");
+					playChiSound ();
+					mplayer.HideMenu ();
+					nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.CHI);
+				} else {
+					i = mplayer.keepedMah.Count;
+					j = mplayer.ponMah.Count;
+					Debug.LogError ("[RPC] " + mplayer.name + "喊吃 " + pai_name + "(" + i + "+" + j + ")");
+					playChiSound ();
+					nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.CHI);
+				}
+			}
+			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(player_id);
 			if (photonPlayer != null) {
 				photonPlayer.mahPlayer.collectChiPai (pai_id, chitype);
@@ -819,6 +1189,7 @@ namespace com.Desktop
                     nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.CHI);
                 }
 			}
+			*/
 		}
 
 
@@ -826,12 +1197,29 @@ namespace com.Desktop
         void WinPai(int[] param)
         {
 			//Debug.Log ("[RPC] 贏牌()");
+			int player_id = (int)param[0];
             Text text = OverPanel.GetComponentInChildren<Text>();
+			//text.text = "玩家" + photonPlayer.NickName + " 胡牌了!";
             //OverPanel.gameObject.SetActive(true);
             //nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PAU);
             StartCoroutine(_OverPanel(5f));
 
-            PhotonPlayer photonPlayer = PhotonPlayer.Find(param[0]);
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			text.text = "玩家" + mplayer.name + " 胡牌了!";
+			if (mplayer) {
+				if (mplayer.ID == 1) {
+					//Debug.LogError ("[RPC] 你贏了 ");
+					playWinSound ();
+					nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.HU2);
+					nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.PAU);
+				} else {
+					playWinSound ();
+					nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.PAU);
+					nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.HU);
+				}
+			}
+			/*
+			PhotonPlayer photonPlayer = PhotonPlayer.Find(param[0]);
             text.text = "玩家" + photonPlayer.NickName + " 胡牌了!";
 			if (photonPlayer.IsLocal) {
 				//Debug.LogError ("[RPC] 你贏了 ");
@@ -844,6 +1232,7 @@ namespace com.Desktop
                 nagiEffectPlayerA.ShowNagi(Nagieffect.NagiType.PAU);
                 nagiEffectPlayerB.ShowNagi(Nagieffect.NagiType.HU);
             }
+            */
         }
 
         private IEnumerator _OverPanel(float time = 0.1f)
@@ -869,7 +1258,7 @@ namespace com.Desktop
 
         public void OneMoreMahjong()
         {
-			//Debug.Log ("OneMoreMahjong()");
+			Debug.Log ("OneMoreMahjong()");
             //只有主机有发牌的权利
             if (!PhotonNetwork.isMasterClient)
             {
@@ -897,6 +1286,9 @@ namespace com.Desktop
                 return;
             }
 
+			StartCoroutine("ReadyPlay");
+
+			/*
             //1.洗牌
             doShuffleMah();
 
@@ -904,10 +1296,11 @@ namespace com.Desktop
             doDice();
 
             //3.发牌
-            doDealingMahs();
+			doDispatchPai();
 
 			//4.設定開始玩家
 			//setActivePlayer(players[0]);
+			*/
         }
 
         private void RestView()
@@ -997,18 +1390,32 @@ namespace com.Desktop
 
         private void LayoutStart()
         {
-            AllCanvasAnim.SetBool("GameStart", true);
-            Invoke("ShowInfo", 0.45f);
+			//VideoCanvas.transform.DOScaleX (1, 0);
+			AllCanvas.transform.DOMoveX (-14, 0, true);
+			AllCanvas.transform.DOMoveX(0, 1, false).SetEase(Ease.InOutBack).OnComplete(ShowInfo);
+			//VideoCanvas.transform.DOScaleX (0.3f, 1).SetEase(Ease.InOutBack);
+            //Invoke("ShowInfo", 0.45f);
+			//ShowInfo();
         }
 
         public void ShowInfo()
         {
-            GameInfoAnim.SetTrigger("ShowInfo");
+            //GameInfoAnim.SetTrigger("ShowInfo");
+			//Debug.Log("ShowInfo()");
+			CanvasGroup cg = GameInfo.GetComponent<CanvasGroup> ();
+			if (cg != null) {
+				cg.DOFade (1, 2);//.SetDelay(1).DOFade(0, 2);
+				cg.DOFade (0, 2).SetDelay(1);
+			}
         }
 
         public void GameStop()
         {
-            AllCanvasAnim.SetBool("GameStart", false);
+            //AllCanvasAnim.SetBool("GameStart", false);
+			AllCanvas.transform.DOMoveX (0, 0, true);
+			//VideoCanvas.transform.DOScaleX (0.3f, 0);
+			AllCanvas.transform.DOMoveX (-14, 1, false).SetEase(Ease.InOutBack);
+			//VideoCanvas.transform.DOScaleX (1, 1).SetEase(Ease.InOutBack);
         }
     }
 }

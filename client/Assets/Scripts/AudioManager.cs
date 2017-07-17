@@ -70,7 +70,7 @@ public class AudioManager : MonoBehaviour
 		} else {
 			this.sound_volume = .0f;
 		}
-		Debug.Log ("AudioManager loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
+		//Debug.Log ("AudioManager loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
 	}
 
 	private void loadAllSoundResources() {

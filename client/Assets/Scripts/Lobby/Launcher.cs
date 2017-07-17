@@ -438,6 +438,8 @@ namespace com.Lobby
 						g.transform.localPosition = Vector3.zero;
 						Text txt = g.GetComponentInChildren<Text> ();
 						txt.text = ri.Name;
+						Button btn = g.GetComponentInChildren<Button> ();
+						btn.onClick.AddListener(delegate () { doJoinRoom(ri.Name); });
 					}
 					if (hint) {
 						hint.gameObject.SetActive (false);
@@ -449,6 +451,12 @@ namespace com.Lobby
 					}
 				}
 			}
+		}
+
+		public void doJoinRoom(string roomname)
+		{
+			Debug.Log ("doJoinRoom("+roomname+")");
+			PhotonNetwork.JoinRoom (roomname);
 		}
 
 		public void setProcess(float t)

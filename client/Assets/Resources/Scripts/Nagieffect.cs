@@ -27,6 +27,7 @@ public class Nagieffect : MonoBehaviour {
     }
 
     public void ShowNagi(NagiType _type) {
+		Debug.Log ("ShowNagi("+_type+")");
         StopAllCoroutines();
         HideAll();
         _mainOb = nagiEffect;

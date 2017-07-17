@@ -8,6 +8,7 @@ namespace com.Desktop
 	public enum GameCommand {
 		SHUFFLEPAI = 0,       //洗牌
 		CHIPAI = 1,           //吃牌
+		AUTOPLAY = 2,         //代打
 		DAPAI = 3,		  	  //打牌
 		SHOWPAI = 4,   		  //显示自己牌的数量
 		ACTIVENEXT = 5,       //下一个玩家的行动激活
@@ -37,10 +38,11 @@ namespace com.Desktop
         /// 31 32 33 34 35 36 37-> 中發白東南西北
         /// </summary>
         //private int[] ID = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17 };
-		private int[] ID0 = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8};
-		private int[] ID1 = { 9, 9, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17 };
-		private int[] ID2 = {18, 18, 19, 19, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26,
-			27, 27, 28, 28, 29, 29, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37};
+		private int[] ID = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 31, 32, 33, 34, 35, 36, 37 };
+		//private int[] ID0 = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8};
+		//private int[] ID1 = { 9, 9, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17 };
+		//private int[] ID2 = {18, 18, 19, 19, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26,
+		//	27, 27, 28, 28, 29, 29, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37};
 		//private int[] ID1 = { 18, 19, 21, 22, 23 };
 		private static string[] ccame = {
 			"", "紅中", "發財", "白板", "東風", "南風", "西風", "北風"
@@ -62,7 +64,19 @@ namespace com.Desktop
 				//Debug.Log ("[s] Mahjong.Awake() !PhotonNetwork.isMasterClient");
                 //return;
             }
-
+			for (int i = 0; i < ID.Length; i++)
+			{
+				_list.Enqueue(ID[i]);
+				_list.Enqueue(ID[i]);
+				//_list.Enqueue(ID0[i]);
+			}
+			for (int i = 0; i < ID.Length; i++)
+			{
+				_list.Enqueue(ID[i]);
+				_list.Enqueue(ID[i]);
+				//_list.Enqueue(ID0[i]);
+			}
+			/*
 			//_list.Clear();
             for (int i = 0; i < ID0.Length; i++)
             {
@@ -98,6 +112,7 @@ namespace com.Desktop
 			//{
 			//	Debug.Log(x);
 			//}
+			*/
         }
 
         /// <summary>

@@ -42,6 +42,12 @@ public class GLoginButton : MonoBehaviour {
 #if UNITY_ANDROID
         login.CallStatic("LoginOut");
 #endif
+        CryptoPrefs.DeleteKey("USERPHOTO");
+        CryptoPrefs.DeleteKey("USERNAME");
+        CryptoPrefs.DeleteKey("USERLEVEL");
+        CryptoPrefs.DeleteKey("USERCOIN");
+        CryptoPrefs.DeleteKey("USERONLINE");
+        CryptoPrefs.DeleteKey("USERTOKEN");
     }
 
     public void OnConnected(string name)

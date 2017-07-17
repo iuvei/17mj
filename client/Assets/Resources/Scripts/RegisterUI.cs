@@ -16,6 +16,10 @@ public class RegisterUI : MonoBehaviour {
     public GameObject RegisterHint_Pass2;     // 註冊頁 第二密碼錯誤提示
     public GameObject RegisterBtn;
 
+    public string registerMail;
+    public string registerPass1;
+    public string registerNickName;
+
     public string[] _canNickName; //罐頭暱稱
     private string _defaultNickName = "大島柚子"; //預設暱稱
 
@@ -63,9 +67,8 @@ public class RegisterUI : MonoBehaviour {
     //註冊頁-確定鈕
     public void ClubRegisterJoin()
     {
-        string registerNickName;
-        string registerMail = RegisterAccount.text;
-        string registerPass1 = RegisterPass1.text;
+        registerMail = RegisterAccount.text;
+        registerPass1 = RegisterPass1.text;
         string registerPass2 = RegisterPass2.text;
 
         //檢查欄位是否合法
@@ -99,10 +102,9 @@ public class RegisterUI : MonoBehaviour {
                 registerNickName = CheckNickName();
                 string id = GetUniqueKey(24);
                 string stype = "C";
-                string mail = "C&" + registerMail;
                 Button btn = RegisterBtn.GetComponent<Button>();
                 btn.interactable = false;
-                MJApi.AddMember(id, mail, registerPass1, registerNickName, stype, RegisterCallback);
+                MJApi.AddMember(id, registerMail, registerPass1, registerNickName, stype, RegisterCallback);
             }
         }
     }
@@ -120,7 +122,8 @@ public class RegisterUI : MonoBehaviour {
         {
             //Debug.Log("ConnectSuccess! " + result);
             //result = token, need save
-            UIManager.instance.ExitRegisterPage(); //離開註冊頁面
+           //UIManager.instance.ExitRegisterPage(); //離開註冊頁面
+            UIManager.instance.StartSetEnterLoading(); //載入下個場景
             ResetAllInput();
         }
         Button btn = RegisterBtn.GetComponent<Button>();

@@ -1303,5 +1303,18 @@ namespace com.Lobby
             childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
         }
 
+        public void BrithBalloon()
+        {
+            Vector3 birthPos = new Vector3(UnityEngine.Random.Range(-900f, 900f), -700f, 0);
+            GameObject go = GameObject.Instantiate(Resources.Load("Prefab/balloon") as GameObject);
+            go.transform.SetParent(lobbyPanel.transform);
+            RectTransform rectT = go.GetComponent<RectTransform>();
+            rectT.localPosition = birthPos;
+            rectT.localScale = Vector3.one;
+            rectT.DOMoveX(UnityEngine.Random.Range(-9f, 9f), 10f, false).SetEase(Ease.InOutFlash);
+            rectT.DOMoveY(6.8f, 10f, false).SetEase(Ease.InOutFlash);
+            rectT.DORotate(new Vector3(0, 0, 15f), 1f).SetLoops(-1, LoopType.Yoyo);
+        }
+
     }
 }

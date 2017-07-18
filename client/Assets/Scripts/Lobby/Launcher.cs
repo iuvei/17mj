@@ -1195,7 +1195,7 @@ namespace com.Lobby
             if (settingPanelNew)
             {
                 settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
-                settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
+                settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic);
                 ExitSetting();
             }
         }
@@ -1205,7 +1205,7 @@ namespace com.Lobby
             if (settingPanelNew)
             {
                 settingPanelNew.transform.DOMoveX(0, 0, true);
-                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
+                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic);
             }
         }
 
@@ -1259,10 +1259,24 @@ namespace com.Lobby
             InputField _contentText = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
             string msg = _titleText.text + ":" + _contentText.text;
 
-            //servicePopup.Find("bg").gameObject.SetActive(true);
-            //servicePopup.Find("popup").DOScale(Vector3.one, 0.3f).SetEase(Ease.Flash);
-            //_text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+            if (servicePopup) {
+                GameObject popupBG = servicePopup.Find("bg").gameObject;
+                popupBG.SetActive(true);
+                popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
 
+                Transform Popup = servicePopup.Find("popup");
+                Popup.transform.DOScale(Vector3.zero, 0);
+                Popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                Popup.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InSine).SetDelay(1.5f);
+                popupBG.GetComponent<Image>().DOFade(0, 0.3f).SetDelay(1.5f);
+                StartCoroutine(HideGameObject(popupBG, 1.8f));
+
+                _titleText.text = "";
+                _contentText.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+
+                settingPanelNew.transform.DOMoveX(0, 0, true);
+                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic).SetDelay(1.8f);
+            }
         }
 
         private void SettingInit() {
@@ -1283,7 +1297,6 @@ namespace com.Lobby
             if (childSettingService) {
                 InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
                 _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
-
                 servicePopup = childSettingService.transform.Find("Popup");
             }
 

@@ -4,9 +4,17 @@ using UnityEngine;
 
 namespace com.Desktop
 {
+	/// <summary>
+	/// Mah jong tools.
+	/// </summary>
     public class MahJongTools
     {
-
+		/// <summary>
+		/// 判斷是否胡牌
+		/// </summary>
+		/// <returns><c>true</c> if is can H the specified mah ID; otherwise, <c>false</c>.</returns>
+		/// <param name="mah">Mah.</param>
+		/// <param name="ID">I.</param>
         public static bool IsCanHU(List<int> mah, int ID)
         {
 			bool result = false;
@@ -18,7 +26,7 @@ namespace com.Desktop
             if (pais.Count == 2)
             {
 				result = (pais[0] == pais[1]);
-				//Debug.Log ("IsCanHU("+result+")");
+				Debug.Log ("IsCanHU("+result+")");
 				return result;
             }
 
@@ -59,6 +67,65 @@ namespace com.Desktop
 			//Debug.Log ("[c] IsCanHU("+result+")");
 			return result;
         }
+
+		/// <summary>
+		/// 判斷是否聽牌
+		/// </summary>
+		/// <returns><c>true</c> if is can tin the specified mah ID; otherwise, <c>false</c>.</returns>
+		/// <param name="mah">Mah.</param>
+		/// <param name="ID">I.</param>
+		public static bool IsCanTin(List<int> mah, int ID)
+		{
+			bool result = false;
+
+			List<int> pais = new List<int>(mah);
+
+			pais.Add(ID);
+			//只有两张牌
+			if (pais.Count == 1)
+			{
+				result = true;
+				Debug.Log ("IsCanTin("+result+")");
+				return result;
+			}
+
+			//先排序
+			pais.Sort();
+
+			//依据牌的顺序从左到右依次分出将牌
+			for (int i = 0; i < pais.Count; i++)
+			{
+				List<int> paiT = new List<int>(pais);
+				List<int> ds = pais.FindAll(delegate (int d)
+					{
+						result = (pais[i] == d);
+						//Debug.Log ("IsCanHU("+result+")");
+						return result;
+						//if(result)
+						//	break;
+					});
+
+				//判断是否能做将牌
+				if (ds.Count >= 2)
+				{
+					//移除两张将牌
+					paiT.Remove(pais[i]);
+					paiT.Remove(pais[i]);
+					i++;
+
+					if (HuPaiPanDin(paiT))
+					{
+						result = true;
+						//Debug.Log ("IsCanHU("+result+")");
+						return result;
+						//break;
+					}
+				}
+			}
+			result = false;
+			//Debug.Log ("[c] IsCanHU("+result+")");
+			return result;
+		}
 
         private static bool HuPaiPanDin(List<int> mahs)
         {

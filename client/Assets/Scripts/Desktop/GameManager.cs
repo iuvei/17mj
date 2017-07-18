@@ -273,7 +273,7 @@ namespace com.Desktop
         /// </summary>
         private void doGameInit()
         {
-			//Debug.LogError ("[s] 0.doGameInit()");
+			Debug.LogError ("[s] 0.doGameInit()");
 			if (PhotonNetwork.playerList.Length > 0 && PhotonNetwork.playerList.Length < 2) {
 				//Debug.Log ("單機模式");
 				//單機模式 第一個是自己 第二個是AI
@@ -371,7 +371,7 @@ namespace com.Desktop
         /// </summary>
 		void doDispatchPai()
         {
-			//Debug.LogError ("[s] 2.doDispatchPai(玩家數="+PhotonNetwork.playerList.Length+")");
+			Debug.LogError ("[s] 2.doDispatchPai(玩家數="+PhotonNetwork.playerList.Length+")");
 			List<int> mahm = new List<int>();
 			int i = 0;
 			foreach (MahPlayer mp in Users) {
@@ -470,6 +470,15 @@ namespace com.Desktop
 					MahPlayer mplayer =  Users.Find (x => x.ID.Equals (playerid));
 					if (mplayer) {
 						mplayer.handleGan (_lastDaPai);
+						int GotID = getMahjongPai ();
+						if (GotID <= 0) {
+							photonView.RPC ("GameOver", PhotonTargets.All, null);
+							return;
+						}
+						//Debug.Log ("mopai"+GotID);
+						string name = Mahjong.getName (GotID);
+						_lastMoPaiPlayerID = _activePlayer.ID;
+						_activePlayer.handleMoPai (GotID, getRemainPai());
 					}
 					/*
 					PhotonPlayer photonPlayer = PhotonPlayer.Find(playerid);
@@ -1287,20 +1296,6 @@ namespace com.Desktop
             }
 
 			StartCoroutine("ReadyPlay");
-
-			/*
-            //1.洗牌
-            doShuffleMah();
-
-            //2.摇骰子
-            doDice();
-
-            //3.发牌
-			doDispatchPai();
-
-			//4.設定開始玩家
-			//setActivePlayer(players[0]);
-			*/
         }
 
         private void RestView()

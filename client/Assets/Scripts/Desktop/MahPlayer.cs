@@ -617,11 +617,17 @@ namespace com.Desktop
 		{
 			//Debug.LogError ("[RPC] collectPonPai(" + mahID + ")");
 			GameObject go = new GameObject("Pon_set");
-			go.AddComponent<Image> ();
-			GridLayoutGroup le = go.AddComponent<GridLayoutGroup> ();
-			le.cellSize = new Vector2 (76, 100);
-			le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-			le.constraintCount = 1;
+			//go.AddComponent<Image> ();
+
+			LayoutElement le = go.AddComponent<LayoutElement> ();
+			le.minWidth = 76 * 3;
+			le.minHeight = 100;
+
+			GridLayoutGroup glg = go.AddComponent<GridLayoutGroup> ();
+			glg.cellSize = new Vector2 (76, 100);
+			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+			glg.constraintCount = 1;
+
 			if (this.ID==1) {
 				if (mahID > 0) {
 					keepedMah.Remove (mahID);
@@ -750,13 +756,24 @@ namespace com.Desktop
 			MahJongObject mahObj1;
 			MahJongObject mahObj2;
 			GameObject go = new GameObject("Chi_set");
-			go.AddComponent<Image> ();
+			//go.AddComponent<Image> ();
+			LayoutElement le = go.AddComponent<LayoutElement> ();
+			le.minWidth = 76 * 3;
+			le.minHeight = 100;
+			GridLayoutGroup glg = go.AddComponent<GridLayoutGroup> ();
+			glg.cellSize = new Vector2 (76, 100);
+			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+			glg.constraintCount = 1;
+			//lg. = 76 * 3;
+			//lg.preferredHeight = 95;
+			/*
 			GridLayoutGroup le = go.AddComponent<GridLayoutGroup> ();
 			le.cellSize = new Vector2 (76, 100);
 			le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+			le.childAlignment = TextAnchor.UpperCenter;
 			le.constraintCount = 1;
 			//glg.cellSize.y = 95;
-
+			*/
 			if (this.ID==1)
 			{
 				if (mahID > 0) {
@@ -982,12 +999,18 @@ namespace com.Desktop
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			GameObject go = new GameObject("Gan_set");
-			go.AddComponent<Image> ();
-			GridLayoutGroup le = go.AddComponent<GridLayoutGroup> ();
-			le.cellSize = new Vector2 (76, 100);
-			le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-			le.constraintCount = 1;
-
+			//go.AddComponent<Image> ();
+			//GridLayoutGroup le = go.AddComponent<GridLayoutGroup> ();
+			//le.cellSize = new Vector2 (76, 100);
+			//le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+			//le.constraintCount = 1;
+			LayoutElement le = go.AddComponent<LayoutElement> ();
+			le.minWidth = 76 * 4;
+			le.minHeight = 100;
+			GridLayoutGroup glg = go.AddComponent<GridLayoutGroup> ();
+			glg.cellSize = new Vector2 (76, 100);
+			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+			glg.constraintCount = 1;
 			if (this.ID==1)
             {
 				if (mahID > 0) {

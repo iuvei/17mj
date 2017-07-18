@@ -1069,7 +1069,7 @@ namespace com.Desktop
             	btnWin.gameObject.SetActive(false);
 			if(btnGang)
 				btnGang.gameObject.SetActive(false);
-			if(btnGang)
+			if(btnPass)
 				btnPass.gameObject.SetActive(false);
 			if(btnPon)
 				btnPon.transform.parent.parent.gameObject.SetActive (false);

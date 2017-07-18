@@ -1195,7 +1195,7 @@ namespace com.Lobby
             if (settingPanelNew)
             {
                 settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
-                settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
+                settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic);
                 ExitSetting();
             }
         }
@@ -1205,7 +1205,7 @@ namespace com.Lobby
             if (settingPanelNew)
             {
                 settingPanelNew.transform.DOMoveX(0, 0, true);
-                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
+                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic);
             }
         }
 
@@ -1259,10 +1259,24 @@ namespace com.Lobby
             InputField _contentText = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
             string msg = _titleText.text + ":" + _contentText.text;
 
-            //servicePopup.Find("bg").gameObject.SetActive(true);
-            //servicePopup.Find("popup").DOScale(Vector3.one, 0.3f).SetEase(Ease.Flash);
-            //_text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+            if (servicePopup) {
+                GameObject popupBG = servicePopup.Find("bg").gameObject;
+                popupBG.SetActive(true);
+                popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
 
+                Transform Popup = servicePopup.Find("popup");
+                Popup.transform.DOScale(Vector3.zero, 0);
+                Popup.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                Popup.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InSine).SetDelay(1.5f);
+                popupBG.GetComponent<Image>().DOFade(0, 0.3f).SetDelay(1.5f);
+                StartCoroutine(HideGameObject(popupBG, 1.8f));
+
+                _titleText.text = "";
+                _contentText.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+
+                settingPanelNew.transform.DOMoveX(0, 0, true);
+                settingPanelNew.transform.DOMoveX(-19.5f, 0.3f, true).SetEase(Ease.OutCubic).SetDelay(1.8f);
+            }
         }
 
         private void SettingInit() {
@@ -1283,11 +1297,23 @@ namespace com.Lobby
             if (childSettingService) {
                 InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
                 _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
-
                 servicePopup = childSettingService.transform.Find("Popup");
             }
 
             childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
+        }
+
+        public void BrithBalloon()
+        {
+            Vector3 birthPos = new Vector3(UnityEngine.Random.Range(-900f, 900f), -700f, 0);
+            GameObject go = GameObject.Instantiate(Resources.Load("Prefab/balloon") as GameObject);
+            go.transform.SetParent(lobbyPanel.transform);
+            RectTransform rectT = go.GetComponent<RectTransform>();
+            rectT.localPosition = birthPos;
+            rectT.localScale = Vector3.one;
+            rectT.DOMoveX(UnityEngine.Random.Range(-9f, 9f), 10f, false).SetEase(Ease.InOutFlash);
+            rectT.DOMoveY(6.8f, 10f, false).SetEase(Ease.InOutFlash);
+            rectT.DORotate(new Vector3(0, 0, 15f), 1f).SetLoops(-1, LoopType.Yoyo);
         }
 
     }

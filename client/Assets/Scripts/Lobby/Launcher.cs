@@ -93,6 +93,7 @@ namespace com.Lobby
         private GameObject profilePanel;
         private GameObject depositRecoPanel;
         private GameObject coinRecoPanel;
+        private Transform servicePopup;
         #endregion
 
         private void Awake()
@@ -1166,6 +1167,7 @@ namespace com.Lobby
         public void ShowSettingLayout()
         {
             string _target = EventSystem.current.currentSelectedGameObject.name;
+            //Debug.Log(EventSystem.current.currentSelectedGameObject.name);
 
             childSetting.SetActive(false);
             childSettingService.SetActive(false);
@@ -1182,6 +1184,7 @@ namespace com.Lobby
                         InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
                         _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
                         childSettingService.SetActive(true);
+                        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
                     }            
                     break;
                 case "Btn_rules": //條款頁
@@ -1193,7 +1196,6 @@ namespace com.Lobby
             {
                 settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
                 settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic).SetUpdate(true);
-
                 ExitSetting();
             }
         }
@@ -1252,9 +1254,19 @@ namespace com.Lobby
             }
         }
 
+        public void ClickSendService() {
+            InputField _titleText = childSettingService.transform.Find("Title/InputField").GetComponent<InputField>();
+            InputField _contentText = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
+            string msg = _titleText.text + ":" + _contentText.text;
+
+            //servicePopup.Find("bg").gameObject.SetActive(true);
+            //servicePopup.Find("popup").DOScale(Vector3.one, 0.3f).SetEase(Ease.Flash);
+            //_text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+
+        }
+
         private void SettingInit() {
             childSetting = settingPanelNew.transform.Find("Setting").gameObject;
-
             if (childSetting) {
                 profilePanel = childSetting.transform.Find("Profile").gameObject;
                 gamePanel = childSetting.transform.Find("Game").gameObject;
@@ -1271,9 +1283,11 @@ namespace com.Lobby
             if (childSettingService) {
                 InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
                 _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
-            }
-            childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
 
+                servicePopup = childSettingService.transform.Find("Popup");
+            }
+
+            childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
         }
 
     }

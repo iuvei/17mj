@@ -50,6 +50,9 @@ namespace com.Lobby
         public Transform  rankItemTarget;
         public Scrollbar  rankScrollbar;
 
+        public GameObject activityPanel;
+
+
         //房间列表
         public RectTransform LobbyPanel;
 
@@ -93,7 +96,8 @@ namespace com.Lobby
         private GameObject profilePanel;
         private GameObject depositRecoPanel;
         private GameObject coinRecoPanel;
-        private Transform servicePopup;
+        private Transform  servicePopup;
+        private Sequence mySequence;
         #endregion
 
         private void Awake()
@@ -132,6 +136,9 @@ namespace com.Lobby
             if (loadingPanel)
             {
                 loadingPanel.SetActive(true);
+                Text xx2 = loadingPanel.transform.Find("processbar/Text").GetComponent<Text>();
+                mySequence = DOTween.Sequence();
+                mySequence.Append(xx2.DOText("載入中...", 3)).SetLoops(-1, LoopType.Restart);
             }
         }
 
@@ -168,7 +175,8 @@ namespace com.Lobby
                 //Debug.Log("Connected");
 				if (loadingPanel) {
 					loadingPanel.SetActive (false);
-				}
+                    //mySequence.Kill();
+                }
             }
             else
             {
@@ -459,12 +467,13 @@ namespace com.Lobby
 		{
 			if (loadingPanel) {
 				Text xx = loadingPanel.transform.Find ("processbar/processtext").GetComponent<Text> ();
-				xx.text = (t*100).ToString ()+"%";
-				Image pp = loadingPanel.transform.Find ("processbar/process").GetComponent<Image> ();
+                xx.text = (t*100).ToString ()+"%";
+                Image pp = loadingPanel.transform.Find ("processbar/process").GetComponent<Image> ();
 				pp.fillAmount = t;
 				if(t>=1) {
 					StartCoroutine(HideLoading());
-				}
+                    mySequence.Kill();
+                }
 			}
 		}
 
@@ -1305,15 +1314,35 @@ namespace com.Lobby
 
         public void BrithBalloon()
         {
-            Vector3 birthPos = new Vector3(UnityEngine.Random.Range(-900f, 900f), -700f, 0);
+            AudioManager.Instance.PlaySE("gp" + UnityEngine.Random.Range(0, 9));
+
+            Vector3 birthPos = new Vector3(UnityEngine.Random.Range(-900f, 900f), -650f, 0);
             GameObject go = GameObject.Instantiate(Resources.Load("Prefab/balloon") as GameObject);
             go.transform.SetParent(lobbyPanel.transform);
             RectTransform rectT = go.GetComponent<RectTransform>();
             rectT.localPosition = birthPos;
             rectT.localScale = Vector3.one;
             rectT.DOMoveX(UnityEngine.Random.Range(-9f, 9f), 10f, false).SetEase(Ease.InOutFlash);
-            rectT.DOMoveY(6.8f, 10f, false).SetEase(Ease.InOutFlash);
+            rectT.DOMoveY(7f, 10f, false).SetEase(Ease.InOutFlash);
             rectT.DORotate(new Vector3(0, 0, 15f), 1f).SetLoops(-1, LoopType.Yoyo);
+        }
+
+        public void ClickActivity()
+        {
+            if (activityPanel)
+            {
+                activityPanel.transform.DOMoveX(-19.5f, 0, true);
+                activityPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
+            }
+        }
+
+        public void ExitActivity()
+        {
+            if (activityPanel)
+            {
+                activityPanel.transform.DOMoveX(0, 0, true);
+                activityPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+            }
         }
 
     }

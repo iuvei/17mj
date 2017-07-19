@@ -95,7 +95,6 @@ public class FBLoginButton : MonoBehaviour {
         {
             var aToken = AccessToken.CurrentAccessToken;
             fbId = aToken.UserId;
-            Debug.Log("userid=" + aToken.UserId);
             int i = 0;
             foreach (string perm in aToken.Permissions)
                 i++;
@@ -143,7 +142,6 @@ public class FBLoginButton : MonoBehaviour {
             string uCoin = string.Empty;
 
             IDictionary dict = Json.Deserialize(result) as IDictionary;
-            Debug.Log(" dict = " + dict);
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();

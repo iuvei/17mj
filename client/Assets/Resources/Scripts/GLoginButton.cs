@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
+using Facebook.MiniJSON;
+using System;
+using System.Collections;
+using System.Net;
 using UnityEngine.UI;
 
 
 public class GLoginButton : MonoBehaviour {
     public Text _logText;
 
-    private string gId = string.Empty;
-    private string gMail = string.Empty;
     private static AndroidJavaObject login = null;
     private static AndroidJavaObject currentActivity = null;
-
 
     void Start () {
         Button btn = GetComponent<Button>();
@@ -50,14 +51,90 @@ public class GLoginButton : MonoBehaviour {
         CryptoPrefs.DeleteKey("USERTOKEN");
     }
 
-    public void OnConnected(string name)
+    private void LoginCallback(WebExceptionStatus status, string result)
     {
-        Debug.Log("OnConnected() = " + name);
-        //Debug.Log("doLogin1(" + fbMail + " " + fbId + ")");
-        //YkiApi.Login("1", mail, fbId, waitServerStatusCallback);
-        //StartCoroutine(CheckServerStatus(LoginUI.Instance.LoginCallback));
+        if (status != WebExceptionStatus.Success)
+        {
+            Debug.Log("Failed! " + result);
+        }
+        else
+        {
+            //Debug.Log("ConnectSuccess!" + result);
+            string uName = string.Empty;
+            string uToken = string.Empty;
+            string uLevel = string.Empty;
+            string uCoin = string.Empty;
+
+            IDictionary dict = Json.Deserialize(result) as IDictionary;
+            if (dict["Name"] != null)
+            {
+                uName = dict["Name"].ToString();
+                CryptoPrefs.SetString("USERNAME", uName);
+            }
+            if (dict["Token"] != null)
+            {
+                uToken = dict["Token"].ToString();
+                CryptoPrefs.SetString("USERTOKEN", uToken);
+            }
+            if (dict["Level"] != null)
+            {
+                uLevel = dict["Level"].ToString();
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
+            }
+            if (dict["Coin"] != null)
+            {
+                uCoin = dict["Coin"].ToString();
+                CryptoPrefs.SetString("USERCOIN", uCoin);
+            }
+        }
+    }
+
+    private IEnumerator GetGooglePhoto()
+    {
+#if UNITY_ANDROID
+        byte[] result = login.CallStatic<byte[]>("GetUserPhoto");
+        if (result != null)
+        {
+            Texture2D tex = new Texture2D(1, 1, TextureFormat.DXT1, false);
+            tex.LoadImage(result);
+            string stringData = Convert.ToBase64String(tex.EncodeToPNG());
+            CryptoPrefs.SetString("USERPHOTO", stringData);
+        }
+#endif
+        yield return null;
+    }
+
+    public void OnConnected(string result)
+    {
+        Debug.Log("OnConnected() = " + result);
+        string uName = string.Empty;
+        string uGid = string.Empty;
+        string uMail = string.Empty;
+        string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
+
+        if (tokens[0] != null)
+            uMail = tokens[0];
+        if (tokens[1] != null)
+            uGid = tokens[1];
+        if (tokens[2] != null)
+            uName = tokens[2];
+
+        string Photo = CryptoPrefs.GetString("USERPHOTO");
+        if (string.IsNullOrEmpty(Photo))
+            StartCoroutine(GetGooglePhoto());
+
+        string stype = "G";
+        string token = CryptoPrefs.GetString("USERTOKEN");
+        if (string.IsNullOrEmpty(token))
+        {
+            MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
+        }
+        else
+        {
+            MJApi.Login(stype, uMail, token, LoginCallback);
+        }
         UIManager.instance.StartSetEnterLoading();
-        _logText.text += " \n OnConnected() "+ name;
+        _logText.text += " \n OnConnected() "+ result;
     }
 
 }

@@ -22,7 +22,7 @@ public class HorseRun : MonoBehaviour {
         _HorseText = gameObject.GetComponent<Text>();
     }
 
-	void Update () {
+	void FixedUpdate () {
         if (_horseRun) {
             
 			if (_HorseText && _HorseText.rectTransform.anchoredPosition.x > _horseLength * (-1))

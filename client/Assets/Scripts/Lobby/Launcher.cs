@@ -55,6 +55,9 @@ namespace com.Lobby
 
         public GameObject balloonPanel;
 
+        public Transform[] playRoomBtns;
+        public Transform[] btmMenuBtns;
+
         //房间列表
         public RectTransform LobbyPanel;
 
@@ -104,7 +107,6 @@ namespace com.Lobby
         private Sequence mySequence;
         private GameObject actDailyPanel;
         private GameObject actMissionPanel;
-
         #endregion
 
         private void Awake()
@@ -165,6 +167,7 @@ namespace com.Lobby
             SubPageInit();
             _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
             SettingInitAnim();
+            InvokeRepeating("AutoBirthBalloon", 3f, 8f);
         }
 
         /// <summary>
@@ -325,7 +328,10 @@ namespace com.Lobby
 		/// </summary>
 		public void ShowRoomList()
 		{
-			Debug.Log ("GetRoomList()");
+            if(playRoomBtns[2])
+                playRoomBtns[2].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
+            //Debug.Log ("GetRoomList()");
             if (roomlistPanel) {
 				roomlistPanel.SetActive (true);
 
@@ -362,8 +368,11 @@ namespace com.Lobby
 		/// </summary>
 		public void JoinOrCreateRoom()
 		{
-			//Debug.Log ("JoinOrCreateRoom()");
-			if (PhotonNetwork.connected)
+            if (playRoomBtns[1])
+                playRoomBtns[1].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
+            //Debug.Log ("JoinOrCreateRoom()");
+            if (PhotonNetwork.connected)
 			{
 				_roomname = "mj_room";
 				//创建房间成功
@@ -503,12 +512,14 @@ namespace com.Lobby
 
 		public void ShowSetting()
 		{
+            if (settingSign)
+                settingSign.DOScale(1.3f, 0.15f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             //if (settingPanel) {
             //	settingPanel.SetActive(true);
             //}
 
             ShowSettingDropdown();
-
         }
 
 		public void HideSetting()
@@ -520,6 +531,9 @@ namespace com.Lobby
 
         public void ClickDespoit()
         {
+            if (btmMenuBtns[2])
+                btmMenuBtns[2].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             if (depositPanel)
             {
                 depositPanel.transform.DOMoveY(-11, 0, true);
@@ -538,6 +552,9 @@ namespace com.Lobby
 
         public void ClickShop()
         {
+            if (btmMenuBtns[1])
+                btmMenuBtns[1].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             if (shopPanel)
             {
                 shopPanel.transform.DOMoveX(-19.5f, 0, true);
@@ -556,6 +573,9 @@ namespace com.Lobby
 
         public void ClickBag()
         {
+            if (btmMenuBtns[3])
+                btmMenuBtns[3].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
 
             foreach (Transform child in bagItemTarget)
@@ -780,6 +800,9 @@ namespace com.Lobby
 
         public void ShowCreatRoomSetting()
         {
+            if (playRoomBtns[0])
+                playRoomBtns[0].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             GameObject popupBG = createPopupPanel.transform.parent.Find("popupBG").gameObject;
             if (popupBG)
             {
@@ -971,7 +994,23 @@ namespace com.Lobby
         private void SettingInitAnim() {
             //設定頁齒輪動畫
             if (settingSign) {
-                settingSign.DORotateQuaternion(Quaternion.Euler(0, 0, 30), 1f).SetEase(Ease.InElastic).SetLoops(-1, LoopType.Yoyo);
+                settingSign.DORotateQuaternion(Quaternion.Euler(0, 0, 30), 1f).SetEase(Ease.OutElastic).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //入口按鈕
+            if (playRoomBtns != null) {
+                playRoomBtns[0].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+                playRoomBtns[1].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetDelay(0.5f).SetLoops(-1, LoopType.Yoyo);
+                playRoomBtns[2].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //底部分頁
+            if (btmMenuBtns != null) {
+                btmMenuBtns[0].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[1].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetDelay(1).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[2].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[3].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetDelay(1).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[4].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
             }
 
             //點廣告領金幣
@@ -983,6 +1022,8 @@ namespace com.Lobby
         //---
         public void ClickRank()
         {
+            if (btmMenuBtns[0])
+                btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
             BirtnRankItem();
 
@@ -1334,10 +1375,26 @@ namespace com.Lobby
             actMissionPanel= activityPanel.transform.Find("Mission").gameObject;
         }
 
-        public void BrithBalloon()
-        {
+        public void ClickBalloonBtn() {
             AudioManager.Instance.PlaySE("gp" + UnityEngine.Random.Range(0, 9));
+            BirthBalloon();
+        }
 
+        private void AutoBirthBalloon() {
+            StartCoroutine("RandomBalloon");
+        }
+
+        IEnumerator RandomBalloon() {
+            int _time = UnityEngine.Random.Range(1, 5); //一次最多5顆
+            for (int i = 0; i < _time; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+                BirthBalloon();
+            }
+        }
+
+        private void BirthBalloon()
+        {
             Vector3 birthPos = new Vector3(UnityEngine.Random.Range(-900f, 900f), -650f, 0);
             GameObject go = GameObject.Instantiate(Resources.Load("Prefab/balloon") as GameObject);
             go.transform.SetParent(balloonPanel.transform);
@@ -1351,6 +1408,9 @@ namespace com.Lobby
 
         public void ClickActivity()
         {
+            if (btmMenuBtns[4])
+                btmMenuBtns[4].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             if (activityPanel)
             {
                 coinAdSign.DOPlay();

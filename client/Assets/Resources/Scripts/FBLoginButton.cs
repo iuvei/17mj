@@ -163,6 +163,7 @@ public class FBLoginButton : MonoBehaviour {
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
         }
+        EnterLoading.instance._autoToNextScene = true;
     }
 
 
@@ -191,12 +192,7 @@ public class FBLoginButton : MonoBehaviour {
         {
             MJApi.Login(stype, fbMail, token, LoginCallback);
         }
-
         _logText.text += "\n doLogin";
-
         UIManager.instance.StartSetEnterLoading();
-    }
-
-   
-    
+    }   
 }

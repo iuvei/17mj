@@ -15,6 +15,8 @@ public static class MJApi
         string api = "V1/login";
         string auth = "Bearer " + secretKey;
         string method = "POST";
+        if(sType == "C1")
+            mail = StringToUnicode(mail);
         string pdata = "[{\"Type\":\"" + sType + "\", \"Mail\":\"" + mail + "\", \"TnPass\":\"" + tnPass + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }

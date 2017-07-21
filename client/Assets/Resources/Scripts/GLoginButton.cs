@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Net;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 
 public class GLoginButton : MonoBehaviour {
@@ -87,6 +88,7 @@ public class GLoginButton : MonoBehaviour {
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
         }
+        EnterLoading.instance._autoToNextScene = true;
     }
 
     private IEnumerator GetGooglePhoto()
@@ -114,26 +116,41 @@ public class GLoginButton : MonoBehaviour {
 
         if (tokens[0] != null)
             uMail = tokens[0];
-        if (tokens[1] != null)
-            uGid = tokens[1];
-        if (tokens[2] != null)
-            uName = tokens[2];
 
-        string Photo = CryptoPrefs.GetString("USERPHOTO");
-        if (string.IsNullOrEmpty(Photo))
-            StartCoroutine(GetGooglePhoto());
-
-        string stype = "G";
-        string token = CryptoPrefs.GetString("USERTOKEN");
-        if (string.IsNullOrEmpty(token))
+        if (uMail == "No Init")
         {
-            MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
+            string cName = CryptoPrefs.GetString("USERNAME");
+            string cToken = CryptoPrefs.GetString("USERTOKEN");
+            if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
+            {
+                string type = "C1";
+                MJApi.Login(type, cName, cToken, LoginCallback);
+                UIManager.instance.StartSetEnterLoading();
+            }
         }
         else
         {
-            MJApi.Login(stype, uMail, token, LoginCallback);
+            if (tokens[1] != null)
+                uGid = tokens[1];
+            if (tokens[2] != null)
+                uName = tokens[2];
+
+            string Photo = CryptoPrefs.GetString("USERPHOTO");
+            if (string.IsNullOrEmpty(Photo))
+                StartCoroutine(GetGooglePhoto());
+
+            string stype = "G";
+            string token = CryptoPrefs.GetString("USERTOKEN");
+            if (string.IsNullOrEmpty(token))
+            {
+                MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
+            }
+            else
+            {
+                MJApi.Login(stype, uMail, token, LoginCallback);
+            }
+            UIManager.instance.StartSetEnterLoading();
         }
-        UIManager.instance.StartSetEnterLoading();
         _logText.text += " \n OnConnected() "+ result;
     }
 

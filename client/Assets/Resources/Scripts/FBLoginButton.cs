@@ -10,6 +10,7 @@ using System.Net;
 public class FBLoginButton : MonoBehaviour {
 
     public Text _logText;
+    public Button[] _fbLoginBtn;
 
     private string fbId = string.Empty;
     private string fbMail = string.Empty;
@@ -35,11 +36,18 @@ public class FBLoginButton : MonoBehaviour {
     }
 
     void Start () {
-        Button btn = GetComponent<Button>();
-        btn.onClick.AddListener(delegate
-        {
-            FBLogin();
-        });
+        //Button btn = GetComponent<Button>();
+        //btn.onClick.AddListener(delegate
+        //{
+        //    FBLogin();
+        //});
+
+        if (_fbLoginBtn.Length != 0) {
+            for (int i = 0; i < _fbLoginBtn.Length; i++)
+            {
+                _fbLoginBtn[i].onClick.AddListener(delegate{ FBLogin();});
+            }
+        }
     }
 
     private void OnFBInitComplete()
@@ -118,12 +126,6 @@ public class FBLoginButton : MonoBehaviour {
     {
         Debug.Log("FBLogout");
         FB.LogOut();
-        CryptoPrefs.DeleteKey("USERPHOTO");
-        CryptoPrefs.DeleteKey("USERNAME");
-        CryptoPrefs.DeleteKey("USERLEVEL");
-        CryptoPrefs.DeleteKey("USERCOIN");
-        CryptoPrefs.DeleteKey("USERONLINE");
-        CryptoPrefs.DeleteKey("USERTOKEN");
         _logText.text += "\n FBLogout";
     }
 

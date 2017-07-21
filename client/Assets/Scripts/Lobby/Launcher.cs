@@ -830,11 +830,11 @@ namespace com.Lobby
         public void ClickShopBuy()
         {
             GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
-            ShopItemInfo _info = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItemInfo>();
+            ShopItem _item = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItem>();
             //Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);
             currentNum = 1;
-            currentPrice = _info.Price;
-            _popupBuyItemName.text = _info.Name;
+            currentPrice = _item.Price;
+            _popupBuyItemName.text = _item.Name;
             _popupBuyItemPrice.text = String.Format("{0:0,0}", currentPrice);
             _popupBuyItemNum.text = currentNum.ToString();
             _popupBuyItemTotal.text = String.Format("{0:0,0}", currentPrice);
@@ -935,11 +935,11 @@ namespace com.Lobby
             foreach (ShopItemInfo info in shopItemInfos)
             {
                 GameObject go = GameObject.Instantiate(Resources.Load("Prefab/shopItem") as GameObject);
-                ShopItemInfo shopInfo = go.GetComponent<ShopItemInfo>();
-                shopInfo.setInfo(info);
+                ShopItem shopItem = go.GetComponent<ShopItem>();
+                shopItem.setInfo(info);
 
-                shopInfo.Name = info.Name;
-                shopInfo.Price = info.Price;
+                shopItem.Name = info.Name;
+                shopItem.Price = info.Price;
                 go.transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate{ ClickShopBuy();});
 
                 go.transform.SetParent(shopItemTarget);

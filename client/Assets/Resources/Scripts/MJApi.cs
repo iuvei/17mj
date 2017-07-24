@@ -7,7 +7,7 @@ public static class MJApi
     public delegate void RequestCallBack(WebExceptionStatus status, string result);
     public static RequestCallBack _callback;
 
-    private static string serverUrl = "https://192.168.22.19:8000/";
+    private static string serverUrl = "http://catpunch.co:9000/";
     private static string secretKey = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvbywbdGABb46cGzeevCMQU2LXvornsNkScfeCS9BmZ0KkebfYTvgvfLwUpl0QjR4LL5hHOYzaHxGQcVfvvY2wtiPRRMxGqhxVq";
 
     public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)

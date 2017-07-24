@@ -30,6 +30,7 @@ namespace com.Lobby
         public RectTransform settingSign;
         public GameObject settingDropdown;
         public GameObject settingPanelNew;
+        public RectTransform popupLogout;
 
         public GameObject roomlistPanel;
         public GameObject roomlistPopupSetting;
@@ -1449,6 +1450,38 @@ namespace com.Lobby
                 }
             }
 
+        }
+
+        public void ShowLogoutPopup()
+        {
+            GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
+
+            if (popupLogout)
+            {
+               if (popupBG)
+                {
+                    popupBG.SetActive(true);
+                    popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+                }
+                popupLogout.transform.DOScale(Vector3.zero, 0);
+                popupLogout.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            }
+        }
+
+        public void ExitLogoutPopup()
+        {
+            GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
+
+            if (popupLogout)
+            {
+                popupLogout.transform.DOScale(Vector3.one, 0);
+                popupLogout.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InSine);
+                if (popupBG)
+                {
+                    popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                    StartCoroutine(HideGameObject(popupBG, 0.3f));
+                }
+            }
         }
     }
 }

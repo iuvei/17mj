@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour {
     private Transform enterLoadingPanel;
     private Animator enterLoadingAnim;
     private Animator mainPanelAnim;
+    private IDictionary dict;
+    private bool _registerSuccess = false;
 
     void Start() {
         instance = this;
@@ -160,13 +162,47 @@ public class UIManager : MonoBehaviour {
         else
         {
             //Debug.Log("ConnectSuccess! " + result);
+            dict = Json.Deserialize(result) as IDictionary;
+            _registerSuccess = true;
 
+            //string uName = string.Empty;
+            //string uToken = string.Empty;
+            //string uLevel = string.Empty;
+            //string uCoin = string.Empty;
+
+            //IDictionary dict = Json.Deserialize(result) as IDictionary;
+            //if (dict["Name"] != null)
+            //{
+            //    uName = dict["Name"].ToString();
+            //    CryptoPrefs.SetString("USERNAME", uName);
+            //}
+            //if (dict["Token"] != null)
+            //{
+            //    uToken = dict["Token"].ToString();
+            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //}
+            //if (dict["Level"] != null)
+            //{
+            //    uLevel = dict["Level"].ToString();
+            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //}
+            //if (dict["Coin"] != null)
+            //{
+            //    uCoin = dict["Coin"].ToString();
+            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //}
+            //EnterLoading.instance._autoToNextScene = true;
+        }
+     }
+
+    void Update() {
+
+        if (_registerSuccess) {
             string uName = string.Empty;
             string uToken = string.Empty;
             string uLevel = string.Empty;
             string uCoin = string.Empty;
 
-            IDictionary dict = Json.Deserialize(result) as IDictionary;
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
@@ -188,6 +224,8 @@ public class UIManager : MonoBehaviour {
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
             EnterLoading.instance._autoToNextScene = true;
+
+            _registerSuccess = false;
         }
-     }
+    }
 }

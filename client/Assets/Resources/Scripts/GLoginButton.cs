@@ -9,9 +9,12 @@ using Facebook.Unity;
 
 public class GLoginButton : MonoBehaviour {
     public Text _logText;
+    public GameObject ConnectingPanel; // 連線中
 
     private static AndroidJavaObject login = null;
     private static AndroidJavaObject currentActivity = null;
+    private bool _loginSuccess = false;  //設定資料
+    private IDictionary dict;
 
     void Start () {
         Button btn = GetComponent<Button>();
@@ -51,38 +54,42 @@ public class GLoginButton : MonoBehaviour {
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("Failed! " + result);
+            _logText.text += " \n LoginCallback Failed! " + result;
         }
         else
         {
-            //Debug.Log("ConnectSuccess!" + result);
-            string uName = string.Empty;
-            string uToken = string.Empty;
-            string uLevel = string.Empty;
-            string uCoin = string.Empty;
+            dict = Json.Deserialize(result) as IDictionary;
+            _loginSuccess = true;
 
-            IDictionary dict = Json.Deserialize(result) as IDictionary;
-            if (dict["Name"] != null)
-            {
-                uName = dict["Name"].ToString();
-                CryptoPrefs.SetString("USERNAME", uName);
-            }
-            if (dict["Token"] != null)
-            {
-                uToken = dict["Token"].ToString();
-                CryptoPrefs.SetString("USERTOKEN", uToken);
-            }
-            if (dict["Level"] != null)
-            {
-                uLevel = dict["Level"].ToString();
-                CryptoPrefs.SetString("USERLEVEL", uLevel);
-            }
-            if (dict["Coin"] != null)
-            {
-                uCoin = dict["Coin"].ToString();
-                CryptoPrefs.SetString("USERCOIN", uCoin);
-            }
+            //Debug.Log("ConnectSuccess!" + result);
+            //string uName = string.Empty;
+            //string uToken = string.Empty;
+            //string uLevel = string.Empty;
+            //string uCoin = string.Empty;
+
+            //IDictionary dict = Json.Deserialize(result) as IDictionary;
+            //if (dict["Name"] != null)
+            //{
+            //    uName = dict["Name"].ToString();
+            //    CryptoPrefs.SetString("USERNAME", uName);
+            //}
+            //if (dict["Token"] != null)
+            //{
+            //    uToken = dict["Token"].ToString();
+            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //}
+            //if (dict["Level"] != null)
+            //{
+            //    uLevel = dict["Level"].ToString();
+            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //}
+            //if (dict["Coin"] != null)
+            //{
+            //    uCoin = dict["Coin"].ToString();
+            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //}
         }
-        EnterLoading.instance._autoToNextScene = true;
+        //EnterLoading.instance._autoToNextScene = true;
     }
 
     private IEnumerator GetGooglePhoto()
@@ -119,7 +126,9 @@ public class GLoginButton : MonoBehaviour {
             {
                 string type = "C1";
                 MJApi.Login(type, cName, cToken, LoginCallback);
-                UIManager.instance.StartSetEnterLoading();
+                //UIManager.instance.StartSetEnterLoading();
+                if (ConnectingPanel)
+                    ConnectingPanel.SetActive(true);
             }
         }
         else
@@ -143,9 +152,54 @@ public class GLoginButton : MonoBehaviour {
             {
                 MJApi.Login(stype, uMail, token, LoginCallback);
             }
-            UIManager.instance.StartSetEnterLoading();
+            if (ConnectingPanel)
+                ConnectingPanel.SetActive(true);
+            //UIManager.instance.StartSetEnterLoading();
         }
         _logText.text += " \n OnConnected() "+ result;
     }
 
+    void Update() {
+        //_logText.text += "\n Update _loginSuccess " + _loginSuccess;
+        if (_loginSuccess) {
+            if (ConnectingPanel)
+                ConnectingPanel.SetActive(false);
+
+            string uName = string.Empty;
+            string uToken = string.Empty;
+            string uLevel = string.Empty;
+            string uCoin = string.Empty;
+
+            _logText.text += " \n 準備寫入G";
+
+            if (dict["Name"] != null)
+            {
+                uName = dict["Name"].ToString();
+                CryptoPrefs.SetString("USERNAME", uName);
+                _logText.text += " \n uName = " + uName;
+            }
+            if (dict["Token"] != null)
+            {
+                uToken = dict["Token"].ToString();
+                CryptoPrefs.SetString("USERTOKEN", uToken);
+                _logText.text += " \n uToken = " + uToken;
+            }
+            if (dict["Level"] != null)
+            {
+                uLevel = dict["Level"].ToString();
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
+                _logText.text += " \n uLevel = " + uLevel;
+            }
+            if (dict["Coin"] != null)
+            {
+                uCoin = dict["Coin"].ToString();
+                CryptoPrefs.SetString("USERCOIN", uCoin);
+                _logText.text += " \n uCoin = " + uCoin;
+            }
+            UIManager.instance.StartSetEnterLoading();
+            EnterLoading.instance._autoToNextScene = true;
+
+            _loginSuccess = false;
+        }
+    }
 }

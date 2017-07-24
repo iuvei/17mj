@@ -1,0 +1,420 @@
+fileFormatVersion: 2
+guid: c94f438873a97ea4493156d5a044e7d2
+timeCreated: 1500858626
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: loadingsign_0
+    21300002: loadingsign_1
+    21300004: loadingsign_2
+    21300006: loadingsign_3
+    21300008: loadingsign_4
+    21300010: loadingsign_5
+    21300012: loadingsign_6
+    21300014: loadingsign_7
+    21300016: loadingsign_8
+    21300018: loadingsign_9
+    21300020: loadingsign_10
+    21300022: loadingsign_11
+    21300024: loadingsign_12
+    21300026: loadingsign_13
+    21300028: loadingsign_14
+    21300030: loadingsign_15
+    21300032: loadingsign_16
+    21300034: loadingsign_17
+    21300036: loadingsign_18
+    21300038: loadingsign_19
+    21300040: loadingsign_20
+    21300042: loadingsign_21
+    21300044: loadingsign_22
+    21300046: loadingsign_23
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: loadingsign_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_1
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_2
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_3
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_4
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_5
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_6
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_7
+      rect:
+        serializedVersion: 2
+        x: 539
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_8
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_9
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_10
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_11
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_12
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_13
+      rect:
+        serializedVersion: 2
+        x: 1001
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_14
+      rect:
+        serializedVersion: 2
+        x: 1078
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_15
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_16
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_17
+      rect:
+        serializedVersion: 2
+        x: 1309
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_18
+      rect:
+        serializedVersion: 2
+        x: 1386
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_19
+      rect:
+        serializedVersion: 2
+        x: 1463
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_20
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_21
+      rect:
+        serializedVersion: 2
+        x: 1617
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_22
+      rect:
+        serializedVersion: 2
+        x: 1694
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: loadingsign_23
+      rect:
+        serializedVersion: 2
+        x: 1771
+        y: 0
+        width: 77.166664
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -8,25 +8,15 @@ public class Logout : MonoBehaviour {
 
     private GameObject AccountManagerPanel;
     private GameObject UnityFacebookSDK;
-    //private static AndroidJavaObject login = null;
-    //private static AndroidJavaObject currentActivity = null;
 
     void Start() {
         if (!AccountManagerPanel) {
             AccountManagerPanel = GameObject.FindGameObjectWithTag("AccountManager");   
         }
-
-//#if UNITY_ANDROID && !UNITY_EDITOR
-//        var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-//        currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-//        var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
-//        login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
-//        login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
-//#endif
     }
 
     public void ClickLogout() {
-        //GLoginOut();
+        GLoginOut();
         FBLogout();
         ClearCache();
 
@@ -41,13 +31,10 @@ public class Logout : MonoBehaviour {
 
     }
 
-//    private void GLoginOut()
-//    {
-//        Debug.Log("GLoginOut()");
-//#if UNITY_ANDROID
-//        login.CallStatic("LoginOut");
-//#endif
-//    }
+    private void GLoginOut()
+    {
+        AccountManagerPanel.GetComponent<GLoginButton>().GLoginOut();
+    }
 
     private void FBLogout()
     {

@@ -9,7 +9,6 @@ using System.Net;
 
 public class FBLoginButton : MonoBehaviour {
 
-    public Text _logText;
     public Button[] _fbLoginBtn;
     public GameObject ConnectingPanel; // 連線中
 
@@ -46,11 +45,9 @@ public class FBLoginButton : MonoBehaviour {
             var perms = new List<string>() { "public_profile", "email", "user_friends" };
             FB.LogInWithReadPermissions(perms, AuthCallback);
             Debug.Log("Awake FB.IsInitialized");
-            _logText.text = "Awake FB.IsInitialized";
         } else {
             FB.Init(OnFBInitComplete, OnHideUnity);
             Debug.Log("Awake FB.Is NOT Initialized");
-            _logText.text = "Awake FB.Is NOT Initialized0";
         }
     }
 
@@ -84,13 +81,11 @@ public class FBLoginButton : MonoBehaviour {
                 if (string.IsNullOrEmpty(fbPhoto))
                     FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, FBPhotoCallback);
                 FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
-                _logText.text += "\n OnFBInitComplete > FB.IsInitialized >　FB.IsLoggedIn";
             }
         }
         else
         {
             Debug.Log("Failed to Initialize the Facebook SDK");
-            _logText.text += "\n Failed to Initialize the Facebook SDK";
         }
     }
 
@@ -104,7 +99,6 @@ public class FBLoginButton : MonoBehaviour {
             //string stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
             //CryptoPrefs.SetString("USERPHOTO", stringData);
         }
-        _logText.text += "\n FBPhotoCallback()";
     }
 
     private void OnHideUnity(bool isGameShown)
@@ -130,24 +124,17 @@ public class FBLoginButton : MonoBehaviour {
             if (string.IsNullOrEmpty(fbPhoto))
                 FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, FBPhotoCallback);
             FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
-            _logText.text += "\n AuthCallback >　FB.IsLoggedIn";
         }
         else
         {
             Debug.Log("User cancelled login");
-            _logText.text += "\n AuthCallback > User cancelled login";
         }
-    }
-
-    public void clearLog() {
-        _logText.text = "";
     }
 
     public void FBLogout()
     {
         Debug.Log("FBLogout");
         FB.LogOut();
-        _logText.text += "\n FBLogout";
     }
 
     private void LoginCallback(WebExceptionStatus status, string result)
@@ -202,7 +189,6 @@ public class FBLoginButton : MonoBehaviour {
         if (dictUser["email"] != null)
             fbMail = dictUser["email"].ToString();
         doLogin();
-        _logText.text += "\n FBUserCallBack()";
     }
 
     public void doLogin()
@@ -218,7 +204,6 @@ public class FBLoginButton : MonoBehaviour {
         {
             MJApi.Login(stype, fbMail, token, LoginCallback);
         }
-        _logText.text += "\n doLogin";
         if (ConnectingPanel)
             ConnectingPanel.SetActive(true);
         //UIManager.instance.StartSetEnterLoading();
@@ -234,31 +219,26 @@ public class FBLoginButton : MonoBehaviour {
             string uLevel = string.Empty;
             string uCoin = string.Empty;
 
-            _logText.text += "\n 準備寫入FB";
 
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
                 CryptoPrefs.SetString("USERNAME", uName);
-                _logText.text += "\n uName = " + uName;
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
                 CryptoPrefs.SetString("USERTOKEN", uToken);
-                _logText.text += "\n uToken = " + uToken;
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
                 CryptoPrefs.SetString("USERLEVEL", uLevel);
-                _logText.text += "\n uLevel = " + uLevel;
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
                 CryptoPrefs.SetString("USERCOIN", uCoin);
-                _logText.text += "\n uCoin = " + uCoin;
             }
             _loginSuccess = false;
             _loginDone = true;
@@ -266,7 +246,6 @@ public class FBLoginButton : MonoBehaviour {
 
         if (_setPhoto) {
             CryptoPrefs.SetString("USERPHOTO", stringData);
-            _logText.text += "\n setFBPhoto";
             _setPhoto = false;
             _setPhotoDone = true;
         }

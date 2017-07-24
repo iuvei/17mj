@@ -8,7 +8,7 @@ using Facebook.Unity;
 
 
 public class GLoginButton : MonoBehaviour {
-    public Text _logText;
+    public Button[] _gLoginBtn;
     public GameObject ConnectingPanel; // 連線中
 
     private static AndroidJavaObject login = null;
@@ -17,35 +17,44 @@ public class GLoginButton : MonoBehaviour {
     private IDictionary dict;
 
     void Start () {
-        Button btn = GetComponent<Button>();
-        btn.onClick.AddListener(delegate
+        if (_gLoginBtn.Length != 0)
         {
-            GLogin();
-        });
+            for (int i = 0; i < _gLoginBtn.Length; i++)
+            {
+                _gLoginBtn[i].onClick.AddListener(delegate { GLogin(); });
+            }
+        }
+
+        //Button btn = GetComponent<Button>();
+        //btn.onClick.AddListener(delegate
+        //{
+        //    GLogin();
+        //});
 #if UNITY_ANDROID && !UNITY_EDITOR
         var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
         var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
-        _logText.text = "Awake GLogin";
 #endif
     }
 
     private void GLogin()
     {
+
         Debug.Log("GLogin()");
 #if UNITY_ANDROID
-        login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
+        //login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
+        login.CallStatic("Login", "AccountManager", "OnConnected", currentActivity);
 #endif
     }   
 
     public void GLoginOut()
     {
         Debug.Log("GLoginOut()");
-        _logText.text += " \n GLoginOut ";
 #if UNITY_ANDROID
-        login.CallStatic("LoginOut");
+        if(login!=null)
+            login.CallStatic("LoginOut");
 #endif
     }
 
@@ -54,7 +63,6 @@ public class GLoginButton : MonoBehaviour {
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("Failed! " + result);
-            _logText.text += " \n LoginCallback Failed! " + result;
         }
         else
         {
@@ -156,11 +164,9 @@ public class GLoginButton : MonoBehaviour {
                 ConnectingPanel.SetActive(true);
             //UIManager.instance.StartSetEnterLoading();
         }
-        _logText.text += " \n OnConnected() "+ result;
     }
 
     void Update() {
-        //_logText.text += "\n Update _loginSuccess " + _loginSuccess;
         if (_loginSuccess) {
             if (ConnectingPanel)
                 ConnectingPanel.SetActive(false);
@@ -170,31 +176,25 @@ public class GLoginButton : MonoBehaviour {
             string uLevel = string.Empty;
             string uCoin = string.Empty;
 
-            _logText.text += " \n 準備寫入G";
-
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
                 CryptoPrefs.SetString("USERNAME", uName);
-                _logText.text += " \n uName = " + uName;
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
                 CryptoPrefs.SetString("USERTOKEN", uToken);
-                _logText.text += " \n uToken = " + uToken;
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
                 CryptoPrefs.SetString("USERLEVEL", uLevel);
-                _logText.text += " \n uLevel = " + uLevel;
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
                 CryptoPrefs.SetString("USERCOIN", uCoin);
-                _logText.text += " \n uCoin = " + uCoin;
             }
             UIManager.instance.StartSetEnterLoading();
             EnterLoading.instance._autoToNextScene = true;

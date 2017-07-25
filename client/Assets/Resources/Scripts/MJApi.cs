@@ -72,12 +72,21 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-    public static void getAuthCode(string name, RequestCallBack callback)
+    public static void getAuthCode(string mail, RequestCallBack callback)
     {
         string api = "V1/getAuthCode";
         string auth = "Bearer " + secretKey;
         string method = "POST";
-        string pdata = "[{\"Name\":\"" + name + "\"}]";
+        string pdata = "[{\"Mail\":\"" + mail + "\"}]";
+        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+    }
+
+    public static void setUserPhoto(string token, string data, RequestCallBack callback)
+    {
+        string api = "V1/setUserPhoto";
+        string auth = "Bearer " + token;
+        string method = "POST";
+        string pdata = "[{\"Token\":\"" + token + "\", \"Photo\":\"" + data + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 

@@ -50,8 +50,7 @@ public class ForgotUI : MonoBehaviour
         }
         else
         {
-            //發送驗證碼 API getAuthCode( mail, Callback);
-            //******************
+            MJApi.getAuthCode(forgotMail, AuthCodeCallback);
 
             //成功後改變按鈕UI並倒數 (接完API後移除)
             ButtonUISwitch(btnSendCode, true); //發送驗證碼按鈕變色
@@ -63,10 +62,10 @@ public class ForgotUI : MonoBehaviour
     //發送驗證碼 Callback
     private void AuthCodeCallback(WebExceptionStatus status, string result)
     {
+        Debug.Log("Status = " + status + ", result = " + result);
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("發送驗證碼 AuthCodeCallback Statue != WebExceptionStatus.Success ");
-            Debug.Log("Statue = " + status + ", result = " + result);
             ShowHint(_mailHint, "此帳戶不存在");
         }
         else

@@ -138,7 +138,7 @@ namespace com.Lobby
 
             //#关键
             //我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
-        PhotonNetwork.autoJoinLobby = true;
+			PhotonNetwork.autoJoinLobby = true;
 
             //#关键
             //这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
@@ -150,6 +150,7 @@ namespace com.Lobby
                 mySequence = DOTween.Sequence();
                 mySequence.Append(xx2.DOText("載入中...", 3)).SetLoops(-1, LoopType.Restart);
             }
+			//DontDestroyOnLoad (this.gameObject);
         }
 
         void Start()
@@ -170,6 +171,12 @@ namespace com.Lobby
             SettingInitAnim();
             InvokeRepeating("AutoBirthBalloon", 3f, 8f);
         }
+
+		public override void OnJoinedLobby()
+		{
+			//PhotonNetwork.JoinRandomRoom();
+			Debug.Log("OnJoinedLobby()");
+		}
 
         /// <summary>
         /// 连接到大厅
@@ -200,6 +207,7 @@ namespace com.Lobby
         /// </summary>
         public override void OnConnectedToPhoton()
         {
+			Debug.Log ("OnConnectedToPhoton()");
             base.OnConnectedToPhoton();
 			setProcess (1.0f);
 			//if (loadingPanel) {
@@ -253,7 +261,9 @@ namespace com.Lobby
 
         public override void OnJoinedRoom()
         {
-			//Debug.Log ("OnJoinedRoom()");
+			Debug.Log ("OnJoinedRoom()");
+			//Debug.Log("OnJoinedRoom()");
+			PhotonNetwork.LoadLevel ("03.Room");
 			//SetPlayerName();
 			this.Players = PhotonNetwork.playerList.ToList ();
 			UpdateRoomInfo ();
@@ -279,7 +289,7 @@ namespace com.Lobby
 
         public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
         {
-			//Debug.Log ("OnPhotonPlayerConnected()");
+			Debug.Log ("OnPhotonPlayerConnected()");
 			Players.Add (newPlayer);
 			//Debug.Log ("cnt="+Players.Count);
 			UpdateRoomInfo ();
@@ -314,12 +324,15 @@ namespace com.Lobby
 			Debug.Log ("CreateRoom()");
             if (PhotonNetwork.connected)
             {
-				_roomname = PhotonNetwork.playerName;
+				_roomname = PhotonNetwork.playerName + '#'+UnityEngine.Random.Range(0, 1000000000);
+				//Debug.Log ();
                 //创建房间成功
 				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))
                 {
-					Debug.Log("Launcher.CreateRoom() 成功");
-                    StartCoroutine(ChangeRoom());
+					Debug.Log (PhotonNetwork.room);
+					Debug.Log("Launcher.CreateRoom() "+_roomname+ " success!!");
+                    //StartCoroutine(ChangeRoom());
+					//ChangeRoom();
                 }
             }
         }
@@ -439,10 +452,27 @@ namespace com.Lobby
 			}
         }
 
-		IEnumerator ChangeRoom()
+		/*
+		void ChangeRoom()
 		{
 			Debug.Log ("ChangeRoom()");
-			yield return new WaitForSeconds (1f);
+			//yield return new WaitForSeconds (1.0f);
+			PhotonNetwork.LoadLevel ("03.Room");
+		}
+		*/
+
+		/*
+		public void OnJoinedRoom()
+		{
+			Debug.Log("OnJoinedRoom()");
+			PhotonNetwork.LoadLevel ("03.Room");
+		}
+		*/
+
+		public void OnCreatedRoom()
+		{
+			Debug.Log("OnCreatedRoom()");
+			//PhotonNetwork.LoadLevel("Stage01");
 			PhotonNetwork.LoadLevel ("03.Room");
 		}
 
@@ -466,6 +496,8 @@ namespace com.Lobby
 						g.transform.localPosition = Vector3.zero;
 						Text txt = g.GetComponentInChildren<Text> ();
 						txt.text = ri.Name;
+						Button bt = g.GetComponent<Button> ();
+						bt.onClick.AddListener(delegate{ joinRoom(ri.Name);});
 					}
 					if (hint) {
 						hint.gameObject.SetActive (false);
@@ -477,6 +509,11 @@ namespace com.Lobby
 					}
 				}
 			}
+		}
+
+		private void joinRoom(string name) {
+			Debug.Log ("joinRoom("+name+")");
+			PhotonNetwork.JoinRoom (name);
 		}
 
 		public void setProcess(float t)

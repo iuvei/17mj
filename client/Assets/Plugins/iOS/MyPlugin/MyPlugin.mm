@@ -47,6 +47,7 @@ static dispatch_once_t _onceToken;
     _rootController = viewController;
     _rootView = _rootController.view;
     
+    /*
     self.myTextView = [[UITextView alloc] initWithFrame:CGRectMake(300, 0, 300, 150)];
     self.myTextView.text = @"...";
     self.myTextView.backgroundColor = [UIColor whiteColor];
@@ -98,6 +99,7 @@ static dispatch_once_t _onceToken;
     [button4 addTarget:self action:@selector(goToFirstTrailer4)
       forControlEvents:(UIControlEvents)UIControlEventTouchDown];
     [_rootView addSubview:button4];
+     */
     
     
     CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width;
@@ -137,7 +139,7 @@ static dispatch_once_t _onceToken;
 -(void)goToFirstTrailer3 {
     NSLog(@"goToFirstTrailer3()");
     //[self startAnimator:@"OutsideToTrailer1_" forNumFrames:60];
-    NSString *arg = @"rtmp://192.168.20.178:1935/mj17/myStream";
+    NSString *arg = @"rtmp://catpunch.co/live/livestream";
     [self startPlay:arg];
 }
 
@@ -292,7 +294,7 @@ static dispatch_once_t _onceToken;
     //1.初始化config配置类
     self.configuration = [[AlivcLConfiguration alloc] init];
     //2. 设置推流地址
-    self.pushUrl = @"rtmp://192.168.20.178:1935/mj17/myStream";
+    self.pushUrl = @"rtmp://catpunch.co/live/livestream";
     self.configuration.url = self.pushUrl;
     NSLog(@"pushurl=%@", self.configuration.url);
     //3. 设置最大码率
@@ -364,8 +366,8 @@ static dispatch_once_t _onceToken;
     
     [self.liveSession.previewView setBounds: CGRectMake(0, 0, ApplicationH, ApplicationW/3)];
     //self.liveSession.previewView.autoresizesSubviews = YES;
-    self.liveSession.previewView.transform = CGAffineTransformMakeRotation(M_PI/2);
-    self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 1.5);
+    self.liveSession.previewView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+    self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     
     //self.liveSession.previewView.layer.cornerRadius = self.liveSession.previewView.bounds.size.height /2;
     self.liveSession.previewView.layer.masksToBounds = YES;
@@ -411,6 +413,19 @@ static dispatch_once_t _onceToken;
     if(self.liveSession==nil)
         [self initRecord];
     [self setupLiveSession];
+}
+
+-(void)moveRight{
+    NSLog(@"moveRight()....%@", self);
+    //if(self.liveSession==nil)
+    //    [self initRecord];
+    //[self setupLiveSession];
+    CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width/3;
+    NSLog(@"ApplicationW=%f", ApplicationW);
+    CGPoint pp = CGPointMake(self.liveSession.previewView.layer.position.x+ApplicationW+40, self.liveSession.previewView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
+    //pp.x += ApplicationW;
+    self.liveSession.previewView.layer.position = pp;
+    //self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 1);
 }
 
 -(void)stopRecord{
@@ -568,6 +583,10 @@ extern "C" {
     void _startRecord (){
         MyPlugin *obj = [MyPlugin sharedInstance];
         [obj startRecord];
+    }
+    void _moveRight (){
+        MyPlugin *obj = [MyPlugin sharedInstance];
+        [obj moveRight];
     }
     void _stopPlay (){
         MyPlugin *obj = [MyPlugin sharedInstance];

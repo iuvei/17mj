@@ -17,6 +17,9 @@ public class VideoRecordingBridge {
 	private static extern void _startPlay (string str);
 	[DllImport("__Internal")]
 	private static extern void _stopPlay ();
+	[DllImport("__Internal")]
+	private static extern void _moveRight ();
+
 	#elif UNITY_ANDROID
 	private static AndroidJavaObject live = null;
 	private static bool init = true;
@@ -30,6 +33,7 @@ public class VideoRecordingBridge {
     #endif
 
 	public static void StartRecord(){
+		Debug.Log ("StartRecord()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_startRecord ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
@@ -39,6 +43,7 @@ public class VideoRecordingBridge {
 	}
 
 	public static void StopRecord(){
+		Debug.Log ("StopRecord()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopRecord ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
@@ -48,6 +53,7 @@ public class VideoRecordingBridge {
 	}
 
 	public static void StartPlay(string str){
+		Debug.Log ("StartPlay()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_startPlay (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
@@ -58,11 +64,22 @@ public class VideoRecordingBridge {
 
 
 	public static void StopPlay(){
+		Debug.Log ("StopPlay()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopPlay ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
 		live.CallStatic("PlayStop");
+		#endif
+	}
+
+	public static void MoveRight(){
+		Debug.Log ("MoveRight()");
+		#if !UNITY_EDITOR && UNITY_IOS
+		_moveRight ();
+		#elif !UNITY_EDITOR && UNITY_ANDROID
+		//setup();
+		//live.CallStatic("PlayStop");
 		#endif
 	}
 

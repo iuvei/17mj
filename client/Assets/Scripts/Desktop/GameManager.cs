@@ -8,7 +8,7 @@ using DG.Tweening;
 
 namespace com.Desktop
 {
-	public class GameManager : Photon.PunBehaviour
+	public class GameManager : MonoBehaviour
     {
         private static GameManager _instance = null;
 
@@ -94,21 +94,20 @@ namespace com.Desktop
                 Destroy(gameObject);
             }
 
-			if (!PhotonNetwork.connected)
-			{
-				
-				// We must be connected to a photon server! Back to main menu
-				//Application.LoadLevel(Application.loadedLevel - 1);
-				SceneManager.LoadScene("02.Lobby");
-				return;
-				//Connect();
-			}
+			//#关键
+			//我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
+			//PhotonNetwork.autoJoinLobby = true;
 
-			PhotonNetwork.isMessageQueueRunning = true;
+			//#关键
+			//这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
+			//PhotonNetwork.automaticallySyncScene = true;
+
+			//PhotonNetwork.isMessageQueueRunning = true;
 
             //PhotonNetwork.OnEventCall += OnEvent;
         }
 
+		/*
 		private void Connect()
 		{
 			//isConnecting = true;
@@ -134,7 +133,9 @@ namespace com.Desktop
 				PhotonNetwork.automaticallySyncScene = true;
 			}
 		}
+		*/
 
+		/*
 		/// <summary>
 		/// 成功连接到大厅
 		/// </summary>
@@ -160,20 +161,30 @@ namespace com.Desktop
 				}
 			}
 		}
-
 		private void OnFailedToConnect(NetworkConnectionError error)
 		{
 			//Debug.Log("fail to Connect");
 		}
+		*/
 
         void Start()
         {
 			//AudioManager.Instance.PlayBGM ("BGM_Playing");
             //只有主机有发牌的权利
+			if (!PhotonNetwork.connected)
+			{
+
+				// We must be connected to a photon server! Back to main menu
+				//Application.LoadLevel(Application.loadedLevel - 1);
+				PhotonNetwork.LoadLevel("02.Lobby");
+				return;
+				//Connect();
+			}
+			Debug.Log (PhotonNetwork.room);
             if (!PhotonNetwork.isMasterClient)
             {
-				VideoRecordingBridge.StartPlay ("rtmp://192.168.20.178:1935/mj17/myStream");
-				//Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+				Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+				VideoRecordingBridge.StartPlay ("rtmp://catpunch.co/live/livestream");
                 return;
             }
 
@@ -188,7 +199,7 @@ namespace com.Desktop
         public void ClickInvatePlay() {
 			if (PhotonNetwork.playerList.Length < 2) {
 				Debug.Log ("兩個人以上才能開桌");
-				return;
+				//return;
 			}
 			LayoutStart(); //畫面移入
 			this._isgameover = false;
@@ -1422,6 +1433,7 @@ namespace com.Desktop
 			//VideoCanvas.transform.DOScaleX (1, 0);
 			AllCanvas.transform.DOMoveX (-14, 0, true);
 			AllCanvas.transform.DOMoveX(0, 1, false).SetEase(Ease.InOutBack).OnComplete(ShowInfo);
+			VideoRecordingBridge.MoveRight ();
 			//VideoCanvas.transform.DOScaleX (0.3f, 1).SetEase(Ease.InOutBack);
             //Invoke("ShowInfo", 0.45f);
 			//ShowInfo();

@@ -62,14 +62,22 @@ public class LoginUI : MonoBehaviour {
 		} else {
             string stype = "C";
 
-            if (ConnectingPanel)
+            if (ConnectingPanel) {
                 ConnectingPanel.SetActive(true);
+                UIManager.instance.PlayConnectingAnim();
+            }
+                
             MJApi.Login(stype, userName, userPass, LoginCallback);
         }
 	}
 
     public void LoginCallback(WebExceptionStatus status, string result)
-	{
+    {
+        if (ConnectingPanel) {
+            ConnectingPanel.SetActive(false);
+            UIManager.instance.StopConnectingAnim();
+        }
+            
         _hideConnecting = true;
 
         if (status!=WebExceptionStatus.Success){
@@ -132,8 +140,6 @@ public class LoginUI : MonoBehaviour {
 
     void Update() {
         if (_hideConnecting) {
-            if (ConnectingPanel)
-                ConnectingPanel.SetActive(false);
             _hideConnecting = false;
         }
 

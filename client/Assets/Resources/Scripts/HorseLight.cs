@@ -28,7 +28,7 @@ public class HorseLight : MonoBehaviour {
 
     private int _cuurSpeed;
 
-    void Start() {
+    void Awake() {
         instance = this;
 
         ReadyToStart();

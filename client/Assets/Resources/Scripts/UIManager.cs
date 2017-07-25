@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Net;
 using Facebook.MiniJSON;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour {
 
     public static UIManager instance;
     public Transform MainPanel;
     public GameObject[] LoginBtns;
+    public GameObject ConnectingPanel;
 
     private GameObject loginPanel;
     private GameObject registerPanel;
@@ -18,6 +21,9 @@ public class UIManager : MonoBehaviour {
     private Animator mainPanelAnim;
     private IDictionary dict;
     private bool _registerSuccess = false;
+    private Transform _connectingSign;
+    private Text _connectingText;
+    private Text _loadingText;
 
     void Start() {
         instance = this;
@@ -34,6 +40,8 @@ public class UIManager : MonoBehaviour {
             rulePanel = MainPanel.Find("RulePanel").gameObject;
             enterLoadingPanel = MainPanel.Find("LoadingPanel");
 
+            _loadingText = enterLoadingPanel.Find("LoadingBar/Text").GetComponent<Text>();
+
             if (!loginPanel)
                 Debug.Log("No found LoginPanel");
             if (!registerPanel)
@@ -46,13 +54,24 @@ public class UIManager : MonoBehaviour {
                 Debug.Log("No found LoadingPanel");
             else
                 enterLoadingAnim = enterLoadingPanel.GetComponent<Animator>();
+
+            if (ConnectingPanel) {
+                _connectingSign = ConnectingPanel.transform.Find("Image/Img").transform;
+                _connectingText = ConnectingPanel.transform.Find("Image/Text").GetComponent<Text>();
+                if (_connectingSign && _connectingText)
+                    ConnectingAnim();
+            }
+
+            if (_loadingText)
+                _loadingText.DOText("載入中...", 3).SetLoops(-1, LoopType.Restart);
         }
 
         if (LoginBtns.Length == 0)
             Debug.LogError("No found GameLobbyButton");
 
         InitialLoginPanel();
-        StartCoroutine("PlayOP"); 
+        StartCoroutine("PlayOP");
+
     }
 
     // 遊戲流程
@@ -228,4 +247,26 @@ public class UIManager : MonoBehaviour {
             _registerSuccess = false;
         }
     }
+
+    public void ConnectingAnim() {
+        _connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
+        _connectingText.DOText("連線中...", 3).SetLoops(-1, LoopType.Restart);
+    }
+
+    public void StopConnectingAnim()
+    {
+        if (_connectingSign && _connectingText) {
+            _connectingSign.DOPause();
+            _connectingText.DOPause();
+        }
+    }
+
+    public void PlayConnectingAnim()
+    {
+        if (_connectingSign && _connectingText) {
+            _connectingSign.DOPlay();
+            _connectingText.DOPlay();
+        }
+    }
+
 }

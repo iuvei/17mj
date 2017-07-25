@@ -95,6 +95,7 @@ public class FBLoginButton : MonoBehaviour {
         if (string.IsNullOrEmpty(result.Error) && result.Texture != null)
         {
             stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
+            //_logText.text = " PHO  = /n" + stringData;
             _setPhoto = true;
             //string stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
             //CryptoPrefs.SetString("USERPHOTO", stringData);
@@ -139,6 +140,12 @@ public class FBLoginButton : MonoBehaviour {
 
     private void LoginCallback(WebExceptionStatus status, string result)
     {
+        if (ConnectingPanel) {
+            ConnectingPanel.SetActive(false);
+            UIManager.instance.StopConnectingAnim();
+        }
+
+
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("Failed! " + result);
@@ -204,15 +211,15 @@ public class FBLoginButton : MonoBehaviour {
         {
             MJApi.Login(stype, fbMail, token, LoginCallback);
         }
-        if (ConnectingPanel)
+        if (ConnectingPanel) {
             ConnectingPanel.SetActive(true);
+            UIManager.instance.PlayConnectingAnim();
+        }
         //UIManager.instance.StartSetEnterLoading();
     }
 
     void Update() {
         if (_loginSuccess) {
-            if (ConnectingPanel)
-                ConnectingPanel.SetActive(false);
 
             string uName = string.Empty;
             string uToken = string.Empty;

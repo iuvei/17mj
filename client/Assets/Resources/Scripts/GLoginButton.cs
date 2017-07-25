@@ -60,6 +60,12 @@ public class GLoginButton : MonoBehaviour {
 
     private void LoginCallback(WebExceptionStatus status, string result)
     {
+        if (ConnectingPanel) {
+            ConnectingPanel.SetActive(false);
+            UIManager.instance.StopConnectingAnim();
+        }
+            
+
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("Failed! " + result);
@@ -135,8 +141,10 @@ public class GLoginButton : MonoBehaviour {
                 string type = "C1";
                 MJApi.Login(type, cName, cToken, LoginCallback);
                 //UIManager.instance.StartSetEnterLoading();
-                if (ConnectingPanel)
+                if (ConnectingPanel) {
                     ConnectingPanel.SetActive(true);
+                    UIManager.instance.PlayConnectingAnim();
+                }
             }
         }
         else
@@ -160,16 +168,16 @@ public class GLoginButton : MonoBehaviour {
             {
                 MJApi.Login(stype, uMail, token, LoginCallback);
             }
-            if (ConnectingPanel)
+            if (ConnectingPanel) {
                 ConnectingPanel.SetActive(true);
+                UIManager.instance.PlayConnectingAnim();
+            }
             //UIManager.instance.StartSetEnterLoading();
         }
     }
 
     void Update() {
         if (_loginSuccess) {
-            if (ConnectingPanel)
-                ConnectingPanel.SetActive(false);
 
             string uName = string.Empty;
             string uToken = string.Empty;

@@ -100,22 +100,22 @@ public class LoginUI : MonoBehaviour {
             //if (dict["Name"] != null)
             //{
             //    uName = dict["Name"].ToString();
-            //    CryptoPrefs.SetString("USERNAME", uName);
+            //    PlayerPrefs.SetString("USERNAME", uName);
             //}
             //if (dict["Token"] != null)
             //{
             //    uToken = dict["Token"].ToString();
-            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //    PlayerPrefs.SetString("USERTOKEN", uToken);
             //}
             //if (dict["Level"] != null)
             //{
             //    uLevel = dict["Level"].ToString();
-            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
             //}
             //if (dict["Coin"] != null)
             //{
             //    uCoin = dict["Coin"].ToString();
-            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //    PlayerPrefs.SetString("USERCOIN", uCoin);
             //}
             //UIManager.instance.StartSetEnterLoading(); //載入下個場景
             //EnterLoading.instance._autoToNextScene = true;
@@ -130,12 +130,12 @@ public class LoginUI : MonoBehaviour {
 
     public void Logout()
     {
-        CryptoPrefs.DeleteKey("USERPHOTO");
-        CryptoPrefs.DeleteKey("USERNAME");
-        CryptoPrefs.DeleteKey("USERLEVEL");
-        CryptoPrefs.DeleteKey("USERCOIN");
-        CryptoPrefs.DeleteKey("USERONLINE");
-        CryptoPrefs.DeleteKey("USERTOKEN");
+        PlayerPrefs.DeleteKey("USERPHOTO");
+        PlayerPrefs.DeleteKey("USERNAME");
+        PlayerPrefs.DeleteKey("USERLEVEL");
+        PlayerPrefs.DeleteKey("USERCOIN");
+        PlayerPrefs.DeleteKey("USERONLINE");
+        PlayerPrefs.DeleteKey("USERTOKEN");
     }
 
     void Update() {
@@ -160,22 +160,22 @@ public class LoginUI : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                CryptoPrefs.SetString("USERNAME", uName);
+                PlayerPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                CryptoPrefs.SetString("USERTOKEN", uToken);
+                PlayerPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                CryptoPrefs.SetString("USERLEVEL", uLevel);
+                PlayerPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                CryptoPrefs.SetString("USERCOIN", uCoin);
+                PlayerPrefs.SetString("USERCOIN", uCoin);
             }
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
             EnterLoading.instance._autoToNextScene = true;

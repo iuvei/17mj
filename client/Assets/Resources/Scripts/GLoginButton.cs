@@ -85,22 +85,22 @@ public class GLoginButton : MonoBehaviour {
             //if (dict["Name"] != null)
             //{
             //    uName = dict["Name"].ToString();
-            //    CryptoPrefs.SetString("USERNAME", uName);
+            //    PlayerPrefs.SetString("USERNAME", uName);
             //}
             //if (dict["Token"] != null)
             //{
             //    uToken = dict["Token"].ToString();
-            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //    PlayerPrefs.SetString("USERTOKEN", uToken);
             //}
             //if (dict["Level"] != null)
             //{
             //    uLevel = dict["Level"].ToString();
-            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
             //}
             //if (dict["Coin"] != null)
             //{
             //    uCoin = dict["Coin"].ToString();
-            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //    PlayerPrefs.SetString("USERCOIN", uCoin);
             //}
         }
         //EnterLoading.instance._autoToNextScene = true;
@@ -115,7 +115,7 @@ public class GLoginButton : MonoBehaviour {
             Texture2D tex = new Texture2D(1, 1, TextureFormat.DXT1, false);
             tex.LoadImage(result);
             string stringData = Convert.ToBase64String(tex.EncodeToPNG());
-            CryptoPrefs.SetString("USERPHOTO", stringData);
+            PlayerPrefs.SetString("USERPHOTO", stringData);
         }
 #endif
         yield return null;
@@ -134,8 +134,8 @@ public class GLoginButton : MonoBehaviour {
 
         if (uMail == "No Init")
         {
-            string cName = CryptoPrefs.GetString("USERNAME");
-            string cToken = CryptoPrefs.GetString("USERTOKEN");
+            string cName = PlayerPrefs.GetString("USERNAME");
+            string cToken = PlayerPrefs.GetString("USERTOKEN");
             if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
             {
                 string type = "C1";
@@ -154,12 +154,12 @@ public class GLoginButton : MonoBehaviour {
             if (tokens[2] != null)
                 uName = tokens[2];
 
-            string Photo = CryptoPrefs.GetString("USERPHOTO");
+            string Photo = PlayerPrefs.GetString("USERPHOTO");
             if (string.IsNullOrEmpty(Photo))
                 StartCoroutine(GetGooglePhoto());
 
             string stype = "G";
-            string token = CryptoPrefs.GetString("USERTOKEN");
+            string token = PlayerPrefs.GetString("USERTOKEN");
             if (string.IsNullOrEmpty(token))
             {
                 MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
@@ -187,22 +187,22 @@ public class GLoginButton : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                CryptoPrefs.SetString("USERNAME", uName);
+                PlayerPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                CryptoPrefs.SetString("USERTOKEN", uToken);
+                PlayerPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                CryptoPrefs.SetString("USERLEVEL", uLevel);
+                PlayerPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                CryptoPrefs.SetString("USERCOIN", uCoin);
+                PlayerPrefs.SetString("USERCOIN", uCoin);
             }
             UIManager.instance.StartSetEnterLoading();
             EnterLoading.instance._autoToNextScene = true;

@@ -1092,52 +1092,6 @@ namespace com.Lobby
 
         public void BirtnRankItem()
         {
-            //讀取玩家資訊(頭像、名稱、Lv)
-            //string sPhoto = CryptoPrefs.GetString("USERPHOTO");
-            //if (!string.IsNullOrEmpty(sPhoto))
-            //{
-            //    Image ProfilePicture;
-            //    Texture2D newPhoto = new Texture2D(1, 1);
-            //    newPhoto.LoadImage(Convert.FromBase64String(sPhoto));
-            //    newPhoto.Apply();
-
-            //    if (playerRankPanel) {
-            //        ProfilePicture = playerRankPanel.Find("Photo").GetComponent<Image>();
-            //        ProfilePicture.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
-            //    }          
-            //}
-
-            //string sName = CryptoPrefs.GetString("USERNAME");
-            //if (!string.IsNullOrEmpty(sName))
-            //{
-            //    Text name;
-            //    if (playerRankPanel) {
-            //        name = playerRankPanel.Find("NameLv/Name").GetComponent<Text>();
-            //        name.text = sName;
-            //    }
-            //}
-
-            //string sLevel = CryptoPrefs.GetString("USERLEVEL");
-            //if (!string.IsNullOrEmpty(sLevel))
-            //{
-            //    Text level;
-            //    if (playerRankPanel) {
-            //        level = playerRankPanel.Find("NameLv/Lv").GetComponent<Text>();
-            //        level.text = "Lv " + sLevel;
-            //    }
-            //}
-
-            //string sCoin = CryptoPrefs.GetString("USERCOIN");
-            //if (!string.IsNullOrEmpty(sCoin))
-            //{
-            //    Text coin;
-            //    if (playerRankPanel)
-            //    {
-            //        coin = rankPanel.transform.Find("topBar/Coin/Text").GetComponent<Text>();
-            //        coin.text = string.Format("{0:0,0}", int.Parse(sCoin));
-            //    }
-            //}
-
             foreach (Transform child in rankItemTarget)
                 Destroy(child.gameObject);
 
@@ -1590,7 +1544,7 @@ namespace com.Lobby
 
         public void SetPlayerPhotos()
         {
-            string sPhoto = CryptoPrefs.GetString("USERPHOTO");
+            string sPhoto = PlayerPrefs.GetString("USERPHOTO");
             if (!string.IsNullOrEmpty(sPhoto))
             {
                 Texture2D newPhoto = new Texture2D(1, 1);
@@ -1606,7 +1560,7 @@ namespace com.Lobby
 
         public void SetPlayerNames()
         {
-            string sName = CryptoPrefs.GetString("USERNAME");
+            string sName = PlayerPrefs.GetString("USERNAME");
             if (!string.IsNullOrEmpty(sName))
             {
                 for (int i = 0; i < playerNames.Length; i++)
@@ -1618,7 +1572,7 @@ namespace com.Lobby
 
         public void SetPlayerLevels()
         {
-            string sLevel = CryptoPrefs.GetString("USERLEVEL");
+            string sLevel = PlayerPrefs.GetString("USERLEVEL");
             if (!string.IsNullOrEmpty(sLevel))
             {
                 for (int i = 0; i < playerLvs.Length; i++)
@@ -1630,7 +1584,7 @@ namespace com.Lobby
 
         public void SetPlayerCoins()
         {
-            string sCoin = CryptoPrefs.GetString("USERCOIN");
+            string sCoin = PlayerPrefs.GetString("USERCOIN");
             if (!string.IsNullOrEmpty(sCoin))
             {
                 for (int i = 0; i < playerCoins.Length; i++)
@@ -1642,7 +1596,7 @@ namespace com.Lobby
 
         public void SetUserOnline()
         {
-            string sOnline = CryptoPrefs.GetString("USERONLINE");
+            string sOnline = PlayerPrefs.GetString("USERONLINE");
             if (!string.IsNullOrEmpty(sOnline))
             {
                 userOnline.text = "在線人數 " + string.Format("{0:0,0}", int.Parse(sOnline));

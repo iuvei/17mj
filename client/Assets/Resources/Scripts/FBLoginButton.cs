@@ -36,8 +36,8 @@ public class FBLoginButton : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
 
-        sName = CryptoPrefs.GetString("USERNAME");
-        fbPhoto = CryptoPrefs.GetString("USERPHOTO");
+        sName = PlayerPrefs.GetString("USERNAME");
+        fbPhoto = PlayerPrefs.GetString("USERPHOTO");
 
         if (FB.IsInitialized && !string.IsNullOrEmpty(sName))
         {
@@ -98,7 +98,7 @@ public class FBLoginButton : MonoBehaviour {
             //_logText.text = " PHO  = /n" + stringData;
             _setPhoto = true;
             //string stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
-            //CryptoPrefs.SetString("USERPHOTO", stringData);
+            //PlayerPrefs.SetString("USERPHOTO", stringData);
         }
     }
 
@@ -165,22 +165,22 @@ public class FBLoginButton : MonoBehaviour {
             //if (dict["Name"] != null)
             //{
             //    uName = dict["Name"].ToString();
-            //    CryptoPrefs.SetString("USERNAME", uName);
+            //    PlayerPrefs.SetString("USERNAME", uName);
             //}
             //if (dict["Token"] != null)
             //{
             //    uToken = dict["Token"].ToString();
-            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //    PlayerPrefs.SetString("USERTOKEN", uToken);
             //}
             //if (dict["Level"] != null)
             //{
             //    uLevel = dict["Level"].ToString();
-            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
             //}
             //if (dict["Coin"] != null)
             //{
             //    uCoin = dict["Coin"].ToString();
-            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //    PlayerPrefs.SetString("USERCOIN", uCoin);
             //}
         }
         //EnterLoading.instance._autoToNextScene = true;
@@ -201,7 +201,7 @@ public class FBLoginButton : MonoBehaviour {
     public void doLogin()
     {
         string stype = "F";
-        string token = CryptoPrefs.GetString("USERTOKEN");
+        string token = PlayerPrefs.GetString("USERTOKEN");
 
         if (string.IsNullOrEmpty(token))
         {
@@ -230,29 +230,29 @@ public class FBLoginButton : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                CryptoPrefs.SetString("USERNAME", uName);
+                PlayerPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                CryptoPrefs.SetString("USERTOKEN", uToken);
+                PlayerPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                CryptoPrefs.SetString("USERLEVEL", uLevel);
+                PlayerPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                CryptoPrefs.SetString("USERCOIN", uCoin);
+                PlayerPrefs.SetString("USERCOIN", uCoin);
             }
             _loginSuccess = false;
             _loginDone = true;
         }
 
         if (_setPhoto) {
-            CryptoPrefs.SetString("USERPHOTO", stringData);
+            PlayerPrefs.SetString("USERPHOTO", stringData);
             _setPhoto = false;
             _setPhotoDone = true;
         }

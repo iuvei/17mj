@@ -99,9 +99,9 @@ namespace com.Desktop
 				
 				// We must be connected to a photon server! Back to main menu
 				//Application.LoadLevel(Application.loadedLevel - 1);
-				//SceneManager.LoadScene("02.Lobby");
-				//return;
-				Connect();
+				SceneManager.LoadScene("02.Lobby");
+				return;
+				//Connect();
 			}
 
 			PhotonNetwork.isMessageQueueRunning = true;
@@ -186,6 +186,10 @@ namespace com.Desktop
 
         // 邀請玩麻將
         public void ClickInvatePlay() {
+			if (PhotonNetwork.playerList.Length < 2) {
+				Debug.Log ("兩個人以上才能開桌");
+				return;
+			}
 			LayoutStart(); //畫面移入
 			this._isgameover = false;
             //只有副机有邀請的權利
@@ -194,6 +198,7 @@ namespace com.Desktop
 			//	Debug.Log ("!PhotonNetwork.isMasterClient");
             //    return;
             //}
+			//只有主机有发牌的权利
 			StartCoroutine("ReadyPlay");
 
             //photonView.RPC("StartMahjong", PhotonTargets.All, null);
@@ -217,6 +222,10 @@ namespace com.Desktop
                 return;
             }
 			_currentIndex = 0;
+			if (PhotonNetwork.playerList.Length < 2) {
+				Debug.Log ("兩個人以上才能開桌");
+				return;
+			}
             StartCoroutine("ReadyPlay");
         }
 
@@ -276,7 +285,8 @@ namespace com.Desktop
         /// </summary>
         private void doGameInit()
         {
-			//Debug.LogError ("[s] 0.doGameInit()");
+			Debug.LogError ("[s] 0.doGameInit()");
+			/*
 			if (PhotonNetwork.playerList.Length > 0 && PhotonNetwork.playerList.Length < 2) {
 				//Debug.Log ("單機模式");
 				//單機模式 第一個是自己 第二個是AI
@@ -287,13 +297,26 @@ namespace com.Desktop
 				Users[1].photonPlayer = null;
 				Users[1].isAI = true;
 			} else {
-				//對戰模式 第一個是自己 第二個是對戰玩家
+			*/
+			Debug.Log ("playerList.Length="+PhotonNetwork.playerList.Length);
+			if (PhotonNetwork.playerList.Length > 1) {
 				Users[0].photonPlayer = PhotonNetwork.player;
 				Users[0].isAI = false;
+				//對戰模式 第一個是自己 第二個是對戰玩家
+				foreach (PhotonPlayer pp in PhotonNetwork.playerList) {
+					if (pp != PhotonNetwork.player) {
+						Users[1].photonPlayer = pp;
+						Users[1].isAI = false;
+						break;
+					}
+				}
+
+				//Users[0].photonPlayer = PhotonNetwork.player;
+				//Users[0].isAI = false;
 				//PhotonNetwork.playerList.
-				PhotonPlayer pp = PhotonPlayer.Find(this._targetid);
-				Users[1].photonPlayer = pp;
-				Users[1].isAI = false;
+				//PhotonPlayer pp = PhotonPlayer.Find(this._targetid);
+				//Users[1].photonPlayer = pp;
+				//Users[1].isAI = false;
 
 			}
 

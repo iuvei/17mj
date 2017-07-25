@@ -1,0 +1,347 @@
+fileFormatVersion: 2
+guid: 4de0c3fdb9ee0a3479462db7ca4c5b55
+timeCreated: 1500515076
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: gift_description
+    21300002: activity_description
+    21300004: gift_frame
+    21300006: activity_frame_02
+    21300008: activity_frame_01
+    21300010: get_gift_btn
+    21300012: activity_btn
+    21300014: activityTitle1
+    21300016: 004_8
+    21300018: 004_9
+    21300020: 004_10
+    21300022: 004_11
+    21300024: bt_ok_sent
+    21300026: 004_13
+    21300028: 004_14
+    21300030: bg_record_unselected
+    21300032: Combined_Shape
+    21300034: click_get_money
+    21300036: 004_18
+    21300038: 004_19
+    21300040: 004_20
+    21300042: 004_21
+    21300044: 004_22
+    21300046: 004_23
+    21300048: activityTitle3
+    21300050: 004_25
+    21300052: 004_26
+    21300054: 004_27
+    21300056: 004_28
+    21300058: 004_29
+    21300060: 004_30
+    21300062: 004_31
+    21300064: 004_32
+    21300066: 004_33
+    21300068: 004_34
+    21300070: 004_35
+    21300072: 004_36
+    21300074: 004_37
+    21300076: rank.dateBg
+    21300078: 004_39
+    21300080: activityTitle4
+    21300082: activityTitle2
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gift_description
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 966
+        width: 1920
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activity_description
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 820
+        width: 1920
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: gift_frame
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 350
+        width: 564
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activity_frame_02
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 350
+        width: 564
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activity_frame_01
+      rect:
+        serializedVersion: 2
+        x: 1137
+        y: 350
+        width: 564
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: get_gift_btn
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 161
+        width: 534
+        height: 185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activity_btn
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 161
+        width: 534
+        height: 184
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activityTitle1
+      rect:
+        serializedVersion: 2
+        x: 1076
+        y: 202
+        width: 370
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_ok_sent
+      rect:
+        serializedVersion: 2
+        x: 1446
+        y: 214
+        width: 438
+        height: 134
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bg_record_unselected
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 92
+        width: 366
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Combined_Shape
+      rect:
+        serializedVersion: 2
+        x: 1486
+        y: 116
+        width: 96
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: click_get_money
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 148
+        width: 284
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 004_19
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 94
+        width: 40
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activityTitle3
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 18
+        width: 370
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: rank.dateBg
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 5
+        width: 525
+        height: 85
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activityTitle4
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 17
+        width: 370
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: activityTitle2
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 18
+        width: 370
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

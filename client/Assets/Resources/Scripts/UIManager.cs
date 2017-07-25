@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-
+using System.Net;
+using Facebook.MiniJSON;
 
 public class UIManager : MonoBehaviour {
 
@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour {
     private Transform enterLoadingPanel;
     private Animator enterLoadingAnim;
     private Animator mainPanelAnim;
+    private IDictionary dict;
+    private bool _registerSuccess = false;
 
     void Start() {
         instance = this;
@@ -112,6 +114,118 @@ public class UIManager : MonoBehaviour {
     public void StartSetEnterLoading()
     {
         loginPanel.SetActive(false);
+        EnterLoading.instance._autoToNextScene = false;
         EnterLoading.instance.StartLoading();
+    }
+
+    public void PlayNowButton()
+    {
+        loginPanel.SetActive(false);
+        EnterLoading.instance._autoToNextScene = false;
+        EnterLoading.instance.StartLoading();
+
+        string[] ran_names = {
+                "雲盤金城武",
+                "高雄彭玉燕",
+                "鼓山張學友",
+                "唐山綾波零",
+                "成大金城武",
+                "韓國林志穎",
+                "釜山林志玲",
+                "左營林志玲",
+                "太極張三豐",
+                "三民陳金城",
+                "台南李炳輝",
+                "彰化波多野",
+                "屏東張韶涵",
+                "台北郭金發",
+                "基隆日本橋"
+            };
+        int idx = UnityEngine.Random.Range(0, ran_names.Length - 1);
+        string uName = ran_names[idx];
+
+        string id = RegisterUI.GetUniqueKey(24);
+        string mail = RegisterUI.GetUniqueKey(8);
+        string pass = RegisterUI.GetUniqueKey(8);
+        string stype = "C";
+
+        MJApi.AddMember(id, mail, pass, uName, stype, RegisterCallback);
+    }
+
+    //註冊 Callback
+    private void RegisterCallback(WebExceptionStatus status, string result)
+    {
+        if (status != WebExceptionStatus.Success)
+        {
+            //Debug.Log("Failed! " + result);
+        }
+        else
+        {
+            //Debug.Log("ConnectSuccess! " + result);
+            dict = Json.Deserialize(result) as IDictionary;
+            _registerSuccess = true;
+
+            //string uName = string.Empty;
+            //string uToken = string.Empty;
+            //string uLevel = string.Empty;
+            //string uCoin = string.Empty;
+
+            //IDictionary dict = Json.Deserialize(result) as IDictionary;
+            //if (dict["Name"] != null)
+            //{
+            //    uName = dict["Name"].ToString();
+            //    CryptoPrefs.SetString("USERNAME", uName);
+            //}
+            //if (dict["Token"] != null)
+            //{
+            //    uToken = dict["Token"].ToString();
+            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //}
+            //if (dict["Level"] != null)
+            //{
+            //    uLevel = dict["Level"].ToString();
+            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //}
+            //if (dict["Coin"] != null)
+            //{
+            //    uCoin = dict["Coin"].ToString();
+            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //}
+            //EnterLoading.instance._autoToNextScene = true;
+        }
+     }
+
+    void Update() {
+
+        if (_registerSuccess) {
+            string uName = string.Empty;
+            string uToken = string.Empty;
+            string uLevel = string.Empty;
+            string uCoin = string.Empty;
+
+            if (dict["Name"] != null)
+            {
+                uName = dict["Name"].ToString();
+                CryptoPrefs.SetString("USERNAME", uName);
+            }
+            if (dict["Token"] != null)
+            {
+                uToken = dict["Token"].ToString();
+                CryptoPrefs.SetString("USERTOKEN", uToken);
+            }
+            if (dict["Level"] != null)
+            {
+                uLevel = dict["Level"].ToString();
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
+            }
+            if (dict["Coin"] != null)
+            {
+                uCoin = dict["Coin"].ToString();
+                CryptoPrefs.SetString("USERCOIN", uCoin);
+            }
+            EnterLoading.instance._autoToNextScene = true;
+
+            _registerSuccess = false;
+        }
     }
 }

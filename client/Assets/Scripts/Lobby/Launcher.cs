@@ -30,6 +30,7 @@ namespace com.Lobby
         public RectTransform settingSign;
         public GameObject settingDropdown;
         public GameObject settingPanelNew;
+        public RectTransform popupLogout;
 
         public GameObject roomlistPanel;
         public GameObject roomlistPopupSetting;
@@ -51,7 +52,12 @@ namespace com.Lobby
         public Scrollbar  rankScrollbar;
 
         public GameObject activityPanel;
+        public RectTransform coinAdSign;
 
+        public GameObject balloonPanel;
+
+        public Transform[] playRoomBtns;
+        public Transform[] btmMenuBtns;
 
         //房间列表
         public RectTransform LobbyPanel;
@@ -77,6 +83,8 @@ namespace com.Lobby
 		private string BGM_name = "BGM_Lobby";
 		private List<Button> buttons = new List<Button>();
         private Text hint;
+        private Toggle toggleAll;
+        private GameObject roomlistEmpty;
         private int[] _createRoomTypeIndex = new int[] {0,0,0};
         private string[] _createRoomChipType = new string[] { "200 / 100","500 / 200","1000 / 500"};
         private string[] _createRoomCircleType = new string[] { "1 圈", "2 圈" };
@@ -98,6 +106,8 @@ namespace com.Lobby
         private GameObject coinRecoPanel;
         private Transform  servicePopup;
         private Sequence mySequence;
+        private GameObject actDailyPanel;
+        private GameObject actMissionPanel;
         #endregion
 
         private void Awake()
@@ -155,10 +165,10 @@ namespace com.Lobby
 
             hint = rListPanel.parent.GetComponentInChildren<Text>();
 
-            ShopInit();
-            SettingInit();
+            SubPageInit();
             _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
-            SettingRotation();
+            SettingInitAnim();
+            InvokeRepeating("AutoBirthBalloon", 3f, 8f);
         }
 
         /// <summary>
@@ -319,7 +329,10 @@ namespace com.Lobby
 		/// </summary>
 		public void ShowRoomList()
 		{
-			Debug.Log ("GetRoomList()");
+            if(playRoomBtns[2])
+                playRoomBtns[2].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
+            //Debug.Log ("GetRoomList()");
             if (roomlistPanel) {
 				roomlistPanel.SetActive (true);
 
@@ -356,8 +369,11 @@ namespace com.Lobby
 		/// </summary>
 		public void JoinOrCreateRoom()
 		{
-			//Debug.Log ("JoinOrCreateRoom()");
-			if (PhotonNetwork.connected)
+            if (playRoomBtns[1])
+                playRoomBtns[1].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
+            //Debug.Log ("JoinOrCreateRoom()");
+            if (PhotonNetwork.connected)
 			{
 				_roomname = "mj_room";
 				//创建房间成功
@@ -497,12 +513,14 @@ namespace com.Lobby
 
 		public void ShowSetting()
 		{
+            if (settingSign)
+                settingSign.DOScale(1.3f, 0.15f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             //if (settingPanel) {
             //	settingPanel.SetActive(true);
             //}
 
             ShowSettingDropdown();
-
         }
 
 		public void HideSetting()
@@ -514,6 +532,9 @@ namespace com.Lobby
 
         public void ClickDespoit()
         {
+            if (btmMenuBtns[2])
+                btmMenuBtns[2].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             if (depositPanel)
             {
                 depositPanel.transform.DOMoveY(-11, 0, true);
@@ -532,6 +553,9 @@ namespace com.Lobby
 
         public void ClickShop()
         {
+            if (btmMenuBtns[1])
+                btmMenuBtns[1].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             if (shopPanel)
             {
                 shopPanel.transform.DOMoveX(-19.5f, 0, true);
@@ -550,6 +574,9 @@ namespace com.Lobby
 
         public void ClickBag()
         {
+            if (btmMenuBtns[3])
+                btmMenuBtns[3].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
 
             foreach (Transform child in bagItemTarget)
@@ -624,39 +651,46 @@ namespace com.Lobby
             return itemInfos.dataList;
         }
 
-        public void RoomListToggleFollow(bool isOn)
+        public void RoomListToggle(bool isOn)
         {
-            GameObject roomlistEmpty = roomlistPanel.transform.Find("empty").gameObject;
-            if (roomlistEmpty)
-                roomlistEmpty.SetActive(isOn);
-        }
+            string _target = EventSystem.current.currentSelectedGameObject.name;
+            //Debug.Log(EventSystem.current.currentSelectedGameObject.name);
 
-        public void RoomListToggleAll(bool isOn)
-        {
             foreach (Transform child in rListPanel)
                 Destroy(child.gameObject);
 
-            if (isOn) {
-                StartCoroutine(reloadRoomlist());
-            }
-            else
+            if (roomlistEmpty)
+                roomlistEmpty.SetActive(false);
+            if (hint)
+                hint.gameObject.SetActive(true);
+
+            if (isOn)
             {
-                StopCoroutine(reloadRoomlist());
-                if (hint) {
-                    hint.gameObject.SetActive(false);
+                switch (_target)
+                {
+                    case "Btn_all": //列表-全部
+                        StartCoroutine(reloadRoomlist());
+                        break;
+                    case "Btn_follow"://列表-追蹤
+                        StopCoroutine(reloadRoomlist());
+
+                        if (roomlistEmpty) {
+                            roomlistEmpty.SetActive(true);
+                        }
+
+                        if (hint)
+                            hint.gameObject.SetActive(false);
+                        break;
                 }
             }
         }
 
         private bool CurrIsToggleAll() {
-            Toggle toggleAll = roomlistPanel.transform.Find("Panel_title/Title/btn_all").GetComponent<Toggle>();
+            bool _ans = false;
             if (toggleAll)
-            {
-                return toggleAll.isOn ? true : false;
-            }
-            else {
-                return false;
-            }
+                _ans =  toggleAll.isOn ? true : false;
+
+            return _ans;
         }
 
         public void ShowRoomListSetting()
@@ -694,9 +728,9 @@ namespace com.Lobby
         }
 
         public void ClickToWatchRoom() {
-            Toggle myToggle = roomlistPanel.transform.Find("Panel_title/Title/btn_all").GetComponent<Toggle>();
-            if (myToggle)
-                myToggle.isOn = true;
+            if (toggleAll)
+                toggleAll.isOn = true;
+            StartCoroutine(reloadRoomlist());
         }
 
         public void ChangeRoomListSetting()
@@ -767,6 +801,9 @@ namespace com.Lobby
 
         public void ShowCreatRoomSetting()
         {
+            if (playRoomBtns[0])
+                playRoomBtns[0].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             GameObject popupBG = createPopupPanel.transform.parent.Find("popupBG").gameObject;
             if (popupBG)
             {
@@ -791,27 +828,14 @@ namespace com.Lobby
             createPopupPanel.transform.DOScale(Vector3.zero, 0.1f).SetEase(Ease.InSine);
         }
 
-
-        private void ShopInit()
-        {
-            if (popupBuy)
-            {
-                _popupBuyItemName = popupBuy.Find("content/Item/name").GetComponent<Text>();
-                _popupBuyItemPrice = popupBuy.Find("content/Price/price").GetComponent<Text>();
-                _popupBuyItemNum = popupBuy.Find("content/Num/num").GetComponent<InputField>();
-                _popupBuyItemTotal = popupBuy.Find("content/Total/total").GetComponent<Text>();
-            }
-            BirtnShopItem();
-        }
-
         public void ClickShopBuy()
         {
             GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
-            ShopItemInfo _info = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItemInfo>();
+            ShopItem _item = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItem>();
             //Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);
             currentNum = 1;
-            currentPrice = _info.Price;
-            _popupBuyItemName.text = _info.Name;
+            currentPrice = _item.Price;
+            _popupBuyItemName.text = _item.Name;
             _popupBuyItemPrice.text = String.Format("{0:0,0}", currentPrice);
             _popupBuyItemNum.text = currentNum.ToString();
             _popupBuyItemTotal.text = String.Format("{0:0,0}", currentPrice);
@@ -912,11 +936,11 @@ namespace com.Lobby
             foreach (ShopItemInfo info in shopItemInfos)
             {
                 GameObject go = GameObject.Instantiate(Resources.Load("Prefab/shopItem") as GameObject);
-                ShopItemInfo shopInfo = go.GetComponent<ShopItemInfo>();
-                shopInfo.setInfo(info);
+                ShopItem shopItem = go.GetComponent<ShopItem>();
+                shopItem.setInfo(info);
 
-                shopInfo.Name = info.Name;
-                shopInfo.Price = info.Price;
+                shopItem.Name = info.Name;
+                shopItem.Price = info.Price;
                 go.transform.Find("Button").GetComponent<Button>().onClick.AddListener(delegate{ ClickShopBuy();});
 
                 go.transform.SetParent(shopItemTarget);
@@ -968,16 +992,39 @@ namespace com.Lobby
             return itemInfos.dataList;
         }
 
-        private void SettingRotation() {
+        private void SettingInitAnim() {
             //設定頁齒輪動畫
             if (settingSign) {
-                settingSign.DORotateQuaternion(Quaternion.Euler(0, 0, 30), 1f).SetEase(Ease.InElastic).SetLoops(-1, LoopType.Yoyo);
+                settingSign.DORotateQuaternion(Quaternion.Euler(0, 0, 30), 1f).SetEase(Ease.OutElastic).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //入口按鈕
+            if (playRoomBtns != null) {
+                playRoomBtns[0].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+                playRoomBtns[1].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetDelay(0.5f).SetLoops(-1, LoopType.Yoyo);
+                playRoomBtns[2].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //底部分頁
+            if (btmMenuBtns != null) {
+                btmMenuBtns[0].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[1].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetDelay(1).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[2].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[3].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetDelay(1).SetLoops(-1, LoopType.Yoyo);
+                btmMenuBtns[4].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //點廣告領金幣
+            if (coinAdSign) {
+                coinAdSign.DOLocalMoveY(30, 1.5f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo).Pause();
             }
         }
 
         //---
         public void ClickRank()
         {
+            if (btmMenuBtns[0])
+                btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
             BirtnRankItem();
 
@@ -1288,7 +1335,21 @@ namespace com.Lobby
             }
         }
 
-        private void SettingInit() {
+        private void SubPageInit() {
+            if (roomlistPanel) {
+                toggleAll = roomlistPanel.transform.Find("Panel_title/Title/Btn_all").GetComponent<Toggle>();
+                roomlistEmpty = roomlistPanel.transform.Find("Empty").gameObject;
+            }
+
+            if (popupBuy)
+            {
+                _popupBuyItemName = popupBuy.Find("content/Item/name").GetComponent<Text>();
+                _popupBuyItemPrice = popupBuy.Find("content/Price/price").GetComponent<Text>();
+                _popupBuyItemNum = popupBuy.Find("content/Num/num").GetComponent<InputField>();
+                _popupBuyItemTotal = popupBuy.Find("content/Total/total").GetComponent<Text>();
+            }
+            BirtnShopItem();
+
             childSetting = settingPanelNew.transform.Find("Setting").gameObject;
             if (childSetting) {
                 profilePanel = childSetting.transform.Find("Profile").gameObject;
@@ -1310,15 +1371,34 @@ namespace com.Lobby
             }
 
             childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
+
+            actDailyPanel = activityPanel.transform.Find("Daily").gameObject;
+            actMissionPanel= activityPanel.transform.Find("Mission").gameObject;
         }
 
-        public void BrithBalloon()
-        {
+        public void ClickBalloonBtn() {
             AudioManager.Instance.PlaySE("gp" + UnityEngine.Random.Range(0, 9));
+            BirthBalloon();
+        }
 
+        private void AutoBirthBalloon() {
+            StartCoroutine("RandomBalloon");
+        }
+
+        IEnumerator RandomBalloon() {
+            int _time = UnityEngine.Random.Range(1, 5); //一次最多5顆
+            for (int i = 0; i < _time; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+                BirthBalloon();
+            }
+        }
+
+        private void BirthBalloon()
+        {
             Vector3 birthPos = new Vector3(UnityEngine.Random.Range(-900f, 900f), -650f, 0);
             GameObject go = GameObject.Instantiate(Resources.Load("Prefab/balloon") as GameObject);
-            go.transform.SetParent(lobbyPanel.transform);
+            go.transform.SetParent(balloonPanel.transform);
             RectTransform rectT = go.GetComponent<RectTransform>();
             rectT.localPosition = birthPos;
             rectT.localScale = Vector3.one;
@@ -1329,8 +1409,12 @@ namespace com.Lobby
 
         public void ClickActivity()
         {
+            if (btmMenuBtns[4])
+                btmMenuBtns[4].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+
             if (activityPanel)
             {
+                coinAdSign.DOPlay();
                 activityPanel.transform.DOMoveX(-19.5f, 0, true);
                 activityPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
             }
@@ -1342,8 +1426,62 @@ namespace com.Lobby
             {
                 activityPanel.transform.DOMoveX(0, 0, true);
                 activityPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+                coinAdSign.DOPause();
             }
         }
 
+        public void ActivityToggle(bool isOn)
+        {
+            string _target = EventSystem.current.currentSelectedGameObject.name;
+            //Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+
+            actDailyPanel.SetActive(false);
+            actMissionPanel.SetActive(false);
+
+            if (isOn) {
+                switch (_target)
+                {
+                    case "Btn_daily": //每日禮物頁
+                        actDailyPanel.SetActive(true);
+                        break;
+                    case "Btn_mission"://賞金任務頁
+                        actMissionPanel.SetActive(true);
+                        break;
+                }
+            }
+
+        }
+
+        public void ShowLogoutPopup()
+        {
+            GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
+
+            if (popupLogout)
+            {
+               if (popupBG)
+                {
+                    popupBG.SetActive(true);
+                    popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+                }
+                popupLogout.transform.DOScale(Vector3.zero, 0);
+                popupLogout.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            }
+        }
+
+        public void ExitLogoutPopup()
+        {
+            GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
+
+            if (popupLogout)
+            {
+                popupLogout.transform.DOScale(Vector3.one, 0);
+                popupLogout.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InSine);
+                if (popupBG)
+                {
+                    popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                    StartCoroutine(HideGameObject(popupBG, 0.3f));
+                }
+            }
+        }
     }
 }

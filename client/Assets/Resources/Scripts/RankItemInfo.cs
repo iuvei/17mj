@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RankItemInfo : MonoBehaviour {
+public class RankItemInfo {
     public int Rank;
     public string Photo;
     public string Name;

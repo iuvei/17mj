@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Collections;
+using Facebook.MiniJSON;
 
 public class RegisterUI : MonoBehaviour {
     static public RegisterUI Instance;
@@ -121,10 +123,36 @@ public class RegisterUI : MonoBehaviour {
         else
         {
             //Debug.Log("ConnectSuccess! " + result);
-            //result = token, need save
-           //UIManager.instance.ExitRegisterPage(); //離開註冊頁面
-            UIManager.instance.StartSetEnterLoading(); //載入下個場景
+
+            string uName = string.Empty;
+            string uToken = string.Empty;
+            string uLevel = string.Empty;
+            string uCoin = string.Empty;
+
+            IDictionary dict = Json.Deserialize(result) as IDictionary;
+            if (dict["Name"] != null)
+            {
+                uName = dict["Name"].ToString();
+                CryptoPrefs.SetString("USERNAME", uName);
+            }
+            if (dict["Token"] != null)
+            {
+                uToken = dict["Token"].ToString();
+                CryptoPrefs.SetString("USERTOKEN", uToken);
+            }
+            if (dict["Level"] != null)
+            {
+                uLevel = dict["Level"].ToString();
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
+            }
+            if (dict["Coin"] != null)
+            {
+                uCoin = dict["Coin"].ToString();
+                CryptoPrefs.SetString("USERCOIN", uCoin);
+            }
             ResetAllInput();
+            UIManager.instance.StartSetEnterLoading(); //載入下個場景
+            EnterLoading.instance._autoToNextScene = true;
         }
         Button btn = RegisterBtn.GetComponent<Button>();
         btn.interactable = true;

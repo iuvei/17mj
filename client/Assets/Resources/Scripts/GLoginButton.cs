@@ -4,51 +4,58 @@ using System;
 using System.Collections;
 using System.Net;
 using UnityEngine.UI;
+using Facebook.Unity;
 
 
 public class GLoginButton : MonoBehaviour {
-    public Text _logText;
+    public Button[] _gLoginBtn;
+    public GameObject ConnectingPanel; // 連線中
 
     private static AndroidJavaObject login = null;
     private static AndroidJavaObject currentActivity = null;
+    private bool _loginSuccess = false;  //設定資料
+    private IDictionary dict;
 
     void Start () {
-        Button btn = GetComponent<Button>();
-        btn.onClick.AddListener(delegate
+        if (_gLoginBtn.Length != 0)
         {
-            GLogin();
-        });
+            for (int i = 0; i < _gLoginBtn.Length; i++)
+            {
+                _gLoginBtn[i].onClick.AddListener(delegate { GLogin(); });
+            }
+        }
+
+        //Button btn = GetComponent<Button>();
+        //btn.onClick.AddListener(delegate
+        //{
+        //    GLogin();
+        //});
 #if UNITY_ANDROID && !UNITY_EDITOR
         var javaUnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         currentActivity = javaUnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
         var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
-        _logText.text = "Awake GLogin";
 #endif
     }
 
     private void GLogin()
     {
+
         Debug.Log("GLogin()");
 #if UNITY_ANDROID
-        login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
+        //login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
+        login.CallStatic("Login", "AccountManager", "OnConnected", currentActivity);
 #endif
     }   
 
     public void GLoginOut()
     {
         Debug.Log("GLoginOut()");
-        _logText.text += " \n GLoginOut ";
 #if UNITY_ANDROID
-        login.CallStatic("LoginOut");
+        if(login!=null)
+            login.CallStatic("LoginOut");
 #endif
-        CryptoPrefs.DeleteKey("USERPHOTO");
-        CryptoPrefs.DeleteKey("USERNAME");
-        CryptoPrefs.DeleteKey("USERLEVEL");
-        CryptoPrefs.DeleteKey("USERCOIN");
-        CryptoPrefs.DeleteKey("USERONLINE");
-        CryptoPrefs.DeleteKey("USERTOKEN");
     }
 
     private void LoginCallback(WebExceptionStatus status, string result)
@@ -59,34 +66,38 @@ public class GLoginButton : MonoBehaviour {
         }
         else
         {
-            //Debug.Log("ConnectSuccess!" + result);
-            string uName = string.Empty;
-            string uToken = string.Empty;
-            string uLevel = string.Empty;
-            string uCoin = string.Empty;
+            dict = Json.Deserialize(result) as IDictionary;
+            _loginSuccess = true;
 
-            IDictionary dict = Json.Deserialize(result) as IDictionary;
-            if (dict["Name"] != null)
-            {
-                uName = dict["Name"].ToString();
-                CryptoPrefs.SetString("USERNAME", uName);
-            }
-            if (dict["Token"] != null)
-            {
-                uToken = dict["Token"].ToString();
-                CryptoPrefs.SetString("USERTOKEN", uToken);
-            }
-            if (dict["Level"] != null)
-            {
-                uLevel = dict["Level"].ToString();
-                CryptoPrefs.SetString("USERLEVEL", uLevel);
-            }
-            if (dict["Coin"] != null)
-            {
-                uCoin = dict["Coin"].ToString();
-                CryptoPrefs.SetString("USERCOIN", uCoin);
-            }
+            //Debug.Log("ConnectSuccess!" + result);
+            //string uName = string.Empty;
+            //string uToken = string.Empty;
+            //string uLevel = string.Empty;
+            //string uCoin = string.Empty;
+
+            //IDictionary dict = Json.Deserialize(result) as IDictionary;
+            //if (dict["Name"] != null)
+            //{
+            //    uName = dict["Name"].ToString();
+            //    CryptoPrefs.SetString("USERNAME", uName);
+            //}
+            //if (dict["Token"] != null)
+            //{
+            //    uToken = dict["Token"].ToString();
+            //    CryptoPrefs.SetString("USERTOKEN", uToken);
+            //}
+            //if (dict["Level"] != null)
+            //{
+            //    uLevel = dict["Level"].ToString();
+            //    CryptoPrefs.SetString("USERLEVEL", uLevel);
+            //}
+            //if (dict["Coin"] != null)
+            //{
+            //    uCoin = dict["Coin"].ToString();
+            //    CryptoPrefs.SetString("USERCOIN", uCoin);
+            //}
         }
+        //EnterLoading.instance._autoToNextScene = true;
     }
 
     private IEnumerator GetGooglePhoto()
@@ -114,27 +125,81 @@ public class GLoginButton : MonoBehaviour {
 
         if (tokens[0] != null)
             uMail = tokens[0];
-        if (tokens[1] != null)
-            uGid = tokens[1];
-        if (tokens[2] != null)
-            uName = tokens[2];
 
-        string Photo = CryptoPrefs.GetString("USERPHOTO");
-        if (string.IsNullOrEmpty(Photo))
-            StartCoroutine(GetGooglePhoto());
-
-        string stype = "G";
-        string token = CryptoPrefs.GetString("USERTOKEN");
-        if (string.IsNullOrEmpty(token))
+        if (uMail == "No Init")
         {
-            MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
+            string cName = CryptoPrefs.GetString("USERNAME");
+            string cToken = CryptoPrefs.GetString("USERTOKEN");
+            if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
+            {
+                string type = "C1";
+                MJApi.Login(type, cName, cToken, LoginCallback);
+                //UIManager.instance.StartSetEnterLoading();
+                if (ConnectingPanel)
+                    ConnectingPanel.SetActive(true);
+            }
         }
         else
         {
-            MJApi.Login(stype, uMail, token, LoginCallback);
+            if (tokens[1] != null)
+                uGid = tokens[1];
+            if (tokens[2] != null)
+                uName = tokens[2];
+
+            string Photo = CryptoPrefs.GetString("USERPHOTO");
+            if (string.IsNullOrEmpty(Photo))
+                StartCoroutine(GetGooglePhoto());
+
+            string stype = "G";
+            string token = CryptoPrefs.GetString("USERTOKEN");
+            if (string.IsNullOrEmpty(token))
+            {
+                MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
+            }
+            else
+            {
+                MJApi.Login(stype, uMail, token, LoginCallback);
+            }
+            if (ConnectingPanel)
+                ConnectingPanel.SetActive(true);
+            //UIManager.instance.StartSetEnterLoading();
         }
-        UIManager.instance.StartSetEnterLoading();
-        _logText.text += " \n OnConnected() "+ result;
     }
 
+    void Update() {
+        if (_loginSuccess) {
+            if (ConnectingPanel)
+                ConnectingPanel.SetActive(false);
+
+            string uName = string.Empty;
+            string uToken = string.Empty;
+            string uLevel = string.Empty;
+            string uCoin = string.Empty;
+
+            if (dict["Name"] != null)
+            {
+                uName = dict["Name"].ToString();
+                CryptoPrefs.SetString("USERNAME", uName);
+            }
+            if (dict["Token"] != null)
+            {
+                uToken = dict["Token"].ToString();
+                CryptoPrefs.SetString("USERTOKEN", uToken);
+            }
+            if (dict["Level"] != null)
+            {
+                uLevel = dict["Level"].ToString();
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
+            }
+            if (dict["Coin"] != null)
+            {
+                uCoin = dict["Coin"].ToString();
+                CryptoPrefs.SetString("USERCOIN", uCoin);
+            }
+            UIManager.instance.StartSetEnterLoading();
+            EnterLoading.instance._autoToNextScene = true;
+
+            _loginSuccess = false;
+        }
+    }
 }

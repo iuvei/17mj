@@ -35,7 +35,8 @@ public class EnterLoading : MonoBehaviour {
     // 準備進入遊戲場景
     public void StartLoading() {
         //顯示載入畫面
-        GetComponent<Animator>().SetTrigger("EnterLoading");
+        if (GetComponent<Animator>())
+            GetComponent<Animator>().SetTrigger("EnterLoading");
         //InvokeRepeating("GuideImages", 0f, 2f); //圖片輪播
 
         StartCoroutine(DisplayLoadingScreen(_sceneName));

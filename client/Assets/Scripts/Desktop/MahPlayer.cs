@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace com.Desktop
 {
@@ -171,8 +172,8 @@ namespace com.Desktop
 			int chitype = 0;
 			if (pai_id > 0) {
 				isCanWin = MahJongTools.IsCanHU (keepedMah, pai_id);
-				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id, state);
-				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, state, ismopai, ponMah);
+				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id);
+				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, ismopai, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, pai_id, out chitype, ismopai);
 			}
 
@@ -428,18 +429,31 @@ namespace com.Desktop
 		}
 		*/
 
-		public void DaPaiToAban(int mahID) {
-			//Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+")");
+		public void DaPaiToAban(int mahID, int cnt) {
+			Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
+			Vector2 dp = new Vector2((cnt-1)*74+37, -(int)(cnt / 18)*90+45);
+			RectTransform apos = GameManager.Instance.abanPos;
 			if (this.ID==1) {
 				Transform t1 = plane_mo.transform.Find (mahID + "");
 				if (t1 == null) {
 					t1 = plane_keep.transform.Find (mahID + "");
 				}
 				if (t1 != null) {
-					GameObject g = t1.gameObject;
-					g.transform.SetParent (plane_abandan.transform);
-					g.transform.localScale = Vector3.one;
-					g.transform.localRotation = Quaternion.identity;
+					//Vector2 sp = Camera.main.WorldToScreenPoint(t1.transform.position);
+					t1.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+					t1.transform.localScale = Vector3.one;
+					t1.transform.localRotation = Quaternion.identity;
+
+					Vector2 fp =  new Vector3(apos.anchoredPosition.x+dp.x, apos.anchoredPosition.y+dp.y);
+					Debug.Log ("fp="+fp);
+					RectTransform r1 = t1.GetComponent<RectTransform>();
+					//r1.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
+					r1.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
+						Debug.Log("Complete!");
+						t1.transform.SetParent (plane_abandan.transform);
+						t1.transform.localScale = Vector3.one;
+						t1.transform.localRotation = Quaternion.identity;
+					});
 				}
 				if (moMahId > 0) {
 					//Debug.Log ("moMahId > 0");
@@ -450,19 +464,69 @@ namespace com.Desktop
 						g.transform.localScale = Vector3.one;
 						g.transform.localRotation = Quaternion.identity;
 					}
+					/*
+					Transform t2 = plane_mo.transform.Find (moMahId + "");
+					if (t2 != null) {
+						t2.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+						t2.transform.localScale = Vector3.one;
+						t2.transform.localRotation = Quaternion.identity;
+
+						Vector2 fp =  new Vector3(apos.anchoredPosition.x+dp.x, apos.anchoredPosition.y+dp.y);
+						Debug.Log ("fp="+fp);
+						RectTransform r2 = t2.GetComponent<RectTransform>();
+						r2.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
+						r2.DOAnchorPos (fp, 1.0f, false).OnComplete(() => {
+							Debug.Log("Complete!");
+							t2.transform.SetParent (plane_abandan.transform);
+							t2.transform.localScale = Vector3.one;
+							t2.transform.localRotation = Quaternion.identity;
+						});
+						//GameObject g = t2.gameObject;
+						//g.transform.SetParent (plane_keep.transform);
+						//g.transform.localScale = Vector3.one;
+						//g.transform.localRotation = Quaternion.identity;
+					}
+					*/
 				}
 			} else {
 				//GotID = 0;
 				Transform t1 = plane_mo.transform.Find (0 + "");
 				if (t1 != null) {
 					Destroy (t1.gameObject);
+					GameObject t2 = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
+					t2.name = mahID + "";
+					t2.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+					t2.transform.localScale = Vector3.one;
+					t2.transform.localRotation = Quaternion.identity;
+					RectTransform r2 = t2.GetComponent<RectTransform>();
+					RectTransform r1 = t1.GetComponent<RectTransform> ();
+					r2.anchoredPosition = new Vector2 (-800, 200);
+					//t1.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+					//t1.transform.localScale = Vector3.one;
+					//t1.transform.localRotation = Quaternion.identity;
+
+					Vector2 fp =  new Vector3(-950+dp.x, -10);
+					Debug.Log ("fp="+fp);
+					//RectTransform r3 = t2.GetComponent<RectTransform>();
+					//r2.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
+					r2.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
+						Debug.Log("Complete!");
+						t2.transform.SetParent (plane_abandan.transform);
+						t2.transform.localScale = Vector3.one;
+						t2.transform.localRotation = Quaternion.identity;
+					});
+						//GameObject g = t2.gameObject;
+						//g.transform.SetParent (plane_keep.transform);
+						//g.transform.localScale = Vector3.one;
+						//g.transform.localRotation = Quaternion.identity;
+					//}
 				}
 
-				GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
-				d.name = mahID + "";
-				d.transform.SetParent (plane_abandan.transform);
-				d.transform.localScale = Vector3.one;
-				d.transform.localRotation = Quaternion.identity;
+				//GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
+				//d.name = mahID + "";
+				//d.transform.SetParent (plane_abandan.transform);
+				//d.transform.localScale = Vector3.one;
+				//d.transform.localRotation = Quaternion.identity;
 			}
 		}
 
@@ -620,11 +684,11 @@ namespace com.Desktop
 			//go.AddComponent<Image> ();
 
 			LayoutElement le = go.AddComponent<LayoutElement> ();
-			le.minWidth = 76 * 3;
+			le.minWidth = 67 * 3;
 			le.minHeight = 100;
 
 			GridLayoutGroup glg = go.AddComponent<GridLayoutGroup> ();
-			glg.cellSize = new Vector2 (76, 100);
+			glg.cellSize = new Vector2 (67, 82);
 			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			glg.constraintCount = 1;
 
@@ -642,16 +706,22 @@ namespace com.Desktop
 					if (t1 != null) {
 						t1.SetParent (go.transform);
 						t1.localScale = Vector3.one;
+					} else {
+						Debug.Log ("t1="+t1);
 					}
 					Transform t2 = plane_keep.transform.Find (mahID + "");
 					if (t2 != null) {
 						t2.SetParent (go.transform);
 						t2.localScale = Vector3.one;
+					} else {
+						Debug.Log ("t2="+t2);
 					}
 					Transform t3 = plane_keep.transform.Find (mahID + "");
 					if (t3 != null) {
 						t3.SetParent (go.transform);
 						t3.localScale = Vector3.one;
+					} else {
+						Debug.Log ("t3="+t3);
 					}
 					go.transform.SetParent (plane_pon.transform);
 					go.transform.localScale = Vector3.one;
@@ -702,7 +772,7 @@ namespace com.Desktop
 
 		public void handleChi(int mahID)
 		{
-			Debug.LogError ("[s] handleChi("+mahID+")");
+			//Debug.LogError ("[s] handleChi("+mahID+")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			int chitype = 0;
@@ -744,7 +814,7 @@ namespace com.Desktop
 
 		public void collectChiPai(int mahID, int chitype)
 		{
-			//Debug.LogError ("[RPC] collectChiPai(" + mahID + ")");
+			Debug.LogError ("[RPC] collectChiPai(" + mahID + ", chitype="+chitype+")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			Transform t1;
@@ -758,10 +828,10 @@ namespace com.Desktop
 			GameObject go = new GameObject("Chi_set");
 			//go.AddComponent<Image> ();
 			LayoutElement le = go.AddComponent<LayoutElement> ();
-			le.minWidth = 76 * 3;
+			le.minWidth = 67 * 3;
 			le.minHeight = 100;
 			GridLayoutGroup glg = go.AddComponent<GridLayoutGroup> ();
-			glg.cellSize = new Vector2 (76, 100);
+			glg.cellSize = new Vector2 (67, 82);
 			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			glg.constraintCount = 1;
 			//lg. = 76 * 3;
@@ -842,16 +912,22 @@ namespace com.Desktop
 						if (t1 != null) {
 							t1.SetParent (go.transform);
 							t1.localScale = Vector3.one;
+						} else {
+							Debug.Log ("t1="+t1);
 						}
 						t2 = plane_keep.transform.Find (mahID - 1 + "");
 						if (t2 != null) {
 							t2.SetParent (go.transform);
 							t2.localScale = Vector3.one;
+						} else {
+							Debug.Log ("t2="+t2);
 						}
 						t3 = plane_keep.transform.Find (mahID - 2 + "");
 						if (t3 != null) {
 							t3.SetParent (go.transform);
 							t3.localScale = Vector3.one;
+						} else {
+							Debug.Log ("t3="+t3);
 						}
 						break;
 					}
@@ -1005,10 +1081,10 @@ namespace com.Desktop
 			//le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			//le.constraintCount = 1;
 			LayoutElement le = go.AddComponent<LayoutElement> ();
-			le.minWidth = 76 * 4;
+			le.minWidth = 67 * 4;
 			le.minHeight = 100;
 			GridLayoutGroup glg = go.AddComponent<GridLayoutGroup> ();
-			glg.cellSize = new Vector2 (76, 100);
+			glg.cellSize = new Vector2 (67, 82);
 			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			glg.constraintCount = 1;
 			if (this.ID==1)
@@ -1111,11 +1187,13 @@ namespace com.Desktop
 			if (iscan) {
 				//有的吃就吃 有的槓就槓
 				if (mahID > 0) {
-					//isCanWin = MahJongTools.IsCanHU (keepedMah, mahID);
-					isCanPon = MahJongTools.IsCanPon (keepedMah, mahID, state);
-					isCanGan = MahJongTools.IsCanGan (keepedMah, mahID, state, false, ponMah);
+					isCanWin = MahJongTools.IsCanHU (keepedMah, mahID);
+					isCanPon = MahJongTools.IsCanPon (keepedMah, mahID);
+					isCanGan = MahJongTools.IsCanGan (keepedMah, mahID, false, ponMah);
 					isCanChi = MahJongTools.IsCanChi (keepedMah, mahID, out chitype, false);
-					if (isCanGan)
+					if (isCanWin)
+						AskWin ();
+					else if (isCanGan)
 						AskGan ();
 					else if (isCanPon)
 						AskPon ();
@@ -1141,11 +1219,12 @@ namespace com.Desktop
 
 			iscan = AICheckPai(this.moMahId);
 			if (iscan) {
-				/*
+				
 				isCanWin = MahJongTools.IsCanHU (keepedMah, this.moMahId);
-				isCanPon = MahJongTools.IsCanPon (keepedMah, this.moMahId, state);
-				isCanGan = MahJongTools.IsCanGan (keepedMah, this.moMahId, state, false, ponMah);
+				isCanPon = MahJongTools.IsCanPon (keepedMah, this.moMahId);
+				isCanGan = MahJongTools.IsCanGan (keepedMah, this.moMahId, false, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, this.moMahId, out chitype, false);
+				/*
 				if (isCanGan)
 					curr = UnityEngine.Random.Range(0, 
 				else if (isCanPon)
@@ -1153,7 +1232,32 @@ namespace com.Desktop
 				else if (isCanChi)
 					AskChi ();
 				*/
-				curr = UnityEngine.Random.Range(0, this.keepedMah.Count - 1);
+				if (isCanWin) {
+					//AskWin ();
+					GameManager.Instance.doHandleWin (this.ID);
+					//} else if (isCanGan) {
+					//	curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
+					//} else if (isCanPon) {
+					//	curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
+					//} else if (isCanChi) {	
+					//	curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
+				} else {
+					//curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
+					curr = this.keepedMah.Count - 1;
+					//Debug.Log ("curr="+curr+", keepedMah.Count="+this.keepedMah.Count);
+					while (curr >= 0 && curr < this.keepedMah.Count && AICheckPai (this.keepedMah [curr])) {
+						if (curr < 0) {
+							//curr = this.keepedMah.Count - 1;
+							break;
+						}
+						curr--;
+						Debug.Log ("curr="+curr+", keepedMah.Count="+this.keepedMah.Count);
+					}
+					if (curr < 0) {
+						curr = this.keepedMah.Count - 1;
+					}
+					Debug.Log ("curr="+curr);
+				}
 			} else {
 				curr = this.keepedMah.Count - 1;
 			}
@@ -1182,6 +1286,7 @@ namespace com.Desktop
 
 		public bool AICheckPai(int pai_id)
 		{
+			//Debug.Log ("AICheckPai("+pai_id+")");
 			bool iscan = false;
 			bool isCanWin = false;
 			bool isCanPon = false;
@@ -1190,12 +1295,12 @@ namespace com.Desktop
 			int chitype = 0;
 			if (pai_id > 0) {
 				isCanWin = MahJongTools.IsCanHU (keepedMah, pai_id);
-				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id, state);
-				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, state, false, ponMah);
+				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id);
+				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, false, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, pai_id, out chitype, false);
 			}
 			iscan = isCanWin || isCanPon || isCanGan || isCanChi;
-
+			Debug.Log ("AICheckPai("+pai_id+", iscan="+iscan+")");
 			return iscan;
 		}
 

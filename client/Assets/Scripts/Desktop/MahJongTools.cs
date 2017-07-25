@@ -9,6 +9,23 @@ namespace com.Desktop
 	/// </summary>
     public class MahJongTools
     {
+		public static bool IsCanDiscard(List<int> mah, int ID)
+		{
+			bool result = true;
+			List<int> pais = new List<int>(mah);
+			pais.Add(ID);
+
+			List<int> currentMahes = pais.FindAll(delegate (int a)
+			{
+				return a == ID;
+			});
+			//Debug.Log ("currentMahes.Count="+currentMahes.Count);
+			if (currentMahes.Count >= 2)
+			{
+				result = false;
+			}
+			return result;
+		}
 		/// <summary>
 		/// 判斷是否胡牌
 		/// </summary>
@@ -97,13 +114,13 @@ namespace com.Desktop
 			{
 				List<int> paiT = new List<int>(pais);
 				List<int> ds = pais.FindAll(delegate (int d)
-					{
-						result = (pais[i] == d);
-						//Debug.Log ("IsCanHU("+result+")");
-						return result;
-						//if(result)
-						//	break;
-					});
+				{
+					result = (pais[i] == d);
+					//Debug.Log ("IsCanHU("+result+")");
+					return result;
+					//if(result)
+					//	break;
+				});
 
 				//判断是否能做将牌
 				if (ds.Count >= 2)
@@ -150,6 +167,9 @@ namespace com.Desktop
             }
             else
             { //组成顺子
+				if(! Mahjong.Suit.Contains(mahs[0])) {//不是萬條筒, 不能組成順子
+					return false;
+				}
                 if (mahs.Contains(mahs[0] + 1) && mahs.Contains(mahs[0] + 2))
                 {
                     mahs.Remove(mahs[0] + 2);
@@ -169,7 +189,7 @@ namespace com.Desktop
         /// <param name="MahID">被打出来的牌</param>
         /// <param name="state">当前玩家状态</param>
         /// <returns>能不能杠牌</returns>
-		public static bool IsCanPon(List<int> mahs, int MahID, PLAYERSTATE state)
+		public static bool IsCanPon(List<int> mahs, int MahID)
         {
 			//if (state == PLAYERSTATE.RESTING)
 			//{
@@ -198,7 +218,7 @@ namespace com.Desktop
         /// <param name="MahID">被打出来的牌</param>
         /// <param name="state">当前玩家状态</param>
         /// <returns>能不能杠牌</returns>
-		public static bool IsCanGan(List<int> mahs, int MahID, PLAYERSTATE state, bool ismopai = false, List<int> ponmahs = null)
+		public static bool IsCanGan(List<int> mahs, int MahID, bool ismopai = false, List<int> ponmahs = null)
         {
 			//Debug.Log ("IsCanGang()");
 			//if (state == PLAYERSTATE.RESTING)
@@ -233,6 +253,14 @@ namespace com.Desktop
 			return isCanGang;
         }
 
+		/// <summary>
+		/// 檢查可不可以吃牌
+		/// </summary>
+		/// <returns><c>true</c> if is can chi the specified mahs MahID chitype ismopai; otherwise, <c>false</c>.</returns>
+		/// <param name="mahs">Mahs.</param>
+		/// <param name="MahID">Mah I.</param>
+		/// <param name="chitype">Chitype.</param>
+		/// <param name="ismopai">If set to <c>true</c> ismopai.</param>
 		public static bool IsCanChi(List<int> mahs, int MahID, out int chitype, bool ismopai = false)
 		{
 			//if (state == PLAYERSTATE.RESTING)
@@ -246,6 +274,10 @@ namespace com.Desktop
 			if (ismopai) {
 				iscanchi = false;
 			} else {
+				if(! Mahjong.Suit.Contains(MahID)) {//不是萬條筒, 不能吃
+					iscanchi = false;
+					return iscanchi;
+				}
 				if (mahs.Contains (MahID + 1) && mahs.Contains (MahID + 2)) {
 					iscanchi = true;
 					chitype = 1;

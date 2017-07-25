@@ -59,6 +59,13 @@ namespace com.Lobby
         public Transform[] playRoomBtns;
         public Transform[] btmMenuBtns;
 
+        public Image[] playerPhotos;
+        public Text[] playerNames;
+        public Text[] playerCoins;
+        public Text[] playerLvs;
+        public Text userOnline;
+
+
         //房间列表
         public RectTransform LobbyPanel;
 
@@ -108,6 +115,7 @@ namespace com.Lobby
         private Sequence mySequence;
         private GameObject actDailyPanel;
         private GameObject actMissionPanel;
+        private Transform playerRankPanel;
         #endregion
 
         private void Awake()
@@ -165,6 +173,7 @@ namespace com.Lobby
 
             hint = rListPanel.parent.GetComponentInChildren<Text>();
 
+            IniPlayerInfo();
             SubPageInit();
             _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
             SettingInitAnim();
@@ -905,13 +914,13 @@ namespace com.Lobby
 
         public void ChangeCurrentNum()
         {
-            if (!Int32.TryParse(_popupBuyItemNum.text, out currentNum))
+            if (!int.TryParse(_popupBuyItemNum.text, out currentNum))
             {
                 _popupBuyItemNum.text = "1";
                 currentNum = 1;
             }
             else
-                currentNum = Int32.Parse(_popupBuyItemNum.text);
+                currentNum = int.Parse(_popupBuyItemNum.text);
 
             if (currentNum < 1)
             {
@@ -1026,7 +1035,7 @@ namespace com.Lobby
             if (btmMenuBtns[0])
                 btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
-            BirtnRankItem();
+            BirtnRankItem(); //產生排行榜項目
 
             if (rankPanel)
             {
@@ -1046,6 +1055,52 @@ namespace com.Lobby
 
         public void BirtnRankItem()
         {
+            //讀取玩家資訊(頭像、名稱、Lv)
+            //string sPhoto = CryptoPrefs.GetString("USERPHOTO");
+            //if (!string.IsNullOrEmpty(sPhoto))
+            //{
+            //    Image ProfilePicture;
+            //    Texture2D newPhoto = new Texture2D(1, 1);
+            //    newPhoto.LoadImage(Convert.FromBase64String(sPhoto));
+            //    newPhoto.Apply();
+
+            //    if (playerRankPanel) {
+            //        ProfilePicture = playerRankPanel.Find("Photo").GetComponent<Image>();
+            //        ProfilePicture.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+            //    }          
+            //}
+
+            //string sName = CryptoPrefs.GetString("USERNAME");
+            //if (!string.IsNullOrEmpty(sName))
+            //{
+            //    Text name;
+            //    if (playerRankPanel) {
+            //        name = playerRankPanel.Find("NameLv/Name").GetComponent<Text>();
+            //        name.text = sName;
+            //    }
+            //}
+
+            //string sLevel = CryptoPrefs.GetString("USERLEVEL");
+            //if (!string.IsNullOrEmpty(sLevel))
+            //{
+            //    Text level;
+            //    if (playerRankPanel) {
+            //        level = playerRankPanel.Find("NameLv/Lv").GetComponent<Text>();
+            //        level.text = "Lv " + sLevel;
+            //    }
+            //}
+
+            //string sCoin = CryptoPrefs.GetString("USERCOIN");
+            //if (!string.IsNullOrEmpty(sCoin))
+            //{
+            //    Text coin;
+            //    if (playerRankPanel)
+            //    {
+            //        coin = rankPanel.transform.Find("topBar/Coin/Text").GetComponent<Text>();
+            //        coin.text = string.Format("{0:0,0}", int.Parse(sCoin));
+            //    }
+            //}
+
             foreach (Transform child in rankItemTarget)
                 Destroy(child.gameObject);
 
@@ -1374,6 +1429,10 @@ namespace com.Lobby
 
             actDailyPanel = activityPanel.transform.Find("Daily").gameObject;
             actMissionPanel= activityPanel.transform.Find("Mission").gameObject;
+
+            if (rankPanel)
+                playerRankPanel = rankPanel.transform.Find("playerRank");
+
         }
 
         public void ClickBalloonBtn() {
@@ -1481,6 +1540,75 @@ namespace com.Lobby
                     popupBG.GetComponent<Image>().DOFade(0, 0.3f);
                     StartCoroutine(HideGameObject(popupBG, 0.3f));
                 }
+            }
+        }
+
+        private void IniPlayerInfo() {
+            SetPlayerPhotos();
+            SetPlayerNames();
+            SetPlayerCoins();
+            SetPlayerLevels();
+            SetUserOnline();
+        }
+
+        public void SetPlayerPhotos()
+        {
+            string sPhoto = CryptoPrefs.GetString("USERPHOTO");
+            if (!string.IsNullOrEmpty(sPhoto))
+            {
+                Texture2D newPhoto = new Texture2D(1, 1);
+                newPhoto.LoadImage(Convert.FromBase64String(sPhoto));
+                newPhoto.Apply();
+
+                for (int i = 0; i < playerPhotos.Length; i++)
+                {
+                    playerPhotos[i].sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                }
+            }
+        }
+
+        public void SetPlayerNames()
+        {
+            string sName = CryptoPrefs.GetString("USERNAME");
+            if (!string.IsNullOrEmpty(sName))
+            {
+                for (int i = 0; i < playerNames.Length; i++)
+                {
+                    playerNames[i].text = sName;
+                }
+            }
+        }
+
+        public void SetPlayerLevels()
+        {
+            string sLevel = CryptoPrefs.GetString("USERLEVEL");
+            if (!string.IsNullOrEmpty(sLevel))
+            {
+                for (int i = 0; i < playerLvs.Length; i++)
+                {
+                    playerLvs[i].text = "Lv " + sLevel;
+                }
+            }
+        }
+
+        public void SetPlayerCoins()
+        {
+            string sCoin = CryptoPrefs.GetString("USERCOIN");
+            if (!string.IsNullOrEmpty(sCoin))
+            {
+                for (int i = 0; i < playerCoins.Length; i++)
+                {
+                    playerCoins[i].text = string.Format("{0:0,0}", int.Parse(sCoin));
+                }
+            }
+        }
+
+        public void SetUserOnline()
+        {
+            string sOnline = CryptoPrefs.GetString("USERONLINE");
+            if (!string.IsNullOrEmpty(sOnline))
+            {
+                userOnline.text = "在線人數 " + string.Format("{0:0,0}", int.Parse(sOnline));
             }
         }
     }

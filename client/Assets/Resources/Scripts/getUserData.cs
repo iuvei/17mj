@@ -15,7 +15,7 @@ public class getUserData : MonoBehaviour {
     private string sLevel;
     private string sCoin;
     private string sOnline;
-    private bool _readUserInfo = false;
+
     void Start() {
         sPhoto = CryptoPrefs.GetString("USERPHOTO");
         if (!string.IsNullOrEmpty(sPhoto))
@@ -46,7 +46,7 @@ public class getUserData : MonoBehaviour {
         if (!string.IsNullOrEmpty(sCoin))
         {
             Text coin = CoinText.GetComponent<Text>();
-            coin.text = sCoin;
+            coin.text = string.Format("{0:0,0}", int.Parse(sCoin));
         }
 
         sOnline = CryptoPrefs.GetString("USERONLINE");
@@ -56,50 +56,6 @@ public class getUserData : MonoBehaviour {
             online.text = "在線人數 " + sOnline;
         }
 
-        //if (string.IsNullOrEmpty(sPhoto) && string.IsNullOrEmpty(sName) &&
-        //    string.IsNullOrEmpty(sLevel) && string.IsNullOrEmpty(sCoin) && string.IsNullOrEmpty(sOnline))
-        //    _readUserInfo = true;
-
     }
-
-    //void Update() {
-    //    if (_readUserInfo) {
-
-    //        if (!string.IsNullOrEmpty(sPhoto))
-    //        {
-    //            Texture2D newPhoto = new Texture2D(1, 1);
-    //            newPhoto.LoadImage(Convert.FromBase64String(sPhoto));
-    //            newPhoto.Apply();
-
-    //            Image ProfilePicture = PhotoImage.GetComponent<Image>();
-    //            ProfilePicture.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
-    //        }
-
-    //        if (!string.IsNullOrEmpty(sName))
-    //        {
-    //            Text name = NameText.GetComponent<Text>();
-    //            name.text = sName;
-    //        }
-
-    //        if (!string.IsNullOrEmpty(sLevel))
-    //        {
-    //            Text level = LevelText.GetComponent<Text>();
-    //            level.text = "Lv " + sLevel;
-    //        }
-
-    //        if (!string.IsNullOrEmpty(sCoin))
-    //        {
-    //            Text coin = CoinText.GetComponent<Text>();
-    //            coin.text = sCoin;
-    //        }
-
-    //        if (!string.IsNullOrEmpty(sOnline))
-    //        {
-    //            Text online = OnlineText.GetComponent<Text>();
-    //            online.text = "在線人數 " + sOnline;
-    //        }
-
-    //        _readUserInfo = false;
-    //    }
-    //}
+ 
 }

@@ -126,7 +126,8 @@ static dispatch_once_t _onceToken;
     NSLog(@"goToFirstTrailer1()");
     //[self startAnimator:@"OutsideToTrailer1_" forNumFrames:60];
     //[self initRecord];
-    [self startRecord];
+    NSString *arg = @"rtmp://catpunch.co/live/livestream";
+    [self startRecord:arg];
 }
 
 -(void)goToFirstTrailer2 {
@@ -289,12 +290,13 @@ static dispatch_once_t _onceToken;
 
 
 // 设置直播参数
-- (void)setupConfiguration {
+- (void)setupConfiguration: (NSString *)url
+ {
     NSLog(@"setupConfiguration()...");
     //1.初始化config配置类
     self.configuration = [[AlivcLConfiguration alloc] init];
     //2. 设置推流地址
-    self.pushUrl = @"rtmp://catpunch.co/live/livestream";
+    self.pushUrl = url;
     self.configuration.url = self.pushUrl;
     NSLog(@"pushurl=%@", self.configuration.url);
     //3. 设置最大码率
@@ -402,16 +404,19 @@ static dispatch_once_t _onceToken;
 }
 
 
--(void)initRecord{
+-(void)initRecord: (NSString *)url
+{
     NSLog(@"initRecord()....%@", self);
     //[UnityGetGLViewController() presentViewController: animated: completion:nil];
-    [self setupConfiguration];
+    [self setupConfiguration: url];
 }
 
--(void)startRecord{
-    NSLog(@"startRecord()....%@", self);
+-(void)startRecord: (NSString *)url
+{
+    //NSLog(@"startRecord()....%@", self);
+    NSLog(@"startRecord()....%@", url);
     if(self.liveSession==nil)
-        [self initRecord];
+        [self initRecord: url];
     [self setupLiveSession];
 }
 
@@ -572,17 +577,19 @@ IMPL_APP_CONTROLLER_SUBCLASS(MyPlugin)
 // into the actual plugin logic.
 extern "C" {
     //-------------------------------------------------------------------------------------------------
-    void _initRecord(){
+    void _initRecord(const char *str){
         MyPlugin *obj = [MyPlugin sharedInstance];
-        [obj initRecord];
+        NSString *arg = [NSString stringWithUTF8String: str];
+        [obj initRecord : arg];
     }
     void _stopRecord (){
         MyPlugin *obj = [MyPlugin sharedInstance];
         [obj stopRecord];
     }
-    void _startRecord (){
+    void _startRecord (const char *str){
         MyPlugin *obj = [MyPlugin sharedInstance];
-        [obj startRecord];
+        NSString *arg = [NSString stringWithUTF8String: str];
+        [obj startRecord : arg];
     }
     void _moveRight (){
         MyPlugin *obj = [MyPlugin sharedInstance];

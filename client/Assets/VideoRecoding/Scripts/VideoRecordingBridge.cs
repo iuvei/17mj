@@ -10,7 +10,7 @@ public class VideoRecordingBridge {
 
     #if UNITY_IOS
 	[DllImport("__Internal")]
-	private static extern void _startRecord ();
+	private static extern void _startRecord (string str);
 	[DllImport("__Internal")]
 	private static extern void _stopRecord ();
 	[DllImport("__Internal")]
@@ -32,10 +32,10 @@ public class VideoRecordingBridge {
 	}
     #endif
 
-	public static void StartRecord(){
-		Debug.Log ("StartRecord()");
+	public static void StartRecord(string str){
+		Debug.Log ("StartRecord("+str+")");
 		#if !UNITY_EDITOR && UNITY_IOS
-		_startRecord ();
+		_startRecord (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
 		live.CallStatic("RecStart");

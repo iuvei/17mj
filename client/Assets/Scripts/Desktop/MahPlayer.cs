@@ -123,39 +123,45 @@ namespace com.Desktop
 				playerName.text = photonPlayer.NickName;
 			}
 
-			if (this.ID==1) {
+			if (this.ID==PhotonNetwork.player.ID) {
 
 				HideMenu ();
-
-				btnWin.onClick.RemoveAllListeners ();
-				btnWin.onClick.AddListener (delegate () {
-					AskWin ();
-				});
-
-				btnPon.onClick.RemoveAllListeners ();
-				btnPon.onClick.AddListener (delegate () {
-					AskPon ();
-				});
-
-				btnChi.onClick.RemoveAllListeners ();
-				btnChi.onClick.AddListener (delegate () {
-					AskChi ();
-				});
-
-				btnGang.onClick.RemoveAllListeners ();
-				btnGang.onClick.AddListener (delegate () {
-					AskGan ();
-				});
-
-				btnPass.onClick.RemoveAllListeners ();
-				btnPass.onClick.AddListener (delegate () {
-					AskPass ();
-				});
-
-				btnAuto.onValueChanged.RemoveAllListeners ();
-				btnAuto.onValueChanged.AddListener (delegate {
-					AskAutoPlay ();
-				});
+				if (btnWin != null) {
+					btnWin.onClick.RemoveAllListeners ();
+					btnWin.onClick.AddListener (delegate () {
+						AskWin ();
+					});
+				}
+				if (btnPon != null) {
+					btnPon.onClick.RemoveAllListeners ();
+					btnPon.onClick.AddListener (delegate () {
+						AskPon ();
+					});
+				}
+				if (btnChi != null) {
+					btnChi.onClick.RemoveAllListeners ();
+					btnChi.onClick.AddListener (delegate () {
+						AskChi ();
+					});
+				}
+				if (btnGang != null) {
+					btnGang.onClick.RemoveAllListeners ();
+					btnGang.onClick.AddListener (delegate () {
+						AskGan ();
+					});
+				}
+				if (btnPass != null) {
+					btnPass.onClick.RemoveAllListeners ();
+					btnPass.onClick.AddListener (delegate () {
+						AskPass ();
+					});
+				}
+				if (btnAuto != null) {
+					btnAuto.onValueChanged.RemoveAllListeners ();
+					btnAuto.onValueChanged.AddListener (delegate {
+						AskAutoPlay ();
+					});
+				}
 			}
         }
 
@@ -212,7 +218,7 @@ namespace com.Desktop
         {
 			//Debug.Log ("[c] "+this.name+".ShowPAI()");
             BundleUIEvent();
-			if (this.ID==1) {
+			if (this.ID==PhotonNetwork.player.ID) {
 				keepedMah.Sort ();
 				//Debug.Log ("[c] "+p.NickName+".ShowPAI(Count="+keepedMah.Count+")");
 				foreach (int a in keepedMah) {
@@ -284,7 +290,7 @@ namespace com.Desktop
         {
 			//Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
 			//int GotID = GameManager.Instance.getMahjongPai(isfirst);
-			if (this.ID==1) {
+			if (this.ID==PhotonNetwork.player.ID) {
 				Transform t1 = plane_mo.transform.Find (GotID + "");
 				if (t1 != null) {
 					GameObject g = t1.gameObject;
@@ -336,7 +342,7 @@ namespace com.Desktop
 		public void createPaiToMo(int GotID)
 		{
 			//Debug.LogError ("[c] "+this.name+".createPaiToMo(id="+GotID+")");
-			if (this.ID==1) {
+			if (this.ID==PhotonNetwork.player.ID) {
 				moMahId = GotID;
 				//bool isZimo = MahJongTools.IsCanHU (keepedMah, GotID);
 				GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
@@ -433,7 +439,8 @@ namespace com.Desktop
 			Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
 			Vector2 dp = new Vector2((cnt-1)*74+37, -(int)(cnt / 18)*90+45);
 			RectTransform apos = GameManager.Instance.abanPos;
-			if (this.ID==1) {
+			if (this.ID==PhotonNetwork.player.ID) {
+				Debug.Log ("QQQQQQQQQ");
 				Transform t1 = plane_mo.transform.Find (mahID + "");
 				if (t1 == null) {
 					t1 = plane_keep.transform.Find (mahID + "");
@@ -445,11 +452,11 @@ namespace com.Desktop
 					t1.transform.localRotation = Quaternion.identity;
 
 					Vector2 fp =  new Vector3(apos.anchoredPosition.x+dp.x, apos.anchoredPosition.y+dp.y);
-					Debug.Log ("fp="+fp);
+					//Debug.Log ("fp="+fp);
 					RectTransform r1 = t1.GetComponent<RectTransform>();
 					//r1.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
 					r1.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
-						Debug.Log("Complete!");
+						//Debug.Log("Complete!");
 						t1.transform.SetParent (plane_abandan.transform);
 						t1.transform.localScale = Vector3.one;
 						t1.transform.localRotation = Quaternion.identity;
@@ -490,37 +497,39 @@ namespace com.Desktop
 				}
 			} else {
 				//GotID = 0;
+				Debug.Log ("tttttttt");
 				Transform t1 = plane_mo.transform.Find (0 + "");
 				if (t1 != null) {
 					Destroy (t1.gameObject);
-					GameObject t2 = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
-					t2.name = mahID + "";
-					t2.transform.SetParent (GameManager.Instance.AllCanvas.transform);
-					t2.transform.localScale = Vector3.one;
-					t2.transform.localRotation = Quaternion.identity;
-					RectTransform r2 = t2.GetComponent<RectTransform>();
-					RectTransform r1 = t1.GetComponent<RectTransform> ();
-					r2.anchoredPosition = new Vector2 (-800, 200);
+				}
+				GameObject t2 = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
+				t2.name = mahID + "";
+				t2.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+				t2.transform.localScale = Vector3.one;
+				t2.transform.localRotation = Quaternion.identity;
+				RectTransform r2 = t2.GetComponent<RectTransform>();
+				//RectTransform r1 = t1.GetComponent<RectTransform> ();
+				r2.anchoredPosition = new Vector2 (-800, 200);
 					//t1.transform.SetParent (GameManager.Instance.AllCanvas.transform);
 					//t1.transform.localScale = Vector3.one;
 					//t1.transform.localRotation = Quaternion.identity;
 
-					Vector2 fp =  new Vector3(-950+dp.x, -10);
-					Debug.Log ("fp="+fp);
+				Vector2 fp =  new Vector3(-950+dp.x, -10);
+				Debug.Log ("fp="+fp);
 					//RectTransform r3 = t2.GetComponent<RectTransform>();
 					//r2.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
-					r2.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
-						Debug.Log("Complete!");
-						t2.transform.SetParent (plane_abandan.transform);
-						t2.transform.localScale = Vector3.one;
-						t2.transform.localRotation = Quaternion.identity;
-					});
+				r2.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
+					//Debug.Log("Complete!");
+					t2.transform.SetParent (plane_abandan.transform);
+					t2.transform.localScale = Vector3.one;
+					t2.transform.localRotation = Quaternion.identity;
+				});
 						//GameObject g = t2.gameObject;
 						//g.transform.SetParent (plane_keep.transform);
 						//g.transform.localScale = Vector3.one;
 						//g.transform.localRotation = Quaternion.identity;
 					//}
-				}
+				//}
 
 				//GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
 				//d.name = mahID + "";
@@ -576,8 +585,8 @@ namespace com.Desktop
 		/// </summary>
 		public void AskPass()
 		{
-			//Debug.Log ("[c] AskPass()");
-			object[] param = { (int)GameCommand.MOPAI, this.ID };
+			Debug.Log ("[c] AskPass()");
+			object[] param = { (int)GameCommand.MOPAI, this.photonPlayer.ID };
 			photonView.RPC ("SendRequestToServer", PhotonTargets.MasterClient, param);
 			HideMenu ();
 		}
@@ -647,15 +656,31 @@ namespace com.Desktop
 
 		public void handleMoPai(int mahID, int cnt)
 		{
-			//Debug.Log ("handleMoPai("+mahID+")");
+			Debug.Log (this.name+".handleMoPai("+mahID+")");
 			this.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 			keepedMah.Add (mahID);
 			//Debug.LogError ("[s] "+this.photonPlayer.NickName+".handleMoPai("+mahID+", "+keepedMah.Count+")");
 			//string amahname = string.Empty;
 			//keepedMah.Add (mahID);
 			string amahname = Mahjong.getName (mahID);
+			//int[] param = { this.ID, mahID, cnt};
+			/*
+			if (PhotonNetwork.player.ID == this.ID) {
+				Debug.Log ("ooooooooooo");
+				int[] param = { this.ID, mahID, cnt};
+				photonView.RPC ("MoPai", PhotonTargets.MasterClient, param);
+				//int[] param2 = { 2, mahID, cnt};
+				//photonView.RPC ("MoPai", PhotonTargets.Others, param2);
+			} else {
+				Debug.Log ("xxxxxxxxx");
+				//int[] param1 = { 2, mahID, cnt};
+				//photonView.RPC ("MoPai", PhotonTargets.MasterClient, param1);
+				int[] param = { this.ID, mahID, cnt};
+				photonView.RPC ("MoPai", PhotonTargets.Others, param);
+			}
+			*/
 			int[] param = { this.ID, mahID, cnt};
-			photonView.RPC("MoPai", PhotonTargets.All, param);
+			photonView.RPC ("MoPai", PhotonTargets.All, param);
 		}
 
 		public void handleAskAutoPlay(bool auto)
@@ -666,6 +691,7 @@ namespace com.Desktop
 
 		public void handleDaPai(int mahID)
 		{
+			Debug.Log (this.name+".handleDaPai("+mahID+")");
 			this.state = PLAYERSTATE.WAITING;//更改為摸牌狀態
 			keepedMah.Remove(mahID);
 			abandanedMah.Add(mahID);

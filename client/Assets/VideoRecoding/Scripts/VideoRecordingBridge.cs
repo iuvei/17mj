@@ -38,11 +38,11 @@ public class VideoRecordingBridge {
 		_startRecord (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-		live.CallStatic("RecStart");
-		#endif
-	}
+		live.CallStatic("RecStart","rtmp://catpunch.co/orson/livestream");
+        #endif
+    }
 
-	public static void StopRecord(){
+    public static void StopRecord(){
 		Debug.Log ("StopRecord()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopRecord ();
@@ -54,16 +54,16 @@ public class VideoRecordingBridge {
 
 	public static void StartPlay(string str){
 		Debug.Log ("StartPlay()");
-		#if !UNITY_EDITOR && UNITY_IOS
+        #if !UNITY_EDITOR && UNITY_IOS
 		_startPlay (str);
-		#elif !UNITY_EDITOR && UNITY_ANDROID
+        #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-		live.CallStatic("PlayStart");
-		#endif
-	}
+		live.CallStatic("PlayStart","rtmp://catpunch.co/orson/livestream");
+        #endif
+    }
 
 
-	public static void StopPlay(){
+    public static void StopPlay(){
 		Debug.Log ("StopPlay()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopPlay ();
@@ -85,11 +85,11 @@ public class VideoRecordingBridge {
 
     public static void REConnect()
     {
-#if !UNITY_EDITOR && UNITY_IOS
-#elif !UNITY_EDITOR && UNITY_ANDROID
+        #if !UNITY_EDITOR && UNITY_IOS
+        #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
 		live.CallStatic("PlayStart");
-#endif
+        #endif
     }
 
 #endif

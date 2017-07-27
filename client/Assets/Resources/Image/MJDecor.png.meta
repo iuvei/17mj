@@ -1,0 +1,434 @@
+fileFormatVersion: 2
+guid: f4e077ca82bb22a449e9ace0193be2d0
+timeCreated: 1501126673
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: MJDecor_0
+    21300002: MJDecor_1
+    21300004: MJDecor_2
+    21300006: MJDecor_3
+    21300008: MJDecor_4
+    21300010: MJDecor_5
+    21300012: MJDecor_6
+    21300014: MJDecor_7
+    21300016: MJDecor_8
+    21300018: MJDecor_9
+    21300020: MJDecor_10
+    21300022: MJDecor_11
+    21300024: MJDecor_12
+    21300026: MJDecor_13
+    21300028: MJDecor_14
+    21300030: MJDecor_15
+    21300032: MJDecor_16
+    21300034: MJDecor_17
+    21300036: MJDecor_18
+    21300038: MJDecor_19
+    21300040: MJDecor_20
+    21300042: MJDecor_21
+    21300044: MJDecor_22
+    21300046: MJDecor_23
+    21300048: MJDecor_24
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MJDecor_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_1
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_2
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_3
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_4
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_5
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_6
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_7
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_8
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 411
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 208
+        width: 162
+        height: 200
+      alignment: 9
+      pivot: {x: 0.4828487, y: 0.12142838}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_10
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 148
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_11
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 148
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_12
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 138
+        width: 50
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_13
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 131
+        width: 55
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_14
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 114
+        width: 88
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_16
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 29
+        width: 73
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_17
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 49
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_18
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 49
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_19
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 49
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_20
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 49
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_21
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 148
+        width: 46
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_22
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 131
+        width: 55
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_23
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 208
+        width: 162
+        height: 200
+      alignment: 9
+      pivot: {x: 0.47427294, y: 0.12142838}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: MJDecor_24
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 208
+        width: 162
+        height: 200
+      alignment: 9
+      pivot: {x: 0.47856066, y: 0.12142838}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

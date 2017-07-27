@@ -285,7 +285,7 @@ namespace com.Desktop
 			//Debug.Log (PhotonNetwork.playerList.Length);
 			//OverPanel.gameObject.SetActive(true);
 			if (PhotonNetwork.playerList.Length < 2) {
-				Back ();
+				//Back ();
 			}
 		}
 

@@ -46,8 +46,8 @@ static dispatch_once_t _onceToken;
     // 把根视图和控制器全部换成我们自定义的内容。
     _rootController = viewController;
     _rootView = _rootController.view;
-    
     /*
+    
     self.myTextView = [[UITextView alloc] initWithFrame:CGRectMake(300, 0, 300, 150)];
     self.myTextView.text = @"...";
     self.myTextView.backgroundColor = [UIColor whiteColor];
@@ -99,19 +99,23 @@ static dispatch_once_t _onceToken;
     [button4 addTarget:self action:@selector(goToFirstTrailer4)
       forControlEvents:(UIControlEvents)UIControlEventTouchDown];
     [_rootView addSubview:button4];
-     */
+    */
     
     
-    CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width;
-    CGFloat ApplicationH = [[UIScreen mainScreen] bounds].size.height;
+    //CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width;
+    //CGFloat ApplicationH = [[UIScreen mainScreen] bounds].size.height;
     
     //self.mShowView = [[UIView alloc] init];
-    self.mShowView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
-    self.mShowView.layer.anchorPoint = CGPointMake(1.5, 0.5);
-    [self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
-    [self.mShowView setBackgroundColor:[UIColor greenColor]];
-    [_rootView insertSubview: self.mShowView atIndex: -1];
+    //self.mShowView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
+    //self.mShowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    //[self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
+    //[self.mShowView setBounds: CGRectMake(0, 0, ApplicationH, ApplicationW/3)];
+    //self.liveSession.previewView.autoresizesSubviews = YES;
+    //self.mShowView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+    
+    //[self.mShowView setBackgroundColor:[UIColor greenColor]];
+    //[_rootView insertSubview: self.mShowView atIndex: -1];
     //[_rootView addSubview:self.mShowView];
     
     //[self initPlayer];
@@ -392,7 +396,7 @@ static dispatch_once_t _onceToken;
     //5. 非常重要
     dispatch_async(dispatch_get_main_queue(), ^{
         //[_rootView addSubview: [self.liveSession previewView]];
-        [_rootView insertSubview:[self.liveSession previewView] atIndex:0];
+        [_rootView insertSubview:[self.liveSession previewView] atIndex:-1];
     });
     
     //dispatch_async(dispatch_get_main_queue(), ^{
@@ -422,15 +426,22 @@ static dispatch_once_t _onceToken;
 
 -(void)moveRight{
     NSLog(@"moveRight()....%@", self);
-    //if(self.liveSession==nil)
-    //    [self initRecord];
-    //[self setupLiveSession];
     CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width/3;
-    NSLog(@"ApplicationW=%f", ApplicationW);
-    CGPoint pp = CGPointMake(self.liveSession.previewView.layer.position.x+ApplicationW+40, self.liveSession.previewView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
-    //pp.x += ApplicationW;
-    self.liveSession.previewView.layer.position = pp;
-    //self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 1);
+    //CGPoint pp = CGPointMake(self.liveSession.previewView.layer.position.x+ApplicationW+40, self.liveSession.previewView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
+    if(self.liveSession!=nil) {
+        //[self setupLiveSession];
+        //CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width/3;
+        //NSLog(@"ApplicationW=%f", ApplicationW);
+        CGPoint pp = CGPointMake(self.liveSession.previewView.layer.position.x+ApplicationW+40, self.liveSession.previewView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
+        //pp.x += ApplicationW;
+        self.liveSession.previewView.layer.position = pp;
+        //self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 1);
+    }
+    if(self.mShowView!=nil) {
+        CGPoint pp = CGPointMake(self.mShowView.layer.position.x+ApplicationW+40, self.mShowView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
+        self.mShowView.layer.position = pp;
+    }
+    
 }
 
 -(void)stopRecord{
@@ -445,6 +456,19 @@ static dispatch_once_t _onceToken;
 
 -(void)initPlayer{
     NSLog(@"initPlayer()....%@", self);
+    CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat ApplicationH = [[UIScreen mainScreen] bounds].size.height;
+    self.mShowView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
+    self.mShowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    [self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
+    
+    //[_rootView insertSubview: self.mShowView atIndex: -1];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //[_rootView addSubview: [self.liveSession previewView]];
+        [_rootView insertSubview:self.mShowView atIndex:0];
+    });
+    
     //初始化播放器的类
     self.player = [[AliVcMediaPlayer alloc] init];
     //创建播放器，传入显示窗口
@@ -463,8 +487,8 @@ static dispatch_once_t _onceToken;
         [self initPlayer];
     NSLog(@"startPlay()....%@", url);
     //传入播放地址，准备播放
-    //NSURL *mUrl = [[NSURL alloc] initWithString:url];
-    NSURL * mUrl = [NSURL URLWithString:url];
+    NSURL *mUrl = [[NSURL alloc] initWithString:url];
+    //NSURL * mUrl = [NSURL URLWithString:url];
     //NSURL *mUrl = [[NSURL alloc] initWithString:url];
     [self.player prepareToPlay:mUrl];
     

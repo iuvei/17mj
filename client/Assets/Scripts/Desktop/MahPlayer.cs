@@ -182,24 +182,31 @@ namespace com.Desktop
 				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, ismopai, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, pai_id, out chitype, ismopai);
 			}
-
-			btnWin.gameObject.SetActive(isCanWin);
-			btnPon.gameObject.SetActive(isCanPon);
-			btnChi.gameObject.SetActive(isCanChi);
-			btnGang.gameObject.SetActive(isCanGan);
+			if(btnWin)
+				btnWin.gameObject.SetActive(isCanWin);
+			if(btnPon)
+				btnPon.gameObject.SetActive(isCanPon);
+			if(btnChi)
+				btnChi.gameObject.SetActive(isCanChi);
+			if(btnGang)
+				btnGang.gameObject.SetActive(isCanGan);
 
 			if (!isCanWin && !isCanPon && !isCanGan && !isCanChi)
 			{//不跳出選單, 直接摸一張牌
 				//Debug.Log ("[c] !display pass button");
-				btnPass.gameObject.SetActive(false);
-				btnPass.transform.parent.parent.gameObject.SetActive (false);
+				if (btnPass) {
+					btnPass.gameObject.SetActive (false);
+					btnPass.transform.parent.parent.gameObject.SetActive (false);
+				}
 				AskPass ();
 			}
 			else
 			{
 				//Debug.Log ("[c] display pass button");
-				btnPass.gameObject.SetActive(true);
-				btnPass.transform.parent.parent.gameObject.SetActive (true);
+				if (btnPass) {
+					btnPass.gameObject.SetActive (true);
+					btnPass.transform.parent.parent.gameObject.SetActive (true);
+				}
 			}
 		}
 

@@ -747,7 +747,7 @@ namespace com.Desktop
 			_activePlayer = player;
 			_activePlayer.actived = false;
 			_activePlayer.state = PLAYERSTATE.PLAYING;
-			int[] param = { _currentIndex };
+			int[] param = { _activePlayer.ID };
 			photonView.RPC("ShowActivePlayer", PhotonTargets.All, param);
 			_lastMoPaiPlayerID = -1;
 			_lastDaPaiPlayerID = -1;
@@ -1018,23 +1018,25 @@ namespace com.Desktop
         [PunRPC]
 		void ShowActivePlayer(int[] param)
         {
-			int idx = (int)param[0];
-			//Debug.LogError ("[RPC] 輪到玩家(idx="+idx+")");
-			//foreach (MahPlayer player in Users) {
-				
-			//}
-			MahPlayer mahPlayer = Users[idx];
+			int player_id = (int)param[0];
+			Debug.LogError ("[RPC] 輪到玩家(id="+player_id+")");
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer!=null && !(mplayer.isAI||mplayer.autoPlay)) {
+				mplayer.checkPai (_lastDaPai, false);
+				mplayer.timer.time = 30;
+				mplayer.timer.Show (0.5f);
+			}
 			//if(mahPlayer.isAI)
 			//	Debug.LogError ("[RPC] 輪到電腦"+mahPlayer.name);
 			//else
 			//	Debug.LogError ("[RPC] 輪到玩家"+mahPlayer.name);
 			//Debug.LogError ("[RPC] 輪到你了!!!("+photonPlayer.NickName+")");
-			if (idx == 0) {
-				if(mahPlayer!=null && !(mahPlayer.isAI||mahPlayer.autoPlay))
-					mahPlayer.checkPai (_lastDaPai, false);
-			}
-			mahPlayer.timer.time = 30;
-			mahPlayer.timer.Show (0.5f);
+			//if (idx == 0) {
+			//	if(mahPlayer!=null && !(mahPlayer.isAI||mahPlayer.autoPlay))
+			//		mahPlayer.checkPai (_lastDaPai, false);
+			//}
+			//mahPlayer.timer.time = 30;
+			//mahPlayer.timer.Show (0.5f);
 			/*
 			PhotonPlayer photonPlayer = PhotonPlayer.Find(id);
 

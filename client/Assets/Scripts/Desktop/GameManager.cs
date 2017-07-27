@@ -932,6 +932,17 @@ namespace com.Desktop
             OverPanel.gameObject.SetActive(true);
 			AbanMjs.Clear ();
         }
+		[PunRPC]
+		private void SetupAI(object[] param)
+		{
+			int player_id = (int)param[0];
+			bool en = (bool)param[1];
+			Debug.LogError ("[RPC] SetupAI(pid="+player_id+", en="+en+")");
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer != null) {
+				mplayer.autoPlay = en;
+			}
+		}
 
 		[PunRPC]
 		private void dispatchPai(object[] param)

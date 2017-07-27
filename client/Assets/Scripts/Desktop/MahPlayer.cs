@@ -198,7 +198,8 @@ namespace com.Desktop
 					btnPass.gameObject.SetActive (false);
 					btnPass.transform.parent.parent.gameObject.SetActive (false);
 				}
-				AskPass ();
+				if(!this.autoPlay && !this.isAI && this.ID!=PhotonNetwork.player.ID)
+					AskPass ();
 			}
 			else
 			{
@@ -592,8 +593,8 @@ namespace com.Desktop
 		/// </summary>
 		public void AskPass()
 		{
-			Debug.Log ("[c] AskPass()");
-			object[] param = { (int)GameCommand.MOPAI, this.photonPlayer.ID };
+			Debug.Log (this.name+" [c] AskPass() auto="+this.autoPlay+" ,isAi="+this.isAI);
+			object[] param = { (int)GameCommand.MOPAI, this.ID };
 			photonView.RPC ("SendRequestToServer", PhotonTargets.MasterClient, param);
 			HideMenu ();
 		}
@@ -694,6 +695,9 @@ namespace com.Desktop
 		{
 			//Debug.Log ("handleAskAutoPlay(this.autoPlay="+auto+")");
 			this.autoPlay = auto;
+			object[] param = { this.ID, auto};
+			photonView.RPC ("SetupAI", PhotonTargets.All, param);
+
 		}
 
 		public void handleDaPai(int mahID)

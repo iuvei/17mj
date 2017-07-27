@@ -64,4 +64,5 @@ MonoBehaviour:
   - RemainTime
   - StartPlay
   - StartMahjong
+  - SetupAI
   DisableAutoOpenWizard: 1

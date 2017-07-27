@@ -36,6 +36,18 @@ public class GLoginButton : MonoBehaviour {
         var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
+#elif UNITY_IOS
+        string cName = PlayerPrefs.GetString("USERNAME");
+        string cToken = PlayerPrefs.GetString("USERTOKEN");
+        if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
+        {
+            string type = "C1";
+            MJApi.Login(type, cName, cToken, LoginCallback);
+            if (ConnectingPanel) {
+                ConnectingPanel.SetActive(true);
+                UIManager.instance.PlayConnectingAnim();
+            }
+        }
 #endif
     }
 

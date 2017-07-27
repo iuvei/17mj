@@ -17,7 +17,7 @@ public class FBLoginButton : MonoBehaviour {
     private bool _setPhoto = false;      //設定頭像
     private string stringData;
     private bool _loginDone = false;
-    private bool _setPhotoDone = false;
+    private bool _setPhotoDone = true;
     private string fbId = string.Empty;
     private string fbMail = string.Empty;
     private string fbPhoto = string.Empty;

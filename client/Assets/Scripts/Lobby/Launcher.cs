@@ -333,7 +333,7 @@ namespace com.Lobby
 			Debug.Log ("CreateRoom()");
             if (PhotonNetwork.connected)
             {
-				_roomname = PhotonNetwork.playerName + '#'+UnityEngine.Random.Range(0, 1000000000);
+				_roomname = UnityEngine.Random.Range(0, 1000000000).ToString();
 				//Debug.Log ();
                 //创建房间成功
 				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))

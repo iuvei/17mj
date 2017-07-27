@@ -198,8 +198,8 @@ namespace com.Desktop
 					btnPass.gameObject.SetActive (false);
 					btnPass.transform.parent.parent.gameObject.SetActive (false);
 				}
-				if(!this.autoPlay && !this.isAI && this.ID!=PhotonNetwork.player.ID)
-					AskPass ();
+				//if(!this.autoPlay && !this.isAI && this.ID!=PhotonNetwork.player.ID)
+				//	AskPass ();
 			}
 			else
 			{

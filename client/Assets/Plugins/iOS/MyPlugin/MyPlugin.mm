@@ -372,7 +372,7 @@ static dispatch_once_t _onceToken;
     
     [self.liveSession.previewView setBounds: CGRectMake(0, 0, ApplicationH, ApplicationW/3)];
     //self.liveSession.previewView.autoresizesSubviews = YES;
-    self.liveSession.previewView.transform = CGAffineTransformMakeRotation(-M_PI/2);
+    self.liveSession.previewView.transform = CGAffineTransformMakeRotation(M_PI/2);
     self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     
     //self.liveSession.previewView.layer.cornerRadius = self.liveSession.previewView.bounds.size.height /2;
@@ -395,8 +395,10 @@ static dispatch_once_t _onceToken;
     
     //5. 非常重要
     dispatch_async(dispatch_get_main_queue(), ^{
-        //[_rootView addSubview: [self.liveSession previewView]];
-        [_rootView insertSubview:[self.liveSession previewView] atIndex:-1];
+        [_rootView addSubview: [self.liveSession previewView]];
+        [_rootView bringSubviewToFront:_unityView];
+        //[_rootView insertSubview:[self.liveSession previewView] atIndex:_rootView.subviews.count];
+        //[_rootView bringSubviewToFront:[self.liveSession previewView]];
     });
     
     //dispatch_async(dispatch_get_main_queue(), ^{
@@ -422,6 +424,7 @@ static dispatch_once_t _onceToken;
     if(self.liveSession==nil)
         [self initRecord: url];
     [self setupLiveSession];
+    //[_rootView bringSubviewToFront:_unityView];
 }
 
 -(void)moveRight{
@@ -465,8 +468,9 @@ static dispatch_once_t _onceToken;
     
     //[_rootView insertSubview: self.mShowView atIndex: -1];
     dispatch_async(dispatch_get_main_queue(), ^{
-        //[_rootView addSubview: [self.liveSession previewView]];
-        [_rootView insertSubview:self.mShowView atIndex:0];
+        [_rootView addSubview: self.mShowView];
+        [_rootView bringSubviewToFront:_unityView];
+        //[_rootView insertSubview:self.mShowView atIndex:0];
     });
     
     //初始化播放器的类
@@ -492,7 +496,7 @@ static dispatch_once_t _onceToken;
     //NSURL *mUrl = [[NSURL alloc] initWithString:url];
     [self.player prepareToPlay:mUrl];
     
-    [_rootView bringSubviewToFront:self.mShowView];
+    //[_rootView bringSubviewToFront:_unityView];
     //开始播放
     [self.player play];
     
@@ -501,7 +505,7 @@ static dispatch_once_t _onceToken;
 -(void)stopPlay{
     NSLog(@"stopPlay()....%@", self);
     [self.player stop];
-    [_rootView sendSubviewToBack: self.mShowView];
+    //[_rootView sendSubviewToBack: self.mShowView];
 }
 
 

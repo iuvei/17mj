@@ -21,6 +21,8 @@
 @property (nonatomic, strong) UITextView *myTextView;
 @property (nonatomic, strong) AliVcMediaPlayer *player;
 @property (nonatomic, strong) UIView *mShowView;
+@property (nonatomic, strong) UIView *mPreView;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSString *pushUrl;
+@property (assign) CGPoint originPosition;
 @end

@@ -65,4 +65,7 @@ MonoBehaviour:
   - StartPlay
   - StartMahjong
   - SetupAI
+  - InvatePlayMJ
+  - BroadcastOnlinePpl
+  - ExitGame
   DisableAutoOpenWizard: 1

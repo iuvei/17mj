@@ -101,25 +101,6 @@ static dispatch_once_t _onceToken;
     [_rootView addSubview:button4];
     */
     
-    
-    //CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width;
-    //CGFloat ApplicationH = [[UIScreen mainScreen] bounds].size.height;
-    
-    //self.mShowView = [[UIView alloc] init];
-    //self.mShowView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    //self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
-    //self.mShowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    //[self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
-    //[self.mShowView setBounds: CGRectMake(0, 0, ApplicationH, ApplicationW/3)];
-    //self.liveSession.previewView.autoresizesSubviews = YES;
-    //self.mShowView.transform = CGAffineTransformMakeRotation(-M_PI/2);
-    
-    //[self.mShowView setBackgroundColor:[UIColor greenColor]];
-    //[_rootView insertSubview: self.mShowView atIndex: -1];
-    //[_rootView addSubview:self.mShowView];
-    
-    //[self initPlayer];
-    
     dispatch_once(&_onceToken, ^{
         _sharedInstance = self;
     });
@@ -393,12 +374,33 @@ static dispatch_once_t _onceToken;
     //[self.liveSession setMute:YES];
     //[self.liveSession previewView];
     
+    self.mPreView = [[UIView alloc] init];
+    self.mPreView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //self.mPreView.transform = CGAffineTransformMakeRotation(M_PI);
+    self.mPreView.layer.anchorPoint = CGPointMake(0.5, 0.5);
+    //[self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
+    //[self.mShowView setBounds: CGRectMake(0, 0, ApplicationH, ApplicationW/3)];
+    [self.mPreView setBackgroundColor:[UIColor blackColor]];
+    
+    UIImageView *imageview = [[UIImageView alloc] init];
+    imageview.frame =  self.mPreView.bounds;
+    imageview.image = [UIImage imageNamed:@"img_player"];
+    imageview.contentMode = UIViewContentModeScaleToFill;
+    imageview.userInteractionEnabled = YES;
+    [self.mPreView addSubview:imageview];
+    //UIBlurEffectStyleLight
+    //UIBlurEffectStyleDark
+    //UIBlurEffectStyleExtraLight
+    UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    visualEffectView.frame = self.mPreView.bounds;
+    [self.mPreView addSubview:visualEffectView];
+    
     //5. 非常重要
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_rootView addSubview: [self.liveSession previewView]];
+        [self.mPreView addSubview: [self.liveSession previewView]];
+        [_rootView addSubview:self.mPreView];
         [_rootView bringSubviewToFront:_unityView];
-        //[_rootView insertSubview:[self.liveSession previewView] atIndex:_rootView.subviews.count];
-        //[_rootView bringSubviewToFront:[self.liveSession previewView]];
     });
     
     //dispatch_async(dispatch_get_main_queue(), ^{
@@ -430,18 +432,28 @@ static dispatch_once_t _onceToken;
 -(void)moveRight{
     NSLog(@"moveRight()....%@", self);
     CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width/3;
-    //CGPoint pp = CGPointMake(self.liveSession.previewView.layer.position.x+ApplicationW+40, self.liveSession.previewView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
     if(self.liveSession!=nil) {
-        //[self setupLiveSession];
-        //CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width/3;
-        //NSLog(@"ApplicationW=%f", ApplicationW);
-        CGPoint pp = CGPointMake(self.liveSession.previewView.layer.position.x+ApplicationW+40, self.liveSession.previewView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
-        //pp.x += ApplicationW;
+        self.originPosition = self.liveSession.previewView.layer.position;
+        CGPoint pp = CGPointMake(self.originPosition.x+ApplicationW+40, self.originPosition.y);
         self.liveSession.previewView.layer.position = pp;
-        //self.liveSession.previewView.layer.anchorPoint = CGPointMake(0.5, 1);
     }
     if(self.mShowView!=nil) {
-        CGPoint pp = CGPointMake(self.mShowView.layer.position.x+ApplicationW+40, self.mShowView.layer.position.y);/// + CGPointMake(ApplicationW, 0);
+        self.originPosition = self.mShowView.layer.position;
+        CGPoint pp = CGPointMake(self.originPosition.x+ApplicationW+40, self.originPosition.y);
+        self.mShowView.layer.position = pp;
+    }
+    
+}
+
+-(void)moveLeft{
+    NSLog(@"moveLeft()....%@", self);
+    //CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width/3;
+    if(self.liveSession!=nil) {
+        CGPoint pp = CGPointMake(self.originPosition.x, self.originPosition.y);
+        self.liveSession.previewView.layer.position = pp;
+    }
+    if(self.mShowView!=nil) {
+        CGPoint pp = CGPointMake(self.originPosition.x, self.originPosition.y);
         self.mShowView.layer.position = pp;
     }
     
@@ -622,6 +634,10 @@ extern "C" {
     void _moveRight (){
         MyPlugin *obj = [MyPlugin sharedInstance];
         [obj moveRight];
+    }
+    void _moveLeft (){
+        MyPlugin *obj = [MyPlugin sharedInstance];
+        [obj moveLeft];
     }
     void _stopPlay (){
         MyPlugin *obj = [MyPlugin sharedInstance];

@@ -19,6 +19,8 @@ public class VideoRecordingBridge {
 	private static extern void _stopPlay ();
 	[DllImport("__Internal")]
 	private static extern void _moveRight ();
+	[DllImport("__Internal")]
+	private static extern void _moveLeft ();
 
 	#elif UNITY_ANDROID
 	private static AndroidJavaObject live = null;
@@ -74,9 +76,19 @@ public class VideoRecordingBridge {
 	}
 
 	public static void MoveRight(){
-		Debug.Log ("MoveRight()");
+		//Debug.Log ("MoveRight()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_moveRight ();
+		#elif !UNITY_EDITOR && UNITY_ANDROID
+		//setup();
+		//live.CallStatic("PlayStop");
+		#endif
+	}
+
+	public static void MoveLeft(){
+		//Debug.Log ("MoveRight()");
+		#if !UNITY_EDITOR && UNITY_IOS
+		_moveLeft ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
 		//setup();
 		//live.CallStatic("PlayStop");

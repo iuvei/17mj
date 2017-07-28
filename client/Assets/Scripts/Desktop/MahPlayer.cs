@@ -448,7 +448,7 @@ namespace com.Desktop
 			Vector2 dp = new Vector2((cnt-1)*74+37, -(int)(cnt / 18)*90+45);
 			RectTransform apos = GameManager.Instance.abanPos;
 			if (this.ID==PhotonNetwork.player.ID) {
-				Debug.Log ("QQQQQQQQQ");
+				//Debug.Log ("QQQQQQQQQ");
 				Transform t1 = plane_mo.transform.Find (mahID + "");
 				if (t1 == null) {
 					t1 = plane_keep.transform.Find (mahID + "");
@@ -505,7 +505,7 @@ namespace com.Desktop
 				}
 			} else {
 				//GotID = 0;
-				Debug.Log ("tttttttt");
+				//Debug.Log ("tttttttt");
 				Transform t1 = plane_mo.transform.Find (0 + "");
 				if (t1 != null) {
 					Destroy (t1.gameObject);
@@ -523,7 +523,7 @@ namespace com.Desktop
 					//t1.transform.localRotation = Quaternion.identity;
 
 				Vector2 fp =  new Vector3(-950+dp.x, -10);
-				Debug.Log ("fp="+fp);
+				//Debug.Log ("fp="+fp);
 					//RectTransform r3 = t2.GetComponent<RectTransform>();
 					//r2.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
 				r2.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
@@ -1241,7 +1241,8 @@ namespace com.Desktop
 			} else {
 				//AskPass ();
 				//yield return StartCoroutine (_MoPaiCo (0));//摸牌
-				doMoPai();
+				if(this.state==PLAYERSTATE.PLAYING)
+					doMoPai();
 			}
 
 			yield return new WaitForSeconds(2.0f);
@@ -1321,8 +1322,10 @@ namespace com.Desktop
 
 		}
 
-		public bool AICheckPai(int pai_id)
+		public bool AICheckPai(int mahID)
 		{
+			if (mahID == 0)
+				return false;
 			//Debug.Log ("AICheckPai("+pai_id+")");
 			bool iscan = false;
 			bool isCanWin = false;
@@ -1330,14 +1333,14 @@ namespace com.Desktop
 			bool isCanGan = false;
 			bool isCanChi = false;
 			int chitype = 0;
-			if (pai_id > 0) {
-				isCanWin = MahJongTools.IsCanHU (keepedMah, pai_id);
-				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id);
-				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, false, ponMah);
-				isCanChi = MahJongTools.IsCanChi (keepedMah, pai_id, out chitype, false);
+			if (mahID > 0) {
+				isCanWin = MahJongTools.IsCanHU (keepedMah, mahID);
+				isCanPon = MahJongTools.IsCanPon (keepedMah, mahID);
+				isCanGan = MahJongTools.IsCanGan (keepedMah, mahID, false, ponMah);
+				isCanChi = MahJongTools.IsCanChi (keepedMah, mahID, out chitype, false);
 			}
 			iscan = isCanWin || isCanPon || isCanGan || isCanChi;
-			Debug.Log ("AICheckPai("+pai_id+", iscan="+iscan+")");
+			Debug.Log ("AICheckPai("+mahID+", iscan="+iscan+")");
 			return iscan;
 		}
 

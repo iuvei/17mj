@@ -53,6 +53,11 @@ namespace com.Desktop
 		public RectTransform VideoCanvas;
 		public GameObject GameInfo;
 		public RectTransform abanPos;
+		public Button InvateBtn;
+		public Text Online;
+		public Image OverPanel;
+		public GameObject PanelInvate;
+		public Text ChatText;
         //public Animator AllCanvasAnim; // 過場移入
         //public Animator GameInfoAnim;  //局風顯示
 
@@ -70,14 +75,12 @@ namespace com.Desktop
 		//private int moMahId = 0;
 		private int _lastMoPaiPlayerID = -1;
 		private int _lastDaPaiPlayerID = -1;
-		private int MaxWaitTime = 30;
+		private int MaxWaitTime = 15;
 		private int _remainTime = 0;
 		private string _gameVersion = "1.0";
 		private int _targetid = 0;
 		private int _currentIndex = 0;
 		private bool _isgameover = false;
-
-        public Image OverPanel;
 
 		private MahPlayer _activePlayer;
         #endregion
@@ -97,13 +100,10 @@ namespace com.Desktop
 			//#关键
 			//我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
 			//PhotonNetwork.autoJoinLobby = true;
-
 			//#关键
 			//这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
 			//PhotonNetwork.automaticallySyncScene = true;
-
 			//PhotonNetwork.isMessageQueueRunning = true;
-
             //PhotonNetwork.OnEventCall += OnEvent;
         }
 
@@ -180,20 +180,32 @@ namespace com.Desktop
 				return;
 				//Connect();
 			}
-			Debug.Log (PhotonNetwork.room);
-			string name = PhotonNetwork.room.Name;
-			string url = "rtmp://catpunch.co/live/" + name;
-            if (!PhotonNetwork.isMasterClient)
-            {
-				Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
-				VideoRecordingBridge.StartPlay (url);
-                return;
-            }
 
-			//VideoRecordingBridge.InitRecord ();
-			//string name = PhotonNetwork.room.Name;
-			//string url = "rtmp://catpunch.co/live/" + name;
-			VideoRecordingBridge.StartRecord (url);
+			if (PanelInvate != null) {
+				PanelInvate.SetActive (false);
+			}
+
+			//Debug.Log (PhotonNetwork.room);
+			if (PhotonNetwork.room != null) {
+				string name = PhotonNetwork.room.Name;
+				if (ChatText != null) {
+					ChatText.text += "房間:"+name+"\n";
+				}
+				//string name = PhotonNetwork.room.Name;
+				string url = "rtmp://catpunch.co/live/" + name;
+				if (!PhotonNetwork.isMasterClient) {
+					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+					VideoRecordingBridge.StartPlay (url);
+					if (InvateBtn != null) {
+						InvateBtn.gameObject.SetActive (true);
+					}
+					return;
+				}
+				VideoRecordingBridge.StartRecord (url);
+				if (InvateBtn != null) {
+					InvateBtn.gameObject.SetActive (false);
+				}
+			}
 
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
             //Debug.Log ("Start()");
@@ -206,7 +218,7 @@ namespace com.Desktop
 				return;
 			}
 			//LayoutStart(); //畫面移入
-			this._isgameover = false;
+			//this._isgameover = false;
             //只有副机有邀請的權利
             //if (PhotonNetwork.isMasterClient)
             //{
@@ -214,12 +226,42 @@ namespace com.Desktop
             //    return;
             //}
 			//只有主机有发牌的权利
-			StartCoroutine("ReadyPlay");
+			//StartCoroutine("ReadyPlay");
 
-            //photonView.RPC("StartMahjong", PhotonTargets.All, null);
+			photonView.RPC("InvatePlayMJ", PhotonTargets.MasterClient, null);
 
         }
 
+		[PunRPC]
+		private void InvatePlayMJ()
+		{
+			//StartCoroutine("ReadyPlay");
+			if (PanelInvate != null) {
+				PanelInvate.SetActive (true);
+			}
+		}
+
+		[PunRPC]
+		private void ExitGame()
+		{
+			LayoutEnd ();
+		}
+
+		public void InvateYES()
+		{
+			if (PanelInvate != null) {
+				PanelInvate.SetActive (false);
+			}
+			StartCoroutine("ReadyPlay");
+		}
+
+		public void InvateNO()
+		{
+			if (PanelInvate != null) {
+				PanelInvate.SetActive (false);
+			}
+		}
+		/*
         [PunRPC]
         private void StartMahjong()
         {
@@ -243,6 +285,7 @@ namespace com.Desktop
 			}
             StartCoroutine("ReadyPlay");
         }
+        */
 
         IEnumerator ReadyPlay() {
             yield return new WaitForSeconds(1.0f);
@@ -257,7 +300,8 @@ namespace com.Desktop
 			doDispatchPai();
 
             //4.設定開始玩家
-			setActivePlayer(Users[_currentIndex]);
+			MahPlayer next = Users[_currentIndex];
+			StartCoroutine( setActivePlayer (next));
         }
 
         public void onLivePlayREConnect()
@@ -277,6 +321,12 @@ namespace com.Desktop
 		public void OnPhotonPlayerConnected(PhotonPlayer player)
 		{
 			Debug.Log("OnPhotonPlayerConnected: " + player.NickName);
+			if (Online != null) {
+				Online.text = PhotonNetwork.playerList.Length.ToString();
+			}
+			if (ChatText != null) {
+				ChatText.text += player.NickName+"進入這個房間\n";
+			}
 		}
 
 		public void OnPhotonPlayerDisconnected(PhotonPlayer player)
@@ -284,9 +334,14 @@ namespace com.Desktop
 			//Debug.Log("OnPlayerDisconneced: " + player.NickName);
 			//Debug.Log (PhotonNetwork.playerList.Length);
 			//OverPanel.gameObject.SetActive(true);
-			if (PhotonNetwork.playerList.Length < 2) {
+			//if (PhotonNetwork.playerList.Length < 2) {
 				//Back ();
+			//}
+			if (ChatText != null) {
+				ChatText.text += player.NickName+"離開這個房間\n";
 			}
+			int ppl =  PhotonNetwork.playerList.Length;
+			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
 		}
 
         private void doShuffleMah()
@@ -314,7 +369,7 @@ namespace com.Desktop
 			} else {
 			*/
 			int[] ids = new int[2];
-			Debug.Log ("playerList.Length="+PhotonNetwork.playerList.Length);
+			//Debug.Log ("playerList.Length="+PhotonNetwork.playerList.Length);
 			if (PhotonNetwork.playerList.Length > 1) {
 				
 				//對戰模式 第一個是自己 第二個是對戰玩家
@@ -340,7 +395,7 @@ namespace com.Desktop
 
 			_currentIndex = 0;
 			this._isgameover = false;
-			Debug.Log (ids);
+			//Debug.Log (ids);
 			photonView.RPC("BundlePlayer", PhotonTargets.Others, ids);
 			/*
             //按照 ABCD的顺序传photonplayer.ID
@@ -430,6 +485,14 @@ namespace com.Desktop
             */
         }
 
+		[PunRPC]
+		private void BroadcastOnlinePpl(int ppl)
+		{
+			if (Online != null) {
+				Online.text = ppl.ToString();
+			}
+		}
+
         /// <summary>
         /// 摇骰子
         /// </summary>
@@ -451,7 +514,7 @@ namespace com.Desktop
 			Debug.LogError ("[s] 2.doDispatchPai(玩家數="+PhotonNetwork.playerList.Length+")");
 			//List<int> mahm = new List<int>();
 			AbanMjs.Clear ();
-			LayoutStart(); //畫面移入
+			LayoutStart();
 			int i = 0;
 			//int[][] pais = new int[Users.Count][];
 			//for(int a=0;a<Users.Count;a++) {
@@ -536,14 +599,8 @@ namespace com.Desktop
 			//Debug.LogError ("[s] doHandleNext()");
 			//StartCoroutine (doHandleNextCo(time));
 			MahPlayer next = Users[_currentIndex]; //_activePlayer.nextPlayer;
-			setActivePlayer (next);
+			StartCoroutine( setActivePlayer (next));
 		}
-
-		//private IEnumerator doHandleNextCo(float time) {
-		//	yield return new WaitForSeconds (time);
-		//	MahPlayer next = _activePlayer.nextPlayer;
-		//	setActivePlayer (next);
-		//}
 
 		//處理玩家碰牌
 		public void doHandlePon (int playerid) {
@@ -686,7 +743,6 @@ namespace com.Desktop
 			} else {
 				//Debug.LogError ("[s] 4.doMoPai()");
 				//players[0].GetMahJong(true);
-				//setActivePlayer(players[0]);
 				if (_activePlayer != null && _activePlayer.ID != _lastMoPaiPlayerID) {
 					//_activePlayer.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 					//Debug.LogError ("[s] 4.doMoPai("+_activePlayer.photonPlayer.NickName+")");
@@ -710,39 +766,15 @@ namespace com.Desktop
 			}
         }
 
-		private void setActivePlayer(MahPlayer player) {
+		private IEnumerator setActivePlayer(MahPlayer player) {
 			//Debug.LogError ("[s] 輪到("+player.name+")");
 			//int[] param = { photonPlayer.ID };
 			//photonView.RPC("ShowTimer", PhotonTargets.All, param);
 			MahPlayer _prevPlayer = _activePlayer;
 			//_remainTime = 0;
 			if (_prevPlayer!=null) {
-				int max = 0;
-				//Debug.Log ("******************_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
-				max = _prevPlayer.keepedMah.Count-1;
-				//Debug.LogError ("max="+max);
-				if (_prevPlayer.state == PLAYERSTATE.PLAYING) {//如果是什麼都沒做, 先摸牌 再打牌
-					doHandleMoPai ();//摸牌
-					max = _prevPlayer.keepedMah.Count-1;
-					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
-				}
-				else if (_prevPlayer.state == PLAYERSTATE.MOPAING) {//如果是摸完牌, 直接打牌
-					max = _prevPlayer.keepedMah.Count-1;
-					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
-				}
-				else if (_prevPlayer.state == PLAYERSTATE.CHIPAING) {//如果是吃牌狀態, 直接打牌
-					max = _prevPlayer.keepedMah.Count-1;
-					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
-				}
-				else if (_prevPlayer.state == PLAYERSTATE.PONPAING) {//如果是碰牌狀態, 直接打牌
-					max = _prevPlayer.keepedMah.Count-1;
-					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
-				}
-				else if (_prevPlayer.state == PLAYERSTATE.GANPAING) {//如果是槓牌狀態, 直接打牌
-					max = _prevPlayer.keepedMah.Count-1;
-					_prevPlayer.handleDaPai (_prevPlayer.keepedMah [max]);
-				}
-				_prevPlayer.state = PLAYERSTATE.WAITING;//更改狀態為完成狀態
+				yield return StartCoroutine( _prevPlayer.doAiThink (this._lastDaPai));
+				//_prevPlayer.state = PLAYERSTATE.WAITING;//更改狀態為完成狀態
 			}
 			_activePlayer = player;
 			_activePlayer.actived = false;
@@ -753,11 +785,11 @@ namespace com.Desktop
 			_lastDaPaiPlayerID = -1;
 			//StopCoroutine ("AutoChangeActivePlayerCo");
 
-			if (_activePlayer != null && (_activePlayer.isAI||_activePlayer.autoPlay)) {
-				StartCoroutine (AutoDaPai ());//自動代打
-			} else {
-				StartCoroutine (AutoChangeActivePlayerCo ());
-			}
+			//if (_activePlayer != null && (_activePlayer.isAI||_activePlayer.autoPlay)) {
+			//	StartCoroutine (AutoDaPai ());//自動代打
+			//} else {
+			yield return StartCoroutine (AutoChangeActivePlayerCo ());
+			//}
 			//StartCoroutine (AutoChangeActivePlayerCo ());
 			//doMoPai (isfirst);
 		}
@@ -768,41 +800,6 @@ namespace com.Desktop
 				if (this._isgameover)
 					yield break;
 				yield return StartCoroutine( _activePlayer.doAiThink (this._lastDaPai));
-				/*
-				int max = 0;
-				int rnd = UnityEngine.Random.Range(2, 10);
-				_remainTime = MaxWaitTime;
-				while (_remainTime>MaxWaitTime-rnd) {
-					yield return new WaitForSeconds (1);
-					_remainTime--;
-					if (this._isgameover)
-						yield break;
-					//Debug.Log ("waitTime="+_waitTime);
-					int[] param = { _remainTime, _currentIndex };
-					photonView.RPC ("RemainTime", PhotonTargets.All, param);
-				}
-				//yield return new WaitForSeconds (rnd);
-				if (_activePlayer.state == PLAYERSTATE.PLAYING) {//如果是什麼都沒做, 先摸牌 再打牌
-					yield return StartCoroutine (_MoPaiCo (0));//摸牌
-					//yield return new WaitForSeconds (1);
-					max = _activePlayer.keepedMah.Count - 1;
-					//Debug.Log ("max="+max+", "+_activePlayer.keepedMah [max]);
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
-				} else if (_activePlayer.state == PLAYERSTATE.MOPAING) {//如果是摸完牌, 直接打牌
-					max = _activePlayer.keepedMah.Count - 1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
-				} else if (_activePlayer.state == PLAYERSTATE.CHIPAING) {//如果是吃牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count - 1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
-				} else if (_activePlayer.state == PLAYERSTATE.PONPAING) {//如果是碰牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count - 1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
-				} else if (_activePlayer.state == PLAYERSTATE.GANPAING) {//如果是槓牌狀態, 直接打牌
-					max = _activePlayer.keepedMah.Count - 1;
-					_activePlayer.handleDaPai (_activePlayer.keepedMah [max]);
-				}
-				_activePlayer.state = PLAYERSTATE.WAITING;//更改狀態為完成狀態
-				*/
 				//yield return new WaitForSeconds (1);
 				if (getRemainPai()> 0) {
 					doHandleNext ();
@@ -817,24 +814,42 @@ namespace com.Desktop
 			if (this._isgameover)
 				yield break;
 			_remainTime = MaxWaitTime;
+			bool iscan = false;
+			if(_activePlayer != null)
+				iscan = _activePlayer.AICheckPai(this._lastDaPai);
 			while (_remainTime>0) {
 				if (this._isgameover)
 					yield break;
 				yield return new WaitForSeconds (1);
 				_remainTime--;
-				//Debug.Log ("waitTime="+_waitTime);
-				//int[] param = { _remainTime, _currentIndex };
-				if (PhotonNetwork.player.ID == Users [_currentIndex].photonPlayer.ID) {
-					int[] param1 = { _remainTime, 0 };
-					photonView.RPC ("RemainTime", PhotonTargets.MasterClient, param1);
-					int[] param2 = { _remainTime, 1 };
-					photonView.RPC ("RemainTime", PhotonTargets.Others, param2);
-				} else {
-					int[] param1 = { _remainTime, 0 };
-					photonView.RPC ("RemainTime", PhotonTargets.Others, param1);
-					int[] param2 = { _remainTime, 1 };
-					photonView.RPC ("RemainTime", PhotonTargets.MasterClient, param2);
+				int player_id = Users [_currentIndex].ID;
+				int[] param = { _remainTime, player_id };
+				photonView.RPC ("RemainTime", PhotonTargets.All, param);
+				if (_activePlayer != null ) {
+					if (_activePlayer.isAI || _activePlayer.autoPlay) {
+						StartCoroutine (AutoDaPai ());//自動代打
+						yield break;
+					} else {
+						if (!iscan && _activePlayer.state == PLAYERSTATE.PLAYING) {
+							_activePlayer.doMoPai ();
+						}
+					}
 				}
+					//Debug.Log ("waitTime="+_waitTime);
+					//int[] param = { _remainTime, _currentIndex };
+				/*
+				if (PhotonNetwork.player.ID == Users [_currentIndex].photonPlayer.ID) {
+					//int[] param1 = { _remainTime, 0 };
+					//photonView.RPC ("RemainTime", PhotonTargets.MasterClient, param1);
+					//int[] param2 = { _remainTime, 1 };
+					//photonView.RPC ("RemainTime", PhotonTargets.Others, param2);
+				} else {
+					//int[] param1 = { _remainTime, 0 };
+					//photonView.RPC ("RemainTime", PhotonTargets.Others, param1);
+					//int[] param2 = { _remainTime, 1 };
+					//photonView.RPC ("RemainTime", PhotonTargets.MasterClient, param2);
+				}
+				*/
 			}
 			//if (_activePlayer != null && mahJong.allMah.Count > 0) {
 			if (getRemainPai() > 0) {
@@ -873,7 +888,7 @@ namespace com.Desktop
 		[PunRPC]
 		private void SendRequestToServer(object[] param)
 		{
-			Debug.Log ("SendRequestToServer()");
+			//Debug.Log ("SendRequestToServer()");
 			int gcmd = (int)param[0];
 			int player_id = -1;
 			switch(gcmd) {
@@ -931,6 +946,9 @@ namespace com.Desktop
 			//Debug.LogError ("[RPC] 遊戲結束()");
             OverPanel.gameObject.SetActive(true);
 			AbanMjs.Clear ();
+			if (ChatText != null) {
+				ChatText.text += "遊戲結束\n";
+			}
         }
 		[PunRPC]
 		private void SetupAI(object[] param)
@@ -947,7 +965,7 @@ namespace com.Desktop
 		[PunRPC]
 		private void dispatchPai(object[] param)
 		{
-			LayoutStart(); //畫面移入
+			LayoutStart();
 			int player_id = (int)param[0];
 			int[] content = (int[])param[1];
 			//Debug.LogError ("[RPC] 發牌()");
@@ -1017,13 +1035,12 @@ namespace com.Desktop
 		private void RemainTime(int[] param)
 		{
 			int rtime = (int)param[0];
-			int idx = (int)param[1];
+			int player_id = (int)param[1];
 			//Debug.LogError ("[RPC] idx="+idx+", RemainTime=" + rtime);
-			//PhotonPlayer photonPlayer = PhotonPlayer.Find(pid);
-			MahPlayer mahPlayer = Users[idx];
-			if (mahPlayer != null) {
-				mahPlayer.timer.time = rtime;
-				mahPlayer.timer.Show (1.0f);
+			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
+			if (mplayer != null) {
+				mplayer.timer.time = rtime;
+				mplayer.timer.Show (0.9f);
 			}
 		}
         [PunRPC]
@@ -1034,8 +1051,8 @@ namespace com.Desktop
 			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
 			if (mplayer!=null && !(mplayer.isAI||mplayer.autoPlay)) {
 				mplayer.checkPai (_lastDaPai, false);
-				mplayer.timer.time = 30;
-				mplayer.timer.Show (0.5f);
+				mplayer.timer.time = MaxWaitTime;
+				mplayer.timer.Show (0.9f);
 			}
 			//if(mahPlayer.isAI)
 			//	Debug.LogError ("[RPC] 輪到電腦"+mahPlayer.name);
@@ -1558,6 +1575,7 @@ namespace com.Desktop
 			AudioManager.Instance.Mute ();
 		}
 
+		//畫面移入
         private void LayoutStart()
         {
 			//VideoCanvas.transform.DOScaleX (1, 0);
@@ -1568,6 +1586,13 @@ namespace com.Desktop
             //Invoke("ShowInfo", 0.45f);
 			//ShowInfo();
         }
+
+		private void LayoutEnd()
+		{
+			AllCanvas.transform.DOMoveX (0, 0, true);
+			AllCanvas.transform.DOMoveX (-14, 1, false).SetEase(Ease.InOutBack);
+			VideoRecordingBridge.MoveLeft ();
+		}
 
         public void ShowInfo()
         {
@@ -1582,11 +1607,7 @@ namespace com.Desktop
 
         public void GameStop()
         {
-            //AllCanvasAnim.SetBool("GameStart", false);
-			AllCanvas.transform.DOMoveX (0, 0, true);
-			//VideoCanvas.transform.DOScaleX (0.3f, 0);
-			AllCanvas.transform.DOMoveX (-14, 1, false).SetEase(Ease.InOutBack);
-			//VideoCanvas.transform.DOScaleX (1, 1).SetEase(Ease.InOutBack);
+			photonView.RPC("ExitGame", PhotonTargets.All, null);
         }
     }
 }

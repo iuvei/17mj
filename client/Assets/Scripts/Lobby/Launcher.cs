@@ -1049,6 +1049,41 @@ namespace com.Lobby
                 playRoomBtns[0].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
                 playRoomBtns[1].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetDelay(0.5f).SetLoops(-1, LoopType.Yoyo);
                 playRoomBtns[2].DOLocalMoveY(-20, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+
+                //骰子
+                Transform diceL = playRoomBtns[0].Find("01/btm/dice_L");
+                Transform diceM = playRoomBtns[0].Find("01/btm/dice_M");
+                Transform diceR = playRoomBtns[0].Find("01/btm/dice_R");
+                Vector3[] waypoints = new[] { new Vector3(-2.467865f, -1.895259f, -2.020508f), new Vector3(-1.8596f, -1.465896f, -2.020508f), new Vector3(-1.269226f, -2.02049f, -2.020508f) };
+
+                Sequence diceSeq1 = DOTween.Sequence();
+                Sequence diceSeq2 = DOTween.Sequence();
+                Sequence diceSeq3= DOTween.Sequence();
+                diceSeq1.PrependInterval(2);
+                diceSeq1.Append(diceL.DORotate(new Vector3(0, 0, -15), 0.1f).SetEase(Ease.InFlash).SetLoops(2, LoopType.Yoyo));
+                diceSeq1.SetLoops(-1, LoopType.Yoyo);
+
+                diceSeq2.PrependInterval(2);
+                diceSeq2.Append(diceM.DORotate(new Vector3(0, 0, -15), 0.1f).SetEase(Ease.InFlash).SetLoops(2, LoopType.Yoyo));
+                diceSeq2.SetLoops(-1, LoopType.Yoyo);
+
+                diceSeq3.PrependInterval(3);
+                diceSeq3.Insert(0, diceR.GetComponent<SpriteRenderer>().DOFade(1, 0.2f));
+                diceSeq3.Insert(0, diceR.DORotate(new Vector3(0, 0, 120), 0.3f).SetEase(Ease.InSine).SetLoops(2, LoopType.Yoyo));
+                diceSeq3.Insert(0, diceR.DOPath(waypoints, 0.8f).SetEase(Ease.InOutQuad));
+                diceSeq3.Insert(2.7f, diceR.GetComponent<SpriteRenderer>().DOFade(0, 0.2f));
+                diceSeq3.SetLoops(-1, LoopType.Restart);
+
+                //中發白
+                Transform cardChun = playRoomBtns[1].Find("02/card_chun");
+                Transform cardFa = playRoomBtns[1].Find("02/card_fa");
+                Transform cardBai = playRoomBtns[1].Find("02/card_bai");
+
+                cardChun.DOMove(new Vector3(2.51f, 0.51f, -2.1f), 1.5f).SetLoops(-1, LoopType.Yoyo);
+                cardChun.DORotate(new Vector3(0, 0, -24.552f), 1.5f).SetLoops(-1, LoopType.Yoyo);
+                cardFa.DOScale(new Vector3(1.05f, 1.05f, 1), 1.5f).SetEase(Ease.OutElastic).SetLoops(-1, LoopType.Yoyo);
+                cardBai.DOMove(new Vector3(1.24f, 0.48f, -2f), 1.5f).SetLoops(-1, LoopType.Yoyo);
+                cardBai.DORotate(new Vector3(0, 0, 20.797f), 1.5f).SetLoops(-1, LoopType.Yoyo);
             }
 
             //底部分頁

@@ -40,7 +40,7 @@ public class VideoRecordingBridge {
 		_startRecord (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-		live.CallStatic("RecStart","rtmp://catpunch.co/orson/livestream");
+		live.CallStatic("RecStart",str);
         #endif
     }
 
@@ -60,7 +60,7 @@ public class VideoRecordingBridge {
 		_startPlay (str);
         #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-		live.CallStatic("PlayStart","rtmp://catpunch.co/orson/livestream");
+		live.CallStatic("PlayStart",str);
         #endif
     }
 

@@ -33,15 +33,15 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        if( _instance != null && _instance != this ){
-            Destroy(gameObject);
-			return;
-        } else {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
-		loadPLayerPrefs ();
+   //     if( _instance != null && _instance != this ){
+   //         Destroy(gameObject);
+			//return;
+   //     } else {
+   //         _instance = this;
+   //         DontDestroyOnLoad(gameObject);
+   //     }
+        _instance = this;
+        loadPLayerPrefs ();
 
 		//create audio sources
 		this.bgmSource = this.gameObject.GetComponent<AudioSource>( );

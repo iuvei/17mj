@@ -38,29 +38,27 @@ namespace com.Desktop
         /// 手牌
         /// </summary>
         public List<int> keepedMah = new List<int>();
-
         public GameObject plane_keep;
 
         /// <summary>
         /// 弃牌
         /// </summary>
         public List<int> abandanedMah = new List<int>();
-
         public GameObject plane_abandan;
 
         /// <summary>
         /// 碰的牌
         /// </summary>
         public List<int> ponMah = new List<int>();
-
         public GameObject plane_pon;
 
+
+		/// <summary>
+		/// 摸的牌
+		/// </summary>
 		public GameObject plane_mo;
 
-        /// <summary>
-        /// 取到的牌
-        /// </summary>
-        private MahJongObject gotMah;
+		public Transform tmp;
 
         /// <summary>
         /// 牌面上被打出去的牌
@@ -81,9 +79,6 @@ namespace com.Desktop
 
         //与PhotonPlayer中的玩家关联
         public PhotonPlayer photonPlayer;
-
-        //下一个玩家
-        //public MahPlayer nextPlayer;
 
         //Photon通讯组件
         public PhotonView photonView;
@@ -252,44 +247,8 @@ namespace com.Desktop
 					d.transform.localRotation = Quaternion.identity;
 				}
 			}
-			//foreach (PhotonPlayer p in Users)
-			/*
-			foreach (PhotonPlayer p in PhotonNetwork.playerList)
-			{
-				if (p.IsLocal) {
-					//Debug.Log ("[c] "+p.mahPlayer.gameObject.name+" photonPlayer.IsLocal");
-					keepedMah.Sort ();
-					//Debug.Log ("[c] "+p.NickName+".ShowPAI(Count="+keepedMah.Count+")");
-					foreach (int a in keepedMah) {
-						GameObject d = Instantiate (Resources.Load ("MahJong/" + a) as GameObject);
-						d.name = a + "";
-						d.transform.SetParent (p.mahPlayer.plane_keep.transform);
-						d.transform.localScale = Vector3.one;
-						d.transform.localRotation = Quaternion.identity;
-						MahJongObject mah = d.GetComponent<MahJongObject> ();
-						mah.ID = a;
-						mah.CanCilcked = true;
-						mah.player = this;
-					}
-					//PhotonNetwork.RaiseEvent((byte)GameCommand.SHOWPAITOOTHER, null, true, null);
-				}
-				else
-				{
-					p.mahPlayer.BundleUI ();
-					//Debug.Log ("[c] "+p.mahPlayer.gameObject.name+"!photonPlayer.IsLocal");
-					//Debug.Log ("[c] "+p.NickName+".ShowPAI(Count="+Mahjong.MAXPAI+")");
-					for (int i = 0; i < Mahjong.MAXPAI; i++)
-					{
-						GameObject d = Instantiate(Resources.Load("MahJong/" + 0) as GameObject);
-						d.name = 0 + "";
-						d.transform.SetParent(p.mahPlayer.plane_keep.transform);
-						d.transform.localScale = Vector3.one;
-						d.transform.localRotation = Quaternion.identity;
-					}
-				}
-			}
-			*/
         }
+
 
         /// <summary>
         /// 把摸到的牌放入keeper
@@ -297,7 +256,6 @@ namespace com.Desktop
 		public void fromMoToKeep(int GotID)
         {
 			//Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
-			//int GotID = GameManager.Instance.getMahjongPai(isfirst);
 			if (this.ID==PhotonNetwork.player.ID) {
 				Transform t1 = plane_mo.transform.Find (GotID + "");
 				if (t1 != null) {
@@ -305,8 +263,9 @@ namespace com.Desktop
 					g.transform.SetParent (plane_keep.transform);
 					g.transform.localScale = Vector3.one;
 					g.transform.localRotation = Quaternion.identity;
+					MahJongObject mah = g.GetComponent<MahJongObject> ();
+					SetGotMahPosition (mah);
 				}
-				//SetGotMahPosition ();
 			} else {
 				GotID = 0;
 				GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
@@ -317,134 +276,35 @@ namespace com.Desktop
 			}
         }
 
-		/*
-		public void fromMoToAban(int GotID)
-		{
-			//Debug.LogError ("[c] "+this.name+".putPaiToKeep(id="+GotID+",isfirst="+isfirst+")");
-			//Debug.LogError ("[c] "+this.name+".fromMoToAban(id="+GotID+")");
-			//int GotID = GameManager.Instance.getMahjongPai(isfirst);
-			if (photonPlayer.IsLocal) {
-				Transform t1 = plane_mo.transform.Find (GotID + "");
-				if (t1 != null) {
-					GameObject g = t1.gameObject;
-					g.transform.SetParent (plane_abandan.transform);
-					g.transform.localScale = Vector3.one;
-					g.transform.localRotation = Quaternion.identity;
-				}
-			} else {
-				//GotID = 0;
-				Transform t1 = plane_mo.transform.Find (0 + "");
-				if (t1 != null) {
-					Destroy (t1.gameObject);
-				}
-
-				GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
-				d.name = GotID + "";
-				d.transform.SetParent (plane_abandan.transform);
-				d.transform.localScale = Vector3.one;
-				d.transform.localRotation = Quaternion.identity;
-			}
-		}
-		*/
-
-		public void createPaiToMo(int GotID)
+		public void createPaiToMo(int mahID)
 		{
 			//Debug.LogError ("[c] "+this.name+".createPaiToMo(id="+GotID+")");
 			if (this.ID==PhotonNetwork.player.ID) {
-				moMahId = GotID;
+				this.moMahId = mahID;
 				//bool isZimo = MahJongTools.IsCanHU (keepedMah, GotID);
-				GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
-				d.name = GotID + "";
+				GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
+				d.name = mahID + "";
 				d.transform.SetParent (plane_mo.transform);
 				d.transform.localScale = Vector3.one;
 				d.transform.localRotation = Quaternion.identity;
 				//d.transform.
 
 				MahJongObject mah = d.GetComponent<MahJongObject> ();
-				mah.ID = GotID;
+				mah.ID = mahID;
 				mah.CanCilcked = true;
 				mah.player = this;
-
-				gotMah = mah;
-				//SetGotMahPosition ();
 			} else {
-				GotID = 0;
-				GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
-				d.name = GotID + "";
+				mahID = 0;
+				GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
+				d.name = mahID + "";
 				d.transform.SetParent (plane_mo.transform);
 				d.transform.localScale = Vector3.one;
 				d.transform.localRotation = Quaternion.identity;
 			}
 		}
 
-		/*
-		public void fromKeepToAban(int mahID)
-		{
-			//Debug.LogError ("[c] "+this.name+".outPaiFromKeep(id="+mahID+")");
-			if (photonPlayer.IsLocal) {
-				Transform t1 = plane_keep.transform.Find (mahID + "");
-				if (t1 != null) {
-					GameObject g = t1.gameObject;
-					//g.name = mahID + "";
-					g.transform.SetParent (plane_abandan.transform);
-					g.transform.localScale = Vector3.one;
-					g.GetComponent<MahJongObject> ().CanCilcked = false;
-				
-					//state = PLAYERSTATE.WAITING;
-					//AskActiveNext ();
-
-					MahJongObject mah = g.GetComponent<MahJongObject> ();
-					mah.ID = mahID;
-					mah.CanCilcked = true;
-					mah.player = this;
-
-					gotMah = mah;
-
-					SetGotMahPosition ();
-				}
-				//GameManager.Instance.abandonMah = g.GetComponent<MahJongObject>();
-
-				//PhotonNetwork.RaiseEvent((byte)GameCommand.DAPAICODE, mahID, true, null);
-
-				//SetGotMahPosition();
-				//ActiveNext();
-				//HideMenu ();
-				//bool isZimo = MahJongTools.IsCanHU (keepedMah, GotID);
-				//keepedMah.Add (GotID);
-				//GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
-				//d.name = GotID + "";
-				//d.transform.SetParent (plane_keep.transform);
-				//d.transform.localScale = Vector3.one;
-				//d.transform.localRotation = Quaternion.identity;
-				//MahJongObject mah = d.GetComponent<MahJongObject> ();
-				//mah.ID = GotID;
-				//mah.CanCilcked = true;
-				//mah.player = this;
-				//gotMah = mah;
-			} else {
-				//GotID = 0;
-				//mahID = 0;
-				//GameObject d = Instantiate (Resources.Load ("MahJong/" + GotID) as GameObject);
-				//d.name = GotID + "";
-				//d.transform.SetParent (plane_keep.transform);
-				//d.transform.localScale = Vector3.one;
-				//d.transform.localRotation = Quaternion.identity;
-				GameObject g = plane_keep.transform.Find(0 + "").gameObject;
-				Destroy (g);
-				GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
-				d.name = mahID + "";
-				//d.transform.localScale = Vector3.one;//new Vector3 (0.7f, 0.7f, 0.7f);
-				//d.transform.localRotation = Quaternion.identity;
-				d.GetComponent<MahJongObject>().CanCilcked = false;
-				d.transform.SetParent(plane_abandan.transform);
-				d.transform.localScale = Vector3.one;
-				d.transform.localRotation = Quaternion.identity;
-			}
-		}
-		*/
-
 		public void DaPaiToAban(int mahID, int cnt) {
-			Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
+			//Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
 			Vector2 dp = new Vector2((cnt-1)*74+37, -(int)(cnt / 18)*90+45);
 			RectTransform apos = GameManager.Instance.abanPos;
 			if (this.ID==PhotonNetwork.player.ID) {
@@ -453,118 +313,82 @@ namespace com.Desktop
 				if (t1 == null) {
 					t1 = plane_keep.transform.Find (mahID + "");
 				}
+				if (t1 == null) {
+					t1 = tmp.Find (mahID + "");
+				}
 				if (t1 != null) {
-					//Vector2 sp = Camera.main.WorldToScreenPoint(t1.transform.position);
-					t1.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+					t1.transform.SetParent (this.tmp);
+					t1.transform.localPosition = Vector3.zero;
 					t1.transform.localScale = Vector3.one;
 					t1.transform.localRotation = Quaternion.identity;
 
-					Vector2 fp =  new Vector3(apos.anchoredPosition.x+dp.x, apos.anchoredPosition.y+dp.y);
+					//Vector2 fp =  new Vector3(apos.anchoredPosition.x+dp.x, apos.anchoredPosition.y+dp.y);
+					Vector2 fp =  new Vector3(-650+dp.x, 282);
 					//Debug.Log ("fp="+fp);
 					RectTransform r1 = t1.GetComponent<RectTransform>();
-					//r1.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
-					r1.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
+					t1.transform.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 0.3f).OnComplete (() => {
+						t1.transform.localScale = Vector3.one;
+					});
+					r1.DOAnchorPos (fp, 0.3f, false).OnComplete(() => {
 						//Debug.Log("Complete!");
 						t1.transform.SetParent (plane_abandan.transform);
 						t1.transform.localScale = Vector3.one;
 						t1.transform.localRotation = Quaternion.identity;
 					});
 				}
-				if (moMahId > 0) {
-					//Debug.Log ("moMahId > 0");
-					Transform t2 = plane_mo.transform.Find (moMahId + "");
-					if (t2 != null) {
-						GameObject g = t2.gameObject;
-						g.transform.SetParent (plane_keep.transform);
-						g.transform.localScale = Vector3.one;
-						g.transform.localRotation = Quaternion.identity;
-					}
-					/*
-					Transform t2 = plane_mo.transform.Find (moMahId + "");
-					if (t2 != null) {
-						t2.transform.SetParent (GameManager.Instance.AllCanvas.transform);
-						t2.transform.localScale = Vector3.one;
-						t2.transform.localRotation = Quaternion.identity;
-
-						Vector2 fp =  new Vector3(apos.anchoredPosition.x+dp.x, apos.anchoredPosition.y+dp.y);
-						Debug.Log ("fp="+fp);
-						RectTransform r2 = t2.GetComponent<RectTransform>();
-						r2.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
-						r2.DOAnchorPos (fp, 1.0f, false).OnComplete(() => {
-							Debug.Log("Complete!");
-							t2.transform.SetParent (plane_abandan.transform);
-							t2.transform.localScale = Vector3.one;
-							t2.transform.localRotation = Quaternion.identity;
-						});
-						//GameObject g = t2.gameObject;
-						//g.transform.SetParent (plane_keep.transform);
-						//g.transform.localScale = Vector3.one;
-						//g.transform.localRotation = Quaternion.identity;
-					}
-					*/
+				if (this.moMahId != mahID) {
+					this.fromMoToKeep (this.moMahId);
 				}
 			} else {
 				//GotID = 0;
 				//Debug.Log ("tttttttt");
 				Transform t1 = plane_mo.transform.Find (0 + "");
+				if (t1 == null) {
+					t1 = plane_keep.transform.Find (mahID + "");
+				}
 				if (t1 != null) {
 					Destroy (t1.gameObject);
 				}
 				GameObject t2 = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
 				t2.name = mahID + "";
-				t2.transform.SetParent (GameManager.Instance.AllCanvas.transform);
+				t2.transform.SetParent (this.tmp);
+				t2.transform.localPosition = Vector3.zero;
 				t2.transform.localScale = Vector3.one;
 				t2.transform.localRotation = Quaternion.identity;
 				RectTransform r2 = t2.GetComponent<RectTransform>();
 				//RectTransform r1 = t1.GetComponent<RectTransform> ();
-				r2.anchoredPosition = new Vector2 (-800, 200);
-					//t1.transform.SetParent (GameManager.Instance.AllCanvas.transform);
-					//t1.transform.localScale = Vector3.one;
-					//t1.transform.localRotation = Quaternion.identity;
-
-				Vector2 fp =  new Vector3(-950+dp.x, -10);
-				//Debug.Log ("fp="+fp);
-					//RectTransform r3 = t2.GetComponent<RectTransform>();
-					//r2.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 1);
-				r2.DOAnchorPos (fp, 0.1f, false).OnComplete(() => {
+				//r2.anchoredPosition = new Vector2 (-800, 200);
+				Vector2 fp =  new Vector3(-650+dp.x, -90);
+				t2.transform.DOScale (new Vector3 (0.9f, 0.9f, 0.9f), 0.3f).OnComplete(() => {
+					t2.transform.localScale = Vector3.one;
+				});
+				r2.DOAnchorPos (fp, 0.3f, false).OnComplete(() => {
 					//Debug.Log("Complete!");
 					t2.transform.SetParent (plane_abandan.transform);
-					t2.transform.localScale = Vector3.one;
+					//t2.transform.localScale = Vector3.one;
 					t2.transform.localRotation = Quaternion.identity;
 				});
-						//GameObject g = t2.gameObject;
-						//g.transform.SetParent (plane_keep.transform);
-						//g.transform.localScale = Vector3.one;
-						//g.transform.localRotation = Quaternion.identity;
-					//}
-				//}
-
-				//GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
-				//d.name = mahID + "";
-				//d.transform.SetParent (plane_abandan.transform);
-				//d.transform.localScale = Vector3.one;
-				//d.transform.localRotation = Quaternion.identity;
 			}
 		}
 
         /// <summary>
         /// 将取得的牌按照顺序插入
         /// </summary>
-        void SetGotMahPosition()
+		void SetGotMahPosition(MahJongObject mah)
         {
 			//Debug.Log (this.name+".SetGotMahPosition()");
             keepedMah.Sort();
             int index = 0;
             for (int i = 0; i < keepedMah.Count; i++)
             {
-                if (keepedMah[i] >= gotMah.ID)
+				if (keepedMah[i] >= mah.ID)
                 {
                     break;
                 }
                 index++;
             }
 
-            gotMah.transform.SetSiblingIndex(index);
+			mah.transform.SetSiblingIndex(index);
         }
 
 		/// <summary>
@@ -664,29 +488,13 @@ namespace com.Desktop
 
 		public void handleMoPai(int mahID, int cnt)
 		{
-			Debug.Log (this.name+".handleMoPai("+mahID+")");
+			//Debug.Log (this.name+".handleMoPai("+mahID+")");
 			this.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 			keepedMah.Add (mahID);
 			//Debug.LogError ("[s] "+this.photonPlayer.NickName+".handleMoPai("+mahID+", "+keepedMah.Count+")");
 			//string amahname = string.Empty;
 			//keepedMah.Add (mahID);
 			string amahname = Mahjong.getName (mahID);
-			//int[] param = { this.ID, mahID, cnt};
-			/*
-			if (PhotonNetwork.player.ID == this.ID) {
-				Debug.Log ("ooooooooooo");
-				int[] param = { this.ID, mahID, cnt};
-				photonView.RPC ("MoPai", PhotonTargets.MasterClient, param);
-				//int[] param2 = { 2, mahID, cnt};
-				//photonView.RPC ("MoPai", PhotonTargets.Others, param2);
-			} else {
-				Debug.Log ("xxxxxxxxx");
-				//int[] param1 = { 2, mahID, cnt};
-				//photonView.RPC ("MoPai", PhotonTargets.MasterClient, param1);
-				int[] param = { this.ID, mahID, cnt};
-				photonView.RPC ("MoPai", PhotonTargets.Others, param);
-			}
-			*/
 			int[] param = { this.ID, mahID, cnt};
 			photonView.RPC ("MoPai", PhotonTargets.All, param);
 		}
@@ -702,7 +510,7 @@ namespace com.Desktop
 
 		public void handleDaPai(int mahID)
 		{
-			Debug.Log (this.name+".handleDaPai("+mahID+")");
+			//Debug.Log (this.name+".handleDaPai("+mahID+")");
 			this.state = PLAYERSTATE.WAITING;//更改為摸牌狀態
 			keepedMah.Remove(mahID);
 			abandanedMah.Add(mahID);
@@ -729,17 +537,17 @@ namespace com.Desktop
 			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			glg.constraintCount = 1;
 
-			if (this.ID==1) {
+			if (this.ID==PhotonNetwork.player.ID) {
 				if (mahID > 0) {
 					keepedMah.Remove (mahID);
 					keepedMah.Remove (mahID);
 					ponMah.Add (mahID);
 					ponMah.Add (mahID);
 					ponMah.Add (mahID);
-					//amahname = Mahjong.getName (mahID);
-					//amah.gameObject.transform.SetParent (plane_pon.transform);
-					//GameObject go = new GameObject("set");
 					Transform t1 = plane_abandan.transform.Find (mahID + "");
+					if (t1 == null) {
+						t1 = tmp.Find (mahID + "");
+					}
 					if (t1 != null) {
 						t1.SetParent (go.transform);
 						t1.localScale = Vector3.one;
@@ -774,6 +582,9 @@ namespace com.Desktop
 				ponMah.Add (mahID);
 				//GameObject go = new GameObject("set");
 				Transform t1 = plane_abandan.transform.Find (mahID + "");
+				if (t1 == null) {
+					t1 = tmp.Find (mahID + "");
+				}
 				if (t1 != null) {
 					t1.SetParent (go.transform);
 					t1.localScale = Vector3.one;
@@ -842,7 +653,7 @@ namespace com.Desktop
 						ponMah.Add (mahID);
 						break;
 					}
-					//Debug.LogError ("[s] " + this.photonPlayer.NickName + ".handleChi(" + mahID + "," + chitype + ")");
+					Debug.LogError ("[s] " + this.name + ".handleChi(" + mahID + "," + chitype + ")");
 					int[] param = { this.ID, mahID, chitype };
 					photonView.RPC ("ChiPai", PhotonTargets.All, param);
 				}
@@ -851,7 +662,7 @@ namespace com.Desktop
 
 		public void collectChiPai(int mahID, int chitype)
 		{
-			Debug.LogError ("[RPC] collectChiPai(" + mahID + ", chitype="+chitype+")");
+			//Debug.LogError ("[RPC] collectChiPai(" + mahID + ", chitype="+chitype+")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			Transform t1;
@@ -871,17 +682,7 @@ namespace com.Desktop
 			glg.cellSize = new Vector2 (67, 82);
 			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			glg.constraintCount = 1;
-			//lg. = 76 * 3;
-			//lg.preferredHeight = 95;
-			/*
-			GridLayoutGroup le = go.AddComponent<GridLayoutGroup> ();
-			le.cellSize = new Vector2 (76, 100);
-			le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-			le.childAlignment = TextAnchor.UpperCenter;
-			le.constraintCount = 1;
-			//glg.cellSize.y = 95;
-			*/
-			if (this.ID==1)
+			if (this.ID==PhotonNetwork.player.ID)
 			{
 				if (mahID > 0) {
 					//Debug.LogError ("[RPC] 你喊了吃 !!!" + mahID + "(" + chitype + ")");
@@ -895,17 +696,28 @@ namespace com.Desktop
 							ponMah.Add ((mahID + 1));
 							ponMah.Add ((mahID + 2));
 						}
-						t1 = plane_abandan.transform.Find (mahID + "");
-						if (t1 != null) {
-							t1.SetParent (go.transform);
-							t1.localScale = Vector3.one;
-						}
 						t2 = plane_keep.transform.Find (mahID + 1 + "");
+						if (t2 == null) {
+							t2 = tmp.Find (mahID + "");
+						}
 						if (t2 != null) {
 							t2.SetParent (go.transform);
 							t2.localScale = Vector3.one;
 						}
+
+						t1 = plane_abandan.transform.Find (mahID + "");
+						if (t1 == null) {
+							t1 = tmp.Find (mahID + "");
+						}
+						if (t1 != null) {
+							t1.SetParent (go.transform);
+							t1.localScale = Vector3.one;
+						}
+
 						t3 = plane_keep.transform.Find (mahID + 2 + "");
+						if (t3 == null) {
+							t3 = tmp.Find (mahID + "");
+						}
 						if (t3 != null) {
 							t3.SetParent (go.transform);
 							t3.localScale = Vector3.one;
@@ -920,17 +732,29 @@ namespace com.Desktop
 							ponMah.Add (mahID);
 							ponMah.Add ((mahID + 1));
 						}
-						t1 = plane_abandan.transform.Find (mahID + "");
-						if (t1 != null) {
-							t1.SetParent (go.transform);
-							t1.localScale = Vector3.one;
-						}
+
 						t2 = plane_keep.transform.Find (mahID - 1 + "");
+						if (t2 == null) {
+							t2 = tmp.Find (mahID + "");
+						}
 						if (t2 != null) {
 							t2.SetParent (go.transform);
 							t2.localScale = Vector3.one;
 						}
+
+						t1 = plane_abandan.transform.Find (mahID + "");
+						if (t1 == null) {
+							t1 = tmp.Find (mahID + "");
+						}
+						if (t1 != null) {
+							t1.SetParent (go.transform);
+							t1.localScale = Vector3.one;
+						}
+
 						t3 = plane_keep.transform.Find (mahID + 1 + "");
+						if (t3 == null) {
+							t3 = tmp.Find (mahID + "");
+						}
 						if (t3 != null) {
 							t3.SetParent (go.transform);
 							t3.localScale = Vector3.one;
@@ -945,21 +769,33 @@ namespace com.Desktop
 							ponMah.Add ((mahID - 1));
 							ponMah.Add (mahID);
 						}
-						t1 = plane_abandan.transform.Find (mahID + "");
-						if (t1 != null) {
-							t1.SetParent (go.transform);
-							t1.localScale = Vector3.one;
-						} else {
-							Debug.Log ("t1="+t1);
-						}
+
 						t2 = plane_keep.transform.Find (mahID - 1 + "");
+						if (t2 == null) {
+							t2 = tmp.Find (mahID + "");
+						}
 						if (t2 != null) {
 							t2.SetParent (go.transform);
 							t2.localScale = Vector3.one;
 						} else {
 							Debug.Log ("t2="+t2);
 						}
+
+						t1 = plane_abandan.transform.Find (mahID + "");
+						if (t1 == null) {
+							t1 = tmp.Find (mahID + "");
+						}
+						if (t1 != null) {
+							t1.SetParent (go.transform);
+							t1.localScale = Vector3.one;
+						} else {
+							Debug.Log ("t1="+t1);
+						}
+
 						t3 = plane_keep.transform.Find (mahID - 2 + "");
+						if (t3 == null) {
+							t3 = tmp.Find (mahID + "");
+						}
 						if (t3 != null) {
 							t3.SetParent (go.transform);
 							t3.localScale = Vector3.one;
@@ -993,6 +829,15 @@ namespace com.Desktop
 						mahObj1.player = this;
 						mahObj1.CanCilcked = false;
 
+						t1 = plane_abandan.transform.Find (mahID + "");
+						if (t1 == null) {
+							t1 = tmp.Find (mahID + "");
+						}
+						if (t1 != null) {
+							t1.SetParent (go.transform);
+							t1.transform.localScale = Vector3.one;
+						}
+
 						d2 = Instantiate(Resources.Load("MahJong/" + (mahID+2)) as GameObject);
 						d2.name = (mahID+2) + "";
 						d2.transform.SetParent(go.transform);
@@ -1020,6 +865,15 @@ namespace com.Desktop
 						mahObj1.ID = (mahID-1);
 						mahObj1.player = this;
 						mahObj1.CanCilcked = false;
+
+						t1 = plane_abandan.transform.Find (mahID + "");
+						if (t1 == null) {
+							t1 = tmp.Find (mahID + "");
+						}
+						if (t1 != null) {
+							t1.SetParent (go.transform);
+							t1.transform.localScale = Vector3.one;
+						}
 
 						d2 = Instantiate(Resources.Load("MahJong/" + (mahID+1)) as GameObject);
 						d2.name = (mahID+1) + "";
@@ -1049,6 +903,15 @@ namespace com.Desktop
 						mahObj1.player = this;
 						mahObj1.CanCilcked = false;
 
+						t1 = plane_abandan.transform.Find (mahID + "");
+						if (t1 == null) {
+							t1 = tmp.Find (mahID + "");
+						}
+						if (t1 != null) {
+							t1.SetParent (go.transform);
+							t1.transform.localScale = Vector3.one;
+						}
+
 						d2 = Instantiate(Resources.Load("MahJong/" + (mahID-1)) as GameObject);
 						d2.name = (mahID-1) + "";
 						d2.transform.SetParent(go.transform);
@@ -1064,11 +927,6 @@ namespace com.Desktop
 					if (!PhotonNetwork.player.IsMasterClient) {
 						keepedMah.RemoveAt (0);
 						keepedMah.RemoveAt (0);
-					}
-					t1 = plane_abandan.transform.Find (mahID + "");
-					if (t1 != null) {
-						t1.SetParent (go.transform);
-						t1.transform.localScale = Vector3.one;
 					}
 
 					//移除手牌
@@ -1112,11 +970,6 @@ namespace com.Desktop
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			GameObject go = new GameObject("Gan_set");
-			//go.AddComponent<Image> ();
-			//GridLayoutGroup le = go.AddComponent<GridLayoutGroup> ();
-			//le.cellSize = new Vector2 (76, 100);
-			//le.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-			//le.constraintCount = 1;
 			LayoutElement le = go.AddComponent<LayoutElement> ();
 			le.minWidth = 67 * 4;
 			le.minHeight = 100;
@@ -1124,11 +977,14 @@ namespace com.Desktop
 			glg.cellSize = new Vector2 (67, 82);
 			glg.constraint = GridLayoutGroup.Constraint.FixedRowCount;
 			glg.constraintCount = 1;
-			if (this.ID==1)
+			if (this.ID==PhotonNetwork.player.ID)
             {
 				if (mahID > 0) {
 					//显示杠了的牌
 					Transform t1 = plane_abandan.transform.Find (mahID + "");
+					if (t1 == null) {
+						t1 = tmp.Find (mahID + "");
+					}
 					if (t1 != null) {
 						t1.SetParent (go.transform);
 						t1.transform.localScale = Vector3.one;
@@ -1152,6 +1008,9 @@ namespace com.Desktop
 				}
             } else {
 				Transform t1 = plane_abandan.transform.Find (mahID + "");
+				if (t1 == null) {
+					t1 = tmp.Find (mahID + "");
+				}
 				if (t1 != null) {
 					t1.SetParent (go.transform);
 					t1.transform.localScale = Vector3.one;
@@ -1185,7 +1044,7 @@ namespace com.Desktop
 
         public void handleWin(int mahID)
         {
-            Debug.LogError ("[s] handleWin(" + mahID + ")");
+            //Debug.LogError ("[s] handleWin(" + mahID + ")");
             string amahname = string.Empty;
             amahname = Mahjong.getName(mahID);
             this.state = PLAYERSTATE.WAITING;
@@ -1213,8 +1072,12 @@ namespace com.Desktop
 
 		public IEnumerator doAiThink(int mahID)
 		{
-			Debug.LogError ("doAiThink(id="+mahID+")");
-			yield return new WaitForSeconds(1.0f);
+			Debug.LogError (this.name+".doAiThink(id="+mahID+")");
+			//yield return new WaitForSeconds(1.0f);
+			if (this.state == PLAYERSTATE.WAITING) {
+				Debug.Log (this.name+"防止自打自碰");
+				yield break;
+			}
 			bool iscan = AICheckPai(mahID);
 			bool isCanWin = false;
 			bool isCanPon = false;
@@ -1223,7 +1086,7 @@ namespace com.Desktop
 			int chitype = 0;
 			if (iscan) {
 				//有的吃就吃 有的槓就槓
-				if (mahID > 0) {
+				if (mahID > 0 && this.state== PLAYERSTATE.PLAYING) {
 					isCanWin = MahJongTools.IsCanHU (keepedMah, mahID);
 					isCanPon = MahJongTools.IsCanPon (keepedMah, mahID);
 					isCanGan = MahJongTools.IsCanGan (keepedMah, mahID, false, ponMah);
@@ -1237,15 +1100,13 @@ namespace com.Desktop
 					else if (isCanChi)
 						AskChi ();
 				}
-				Debug.LogError (" isCanGan="+isCanGan+", isCanPon="+isCanPon+", isCanChi="+isCanChi+")");
+				//Debug.LogError (" isCanGan="+isCanGan+", isCanPon="+isCanPon+", isCanChi="+isCanChi+")");
 			} else {
-				//AskPass ();
-				//yield return StartCoroutine (_MoPaiCo (0));//摸牌
 				if(this.state==PLAYERSTATE.PLAYING)
 					doMoPai();
 			}
 
-			yield return new WaitForSeconds(2.0f);
+			yield return new WaitForSeconds(1.0f);
 
 			isCanWin = false;
 			isCanPon = false;
@@ -1257,30 +1118,13 @@ namespace com.Desktop
 
 			iscan = AICheckPai(this.moMahId);
 			if (iscan) {
-				
 				isCanWin = MahJongTools.IsCanHU (keepedMah, this.moMahId);
 				isCanPon = MahJongTools.IsCanPon (keepedMah, this.moMahId);
 				isCanGan = MahJongTools.IsCanGan (keepedMah, this.moMahId, false, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, this.moMahId, out chitype, false);
-				/*
-				if (isCanGan)
-					curr = UnityEngine.Random.Range(0, 
-				else if (isCanPon)
-					AskPon ();
-				else if (isCanChi)
-					AskChi ();
-				*/
 				if (isCanWin) {
-					//AskWin ();
 					GameManager.Instance.doHandleWin (this.ID);
-					//} else if (isCanGan) {
-					//	curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
-					//} else if (isCanPon) {
-					//	curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
-					//} else if (isCanChi) {	
-					//	curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
 				} else {
-					//curr = UnityEngine.Random.Range (0, this.keepedMah.Count - 1);
 					curr = this.keepedMah.Count - 1;
 					//Debug.Log ("curr="+curr+", keepedMah.Count="+this.keepedMah.Count);
 					while (curr >= 0 && curr < this.keepedMah.Count && AICheckPai (this.keepedMah [curr])) {
@@ -1289,20 +1133,17 @@ namespace com.Desktop
 							break;
 						}
 						curr--;
-						Debug.Log ("curr="+curr+", keepedMah.Count="+this.keepedMah.Count);
+						//Debug.Log ("curr="+curr+", keepedMah.Count="+this.keepedMah.Count);
 					}
 					if (curr < 0) {
 						curr = this.keepedMah.Count - 1;
 					}
-					Debug.Log ("curr="+curr);
+					//Debug.Log ("curr="+curr);
 				}
 			} else {
 				curr = this.keepedMah.Count - 1;
 			}
 			if (this.state == PLAYERSTATE.PLAYING) {//如果是什麼都沒做, 先摸牌 再打牌
-				//yield return StartCoroutine (_MoPaiCo (0));//摸牌
-				//yield return new WaitForSeconds (1);
-				//Debug.Log ("max="+max+", "+_activePlayer.keepedMah [max]);
 				GameManager.Instance.doHandleDaPai(this.ID, this.keepedMah [curr]);
 			} else if (this.state == PLAYERSTATE.MOPAING) {//如果是摸完牌, 直接打牌
 				//curr = this.keepedMah.Count - 1;
@@ -1340,7 +1181,7 @@ namespace com.Desktop
 				isCanChi = MahJongTools.IsCanChi (keepedMah, mahID, out chitype, false);
 			}
 			iscan = isCanWin || isCanPon || isCanGan || isCanChi;
-			Debug.Log ("AICheckPai("+mahID+", iscan="+iscan+")");
+			//Debug.Log ("AICheckPai("+mahID+", iscan="+iscan+")");
 			return iscan;
 		}
 
@@ -1349,7 +1190,13 @@ namespace com.Desktop
 			this.moMahId = GameManager.Instance.getMahjongPai ();
 			int remain = GameManager.Instance.getRemainPai ();
 			handleMoPai (moMahId, remain);
-			//this.keepedMah.Add (moMahId);
+		}
+
+		public void sortPai()
+		{
+			for (int i = plane_keep.transform.childCount - 1; i >= 0; i--) {
+				Destroy(plane_keep.transform.GetChild(i).gameObject);
+			}
 		}
     }
 }

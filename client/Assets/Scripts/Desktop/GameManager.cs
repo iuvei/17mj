@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -58,6 +59,8 @@ namespace com.Desktop
 		public Image OverPanel;
 		public GameObject PanelInvate;
 		public Text ChatText;
+		public GameObject PanelAlert;
+		public Text RoomUserName;
         //public Animator AllCanvasAnim; // 過場移入
         //public Animator GameInfoAnim;  //局風顯示
 
@@ -132,17 +135,19 @@ namespace com.Desktop
 		/// </summary>
 		public override void OnConnectedToPhoton()
 		{
-			//Debug.Log ("OnConnectedToPhoton()");
-			base.OnConnectedToPhoton();
+			Debug.Log (this.name+".OnConnectedToPhoton()");
+			//base.OnConnectedToPhoton();
 			//setProcess (1.0f);
 			//if (loadingPanel) {
 			//loadingPanel.SetActive (false);
 			//}
 		}
 
+
 		public override void OnJoinedLobby()
 		{
-			//Debug.Log ("OnJoinedLobby()");
+			Debug.Log (this.name+".OnJoinedLobby()");
+
 			if (PhotonNetwork.room == null) {
 				
 				if (PhotonNetwork.CreateRoom(PhotonNetwork.playerName, new RoomOptions { MaxPlayers = 100 }, null))
@@ -151,12 +156,14 @@ namespace com.Desktop
 					//StartCoroutine(ChangeRoom());
 				}
 			}
-		}
-		private void OnFailedToConnect(NetworkConnectionError error)
-		{
-			//Debug.Log("fail to Connect");
+
 		}
 		*/
+
+		private void OnFailedToConnect(NetworkConnectionError error)
+		{
+			Debug.Log(this.name+" fail to Connect");
+		}
 
         void Start()
         {
@@ -198,6 +205,21 @@ namespace com.Desktop
 				}
 			}
 
+			if (RoomUserName != null) {
+				//PhotonNetwork.playerList
+				PhotonPlayer mp = null;
+				foreach(PhotonPlayer pp in PhotonNetwork.playerList) {
+					if (pp.IsMasterClient) {
+						mp = pp;
+						break;
+					}
+						
+				}
+				if(mp!=null) {
+					RoomUserName.text = mp.NickName;
+				}
+			}
+
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
             //Debug.Log ("Start()");
         }
@@ -208,27 +230,32 @@ namespace com.Desktop
 				Debug.Log ("兩個人以上才能開桌");
 				return;
 			}
-			//LayoutStart(); //畫面移入
-			//this._isgameover = false;
-            //只有副机有邀請的權利
-            //if (PhotonNetwork.isMasterClient)
-            //{
-			//	Debug.Log ("!PhotonNetwork.isMasterClient");
-            //    return;
-            //}
-			//只有主机有发牌的权利
-			//StartCoroutine("ReadyPlay");
 
-			photonView.RPC("InvatePlayMJ", PhotonTargets.MasterClient, null);
+			string name = PhotonNetwork.masterClient.NickName;
+			ShowAlert ("你邀請房主["+name+"]一起玩麻將, 等待回應中...", 2.0f);
+
+			int[] param = { (int)PhotonNetwork.player.ID };
+			photonView.RPC("InvatePlayMJ", PhotonTargets.MasterClient, param);
 
         }
 
 		[PunRPC]
-		private void InvatePlayMJ()
+		private void InvatePlayMJ(int[] param)
 		{
-			//StartCoroutine("ReadyPlay");
-			if (PanelInvate != null) {
-				PanelInvate.SetActive (true);
+			int player_id = (int)param [0];
+			Debug.LogError ("[RPC] InvatePlayMJ(id="+player_id+")");
+			List<PhotonPlayer> all = PhotonNetwork.playerList.ToList ();
+			PhotonPlayer pplayer = all.Find(x => x.ID.Equals (player_id));
+			string name = string.Empty;
+			if (pplayer != null) {
+				//mplayer.handlePon (_lastDaPai);
+				name = pplayer.NickName;
+				//StartCoroutine("ReadyPlay");
+				if (PanelInvate != null) {
+					Text txt = PanelInvate.GetComponentInChildren<Text> ();
+					txt.text = name;
+					PanelInvate.SetActive (true);
+				}
 			}
 		}
 
@@ -1196,5 +1223,24 @@ namespace com.Desktop
         {
 			photonView.RPC("ExitGame", PhotonTargets.All, null);
         }
+
+		public void ShowAlert(string msg, float t = 0)
+		{
+			if (PanelAlert != null) {
+				Text txt = PanelAlert.GetComponentInChildren<Text> ();
+				txt.text = msg;
+				PanelAlert.SetActive (true);
+				if (t > 0) {
+					Invoke ("HideAlert", t);
+				}
+			}
+		}
+
+		public void HideAlert()
+		{
+			if (PanelAlert != null) {
+				PanelAlert.SetActive (false);
+			}
+		}
     }
 }

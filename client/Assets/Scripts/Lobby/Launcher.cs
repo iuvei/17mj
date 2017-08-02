@@ -231,6 +231,7 @@ namespace com.Lobby
         private void OnFailedToConnect(NetworkConnectionError error)
         {
             Debug.Log("fail to Connect");
+			Connect ();
         }
 
         public override void OnPhotonCreateRoomFailed(object[] codeAndMsg)
@@ -330,7 +331,7 @@ namespace com.Lobby
         /// </summary>
         public void CreateRoom()
         {
-			Debug.Log ("CreateRoom()");
+			//Debug.Log (this.name+".CreateRoom()");
             if (PhotonNetwork.connected)
             {
 				_roomname = UnityEngine.Random.Range(0, 1000000000).ToString();
@@ -338,8 +339,8 @@ namespace com.Lobby
                 //创建房间成功
 				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))
                 {
-					Debug.Log (PhotonNetwork.room);
-					Debug.Log("Launcher.CreateRoom() "+_roomname+ " success!!");
+					//Debug.Log (PhotonNetwork.room);
+					Debug.Log("Launcher.CreateRoom(#"+_roomname+ " success!!)");
                     //StartCoroutine(ChangeRoom());
 					//ChangeRoom();
                 }
@@ -480,7 +481,7 @@ namespace com.Lobby
 
 		public void OnCreatedRoom()
 		{
-			Debug.Log("OnCreatedRoom()");
+			//Debug.Log("OnCreatedRoom()");
 			//PhotonNetwork.LoadLevel("Stage01");
 			PhotonNetwork.LoadLevel ("03.Room");
 		}

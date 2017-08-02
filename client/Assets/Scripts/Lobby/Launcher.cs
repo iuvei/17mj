@@ -1100,6 +1100,10 @@ namespace com.Lobby
             if (coinAdSign) {
                 coinAdSign.DOLocalMoveY(30, 1.5f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo).Pause();
             }
+
+            Transform depositeFlash = depositPanel.transform.Find("bg/flash");
+            if(depositeFlash)
+                depositeFlash.DOLocalRotate(new Vector3(0, 0, 180), 10f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
         }
 
         //---

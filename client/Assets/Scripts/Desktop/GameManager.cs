@@ -61,6 +61,8 @@ namespace com.Desktop
 		public Text ChatText;
 		public GameObject PanelAlert;
 		public Text RoomUserName;
+        public RectTransform SettingCanvas;
+        public RectTransform _invitePlayPop;
         //public Animator AllCanvasAnim; // 過場移入
         //public Animator GameInfoAnim;  //局風顯示
 
@@ -189,20 +191,22 @@ namespace com.Desktop
 				if (ChatText != null) {
 					ChatText.text += "房間:"+name+"\n";
 				}
-				//string name = PhotonNetwork.room.Name;
-				string url = "rtmp://catpunch.co/live/" + name;
+                //string name = PhotonNetwork.room.Name;
+                string url = "rtmp://catpunch.co/live/" + name;
 				if (!PhotonNetwork.isMasterClient) {
 					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
 					VideoRecordingBridge.StartPlay (url);
 					if (InvateBtn != null) {
-						InvateBtn.gameObject.SetActive (true);
+                        if (_invitePlayPop) //邀請搖晃動畫
+                            _invitePlayPop.DOScale(new Vector3(1.15f, 1.15f, 1), .8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+                        InvateBtn.gameObject.SetActive (true);
 					}
 					return;
 				}
 				VideoRecordingBridge.StartRecord (url);
 				if (InvateBtn != null) {
 					InvateBtn.gameObject.SetActive (false);
-				}
+                }
 			}
 
 			if (RoomUserName != null) {
@@ -1188,8 +1192,18 @@ namespace com.Desktop
 		{
 			AudioManager.Instance.Mute ();
 		}
+        public void ClickSetting() {
+            //SettingCanvas.transform.DOMoveY(10.8f, 0, true);
+            SettingCanvas.transform.DOMoveY(0, 1f, false).SetEase(Ease.InOutBack);
+        }
 
-		//畫面移入
+        public void ExitSetting()
+        {
+            //SettingCanvas.transform.DOMoveY(0, 0, true);
+            SettingCanvas.transform.DOMoveY(10.8f, 1, false).SetEase(Ease.InOutBack);
+        }
+
+        //畫面移入
         private void LayoutStart()
         {
 			//VideoCanvas.transform.DOScaleX (1, 0);
@@ -1203,7 +1217,9 @@ namespace com.Desktop
 
 		private void LayoutEnd()
 		{
-			AllCanvas.transform.DOMoveX (0, 0, true);
+            ExitSetting();
+            OverPanel.gameObject.SetActive(false);
+            AllCanvas.transform.DOMoveX (0, 0, true);
 			AllCanvas.transform.DOMoveX (-14, 1, false).SetEase(Ease.InOutBack);
 			VideoRecordingBridge.MoveLeft ();
 		}

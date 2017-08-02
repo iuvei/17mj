@@ -6,6 +6,8 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+//using ExitGames.Client.Photon.Encry;
 
 namespace com.Lobby
 {
@@ -334,10 +336,20 @@ namespace com.Lobby
 			//Debug.Log (this.name+".CreateRoom()");
             if (PhotonNetwork.connected)
             {
-				_roomname = UnityEngine.Random.Range(0, 1000000000).ToString();
+				Hashtable customp = new Hashtable ();
+				string cname = PhotonNetwork.player.NickName;
+				customp.Add("CRoomName", cname);
+				_roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
+				// 房間選項
+				RoomOptions roomOptions = new RoomOptions ();
+				roomOptions.isVisible = true;
+				roomOptions.isOpen = true;
+				roomOptions.maxPlayers = _roommax;
+				roomOptions.customRoomProperties = customp;
+				roomOptions.customRoomPropertiesForLobby = new string[] {"CRoomName"};
 				//Debug.Log ();
                 //创建房间成功
-				if (PhotonNetwork.CreateRoom(_roomname, new RoomOptions { MaxPlayers = _roommax }, null))
+				if (PhotonNetwork.CreateRoom(_roomname, roomOptions, null))
                 {
 					//Debug.Log (PhotonNetwork.room);
 					Debug.Log("Launcher.CreateRoom(#"+_roomname+ " success!!)");
@@ -392,6 +404,7 @@ namespace com.Lobby
 		/// </summary>
 		public void JoinOrCreateRoom()
 		{
+			/*
             if (playRoomBtns[1])
                 playRoomBtns[1].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
@@ -407,6 +420,7 @@ namespace com.Lobby
 					StartCoroutine(GetInRoom());
 				}
 			}
+			*/
 		}
         
         /// <summary>
@@ -493,6 +507,13 @@ namespace com.Lobby
 				hint.gameObject.SetActive (true);
 				hint.text = "載入中...";
 			}
+			if (rListPanel != null) {
+				int childs = rListPanel.childCount;
+				for (int i = childs-1; i >=0; i--)
+				{
+					GameObject.DestroyImmediate(rListPanel.GetChild(i).gameObject);
+				}
+			}
 			//hint.gameObject.SetActive (false);
 			yield return new WaitForSeconds(1.0f);
 
@@ -505,7 +526,12 @@ namespace com.Lobby
 						g.transform.localScale = Vector3.one;
 						g.transform.localPosition = Vector3.zero;
 						Text txt = g.GetComponentInChildren<Text> ();
-						txt.text = ri.Name;
+						Hashtable cp = ri.customProperties;
+						if (cp ["CRoomName"] != null) {
+							string name = cp ["CRoomName"].ToString ();
+							txt.text = name;
+						}
+						//txt.text = ri.Name;
 						Button bt = g.GetComponent<Button> ();
 						bt.onClick.AddListener(delegate{ joinRoom(ri.Name);});
 					}

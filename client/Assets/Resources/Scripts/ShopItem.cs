@@ -7,10 +7,20 @@ public class ShopItem : MonoBehaviour {
     public Image _targetImg;
     public Text _targetName;
     public Text _targetPrice;
+    public Image _spotLightImg;
+
     [HideInInspector]
     public string Name;
     [HideInInspector]
     public int Price;
+
+    private bool _changeFlag = false;
+    private Sprite _spot1;
+    private Sprite _spot2;
+
+    void Start() {
+        InvokeRepeating("ChangeSpotSprite", .5f, .5f);
+    }
 
     public void setInfo(ShopItemInfo info)
     {
@@ -18,5 +28,13 @@ public class ShopItem : MonoBehaviour {
         _targetImg.SetNativeSize();
         _targetName.text = info.Name;
         _targetPrice.text = string.Format("{0:0,0}", info.Price);
+    }
+
+    private void ChangeSpotSprite() {
+        string _num = (_changeFlag) ? "1" : "2";
+        if (_spotLightImg)
+            _spotLightImg.sprite = Resources.Load<Sprite>("Image/shop_glow" + _num);
+
+        _changeFlag = !_changeFlag;
     }
 }

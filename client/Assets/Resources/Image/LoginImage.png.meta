@@ -1,0 +1,442 @@
+fileFormatVersion: 2
+guid: 8e5a2b287cc64754fb810937aa1f26c3
+timeCreated: 1501638360
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: bg_login_input
+    21300002: bt_playnow
+    21300004: bt_confirm_change_disable
+    21300006: bt_signup
+    21300008: 15Up
+    21300010: get_new_pass-07
+    21300012: get_new_pass-06
+    21300014: sparkle
+    21300016: bt_confirm_change
+    21300018: bt_fb_login_s
+    21300020: bt_17_login
+    21300022: logo
+    21300024: bt_sent_code
+    21300026: bt_forget
+    21300028: 0001_14
+    21300030: 0001_15
+    21300032: bt_confirm_disable
+    21300034: bt_google_login
+    21300036: sparkle_yellow1
+    21300038: bt_confirm
+    21300040: bt_login
+    21300042: foxgame
+    21300044: 0001_22
+    21300046: 0001_23
+    21300048: 0001_24
+    21300050: 0001_25
+    21300052: 0001_26
+    21300054: 0001_27
+    21300056: bt_close
+    21300058: bt_playnow_s
+    21300060: bt_google_login_s
+    21300062: bt_fb_login
+    21300064: bt_signup_s
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: bg_login_input
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 550
+        width: 586
+        height: 524
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_playnow
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 846
+        width: 588
+        height: 228
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_confirm_change_disable
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 964
+        width: 800
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_signup
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 851
+        width: 800
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 15Up
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 593
+        width: 251
+        height: 251
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: get_new_pass-07
+      rect:
+        serializedVersion: 2
+        x: 844
+        y: 743
+        width: 88
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: get_new_pass-06
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 743
+        width: 88
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: sparkle
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 733
+        width: 111
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_confirm_change
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 739
+        width: 800
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_fb_login_s
+      rect:
+        serializedVersion: 2
+        x: 843
+        y: 578
+        width: 588
+        height: 154
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_17_login
+      rect:
+        serializedVersion: 2
+        x: 1433
+        y: 509
+        width: 588
+        height: 228
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: logo
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 179
+        width: 1062
+        height: 370
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_sent_code
+      rect:
+        serializedVersion: 2
+        x: 1066
+        y: 478
+        width: 300
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_forget
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 532
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_confirm_disable
+      rect:
+        serializedVersion: 2
+        x: 1066
+        y: 378
+        width: 300
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_google_login
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 318
+        width: 588
+        height: 188
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: sparkle_yellow1
+      rect:
+        serializedVersion: 2
+        x: 1958
+        y: 442
+        width: 65
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_confirm
+      rect:
+        serializedVersion: 2
+        x: 1066
+        y: 278
+        width: 300
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_login
+      rect:
+        serializedVersion: 2
+        x: 1772
+        y: 214
+        width: 254
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: foxgame
+      rect:
+        serializedVersion: 2
+        x: 1068
+        y: 192
+        width: 374
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_close
+      rect:
+        serializedVersion: 2
+        x: 1771
+        y: 88
+        width: 125
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_playnow_s
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 22
+        width: 588
+        height: 154
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_google_login_s
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 22
+        width: 588
+        height: 154
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_fb_login
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 4
+        width: 588
+        height: 188
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: bt_signup_s
+      rect:
+        serializedVersion: 2
+        x: 1444
+        y: 212
+        width: 254
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

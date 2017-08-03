@@ -73,10 +73,10 @@ public class LoginUI : MonoBehaviour {
 
     public void LoginCallback(WebExceptionStatus status, string result)
     {
-        if (ConnectingPanel) {
-            ConnectingPanel.SetActive(false);
-            UIManager.instance.StopConnectingAnim();
-        }
+        //if (ConnectingPanel) {
+        //    ConnectingPanel.SetActive(false);
+        //    UIManager.instance.StopConnectingAnim();
+        //}
             
         _hideConnecting = true;
 
@@ -140,6 +140,12 @@ public class LoginUI : MonoBehaviour {
 
     void Update() {
         if (_hideConnecting) {
+            if (ConnectingPanel)
+            {
+                ConnectingPanel.SetActive(false);
+                UIManager.instance.StopConnectingAnim();
+            }
+
             _hideConnecting = false;
         }
 

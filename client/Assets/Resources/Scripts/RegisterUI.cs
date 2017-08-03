@@ -152,7 +152,6 @@ public class RegisterUI : MonoBehaviour {
             }
             ResetAllInput();
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
-            EnterLoading.instance._autoToNextScene = true;
         }
         Button btn = RegisterBtn.GetComponent<Button>();
         btn.interactable = true;

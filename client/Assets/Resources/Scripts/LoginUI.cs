@@ -184,8 +184,6 @@ public class LoginUI : MonoBehaviour {
                 PlayerPrefs.SetString("USERCOIN", uCoin);
             }
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
-            EnterLoading.instance._autoToNextScene = true;
-
             _loginSuccess = false;
         }
     }

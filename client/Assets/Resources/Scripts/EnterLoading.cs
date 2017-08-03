@@ -8,6 +8,7 @@ public class EnterLoading : MonoBehaviour {
     public string _sceneName; 
     public Text loadText;
     public Image loadImage;
+    public float _delayTime = 0;
 
     public bool _autoToNextScene = false; // 是否載入完自動切換場景
     public bool _fadeOutBGM = false;      // 切換場景前是否要淡出背景音樂
@@ -39,13 +40,14 @@ public class EnterLoading : MonoBehaviour {
             GetComponent<Animator>().SetTrigger("EnterLoading");
         //InvokeRepeating("GuideImages", 0f, 2f); //圖片輪播
 
-        StartCoroutine(DisplayLoadingScreen(_sceneName));
+        StartCoroutine(DisplayLoadingScreen(_sceneName, _delayTime));
     }
 
    
-    IEnumerator DisplayLoadingScreen(string sceneName)
+    IEnumerator DisplayLoadingScreen(string sceneName, float delayT)
     {
-        yield return new WaitForSeconds(3f);
+        if(delayT > 0)
+            yield return new WaitForSeconds(delayT);
 
         int displayProgress = 0;
         int toProgress = 0;

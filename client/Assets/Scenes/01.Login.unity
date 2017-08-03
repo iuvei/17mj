@@ -1048,7 +1048,7 @@ Prefab:
     - target: {fileID: 114740206784943600, guid: 00097b7523e99e5478941c7381653fae,
         type: 2}
       propertyPath: _autoToNextScene
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114740206784943600, guid: 00097b7523e99e5478941c7381653fae,
         type: 2}

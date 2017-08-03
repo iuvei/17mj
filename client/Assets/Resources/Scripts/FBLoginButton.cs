@@ -17,7 +17,7 @@ public class FBLoginButton : MonoBehaviour {
     private bool _setPhoto = false;      //設定頭像
     private string stringData;
     private bool _loginDone = false;
-    private bool _setPhotoDone = true;
+    private bool _setPhotoDone = false;
     private string fbId = string.Empty;
     private string fbMail = string.Empty;
     private string fbPhoto = string.Empty;
@@ -78,6 +78,7 @@ public class FBLoginButton : MonoBehaviour {
 #if UNITY_ANDROID || UNITY_IOS && !UNITY_EDITOR
             FB.ActivateApp();
 #endif
+            /*
             if (FB.IsLoggedIn)
             {
                 var aToken = AccessToken.CurrentAccessToken;
@@ -85,7 +86,7 @@ public class FBLoginButton : MonoBehaviour {
                 if (string.IsNullOrEmpty(fbPhoto))
                     FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, FBPhotoCallback);
                 FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
-            }
+            }*/
         }
         else
         {
@@ -128,6 +129,8 @@ public class FBLoginButton : MonoBehaviour {
                 i++;
             if (string.IsNullOrEmpty(fbPhoto))
                 FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, FBPhotoCallback);
+            else
+                _setPhotoDone = true;
             FB.API("me?fields=name,email", HttpMethod.GET, FBUserCallBack);
         }
         else
@@ -263,8 +266,6 @@ public class FBLoginButton : MonoBehaviour {
 
         if (_loginDone && _setPhotoDone) {
             UIManager.instance.StartSetEnterLoading();
-            EnterLoading.instance._autoToNextScene = true;
-
             _loginDone = false;
             _setPhotoDone = false;
         }

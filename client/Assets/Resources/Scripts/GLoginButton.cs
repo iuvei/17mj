@@ -221,8 +221,6 @@ public class GLoginButton : MonoBehaviour {
                 PlayerPrefs.SetString("USERCOIN", uCoin);
             }
             UIManager.instance.StartSetEnterLoading();
-            EnterLoading.instance._autoToNextScene = true;
-
             _loginSuccess = false;
         }
     }

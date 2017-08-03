@@ -118,6 +118,8 @@ namespace com.Lobby
         private GameObject actDailyPanel;
         private GameObject actMissionPanel;
         private Transform playerRankPanel;
+        private Button replaceNickname;
+        private InputField settingNickname;
         #endregion
 
         private void Awake()
@@ -176,8 +178,9 @@ namespace com.Lobby
 
             hint = rListPanel.parent.GetComponentInChildren<Text>();
 
-            IniPlayerInfo();
+            
             SubPageInit();
+            IniPlayerInfo();
             _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
             SettingInitAnim();
             InvokeRepeating("AutoBirthBalloon", 3f, 8f);
@@ -1475,6 +1478,11 @@ namespace com.Lobby
                 gamePanel = childSetting.transform.Find("Game").gameObject;
                 recordPanel = childSetting.transform.Find("Record").gameObject;
 
+                if (profilePanel) {
+                    settingNickname = profilePanel.transform.Find("IF_nick").GetComponent<InputField>();
+                    replaceNickname = profilePanel.transform.Find("Btn_changeName").GetComponent<Button>();
+                }
+                
                 if (recordPanel)
                 {
                     depositRecoPanel = recordPanel.transform.Find("Panel_depositReco").gameObject;
@@ -1640,6 +1648,9 @@ namespace com.Lobby
                 {
                     playerNames[i].text = sName;
                 }
+
+                if(settingNickname) //設定頁暱稱欄位
+                    settingNickname.text = sName;
             }
         }
 
@@ -1674,6 +1685,22 @@ namespace com.Lobby
             {
                 userOnline.text = "在線人數 " + string.Format("{0:0,0}", int.Parse(sOnline));
             }
+        }
+
+        public void NicknameChange() {
+            if (replaceNickname)
+                replaceNickname.interactable = true;
+        }
+
+        public void SaveNickname()
+        {
+            if (settingNickname) {
+                PlayerPrefs.SetString("USERNAME", settingNickname.text);
+                SetPlayerNames();
+            }
+
+            if (replaceNickname)
+                replaceNickname.interactable = false;
         }
     }
 }

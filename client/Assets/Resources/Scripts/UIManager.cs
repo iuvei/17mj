@@ -133,7 +133,6 @@ public class UIManager : MonoBehaviour {
     public void StartSetEnterLoading()
     {
         loginPanel.SetActive(false);
-        EnterLoading.instance._autoToNextScene = false;
         EnterLoading.instance.StartLoading();
     }
 

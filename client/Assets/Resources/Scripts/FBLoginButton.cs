@@ -61,7 +61,11 @@ public class FBLoginButton : MonoBehaviour {
         if (_fbLoginBtn.Length != 0) {
             for (int i = 0; i < _fbLoginBtn.Length; i++)
             {
-                _fbLoginBtn[i].onClick.AddListener(delegate{ FBLogin();});
+				if (_fbLoginBtn [i] != null) {
+					_fbLoginBtn [i].onClick.AddListener (delegate {
+						FBLogin ();
+					});
+				}
             }
         }
     }

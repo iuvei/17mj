@@ -35,7 +35,7 @@ public class VideoRecordingBridge {
     #endif
 
 	public static void StartRecord(string str){
-		Debug.Log ("StartRecord("+str+")");
+		Debug.Log ("StartRecord('"+str+"')");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_startRecord (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID

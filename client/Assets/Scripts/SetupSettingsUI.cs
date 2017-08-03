@@ -39,7 +39,7 @@ public class SetupSettingsUI : MonoBehaviour {
 			this.sound_volume = .0f;
 		}
 
-		Debug.Log ("SetupSettingsUI loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
+		//Debug.Log ("SetupSettingsUI loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
 	}
 
 	public void init_slider() {

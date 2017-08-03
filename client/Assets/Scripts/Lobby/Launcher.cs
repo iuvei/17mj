@@ -186,7 +186,7 @@ namespace com.Lobby
 		public override void OnJoinedLobby()
 		{
 			//PhotonNetwork.JoinRandomRoom();
-			Debug.Log("OnJoinedLobby()");
+			Debug.LogError(this.name+".OnJoinedLobby()");
 		}
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace com.Lobby
         /// </summary>
         public override void OnConnectedToPhoton()
         {
-			Debug.Log ("OnConnectedToPhoton()");
+			Debug.LogError (this.name+".OnConnectedToPhoton()");
             base.OnConnectedToPhoton();
 			setProcess (1.0f);
 			//if (loadingPanel) {
@@ -352,7 +352,7 @@ namespace com.Lobby
 				if (PhotonNetwork.CreateRoom(_roomname, roomOptions, null))
                 {
 					//Debug.Log (PhotonNetwork.room);
-					Debug.Log("Launcher.CreateRoom(#"+_roomname+ " success!!)");
+					Debug.Log("Launcher.CreateRoom('#"+_roomname+ " success!!')");
                     //StartCoroutine(ChangeRoom());
 					//ChangeRoom();
                 }
@@ -364,6 +364,7 @@ namespace com.Lobby
 		/// </summary>
 		public void ShowRoomList()
 		{
+			Debug.Log ("ShowRoomList()");
             if(playRoomBtns[2])
                 playRoomBtns[2].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
@@ -387,7 +388,7 @@ namespace com.Lobby
             foreach (Transform child in rListPanel)
                 Destroy(child.gameObject);
 
-            Debug.Log ("HideRoomList()");
+            //Debug.Log ("HideRoomList()");
 			if (buttons.Count > 0) {
 				foreach (Button bu in buttons) {
 					Destroy (bu.gameObject);
@@ -502,6 +503,7 @@ namespace com.Lobby
 
 		IEnumerator reloadRoomlist()
 		{
+			Debug.Log ("reloadRoomlist()");
 			//Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
 			if (hint) {
 				hint.gameObject.SetActive (true);
@@ -533,7 +535,9 @@ namespace com.Lobby
 						}
 						//txt.text = ri.Name;
 						Button bt = g.GetComponent<Button> ();
-						bt.onClick.AddListener(delegate{ joinRoom(ri.Name);});
+						bt.onClick.AddListener (delegate {
+							joinRoom (ri.Name);
+						});
 					}
 					if (hint) {
 						hint.gameObject.SetActive (false);
@@ -544,6 +548,9 @@ namespace com.Lobby
 						//hint.gameObject.SetActive (false);
 					}
 				}
+			} else {
+				Debug.LogError ("網路連線失敗");
+				Connect ();
 			}
 		}
 

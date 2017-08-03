@@ -22,7 +22,17 @@ namespace com.Desktop
         #region 玩家的牌
 		public int ID = 0;
 		public bool isAI = false;
-		public bool autoPlay = false;
+		private bool _autoPlay = false;
+		public bool AutoPlay
+		{
+			get { return this._autoPlay; }
+			set {
+				this._autoPlay = value;
+				if (btnAuto != null) {
+					btnAuto.isOn = this._autoPlay;
+				}
+			}
+		}
         /// <summary>
         /// 是否为庄家
         /// 游戏开始 第一出手的玩家
@@ -59,11 +69,6 @@ namespace com.Desktop
 		public GameObject plane_mo;
 
 		public Transform tmp;
-
-        /// <summary>
-        /// 牌面上被打出去的牌
-        /// </summary>
-        //public MahJongObject abandonMah;
 
         #endregion
 
@@ -113,12 +118,12 @@ namespace com.Desktop
         /// </summary>
         private void BundleUIEvent()
         {
-			//Debug.Log ("[c] "+this.name+".BundleUI("+photonPlayer.NickName+")");
+			Debug.Log ("[c] "+this.name+".BundleUI("+photonPlayer.NickName+")");
 			if (photonPlayer != null) {
 				playerName.text = photonPlayer.NickName;
 			}
 
-			if (this.ID==PhotonNetwork.player.ID) {
+			if (this.ID == PhotonNetwork.player.ID) {
 
 				HideMenu ();
 				if (btnWin != null) {
@@ -152,10 +157,16 @@ namespace com.Desktop
 					});
 				}
 				if (btnAuto != null) {
+					btnAuto.isOn = this._autoPlay;
 					btnAuto.onValueChanged.RemoveAllListeners ();
 					btnAuto.onValueChanged.AddListener (delegate {
 						AskAutoPlay ();
 					});
+				}
+			} else {
+				if (btnAuto != null) {
+					btnAuto.isOn = this._autoPlay;
+					btnAuto.onValueChanged.RemoveAllListeners ();
 				}
 			}
         }
@@ -208,9 +219,18 @@ namespace com.Desktop
 
 		public void clearPAI()
 		{
-			//Debug.Log ("[c] "+this.name+".clearPAI()");
+			Debug.Log ("[c] "+this.name+".clearPAI()");
 			for (int i = plane_keep.transform.childCount - 1; i >= 0; i--) {
 				Destroy(plane_keep.transform.GetChild(i).gameObject);
+			}
+			for (int i = plane_pon.transform.childCount - 1; i >= 0; i--) {
+				Destroy(plane_pon.transform.GetChild(i).gameObject);
+			}
+			for (int i = plane_mo.transform.childCount - 1; i >= 0; i--) {
+				Destroy(plane_mo.transform.GetChild(i).gameObject);
+			}
+			for (int i = plane_abandan.transform.childCount - 1; i >= 0; i--) {
+				Destroy(plane_abandan.transform.GetChild(i).gameObject);
 			}
 		}
 
@@ -219,7 +239,7 @@ namespace com.Desktop
         /// </summary>
         public void ShowPAI()
         {
-			//Debug.Log ("[c] "+this.name+".ShowPAI()");
+			Debug.Log ("[c] "+this.name+".ShowPAI()");
             BundleUIEvent();
 			if (this.ID==PhotonNetwork.player.ID) {
 				keepedMah.Sort ();
@@ -278,7 +298,7 @@ namespace com.Desktop
 
 		public void createPaiToMo(int mahID)
 		{
-			//Debug.LogError ("[c] "+this.name+".createPaiToMo(id="+GotID+")");
+			Debug.LogError ("[c] "+this.name+".createPaiToMo(id="+mahID+")");
 			if (this.ID==PhotonNetwork.player.ID) {
 				this.moMahId = mahID;
 				//bool isZimo = MahJongTools.IsCanHU (keepedMah, GotID);
@@ -397,7 +417,7 @@ namespace com.Desktop
 		/// <param name="MahID">胡牌的ID</param>
 		public void AskWin()
 		{
-            //Debug.Log ("[c] AskWin()");
+            Debug.Log ("[c] AskWin()");
             //photonView.RPC("WinPai", PhotonTargets.MasterClient, param); 
 			object[] param = { (int)GameCommand.WINPAI, this.ID };
             photonView.RPC("SendRequestToServer", PhotonTargets.MasterClient, param);
@@ -406,7 +426,7 @@ namespace com.Desktop
 			
 		public void AskAutoPlay()
 		{
-			bool en = !this.autoPlay;
+			bool en = !this._autoPlay;
 			//Debug.Log ("[c] AskAutoPlay()"); 
 			object[] param = { (int)GameCommand.AUTOPLAY, this.ID,  en};
 			photonView.RPC("SendRequestToServer", PhotonTargets.MasterClient, param);
@@ -417,7 +437,7 @@ namespace com.Desktop
 		/// </summary>
 		public void AskPass()
 		{
-			Debug.Log (this.name+" [c] AskPass() auto="+this.autoPlay+" ,isAi="+this.isAI);
+			Debug.Log (this.name+" [c] AskPass() auto="+this._autoPlay+" ,isAi="+this.isAI);
 			object[] param = { (int)GameCommand.MOPAI, this.ID };
 			photonView.RPC ("SendRequestToServer", PhotonTargets.MasterClient, param);
 			HideMenu ();
@@ -488,7 +508,11 @@ namespace com.Desktop
 
 		public void handleMoPai(int mahID, int cnt)
 		{
-			//Debug.Log (this.name+".handleMoPai("+mahID+")");
+			Debug.Log (this.name+".handleMoPai("+mahID+")");
+			if (mahID < 0) {
+				GameManager.Instance.bcGameOver ();
+				return;
+			}
 			this.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 			keepedMah.Add (mahID);
 			//Debug.LogError ("[s] "+this.photonPlayer.NickName+".handleMoPai("+mahID+", "+keepedMah.Count+")");
@@ -501,8 +525,8 @@ namespace com.Desktop
 
 		public void handleAskAutoPlay(bool auto)
 		{
-			//Debug.Log ("handleAskAutoPlay(this.autoPlay="+auto+")");
-			this.autoPlay = auto;
+			Debug.Log ("handleAskAutoPlay(this.autoPlay="+auto+")");
+			this.AutoPlay = auto;
 			object[] param = { this.ID, auto};
 			photonView.RPC ("SetupAI", PhotonTargets.All, param);
 
@@ -1072,12 +1096,13 @@ namespace com.Desktop
 
 		public IEnumerator doAiThink(int mahID)
 		{
-			Debug.LogError (this.name+".doAiThink(id="+mahID+")");
+			//Debug.LogError (this.name+".doAiThink(id="+mahID+")");
 			//yield return new WaitForSeconds(1.0f);
 			if (this.state == PLAYERSTATE.WAITING) {
-				Debug.Log (this.name+"防止自打自碰");
+				//Debug.Log ("doAiThink("+mahID+","+this.name+"防止自打自碰)");
 				yield break;
 			}
+			Debug.LogError (this.name+".doAiThink(id="+mahID+")");
 			bool iscan = AICheckPai(mahID);
 			bool isCanWin = false;
 			bool isCanPon = false;
@@ -1187,7 +1212,7 @@ namespace com.Desktop
 
 		public void doMoPai()
 		{
-			this.moMahId = GameManager.Instance.getMahjongPai ();
+			this.moMahId = GameManager.Instance.getMahjongPai ();				
 			int remain = GameManager.Instance.getRemainPai ();
 			handleMoPai (moMahId, remain);
 		}

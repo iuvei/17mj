@@ -68,4 +68,5 @@ MonoBehaviour:
   - InvatePlayMJ
   - BroadcastOnlinePpl
   - ExitGame
+  - GameStart
   DisableAutoOpenWizard: 1

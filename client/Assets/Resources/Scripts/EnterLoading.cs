@@ -22,12 +22,12 @@ public class EnterLoading : MonoBehaviour {
     void Awake() {
         instance = this;
 
-        if (_sceneName == "")
-            Debug.Log("No Found Scene Name");
-        if(!GetComponent<SoundEffect>())
-            Debug.Log("No Found Sound Effect Component");
-        if (!GetComponent<Animator>())
-            Debug.Log("No Found Animator Component");
+        //if (_sceneName == "")
+        //    Debug.Log("No Found Scene Name");
+        //if(!GetComponent<SoundEffect>())
+        //    Debug.Log("No Found Sound Effect Component");
+        //if (!GetComponent<Animator>())
+        //    Debug.Log("No Found Animator Component");
 
         //guideImageNum = guideImages.Length; //圖片輪播
     }

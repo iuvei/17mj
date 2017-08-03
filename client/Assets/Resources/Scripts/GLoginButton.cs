@@ -21,7 +21,11 @@ public class GLoginButton : MonoBehaviour {
         {
             for (int i = 0; i < _gLoginBtn.Length; i++)
             {
-                _gLoginBtn[i].onClick.AddListener(delegate { GLogin(); });
+				if (_gLoginBtn [i] != null) {
+					_gLoginBtn [i].onClick.AddListener (delegate {
+						GLogin ();
+					});
+				}
             }
         }
 

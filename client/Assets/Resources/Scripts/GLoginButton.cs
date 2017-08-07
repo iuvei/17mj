@@ -41,8 +41,8 @@ public class GLoginButton : MonoBehaviour {
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
 #elif UNITY_IOS
-        string cName = PlayerPrefs.GetString("USERNAME");
-        string cToken = PlayerPrefs.GetString("USERTOKEN");
+        string cName = CryptoPrefs.GetString("USERNAME");
+        string cToken = CryptoPrefs.GetString("USERTOKEN");
         if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
         {
             string type = "C1";
@@ -79,8 +79,7 @@ public class GLoginButton : MonoBehaviour {
         if (ConnectingPanel) {
             ConnectingPanel.SetActive(false);
             UIManager.instance.StopConnectingAnim();
-        }
-            
+        }    
 
         if (status != WebExceptionStatus.Success)
         {
@@ -90,36 +89,7 @@ public class GLoginButton : MonoBehaviour {
         {
             dict = Json.Deserialize(result) as IDictionary;
             _loginSuccess = true;
-
-            //Debug.Log("ConnectSuccess!" + result);
-            //string uName = string.Empty;
-            //string uToken = string.Empty;
-            //string uLevel = string.Empty;
-            //string uCoin = string.Empty;
-
-            //IDictionary dict = Json.Deserialize(result) as IDictionary;
-            //if (dict["Name"] != null)
-            //{
-            //    uName = dict["Name"].ToString();
-            //    PlayerPrefs.SetString("USERNAME", uName);
-            //}
-            //if (dict["Token"] != null)
-            //{
-            //    uToken = dict["Token"].ToString();
-            //    PlayerPrefs.SetString("USERTOKEN", uToken);
-            //}
-            //if (dict["Level"] != null)
-            //{
-            //    uLevel = dict["Level"].ToString();
-            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
-            //}
-            //if (dict["Coin"] != null)
-            //{
-            //    uCoin = dict["Coin"].ToString();
-            //    PlayerPrefs.SetString("USERCOIN", uCoin);
-            //}
         }
-        //EnterLoading.instance._autoToNextScene = true;
     }
 
     private IEnumerator GetGooglePhoto()
@@ -131,7 +101,7 @@ public class GLoginButton : MonoBehaviour {
             Texture2D tex = new Texture2D(1, 1, TextureFormat.DXT1, false);
             tex.LoadImage(result);
             string stringData = Convert.ToBase64String(tex.EncodeToPNG());
-            PlayerPrefs.SetString("USERPHOTO", stringData);
+            CryptoPrefs.SetString("USERPHOTO", stringData);
         }
 #endif
         yield return null;
@@ -150,8 +120,8 @@ public class GLoginButton : MonoBehaviour {
 
         if (uMail == "No Init")
         {
-            string cName = PlayerPrefs.GetString("USERNAME");
-            string cToken = PlayerPrefs.GetString("USERTOKEN");
+            string cName = CryptoPrefs.GetString("USERNAME");
+            string cToken = CryptoPrefs.GetString("USERTOKEN");
             if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
             {
                 string type = "C1";
@@ -170,12 +140,12 @@ public class GLoginButton : MonoBehaviour {
             if (tokens[2] != null)
                 uName = tokens[2];
 
-            string Photo = PlayerPrefs.GetString("USERPHOTO");
+            string Photo = CryptoPrefs.GetString("USERPHOTO");
             if (string.IsNullOrEmpty(Photo))
                 StartCoroutine(GetGooglePhoto());
 
             string stype = "G";
-            string token = PlayerPrefs.GetString("USERTOKEN");
+            string token = CryptoPrefs.GetString("USERTOKEN");
             if (string.IsNullOrEmpty(token))
             {
                 MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
@@ -203,22 +173,22 @@ public class GLoginButton : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                PlayerPrefs.SetString("USERNAME", uName);
+                CryptoPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                PlayerPrefs.SetString("USERTOKEN", uToken);
+                CryptoPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                PlayerPrefs.SetString("USERLEVEL", uLevel);
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                PlayerPrefs.SetString("USERCOIN", uCoin);
+                CryptoPrefs.SetString("USERCOIN", uCoin);
             }
             UIManager.instance.StartSetEnterLoading();
             _loginSuccess = false;

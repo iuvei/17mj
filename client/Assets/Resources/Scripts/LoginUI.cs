@@ -87,38 +87,7 @@ public class LoginUI : MonoBehaviour {
             //Debug.Log("登入失敗: 輸入資訊錯誤");		
         } else {
             dict = Json.Deserialize(result) as IDictionary;
-
             _loginSuccess = true;
-            //Debug.Log ("登入成功! Token= "+ result);
-            //string uName = string.Empty;
-            //string uToken = string.Empty;
-            //string uLevel = string.Empty;
-            //string uCoin = string.Empty;
-
-
-            //IDictionary dict = Json.Deserialize(result) as IDictionary;
-            //if (dict["Name"] != null)
-            //{
-            //    uName = dict["Name"].ToString();
-            //    PlayerPrefs.SetString("USERNAME", uName);
-            //}
-            //if (dict["Token"] != null)
-            //{
-            //    uToken = dict["Token"].ToString();
-            //    PlayerPrefs.SetString("USERTOKEN", uToken);
-            //}
-            //if (dict["Level"] != null)
-            //{
-            //    uLevel = dict["Level"].ToString();
-            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
-            //}
-            //if (dict["Coin"] != null)
-            //{
-            //    uCoin = dict["Coin"].ToString();
-            //    PlayerPrefs.SetString("USERCOIN", uCoin);
-            //}
-            //UIManager.instance.StartSetEnterLoading(); //載入下個場景
-            //EnterLoading.instance._autoToNextScene = true;
         }
     }
 
@@ -130,12 +99,12 @@ public class LoginUI : MonoBehaviour {
 
     public void Logout()
     {
-        PlayerPrefs.DeleteKey("USERPHOTO");
-        PlayerPrefs.DeleteKey("USERNAME");
-        PlayerPrefs.DeleteKey("USERLEVEL");
-        PlayerPrefs.DeleteKey("USERCOIN");
-        PlayerPrefs.DeleteKey("USERONLINE");
-        PlayerPrefs.DeleteKey("USERTOKEN");
+        CryptoPrefs.DeleteKey("USERPHOTO");
+        CryptoPrefs.DeleteKey("USERNAME");
+        CryptoPrefs.DeleteKey("USERLEVEL");
+        CryptoPrefs.DeleteKey("USERCOIN");
+        CryptoPrefs.DeleteKey("USERONLINE");
+        CryptoPrefs.DeleteKey("USERTOKEN");
     }
 
     void Update() {
@@ -166,22 +135,22 @@ public class LoginUI : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                PlayerPrefs.SetString("USERNAME", uName);
+                CryptoPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                PlayerPrefs.SetString("USERTOKEN", uToken);
+                CryptoPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                PlayerPrefs.SetString("USERLEVEL", uLevel);
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                PlayerPrefs.SetString("USERCOIN", uCoin);
+                CryptoPrefs.SetString("USERCOIN", uCoin);
             }
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
             _loginSuccess = false;

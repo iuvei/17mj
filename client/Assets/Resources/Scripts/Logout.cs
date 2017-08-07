@@ -43,11 +43,11 @@ public class Logout : MonoBehaviour {
 
     private void ClearCache()
     {
-        PlayerPrefs.DeleteKey("USERPHOTO");
-        PlayerPrefs.DeleteKey("USERNAME");
-        PlayerPrefs.DeleteKey("USERLEVEL");
-        PlayerPrefs.DeleteKey("USERCOIN");
-        PlayerPrefs.DeleteKey("USERONLINE");
-        PlayerPrefs.DeleteKey("USERTOKEN");
+        CryptoPrefs.DeleteKey("USERPHOTO");
+        CryptoPrefs.DeleteKey("USERNAME");
+        CryptoPrefs.DeleteKey("USERLEVEL");
+        CryptoPrefs.DeleteKey("USERCOIN");
+        CryptoPrefs.DeleteKey("USERONLINE");
+        CryptoPrefs.DeleteKey("USERTOKEN");
     }
 }

@@ -1629,7 +1629,7 @@ namespace com.Lobby
 
         public void SetPlayerPhotos()
         {
-            string sPhoto = PlayerPrefs.GetString("USERPHOTO");
+            string sPhoto = CryptoPrefs.GetString("USERPHOTO");
             if (!string.IsNullOrEmpty(sPhoto))
             {
                 Texture2D newPhoto = new Texture2D(1, 1);
@@ -1645,7 +1645,7 @@ namespace com.Lobby
 
         public void SetPlayerNames()
         {
-            string sName = PlayerPrefs.GetString("USERNAME");
+            string sName = CryptoPrefs.GetString("USERNAME");
             if (!string.IsNullOrEmpty(sName))
             {
                 for (int i = 0; i < playerNames.Length; i++)
@@ -1660,7 +1660,7 @@ namespace com.Lobby
 
         public void SetPlayerLevels()
         {
-            string sLevel = PlayerPrefs.GetString("USERLEVEL");
+            string sLevel = CryptoPrefs.GetString("USERLEVEL");
             if (!string.IsNullOrEmpty(sLevel))
             {
                 for (int i = 0; i < playerLvs.Length; i++)
@@ -1672,7 +1672,7 @@ namespace com.Lobby
 
         public void SetPlayerCoins()
         {
-            string sCoin = PlayerPrefs.GetString("USERCOIN");
+            string sCoin = CryptoPrefs.GetString("USERCOIN");
             if (!string.IsNullOrEmpty(sCoin))
             {
                 for (int i = 0; i < playerCoins.Length; i++)
@@ -1684,7 +1684,7 @@ namespace com.Lobby
 
         public void SetUserOnline()
         {
-            string sOnline = PlayerPrefs.GetString("USERONLINE");
+            string sOnline = CryptoPrefs.GetString("USERONLINE");
             if (!string.IsNullOrEmpty(sOnline))
             {
                 userOnline.text = "在線人數 " + string.Format("{0:0,0}", int.Parse(sOnline));
@@ -1699,7 +1699,7 @@ namespace com.Lobby
         public void SaveNickname()
         {
             if (settingNickname) {
-                PlayerPrefs.SetString("USERNAME", settingNickname.text);
+                CryptoPrefs.SetString("USERNAME", settingNickname.text);
                 SetPlayerNames();
             }
 
@@ -1775,7 +1775,7 @@ namespace com.Lobby
                     Sprite sp = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
                     playerPhotos[2].sprite = sp;
 
-                    PlayerPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToPNG()));
+                    CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToPNG()));
                     SetPlayerPhotos();
                 }
             }

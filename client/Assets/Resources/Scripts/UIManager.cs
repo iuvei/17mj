@@ -182,34 +182,6 @@ public class UIManager : MonoBehaviour {
             //Debug.Log("ConnectSuccess! " + result);
             dict = Json.Deserialize(result) as IDictionary;
             _registerSuccess = true;
-
-            //string uName = string.Empty;
-            //string uToken = string.Empty;
-            //string uLevel = string.Empty;
-            //string uCoin = string.Empty;
-
-            //IDictionary dict = Json.Deserialize(result) as IDictionary;
-            //if (dict["Name"] != null)
-            //{
-            //    uName = dict["Name"].ToString();
-            //    PlayerPrefs.SetString("USERNAME", uName);
-            //}
-            //if (dict["Token"] != null)
-            //{
-            //    uToken = dict["Token"].ToString();
-            //    PlayerPrefs.SetString("USERTOKEN", uToken);
-            //}
-            //if (dict["Level"] != null)
-            //{
-            //    uLevel = dict["Level"].ToString();
-            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
-            //}
-            //if (dict["Coin"] != null)
-            //{
-            //    uCoin = dict["Coin"].ToString();
-            //    PlayerPrefs.SetString("USERCOIN", uCoin);
-            //}
-            //EnterLoading.instance._autoToNextScene = true;
         }
      }
 
@@ -224,22 +196,22 @@ public class UIManager : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                PlayerPrefs.SetString("USERNAME", uName);
+                CryptoPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                PlayerPrefs.SetString("USERTOKEN", uToken);
+                CryptoPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                PlayerPrefs.SetString("USERLEVEL", uLevel);
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                PlayerPrefs.SetString("USERCOIN", uCoin);
+                CryptoPrefs.SetString("USERCOIN", uCoin);
             }
             EnterLoading.instance._autoToNextScene = true;
 

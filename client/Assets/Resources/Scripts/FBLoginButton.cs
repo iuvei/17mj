@@ -36,8 +36,8 @@ public class FBLoginButton : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
 
-        sName = PlayerPrefs.GetString("USERNAME");
-        fbPhoto = PlayerPrefs.GetString("USERPHOTO");
+        sName = CryptoPrefs.GetString("USERNAME");
+        fbPhoto = CryptoPrefs.GetString("USERPHOTO");
 
         if (FB.IsInitialized && !string.IsNullOrEmpty(sName))
         {
@@ -100,10 +100,7 @@ public class FBLoginButton : MonoBehaviour {
         if (string.IsNullOrEmpty(result.Error) && result.Texture != null)
         {
             stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
-            //_logText.text = " PHO  = /n" + stringData;
             _setPhoto = true;
-            //string stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
-            //PlayerPrefs.SetString("USERPHOTO", stringData);
         }
     }
 
@@ -152,7 +149,6 @@ public class FBLoginButton : MonoBehaviour {
             UIManager.instance.StopConnectingAnim();
         }
 
-
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("Failed! " + result);
@@ -161,36 +157,7 @@ public class FBLoginButton : MonoBehaviour {
         {
             dict = Json.Deserialize(result) as IDictionary;
             _loginSuccess = true;
-
-            //Debug.Log("ConnectSuccess!" + result);
-            //string uName = string.Empty;
-            //string uToken = string.Empty;
-            //string uLevel = string.Empty;
-            //string uCoin = string.Empty;
-
-            //IDictionary dict = Json.Deserialize(result) as IDictionary;
-            //if (dict["Name"] != null)
-            //{
-            //    uName = dict["Name"].ToString();
-            //    PlayerPrefs.SetString("USERNAME", uName);
-            //}
-            //if (dict["Token"] != null)
-            //{
-            //    uToken = dict["Token"].ToString();
-            //    PlayerPrefs.SetString("USERTOKEN", uToken);
-            //}
-            //if (dict["Level"] != null)
-            //{
-            //    uLevel = dict["Level"].ToString();
-            //    PlayerPrefs.SetString("USERLEVEL", uLevel);
-            //}
-            //if (dict["Coin"] != null)
-            //{
-            //    uCoin = dict["Coin"].ToString();
-            //    PlayerPrefs.SetString("USERCOIN", uCoin);
-            //}
         }
-        //EnterLoading.instance._autoToNextScene = true;
     }
 
 
@@ -208,7 +175,7 @@ public class FBLoginButton : MonoBehaviour {
     public void doLogin()
     {
         string stype = "F";
-        string token = PlayerPrefs.GetString("USERTOKEN");
+        string token = CryptoPrefs.GetString("USERTOKEN");
 
         if (string.IsNullOrEmpty(token))
         {
@@ -237,29 +204,29 @@ public class FBLoginButton : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                PlayerPrefs.SetString("USERNAME", uName);
+                CryptoPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                PlayerPrefs.SetString("USERTOKEN", uToken);
+                CryptoPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                PlayerPrefs.SetString("USERLEVEL", uLevel);
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                PlayerPrefs.SetString("USERCOIN", uCoin);
+                CryptoPrefs.SetString("USERCOIN", uCoin);
             }
             _loginSuccess = false;
             _loginDone = true;
         }
 
         if (_setPhoto) {
-            PlayerPrefs.SetString("USERPHOTO", stringData);
+            CryptoPrefs.SetString("USERPHOTO", stringData);
             _setPhoto = false;
             _setPhotoDone = true;
         }

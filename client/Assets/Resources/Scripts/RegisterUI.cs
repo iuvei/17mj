@@ -133,22 +133,22 @@ public class RegisterUI : MonoBehaviour {
             if (dict["Name"] != null)
             {
                 uName = dict["Name"].ToString();
-                PlayerPrefs.SetString("USERNAME", uName);
+                CryptoPrefs.SetString("USERNAME", uName);
             }
             if (dict["Token"] != null)
             {
                 uToken = dict["Token"].ToString();
-                PlayerPrefs.SetString("USERTOKEN", uToken);
+                CryptoPrefs.SetString("USERTOKEN", uToken);
             }
             if (dict["Level"] != null)
             {
                 uLevel = dict["Level"].ToString();
-                PlayerPrefs.SetString("USERLEVEL", uLevel);
+                CryptoPrefs.SetString("USERLEVEL", uLevel);
             }
             if (dict["Coin"] != null)
             {
                 uCoin = dict["Coin"].ToString();
-                PlayerPrefs.SetString("USERCOIN", uCoin);
+                CryptoPrefs.SetString("USERCOIN", uCoin);
             }
             ResetAllInput();
             UIManager.instance.StartSetEnterLoading(); //載入下個場景

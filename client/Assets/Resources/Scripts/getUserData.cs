@@ -17,7 +17,7 @@ public class getUserData : MonoBehaviour {
     private string sOnline;
 
     void Start() {
-        sPhoto = PlayerPrefs.GetString("USERPHOTO");
+        sPhoto = CryptoPrefs.GetString("USERPHOTO");
         if (!string.IsNullOrEmpty(sPhoto))
         {
             Texture2D newPhoto = new Texture2D(1, 1);
@@ -28,28 +28,28 @@ public class getUserData : MonoBehaviour {
             ProfilePicture.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
         }
 
-        sName = PlayerPrefs.GetString("USERNAME");
+        sName = CryptoPrefs.GetString("USERNAME");
         if (!string.IsNullOrEmpty(sName))
         {
             Text name = NameText.GetComponent<Text>();
             name.text = sName;
         }
 
-        sLevel = PlayerPrefs.GetString("USERLEVEL");
+        sLevel = CryptoPrefs.GetString("USERLEVEL");
         if (!string.IsNullOrEmpty(sLevel))
         {
             Text level = LevelText.GetComponent<Text>();
             level.text = "Lv " + sLevel;
         }
 
-        sCoin = PlayerPrefs.GetString("USERCOIN");
+        sCoin = CryptoPrefs.GetString("USERCOIN");
         if (!string.IsNullOrEmpty(sCoin))
         {
             Text coin = CoinText.GetComponent<Text>();
             coin.text = string.Format("{0:0,0}", int.Parse(sCoin));
         }
 
-        sOnline = PlayerPrefs.GetString("USERONLINE");
+        sOnline = CryptoPrefs.GetString("USERONLINE");
         if (!string.IsNullOrEmpty(sOnline))
         {
             Text online = OnlineText.GetComponent<Text>();

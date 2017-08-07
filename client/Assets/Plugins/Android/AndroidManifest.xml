@@ -21,6 +21,14 @@
       </intent-filter>
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
+    <activity
+android:name="com.astricstore.imagevideocontactpicker.AndroidPickerActivity"
+android:configChanges="orientation|keyboardHidden|screenSize">
+    </activity>
+    <activity
+     android:name="eu.janmuller.android.simplecropimage.CropImage"
+     android:configChanges="orientation|keyboardHidden|screenSize">
+    </activity>
     <activity android:name="com.foxgame.google.GoogleSignInDialog" />
     <activity android:name="com.foxgame.google.GoogleLogin" />
     <activity android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"

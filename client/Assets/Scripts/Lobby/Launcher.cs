@@ -62,6 +62,9 @@ namespace com.Lobby
         public Transform[] playRoomBtns;
         public Transform[] btmMenuBtns;
 
+        public GameObject dailyBonusPanel;
+        public Transform dailyBonusTarget;
+
         public Image[] playerPhotos;
         public Text[] playerNames;
         public Text[] playerCoins;
@@ -124,6 +127,9 @@ namespace com.Lobby
 		private Texture2D texture;
 		private List<string> _photoNames = new List<string>();
 		private string _selectedName = "";
+        private Transform popupDailyBonus;
+        private Image dailyBonuGirlEye;
+        private Image dailyBonuSparkle;
         #endregion
 
         private void Awake()
@@ -1099,7 +1105,7 @@ namespace com.Lobby
 
                 Sequence diceSeq1 = DOTween.Sequence();
                 Sequence diceSeq2 = DOTween.Sequence();
-                Sequence diceSeq3= DOTween.Sequence();
+                Sequence diceSeq3 = DOTween.Sequence();
                 diceSeq1.PrependInterval(2);
                 diceSeq1.Append(diceL.DORotate(new Vector3(0, 0, -15), 0.1f).SetEase(Ease.InFlash).SetLoops(2, LoopType.Yoyo));
                 diceSeq1.SetLoops(-1, LoopType.Yoyo);
@@ -1134,6 +1140,21 @@ namespace com.Lobby
                 btmMenuBtns[2].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
                 btmMenuBtns[3].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetDelay(1).SetLoops(-1, LoopType.Yoyo);
                 btmMenuBtns[4].DOLocalMoveY(-15, 1f).SetEase(Ease.InOutFlash).SetLoops(-1, LoopType.Yoyo);
+            }
+
+            //每日登入女模閉眼
+            if (dailyBonuGirlEye) {
+                Sequence dBSeq = DOTween.Sequence();
+                Vector3[] waypoints = new[] { new Vector3(6.1f, 3.24f, -1f), new Vector3(6.93f, 3.69f, -1f) };
+
+                dBSeq.Append(dailyBonuGirlEye.DOFade(1, 0.3f).SetLoops(2, LoopType.Yoyo));
+                dBSeq.Insert(0, dailyBonuSparkle.DOFade(1, 0.3f));
+                dBSeq.Insert(0, dailyBonuSparkle.transform.DOScale(new Vector3(1, 1, 1), 0.6f));
+                dBSeq.Insert(0, dailyBonuSparkle.transform.DORotate(new Vector3(0, 0, 30), 0.1f).SetEase(Ease.Linear).SetLoops(3, LoopType.Yoyo));
+                dBSeq.Insert(0.1f, dailyBonuSparkle.transform.DOPath(waypoints, 0.5f, PathType.CatmullRom, PathMode.TopDown2D, 5).SetEase(Ease.OutQuad));
+                dBSeq.Insert(0.5f, dailyBonuSparkle.DOFade(0, 0.1f));
+                dBSeq.AppendInterval(1);
+                dBSeq.SetLoops(-1, LoopType.Restart).SetUpdate(true);
             }
 
             //點廣告領金幣
@@ -1509,6 +1530,16 @@ namespace com.Lobby
             if (rankPanel)
                 playerRankPanel = rankPanel.transform.Find("playerRank");
 
+            if (dailyBonusPanel) {
+                popupDailyBonus = dailyBonusPanel.transform.Find("main");
+
+                if (popupDailyBonus)
+                {
+                    dailyBonuGirlEye = popupDailyBonus.Find("Girl/eye").GetComponent<Image>();
+                    dailyBonuSparkle = popupDailyBonus.Find("spakle").GetComponent<Image>();
+                }
+            }
+            BirthDailyBonusItem();
         }
 
         public void ClickBalloonBtn() {
@@ -1779,8 +1810,83 @@ namespace com.Lobby
                     SetPlayerPhotos();
                 }
             }
+        }
 
-            
-        }		
+        public void ShowDailyBonus()
+        {
+            GameObject popupBG = dailyBonusPanel.transform.Find("popupBG").gameObject;
+
+            if (popupDailyBonus)
+            {
+                popupDailyBonus.gameObject.SetActive(true);
+                Time.timeScale = 0;
+                if (popupBG)
+                {
+                    popupBG.SetActive(true);
+                    popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f).SetUpdate(true);
+                }
+                popupDailyBonus.DOScale(Vector3.zero, 0);
+                popupDailyBonus.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetUpdate(true);
+            }
+        }
+
+        public void ExitDailyBonus()
+        {
+            GameObject popupBG = dailyBonusPanel.transform.Find("popupBG").gameObject;
+
+            if (popupDailyBonus)
+            {
+                Time.timeScale = 1;
+                popupDailyBonus.DOScale(Vector3.one, 0);
+                popupDailyBonus.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InSine);
+                if (popupBG)
+                {
+                    popupBG.GetComponent<Image>().DOFade(0, 0.3f);
+                    StartCoroutine(HideGameObject(popupBG, 0.3f));
+                }
+            }
+        }
+
+        public void BirthDailyBonusItem()
+        {
+            DateTime myDate = DateTime.Now;
+            int maxDay = 30;
+
+            switch (myDate.Month) {
+                case 1:case 3:case 5:case 7:case 8:case 10:case 12:
+                    maxDay = 31;
+                    break;
+                case 4:case 6:case 9:case 11:
+                    maxDay = 30;
+                    break;
+                case 2:
+                    maxDay = (myDate.Year % 4 == 0) ? 29 : 28;
+                    break;
+            }
+
+            foreach (Transform child in dailyBonusTarget)
+                Destroy(child.gameObject);
+
+            for (int i = 0 ;i < maxDay; i++)
+            {
+                GameObject go = GameObject.Instantiate(Resources.Load("Prefab/dailyBonusItem") as GameObject);
+                DailyBonus db = go.GetComponent<DailyBonus>();
+                db.ShowDate(i+1);
+
+                if (i + 1 >= myDate.Day)
+                    db.NotTake(i+1);
+                else
+                    db.AlreadyTake();
+
+                go.transform.SetParent(dailyBonusTarget);
+                RectTransform rectT = go.GetComponent<RectTransform>();
+                rectT.localPosition = Vector3.zero;
+                rectT.localScale = Vector3.one;
+
+                //if(i+1== myDate.Day)
+                //    db.ReadyTake();
+            }
+        }
+
     }
 }

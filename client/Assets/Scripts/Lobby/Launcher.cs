@@ -130,6 +130,7 @@ namespace com.Lobby
         private Transform popupDailyBonus;
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
+        private DailyBonus dailyBonusToday;
         #endregion
 
         private void Awake()
@@ -177,7 +178,8 @@ namespace com.Lobby
 
         void Start()
         {
-			setProcess (0.1f);
+            //SubPageInit();
+            setProcess (0.1f);
             Connect();
 			AudioManager.Instance.PlayBGM (BGM_name);
             SetPlayerName();
@@ -593,8 +595,10 @@ namespace com.Lobby
 			yield return new WaitForSeconds(1f);
 			loadingPanel.SetActive(false);
 			StopCoroutine (HideLoading());
-			//roomPanel.transform.DOScaleY(1, 1f);
-		}
+            //roomPanel.transform.DOScaleY(1, 1f);
+
+            Invoke("DailyFirstLogin", 0.8f); // 出現每日登入獎勵畫面
+        }
 
 		public void UpdateRoomInfo()
 		{
@@ -1812,6 +1816,11 @@ namespace com.Lobby
             }
         }
 
+        private void DailyFirstLogin() {
+            ShowDailyBonus();
+            dailyBonusToday.ReadyTake();
+        }
+
         public void ShowDailyBonus()
         {
             GameObject popupBG = dailyBonusPanel.transform.Find("popupBG").gameObject;
@@ -1826,7 +1835,7 @@ namespace com.Lobby
                     popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f).SetUpdate(true);
                 }
                 popupDailyBonus.DOScale(Vector3.zero, 0);
-                popupDailyBonus.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).SetUpdate(true);
+                popupDailyBonus.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack).SetUpdate(true);
             }
         }
 
@@ -1879,12 +1888,13 @@ namespace com.Lobby
                     db.AlreadyTake();
 
                 go.transform.SetParent(dailyBonusTarget);
+                go.name = (i + 1).ToString();
                 RectTransform rectT = go.GetComponent<RectTransform>();
                 rectT.localPosition = Vector3.zero;
                 rectT.localScale = Vector3.one;
 
-                //if(i+1== myDate.Day)
-                //    db.ReadyTake();
+                if (i + 1 == myDate.Day)
+                    dailyBonusToday = db; //當天
             }
         }
 

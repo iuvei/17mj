@@ -6,6 +6,7 @@ public class UnityIAPStoreListener : IStoreListener
 {
     // Unity IAP objects 
     private IStoreController m_Controller;
+    bool purchaseInProgress = false;
 
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
@@ -27,20 +28,6 @@ public class UnityIAPStoreListener : IStoreListener
                     }));
             }
         }*/
-    }
-    
-    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
-    {
-        Debug.Log("Purchase OK");
-        //Debug.Log("Purchase OK: " + e.purchasedProduct.definition.id);
-        //Debug.Log("Receipt: " + e.purchasedProduct.receipt);
-        return PurchaseProcessingResult.Complete;
-    }
-        
-    public void OnPurchaseFailed(Product item, PurchaseFailureReason r)
-    {
-        Debug.Log("Purchase failed: " + item.definition.id);
-        //Debug.Log(r);
     }
 
     public void OnInitializeFailed(InitializationFailureReason error)
@@ -105,12 +92,15 @@ public class UnityIAPStoreListener : IStoreListener
 
     public void PurchaseItem(int num)
     {
+        if (purchaseInProgress) return;
+
         if (m_Controller != null)
         {
             var product = m_Controller.products.all[num];
             if (product != null && product.availableToPurchase)
-            {               
+            {
                 m_Controller.InitiatePurchase(product);
+                purchaseInProgress = true;
             }
             else
             {
@@ -119,5 +109,74 @@ public class UnityIAPStoreListener : IStoreListener
         }
     }
 
-  
+    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
+    {
+        if (!purchaseInProgress) return PurchaseProcessingResult.Complete;
+        purchaseInProgress = false;
+
+        Debug.Log("Purchase OK, ID = " + e.purchasedProduct.definition.id);
+        Debug.Log("Receipt: " + e.purchasedProduct.receipt);
+
+        bool validPurchase = true; // Presume valid for platforms with no R.V.
+
+        // Unity IAP's validation logic is only included on these platforms.
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE_OSX
+        // Prepare the validator with the secrets we prepared in the Editor
+        // obfuscation window.
+        var validator = new CrossPlatformValidator(GooglePlayTangle.Data(),
+            AppleTangle.Data(), Application.identifier);
+
+        try
+        {
+            // On Google Play, result has a single product ID.
+            // On Apple stores, receipts contain multiple products.
+            var result = validator.Validate(e.purchasedProduct.receipt);
+            // For informational purposes, we list the receipt(s)
+            Debug.Log("Receipt is valid. Contents:");
+            foreach (IPurchaseReceipt productReceipt in result)
+            {
+                Debug.Log(productReceipt.productID);
+                Debug.Log(productReceipt.purchaseDate);
+                Debug.Log(productReceipt.transactionID);
+            }
+        }
+        catch (IAPSecurityException)
+        {
+            Debug.Log("Invalid receipt, not unlocking content");
+            validPurchase = false;
+        }
+#endif
+
+        if (validPurchase)
+        {
+            // Unlock the appropriate content here.
+            switch (e.purchasedProduct.definition.id)
+            {
+                case "Beginner Pack":
+                    break;
+                case "Happy Pack":
+                    break;
+                case "Adventurer Pack":
+                    break;
+                case "Master Pack":
+                    break;
+                case "Wealth Pack":
+                    break;
+                case "Professional Pack":
+                    break;
+            }
+        }
+
+        return PurchaseProcessingResult.Complete;
+    }
+
+    public void OnPurchaseFailed(Product item, PurchaseFailureReason r)
+    {
+        if (!purchaseInProgress) return;
+        purchaseInProgress = false;
+        Debug.Log("Purchase failed: " + item.definition.id);
+        //Debug.Log(r);
+    }
+
+
 }

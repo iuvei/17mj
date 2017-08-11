@@ -17,22 +17,22 @@ public class UnityIAP : MonoBehaviour {
         string _target = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name;
         switch (_target)
         {
-            case "Button01":
+            case "item1":
                 m_Singleton.PurchaseItem(0);
                 break;
-            case "Button02":
+            case "item2":
                 m_Singleton.PurchaseItem(1);
                 break;
-            case "Button03":
+            case "item3":
                 m_Singleton.PurchaseItem(2);
                 break;
-            case "Button04":
+            case "item4":
                 m_Singleton.PurchaseItem(3);
                 break;
-            case "Button05":
+            case "item5":
                 m_Singleton.PurchaseItem(4);
                 break;
-            case "Button06":
+            case "item6":
                 m_Singleton.PurchaseItem(5);
                 break;
         }

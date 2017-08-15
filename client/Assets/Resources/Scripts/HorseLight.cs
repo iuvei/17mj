@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using Facebook.MiniJSON;
+using System;
 
 public class HorseLight : MonoBehaviour {
     public static HorseLight instance;
@@ -25,11 +28,65 @@ public class HorseLight : MonoBehaviour {
     private bool _horseEmpty_2 = true;
     private bool _horseReadyRun_1 = false;
     private bool _horseReadyRun_2 = false;
+    private IDictionary dict;
 
     private int _cuurSpeed;
 
     void Awake() {
         instance = this;
+        //ReadyToStart();
+    }
+
+    void Start() {
+        //Insert test Data
+        //MJApi.setBulletin("bulletin", "新手禮包特價中,17玩麻將 一週年紀念活動開跑開跑", setBCallback);
+        //MJApi.setBulletin("Reward", "恭喜林小晴1獲得500顆寶石!", setBCallback);
+        string count = "3";
+        MJApi.getBulletin(count, BulletinCallback);
+    }
+
+    public void setBCallback(WebExceptionStatus status, string result)
+    {
+        if (status != WebExceptionStatus.Success)
+        {
+            Debug.Log("Failed! " + result);
+        }
+        Debug.Log("setBCallback =  " + result);
+    }
+
+    public void BulletinCallback(WebExceptionStatus status, string result)
+    {
+        if (status != WebExceptionStatus.Success)
+        {
+            Debug.Log("Failed! " + result);
+        }
+        //Debug.Log("BulletinCallback =  " + result);
+
+        string uBulletin = string.Empty;
+        dict = Json.Deserialize(result) as IDictionary;
+        if (dict["bulletin"] != null)
+        {
+            uBulletin = dict["bulletin"].ToString();
+            char[] delimiterChars = { ',' };
+            string[] words = uBulletin.Split(delimiterChars);
+            int i = 0;
+            foreach (string s in words)
+            {
+                _canMessages[i++] = s;
+                Debug.Log("s =  " + s);
+            }
+        }
+
+        foreach (String key in dict.Keys)
+        {
+            //Debug.Log("key =  " + key);
+            if (key != "bulletin")
+            {
+                string doc = dict[key].ToString();
+                Debug.Log("doc =  " + doc);
+               _rewardLists.Add(doc);
+            }
+        }
 
         ReadyToStart();
     }

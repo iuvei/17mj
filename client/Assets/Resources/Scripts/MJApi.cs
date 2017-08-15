@@ -7,7 +7,8 @@ public static class MJApi
     public delegate void RequestCallBack(WebExceptionStatus status, string result);
     public static RequestCallBack _callback;
 
-    private static string serverUrl = "http://catpunch.co:9000/";
+    //private static string serverUrl = "http://catpunch.co:9000/";
+    private static string serverUrl = "http://192.168.22.19:9000/";
     private static string secretKey = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvbywbdGABb46cGzeevCMQU2LXvornsNkScfeCS9BmZ0KkebfYTvgvfLwUpl0QjR4LL5hHOYzaHxGQcVfvvY2wtiPRRMxGqhxVq";
 
     public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
@@ -113,6 +114,25 @@ public static class MJApi
         string auth = "Bearer " + name + ":" + token;
         string method = "GET";
         string pdata = string.Empty;
+        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+    }
+
+    public static void setBulletin(string type, string data, RequestCallBack callback)
+    {
+        string api = "V1/setBulletin";
+        string auth = "Bearer " + secretKey;
+        string method = "POST";
+        data = StringToUnicode(data);
+        string pdata = "[{\"Data\":\"" + data + "\", \"Type\":\"" + type + "\"}]";
+        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+    }
+
+    public static void getBulletin(string count, RequestCallBack callback)
+    {
+        string api = "V1/getBulletin";
+        string auth = "Bearer " + secretKey;
+        string method = "POST";
+        string pdata = "[{\"Count\":\"" + count + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 

@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 //using ExitGames.Client.Photon.Encry;
 using ImageVideoContactPicker;
+using System.Net;
 
 namespace com.Lobby
 {
@@ -255,7 +256,6 @@ namespace com.Lobby
         {
             Debug.Log("Launcher Create Room faileds");
         }
-
         public void SetPlayerName()
         {
 			//Debug.Log ("SetPlayerName("+PhotonNetwork.player.NickName+")");
@@ -1731,10 +1731,22 @@ namespace com.Lobby
                 replaceNickname.interactable = true;
         }
 
+        public void setNameCallback(WebExceptionStatus status, string result)
+        {
+            if (status != WebExceptionStatus.Success)
+            {
+                Debug.Log("Failed! " + result);
+            }
+            Debug.Log("setNameCallback =  " + result);
+        }
+
         public void SaveNickname()
         {
             if (settingNickname) {
+                string oName = CryptoPrefs.GetString("USERNAME");
                 CryptoPrefs.SetString("USERNAME", settingNickname.text);
+                string sToken = CryptoPrefs.GetString("USERTOKEN");
+                MJApi.setPlayerName(sToken, oName, settingNickname.text, setNameCallback);
                 SetPlayerNames();
             }
 

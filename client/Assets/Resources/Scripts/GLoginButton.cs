@@ -109,7 +109,7 @@ public class GLoginButton : MonoBehaviour {
 
     public void OnConnected(string result)
     {
-        Debug.Log("OnConnected() = " + result);
+        //Debug.Log("OnConnected() = " + result);
         string uName = string.Empty;
         string uGid = string.Empty;
         string uMail = string.Empty;
@@ -148,10 +148,12 @@ public class GLoginButton : MonoBehaviour {
             string token = CryptoPrefs.GetString("USERTOKEN");
             if (string.IsNullOrEmpty(token))
             {
+                //Debug.Log("Call MJApi.AddMember ===");
                 MJApi.AddMember(uGid, uMail, "1", uName, stype, LoginCallback);
             }
             else
             {
+                //Debug.Log("Call MJApi.login ===");
                 MJApi.Login(stype, uMail, token, LoginCallback);
             }
             if (ConnectingPanel) {

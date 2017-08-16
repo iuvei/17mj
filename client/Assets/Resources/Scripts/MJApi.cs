@@ -91,12 +91,14 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-    public static void setTaskStatus(string token, string name, string taskStatus, RequestCallBack callback)
+    public static void setPlayerName(string token, string oName, string uName, RequestCallBack callback)
     {
-        string api = "V1/setTaskStatus";
-        string auth = "Bearer " + name + ":" + token;
-        string method = "PUT";
-        string pdata = "[{\"TaskStatus\":\"" + taskStatus + "\"}]";
+        string api = "V1/setPlayerName";
+        oName = StringToUnicode(oName);
+        uName = StringToUnicode(uName);
+        string auth = "Bearer " + secretKey;
+        string method = "POST";
+        string pdata = "[{\"Token\":\"" + token + "\", \"uName\":\"" + uName + "\", \"oName\":\"" + oName + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 

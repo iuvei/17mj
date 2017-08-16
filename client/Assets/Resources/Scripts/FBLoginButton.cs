@@ -44,10 +44,10 @@ public class FBLoginButton : MonoBehaviour {
             FB.ActivateApp();
             var perms = new List<string>() { "public_profile", "email", "user_friends" };
             FB.LogInWithReadPermissions(perms, AuthCallback);
-            Debug.Log("Awake FB.IsInitialized");
+            //Debug.Log("Awake FB.IsInitialized");
         } else {
             FB.Init(OnFBInitComplete, OnHideUnity);
-            Debug.Log("Awake FB.Is NOT Initialized");
+            //Debug.Log("Awake FB.Is NOT Initialized");
         }
     }
 

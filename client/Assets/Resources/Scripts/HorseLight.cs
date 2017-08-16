@@ -20,6 +20,9 @@ public class HorseLight : MonoBehaviour {
     [HideInInspector]
     public bool _acceptPass = true; // 允許放行
 
+    [HideInInspector]
+    public string _bulletinNum = "5"; // 取DB得獎人數量
+
     private float _horseLightLength_1;
     private float _horseLightLength_2;
     private bool _fixedTimeCheck = false;
@@ -31,18 +34,23 @@ public class HorseLight : MonoBehaviour {
     private IDictionary dict;
 
     private int _cuurSpeed;
+    private bool _readyToStart = false; //取得DB資料更新完 準備起跑
 
     void Awake() {
         instance = this;
-        //ReadyToStart();
     }
 
     void Start() {
         //Insert test Data
         //MJApi.setBulletin("bulletin", "新手禮包特價中,17玩麻將 一週年紀念活動開跑開跑", setBCallback);
         //MJApi.setBulletin("Reward", "恭喜林小晴1獲得500顆寶石!", setBCallback);
-        string count = "3";
-        MJApi.getBulletin(count, BulletinCallback);
+
+        InvokeRepeating("RegularCallBulletin", 0, 150);
+    }
+
+    private void RegularCallBulletin() {
+        if (_rewardLists.Count < 10)
+            MJApi.getBulletin(_bulletinNum, BulletinCallback);
     }
 
     public void setBCallback(WebExceptionStatus status, string result)
@@ -88,10 +96,15 @@ public class HorseLight : MonoBehaviour {
             }
         }
 
-        ReadyToStart();
+        _readyToStart = true;
     }
 
     void FixedUpdate() {
+        if (_readyToStart)
+        {
+            ReadyToStart();
+            _readyToStart = false;
+        }
 
         //偵測是否準備起跑
         if (_acceptPass) {

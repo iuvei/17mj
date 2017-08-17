@@ -12,7 +12,7 @@ public class MyPluginPostProcessBuild
 	[PostProcessBuild]
 	public static void ChangeXcodePlist(BuildTarget buildTarget, string pathToBuiltProject)
 	{
-		#if UNITY_5 && (UNITY_IOS || UNITY_TVOS)
+#if UNITY_5 && (UNITY_IOS || UNITY_TVOS)
 		if ( buildTarget == BuildTarget.iOS )
 		{
 			// Get plist
@@ -24,8 +24,9 @@ public class MyPluginPostProcessBuild
 			PlistElementDict rootDict = plist.root;
 
 			// background location useage key (new in iOS 8)
-			rootDict.SetString("NSMicrophoneUsageDescription", "xxx");
-			rootDict.SetString("NSCameraUsageDescription", "yyy");
+			rootDict.SetString("NSMicrophoneUsageDescription", "Microphone Access Warning");
+			rootDict.SetString("NSCameraUsageDescription", "Camera Access Warning");
+            rootDict.SetString("NSPhotoLibraryUsageDescription", "Photo Library Access Warning");
 			rootDict.SetString ("UIBackgroundModes", "remote-notification");
 
 			// background modes
@@ -47,6 +48,6 @@ public class MyPluginPostProcessBuild
 
 			File.WriteAllText(projPath, proj.WriteToString());
 		}
-		#endif
-	}
+#endif
+    }
 }

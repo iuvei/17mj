@@ -28,6 +28,7 @@ public class MyPluginPostProcessBuild
 			rootDict.SetString("NSCameraUsageDescription", "Camera Access Warning");
             rootDict.SetString("NSPhotoLibraryUsageDescription", "Photo Library Access Warning");
 			rootDict.SetString ("UIBackgroundModes", "remote-notification");
+            rootDict.SetString ("UIRequiresFullScreen", "YES");
 
 			// background modes
 			PlistElementArray bgModes = rootDict.CreateArray("UIBackgroundModes");

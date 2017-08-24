@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 //using ExitGames.Client.Photon.Encry;
-using ImageVideoContactPicker;
 using System.Net;
 
 namespace com.Lobby
@@ -125,14 +124,14 @@ namespace com.Lobby
         private Transform playerRankPanel;
         private Button replaceNickname;
         private InputField settingNickname;
-		private Texture2D texture;
-		private List<string> _photoNames = new List<string>();
-		private string _selectedName = "";
         private Transform popupDailyBonus;
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
+        [SerializeField]
+        private Unimgpicker imagePicker;
         #endregion
+
 
         private void Awake()
         {
@@ -174,7 +173,34 @@ namespace com.Lobby
                 mySequence = DOTween.Sequence();
                 mySequence.Append(xx2.DOText("載入中...", 3)).SetLoops(-1, LoopType.Restart);
             }
-			//DontDestroyOnLoad (this.gameObject);
+            //DontDestroyOnLoad (this.gameObject);
+
+            imagePicker.Completed += (string path) =>
+            {
+                StartCoroutine(LoadImage(path));
+            };
+        }
+
+        private IEnumerator LoadImage(string path)
+        {
+            var url = "file://" + path;
+            var www = new WWW(url);
+            yield return www;
+
+            var texture = www.texture;
+            if (texture == null)            
+                Debug.LogError("Failed to load texture url:" + url);
+
+            if (texture != null)
+            {
+                if (playerPhotos[2])
+                {
+                    Sprite sp = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+                    playerPhotos[2].sprite = sp;
+                    CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToPNG()));
+                    SetPlayerPhotos();
+                }
+            }          
         }
 
         void Start()
@@ -1754,78 +1780,8 @@ namespace com.Lobby
                 replaceNickname.interactable = false;
         }
 		
-        void OnEnable()
-        {
-            PickerEventListener.onImageSelect += OnImageSelect;
-            PickerEventListener.onImageLoad += OnImageLoad;
-            PickerEventListener.onError += OnError;
-            PickerEventListener.onCancel += OnCancel;
-        }
-
-        void OnDisable()
-        {
-            PickerEventListener.onImageSelect -= OnImageSelect;
-            PickerEventListener.onImageLoad -= OnImageLoad;
-            PickerEventListener.onError -= OnError;
-            PickerEventListener.onCancel -= OnCancel;
-        }
-
-        void OnImageSelect(string imgPath)
-        {
-            Debug.Log("Image Location : " + imgPath);
-            //log += "\nImage Path : " + imgPath;
-        }
-
-        void OnImageLoad(string imgPath, Texture2D tex)
-        {
-            Debug.Log("Image Location : " + imgPath);
-            texture = tex;
-        }
-
-        void OnError(string errorMsg)
-        {
-            Debug.Log("Error : " + errorMsg);
-            //log += "\nError :" +errorMsg;
-        }
-
-        void OnCancel()
-        {
-            Debug.Log("Cancel by user");
-            //log += "\nCancel by user";
-        }
-
         public void ClickReplacePhoto() {
-            #if UNITY_ANDROID
-                                AndroidPicker.BrowseImage(false);
-            #elif UNITY_IPHONE
-			                            IOSPicker.BrowseImage(false); // pick
-            #endif
-        }
-
-        Vector2 sp1 = Vector2.zero;
-        void OnGUI()
-        {
-            sp1 = GUI.BeginScrollView(new Rect(10, 50, Screen.width / 2 - 20, Screen.height - 20), sp1, new Rect(0, 0, Screen.width / 2 - 50, _photoNames.Count * 30));
-            for (int i = 0; i < _photoNames.Count; i++)
-            {
-                if (GUI.Button(new Rect(0, 5 * i, Screen.width / 2 - 25, 25), _photoNames[i]))
-                {
-                    _selectedName = _photoNames[i];
-                }
-            }
-            GUI.EndScrollView();
-
-            if (texture != null)
-            {
-                if (playerPhotos[2])
-                {
-                    Sprite sp = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-                    playerPhotos[2].sprite = sp;
-
-                    CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToPNG()));
-                    SetPlayerPhotos();
-                }
-            }
+            imagePicker.Show("Select Image", "unimgpicker", "ImagePicker", 1024);
         }
 
         private void DailyFirstLogin() {

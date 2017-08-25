@@ -199,8 +199,22 @@ namespace com.Lobby
                     playerPhotos[2].sprite = sp;
                     CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToPNG()));
                     SetPlayerPhotos();
+
+                    string sName = CryptoPrefs.GetString("USERNAME");
+                    string sToken = CryptoPrefs.GetString("USERTOKEN");
+                    string sPhoto = CryptoPrefs.GetString("USERPHOTO");
+                    MJApi.setUserPhoto(sToken, sName, sPhoto, setPhotoCallback);
                 }
             }          
+        }
+
+        public void setPhotoCallback(WebExceptionStatus status, string result)
+        {
+            if (status != WebExceptionStatus.Success)
+            {
+                Debug.Log("Failed! " + result);
+            }
+            //Debug.Log("setPhotoCallback =  " + result);
         }
 
         void Start()
@@ -1763,7 +1777,7 @@ namespace com.Lobby
             {
                 Debug.Log("Failed! " + result);
             }
-            Debug.Log("setNameCallback =  " + result);
+            //Debug.Log("setNameCallback =  " + result);
         }
 
         public void SaveNickname()

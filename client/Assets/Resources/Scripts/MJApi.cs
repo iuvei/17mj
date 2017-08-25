@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+using UnityEngine;
 
 public static class MJApi
 {
@@ -82,12 +83,13 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-    public static void setUserPhoto(string token, string data, RequestCallBack callback)
+    public static void setUserPhoto(string token, string name, string data, RequestCallBack callback)
     {
         string api = "V1/setUserPhoto";
-        string auth = "Bearer " + token;
+        string auth = "Bearer " + secretKey;
+        name = StringToUnicode(name);
         string method = "POST";
-        string pdata = "[{\"Token\":\"" + token + "\", \"Photo\":\"" + data + "\"}]";
+        string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
@@ -155,23 +157,6 @@ public static class MJApi
         string pdata = "[{\"Id\":"+ id +",\"Num\":" +  num +"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
-    
-    public static void getBPItemNum(string token, string name, RequestCallBack callback)
-    {
-        string api = "V1/getBPItemNum";
-        string auth = "Bearer " + name + ":" + token;
-        string method = "GET";
-        string pdata = string.Empty;
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
 
-    public static void getBPItemNum(string token, string name, int id, RequestCallBack callback)
-    {
-        string api = "V1/getOneBPItemNum?bpitemid=" + id;
-        string auth = "Bearer " + name + ":" + token;
-        string method = "GET";
-        string pdata = string.Empty;
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
 
 }

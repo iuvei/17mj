@@ -59,7 +59,7 @@ public class HorseLight : MonoBehaviour {
         {
             Debug.Log("Failed! " + result);
         }
-        Debug.Log("setBCallback =  " + result);
+        //Debug.Log("setBCallback =  " + result);
     }
 
     public void BulletinCallback(WebExceptionStatus status, string result)
@@ -81,7 +81,7 @@ public class HorseLight : MonoBehaviour {
             foreach (string s in words)
             {
                 _canMessages[i++] = s;
-                Debug.Log("s =  " + s);
+                //Debug.Log("s =  " + s);
             }
         }
 
@@ -91,7 +91,7 @@ public class HorseLight : MonoBehaviour {
             if (key != "bulletin")
             {
                 string doc = dict[key].ToString();
-                Debug.Log("doc =  " + doc);
+                //Debug.Log("doc =  " + doc);
                _rewardLists.Add(doc);
             }
         }

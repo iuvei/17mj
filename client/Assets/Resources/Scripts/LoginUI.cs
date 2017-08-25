@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Net;
-using System.Collections;
-using Facebook.MiniJSON;
+using System;
 
 public class LoginUI : MonoBehaviour {
     public static LoginUI Instance;
@@ -17,7 +16,7 @@ public class LoginUI : MonoBehaviour {
     private bool _hideConnecting = false;    //隱藏連線中
     private bool _showLoginHintPass = false; //顯示錯誤訊息
     private bool _loginSuccess = false;    //設定資料
-    private IDictionary dict;
+    private string loginResult = string.Empty;
 
     void Awake() {
         Instance = this;
@@ -86,7 +85,8 @@ public class LoginUI : MonoBehaviour {
             _showLoginHintPass = true;
             //Debug.Log("登入失敗: 輸入資訊錯誤");		
         } else {
-            dict = Json.Deserialize(result) as IDictionary;
+            //dict = Json.Deserialize(result) as IDictionary;
+            loginResult = result;
             _loginSuccess = true;
         }
     }
@@ -131,26 +131,33 @@ public class LoginUI : MonoBehaviour {
             string uToken = string.Empty;
             string uLevel = string.Empty;
             string uCoin = string.Empty;
+            string uPhoto = string.Empty;
+            string[] tokens = loginResult.Split(new string[] { "," }, StringSplitOptions.None);
 
-            if (dict["Name"] != null)
+            if (tokens[0] != null)
             {
-                uName = dict["Name"].ToString();
+                uName = tokens[0];
                 CryptoPrefs.SetString("USERNAME", uName);
             }
-            if (dict["Token"] != null)
+            if (tokens[1] != null)
             {
-                uToken = dict["Token"].ToString();
+                uToken = tokens[1];
                 CryptoPrefs.SetString("USERTOKEN", uToken);
             }
-            if (dict["Level"] != null)
+            if (tokens[2] != null)
             {
-                uLevel = dict["Level"].ToString();
+                uLevel = tokens[2];
                 CryptoPrefs.SetString("USERLEVEL", uLevel);
             }
-            if (dict["Coin"] != null)
+            if (tokens[3] != null)
             {
-                uCoin = dict["Coin"].ToString();
+                uCoin = tokens[3];
                 CryptoPrefs.SetString("USERCOIN", uCoin);
+            }
+            if (tokens[4] != null && tokens[4] != "undefined")
+            {
+                uPhoto = tokens[4];
+                CryptoPrefs.SetString("USERPHOTO", uPhoto);
             }
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
             _loginSuccess = false;

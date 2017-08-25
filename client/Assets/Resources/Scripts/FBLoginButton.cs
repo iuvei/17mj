@@ -15,7 +15,7 @@ public class FBLoginButton : MonoBehaviour {
     private bool _loginSuccess = false;  //設定資料
     private IDictionary dict;
     private bool _setPhoto = false;      //設定頭像
-    private string stringData;
+    private string stringData = string.Empty;
     private bool _loginDone = false;
     private bool _setPhotoDone = false;
     private string fbId = string.Empty;
@@ -96,7 +96,7 @@ public class FBLoginButton : MonoBehaviour {
 
     void FBPhotoCallback(IGraphResult result)
     {
-        Debug.Log("FBPhotoCallback()");
+        //Debug.Log("FBPhotoCallback()");
         if (string.IsNullOrEmpty(result.Error) && result.Texture != null)
         {
             stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
@@ -192,6 +192,15 @@ public class FBLoginButton : MonoBehaviour {
         //UIManager.instance.StartSetEnterLoading();
     }
 
+    public void setPhotoCallback(WebExceptionStatus status, string result)
+    {
+        if (status != WebExceptionStatus.Success)
+        {
+            Debug.Log("Failed! " + result);
+        }
+        //Debug.Log("FBlogin setPhotoCallback =  " + result);
+    }
+
     void Update() {
         if (_loginSuccess) {
 
@@ -226,9 +235,21 @@ public class FBLoginButton : MonoBehaviour {
         }
 
         if (_setPhoto) {
-            CryptoPrefs.SetString("USERPHOTO", stringData);
-            _setPhoto = false;
-            _setPhotoDone = true;
+            string sName = string.Empty;
+            string sToken = string.Empty;
+            string sPhoto = string.Empty;
+            sName = CryptoPrefs.GetString("USERNAME");
+            sToken = CryptoPrefs.GetString("USERTOKEN");
+            if (stringData != string.Empty &&
+                 sName != string.Empty &&
+                 sToken != string.Empty)
+            {
+                CryptoPrefs.SetString("USERPHOTO", stringData);
+                sPhoto = CryptoPrefs.GetString("USERPHOTO");
+                MJApi.setUserPhoto(sToken, sName, sPhoto, setPhotoCallback);
+                _setPhoto = false;
+                _setPhotoDone = true;
+            }
         }
 
         if (_loginDone && _setPhotoDone) {

@@ -14,6 +14,10 @@ public class GLoginButton : MonoBehaviour {
     private static AndroidJavaObject login = null;
     private static AndroidJavaObject currentActivity = null;
     private bool _loginSuccess = false;  //設定資料
+    private bool _setPhoto = false;      //設定頭像
+    private string stringData = string.Empty;
+    private bool _loginDone = false;
+    private bool _setPhotoDone = false;
     private IDictionary dict;
 
     void Start () {
@@ -100,8 +104,8 @@ public class GLoginButton : MonoBehaviour {
         {
             Texture2D tex = new Texture2D(1, 1, TextureFormat.DXT1, false);
             tex.LoadImage(result);
-            string stringData = Convert.ToBase64String(tex.EncodeToPNG());
-            CryptoPrefs.SetString("USERPHOTO", stringData);
+            stringData = Convert.ToBase64String(tex.EncodeToPNG());
+            _setPhoto = true;
         }
 #endif
         yield return null;
@@ -125,6 +129,7 @@ public class GLoginButton : MonoBehaviour {
             if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
             {
                 string type = "C1";
+                _setPhotoDone = true;
                 MJApi.Login(type, cName, cToken, LoginCallback);
                 //UIManager.instance.StartSetEnterLoading();
                 if (ConnectingPanel) {
@@ -143,6 +148,8 @@ public class GLoginButton : MonoBehaviour {
             string Photo = CryptoPrefs.GetString("USERPHOTO");
             if (string.IsNullOrEmpty(Photo))
                 StartCoroutine(GetGooglePhoto());
+            else
+                _setPhotoDone = true;
 
             string stype = "G";
             string token = CryptoPrefs.GetString("USERTOKEN");
@@ -162,6 +169,15 @@ public class GLoginButton : MonoBehaviour {
             }
             //UIManager.instance.StartSetEnterLoading();
         }
+    }
+
+    public void setPhotoCallback(WebExceptionStatus status, string result)
+    {
+        if (status != WebExceptionStatus.Success)
+        {
+            Debug.Log("Failed! " + result);
+        }
+        //Debug.Log("Glogin setPhotoCallback =  " + result);
     }
 
     void Update() {
@@ -192,8 +208,33 @@ public class GLoginButton : MonoBehaviour {
                 uCoin = dict["Coin"].ToString();
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
-            UIManager.instance.StartSetEnterLoading();
             _loginSuccess = false;
+            _loginDone = true;
+        }
+        if (_setPhoto)
+        {
+            string sName = string.Empty;
+            string sToken = string.Empty;
+            string sPhoto = string.Empty;
+            sName = CryptoPrefs.GetString("USERNAME");
+            sToken = CryptoPrefs.GetString("USERTOKEN");
+            if (stringData != string.Empty &&
+                 sName != string.Empty &&
+                 sToken != string.Empty)
+            {
+                CryptoPrefs.SetString("USERPHOTO", stringData);
+                sPhoto = CryptoPrefs.GetString("USERPHOTO");
+                MJApi.setUserPhoto(sToken, sName, sPhoto, setPhotoCallback);
+                _setPhoto = false;
+                _setPhotoDone = true;
+            }
+        }
+
+        if (_loginDone && _setPhotoDone)
+        {
+            UIManager.instance.StartSetEnterLoading();
+            _loginDone = false;
+            _setPhotoDone = false;
         }
     }
 }

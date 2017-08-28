@@ -10,7 +10,7 @@
 
 #pragma mark Config
 
-const char* CALLBACK_OBJECT = "Unimgpicker";
+const char* CALLBACK_OBJECT = "ImagePicker";
 const char* CALLBACK_METHOD = "OnComplete";
 const char* CALLBACK_METHOD_FAILURE = "OnFailure";
 
@@ -113,7 +113,7 @@ const char* MESSAGE_FAILED_COPY = "Failed to copy the image";
 #pragma mark Unity Plugin
 
 extern "C" {
-    void Unimgpicker_show(const char* title, const char* outputFileName, int maxSize) {
+    void Unimgpicker_show(const char* title, const char* outputFileName, const char* objName, int maxSize) {
         Picker *picker = [Picker sharedInstance];
         [picker show:[NSString stringWithUTF8String:title] outputFileName:[NSString stringWithUTF8String:outputFileName] maxSize:(NSInteger)maxSize];
     }

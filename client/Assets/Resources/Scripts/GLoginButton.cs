@@ -45,19 +45,25 @@ public class GLoginButton : MonoBehaviour {
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
 #elif UNITY_IOS
-        string cName = CryptoPrefs.GetString("USERNAME");
-        string cToken = CryptoPrefs.GetString("USERTOKEN");
-        if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
-        {
-            string type = "C1";
-            MJApi.Login(type, cName, cToken, LoginCallback);
-            if (ConnectingPanel) {
-                ConnectingPanel.SetActive(true);
-                UIManager.instance.PlayConnectingAnim();
-            }
-        }
+		AutoLoginCheck();
 #endif
     }
+
+	private void AutoLoginCheck()
+	{
+		string cName = CryptoPrefs.GetString("USERNAME");
+		string cToken = CryptoPrefs.GetString("USERTOKEN");
+		if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
+		{
+			string type = "C1";
+			_setPhotoDone = true;
+			MJApi.Login(type, cName, cToken, LoginCallback);
+			if (ConnectingPanel) {
+				ConnectingPanel.SetActive(true);
+				UIManager.instance.PlayConnectingAnim();
+			}
+		}
+	}
 
     private void GLogin()
     {
@@ -124,19 +130,7 @@ public class GLoginButton : MonoBehaviour {
 
         if (uMail == "No Init")
         {
-            string cName = CryptoPrefs.GetString("USERNAME");
-            string cToken = CryptoPrefs.GetString("USERTOKEN");
-            if (!string.IsNullOrEmpty(cName) && !string.IsNullOrEmpty(cToken))
-            {
-                string type = "C1";
-                _setPhotoDone = true;
-                MJApi.Login(type, cName, cToken, LoginCallback);
-                //UIManager.instance.StartSetEnterLoading();
-                if (ConnectingPanel) {
-                    ConnectingPanel.SetActive(true);
-                    UIManager.instance.PlayConnectingAnim();
-                }
-            }
+			AutoLoginCheck ();
         }
         else
         {

@@ -1424,26 +1424,40 @@ namespace com.Lobby
             {
                 case "Btn_setting": //設定頁
                     childSetting.SetActive(true);
+
+                    if (settingPanelNew)
+                    {
+                        settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
+                        settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic);
+                        ExitSetting();
+                    }
                     break;
                 case "Btn_service"://客服頁
-                    if (childSettingService)
+                    Application.OpenURL("https://www.facebook.com/17%E7%8E%A9%E9%BA%BB%E5%B0%87-394416694307519#");
+
+                    //if (childSettingService)
+                    //{
+                    //    InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
+                    //    _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
+                    //    childSettingService.SetActive(true);
+                    //    Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+                    //}
+
+                    if (settingPanelNew)
                     {
-                        InputField _text = childSettingService.transform.Find("Content/InputField").GetComponent<InputField>();
-                        _text.text = "請詳述您的問題：\n\n方便聯絡的時間：\n\n聯絡電話：";
-                        childSettingService.SetActive(true);
-                        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
-                    }            
+                        ExitSetting();
+                    }
                     break;
                 case "Btn_rules": //條款頁
                     childSettingRule.SetActive(true);
-                    break;
-            }
 
-            if (settingPanelNew)
-            {
-                settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
-                settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic);
-                ExitSetting();
+                    if (settingPanelNew)
+                    {
+                        settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
+                        settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic);
+                        ExitSetting();
+                    }
+                    break;
             }
         }
 

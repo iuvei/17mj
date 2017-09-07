@@ -5,6 +5,7 @@ using System.Collections;
 using System.Net;
 using UnityEngine.UI;
 using Facebook.Unity;
+using System.Runtime.InteropServices;
 
 
 public class GLoginButton : MonoBehaviour {
@@ -19,6 +20,15 @@ public class GLoginButton : MonoBehaviour {
     private bool _loginDone = false;
     private bool _setPhotoDone = false;
     private IDictionary dict;
+
+    #if UNITY_IOS
+    [DllImport("__Internal")]
+    private static extern void _loginCheck ();
+    [DllImport("__Internal")]
+    private static extern void _login ();
+    [DllImport("__Internal")]
+    private static extern void _loginOut ();
+    #endif
 
     void Start () {
         if (_gLoginBtn.Length != 0)
@@ -44,8 +54,8 @@ public class GLoginButton : MonoBehaviour {
         var loginClass = new AndroidJavaClass("com.foxgame.google.GoogleSignInDialog");
         login = loginClass.CallStatic<AndroidJavaObject>("getInstance");
         login.CallStatic("checkInit", this.gameObject.name, "OnConnected", currentActivity);
-#elif UNITY_IOS
-		AutoLoginCheck();
+#elif UNITY_IOS && !UNITY_EDITOR
+	    _loginCheck();
 #endif
     }
 
@@ -67,20 +77,22 @@ public class GLoginButton : MonoBehaviour {
 
     private void GLogin()
     {
-
         Debug.Log("GLogin()");
-#if UNITY_ANDROID
-        //login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
-        login.CallStatic("Login", "AccountManager", "OnConnected", currentActivity);
+#if UNITY_ANDROID && !UNITY_EDITOR
+        login.CallStatic("Login", this.gameObject.name, "OnConnected", currentActivity);
+#elif UNITY_IOS && !UNITY_EDITOR
+	    _login ();
 #endif
     }   
 
     public void GLoginOut()
     {
         Debug.Log("GLoginOut()");
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         if(login!=null)
             login.CallStatic("LoginOut");
+#elif UNITY_IOS && !UNITY_EDITOR
+        _loginOut ();
 #endif
     }
 
@@ -102,27 +114,27 @@ public class GLoginButton : MonoBehaviour {
         }
     }
 
-    private IEnumerator GetGooglePhoto()
+	private IEnumerator getPhoto(string url)
     {
-#if UNITY_ANDROID
-        byte[] result = login.CallStatic<byte[]>("GetUserPhoto");
-        if (result != null)
-        {
-            Texture2D tex = new Texture2D(1, 1, TextureFormat.DXT1, false);
-            tex.LoadImage(result);
-            stringData = Convert.ToBase64String(tex.EncodeToPNG());
-            _setPhoto = true;
-        }
-#endif
-        yield return null;
+		if (url != null)
+		{
+			Texture2D tex = new Texture2D(1, 1, TextureFormat.DXT1, false);
+			WWW www = new WWW(url);
+			yield return www;
+			www.LoadImageIntoTexture(tex);
+			stringData = Convert.ToBase64String(tex.EncodeToJPG());
+		}
+		_setPhoto = true;
     }
 
     public void OnConnected(string result)
     {
         //Debug.Log("OnConnected() = " + result);
+
         string uName = string.Empty;
         string uGid = string.Empty;
-        string uMail = string.Empty;
+		string uMail = string.Empty;
+		string uPhoto = string.Empty;
         string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
 
         if (tokens[0] != null)
@@ -138,11 +150,13 @@ public class GLoginButton : MonoBehaviour {
                 uGid = tokens[1];
             if (tokens[2] != null)
                 uName = tokens[2];
+			if (tokens[3] != null)
+				uPhoto = tokens[3];
 
             string Photo = CryptoPrefs.GetString("USERPHOTO");
-            if (string.IsNullOrEmpty(Photo))
-                StartCoroutine(GetGooglePhoto());
-            else
+			if (string.IsNullOrEmpty(Photo))
+				StartCoroutine(getPhoto(uPhoto));
+			else
                 _setPhotoDone = true;
 
             string stype = "G";

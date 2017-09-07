@@ -26,9 +26,9 @@ public class MyPluginPostProcessBuild
 			// background location useage key (new in iOS 8)
 			rootDict.SetString("NSMicrophoneUsageDescription", "Microphone Access Warning");
 			rootDict.SetString("NSCameraUsageDescription", "Camera Access Warning");
-            rootDict.SetString("NSPhotoLibraryUsageDescription", "Photo Library Access Warning");
+                        rootDict.SetString("NSPhotoLibraryUsageDescription", "Photo Library Access Warning");
 			rootDict.SetString ("UIBackgroundModes", "remote-notification");
-            rootDict.SetString ("UIRequiresFullScreen", "YES");
+                        rootDict.SetString ("UIRequiresFullScreen", "YES");
 
 			// background modes
 			PlistElementArray bgModes = rootDict.CreateArray("UIBackgroundModes");
@@ -46,6 +46,10 @@ public class MyPluginPostProcessBuild
 			string target = proj.TargetGuidByName("Unity-iPhone");
 
 			proj.SetBuildProperty(target, "ENABLE_BITCODE", "NO");
+
+			proj.AddFrameworkToProject(target, "SafariServices.framework", false /*not weak*/);
+
+			proj.AddBuildProperty(target, "OTHER_LDFLAGS", "-ObjC");
 
 			File.WriteAllText(projPath, proj.WriteToString());
 		}

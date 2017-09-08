@@ -66,7 +66,7 @@ namespace com.Lobby
         public Transform dailyBonusTarget;
 
         public Image[] playerPhotos;
-        public Text[] playerNames;
+		public Text[] playerNames;
         public Text[] playerCoins;
         public Text[] playerLvs;
         public Text userOnline;
@@ -124,6 +124,7 @@ namespace com.Lobby
         private Transform playerRankPanel;
         private Button replaceNickname;
         private InputField settingNickname;
+		private InputField settingAccount;
         private Transform popupDailyBonus;
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
@@ -197,7 +198,7 @@ namespace com.Lobby
                 {
                     Sprite sp = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
                     playerPhotos[2].sprite = sp;
-                    CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToPNG()));
+                    CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToJPG()));
                     SetPlayerPhotos();
 
                     string sName = CryptoPrefs.GetString("USERNAME");
@@ -1562,8 +1563,9 @@ namespace com.Lobby
                 recordPanel = childSetting.transform.Find("Record").gameObject;
 
                 if (profilePanel) {
-                    settingNickname = profilePanel.transform.Find("IF_nick").GetComponent<InputField>();
+					settingNickname = profilePanel.transform.Find("IF_nick").GetComponent<InputField>();
                     replaceNickname = profilePanel.transform.Find("Btn_changeName").GetComponent<Button>();
+					settingAccount = profilePanel.transform.Find("IF_acc").GetComponent<InputField>();
                 }
                 
                 if (recordPanel)
@@ -1711,6 +1713,7 @@ namespace com.Lobby
         private void IniPlayerInfo() {
             SetPlayerPhotos();
             SetPlayerNames();
+			SetPlayerAccount ();
             SetPlayerCoins();
             SetPlayerLevels();
             SetUserOnline();
@@ -1732,20 +1735,31 @@ namespace com.Lobby
             }
         }
 
-        public void SetPlayerNames()
+		public void SetPlayerAccount()
         {
-            string sName = CryptoPrefs.GetString("USERNAME");
-            if (!string.IsNullOrEmpty(sName))
-            {
-                for (int i = 0; i < playerNames.Length; i++)
-                {
-                    playerNames[i].text = sName;
-                }
+			string sType = CryptoPrefs.GetString("USERTYPE");
+			Debug.Log("sType=" + sType);
+            string sMail = CryptoPrefs.GetString("USERMAIL");
+			Debug.Log("sMail=" + sMail);
 
-                if(settingNickname) //設定頁暱稱欄位
-                    settingNickname.text = sName;
-            }
+            if (!string.IsNullOrEmpty(sMail))
+				settingAccount.text = sMail;
         }
+
+		public void SetPlayerNames()
+		{
+			string sName = CryptoPrefs.GetString("USERNAME");
+			if (!string.IsNullOrEmpty(sName))
+			{
+				for (int i = 0; i < playerNames.Length; i++)
+				{
+					playerNames[i].text = sName;
+				}
+
+				if(settingNickname) //設定頁暱稱欄位
+					settingNickname.text = sName;
+			}
+		}
 
         public void SetPlayerLevels()
         {

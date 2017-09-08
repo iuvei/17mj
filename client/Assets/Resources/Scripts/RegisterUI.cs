@@ -106,6 +106,8 @@ public class RegisterUI : MonoBehaviour {
                 string stype = "C";
                 Button btn = RegisterBtn.GetComponent<Button>();
                 btn.interactable = false;
+				CryptoPrefs.SetString("USERTYPE", stype);
+				CryptoPrefs.SetString("USERMAIL", registerMail);
                 MJApi.AddMember(id, registerMail, registerPass1, registerNickName, stype, RegisterCallback);
             }
         }

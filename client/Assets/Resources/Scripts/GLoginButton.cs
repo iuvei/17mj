@@ -146,6 +146,9 @@ public class GLoginButton : MonoBehaviour {
         }
         else
         {
+			CryptoPrefs.SetString("USERTYPE", "G");
+			CryptoPrefs.SetString("USERMAIL", uMail);
+
             if (tokens[1] != null)
                 uGid = tokens[1];
             if (tokens[2] != null)

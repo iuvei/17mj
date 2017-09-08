@@ -167,6 +167,8 @@ public class UIManager : MonoBehaviour {
         string pass = RegisterUI.GetUniqueKey(8);
         string stype = "C";
 
+		CryptoPrefs.SetString("USERTYPE", "P");
+		CryptoPrefs.SetString("USERMAIL", mail);
         MJApi.AddMember(id, mail, pass, uName, stype, RegisterCallback);
     }
 

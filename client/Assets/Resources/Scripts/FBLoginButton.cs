@@ -99,7 +99,7 @@ public class FBLoginButton : MonoBehaviour {
         //Debug.Log("FBPhotoCallback()");
         if (string.IsNullOrEmpty(result.Error) && result.Texture != null)
         {
-            stringData = Convert.ToBase64String(result.Texture.EncodeToPNG());
+            stringData = Convert.ToBase64String(result.Texture.EncodeToJPG());
             _setPhoto = true;
         }
     }
@@ -176,6 +176,9 @@ public class FBLoginButton : MonoBehaviour {
     {
         string stype = "F";
         string token = CryptoPrefs.GetString("USERTOKEN");
+
+		CryptoPrefs.SetString("USERTYPE", stype);
+		CryptoPrefs.SetString("USERMAIL", fbMail);
 
         if (string.IsNullOrEmpty(token))
         {

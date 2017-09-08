@@ -65,7 +65,8 @@ public class LoginUI : MonoBehaviour {
                 ConnectingPanel.SetActive(true);
                 UIManager.instance.PlayConnectingAnim();
             }
-                
+			CryptoPrefs.SetString("USERTYPE", stype);
+			CryptoPrefs.SetString("USERMAIL", userName);
             MJApi.Login(stype, userName, userPass, LoginCallback);
         }
 	}
@@ -97,16 +98,6 @@ public class LoginUI : MonoBehaviour {
         targetHint.GetComponentInParent<InputField>().ActivateInputField();
     }
 
-    public void Logout()
-    {
-        CryptoPrefs.DeleteKey("USERPHOTO");
-        CryptoPrefs.DeleteKey("USERNAME");
-        CryptoPrefs.DeleteKey("USERLEVEL");
-        CryptoPrefs.DeleteKey("USERCOIN");
-        CryptoPrefs.DeleteKey("USERONLINE");
-        CryptoPrefs.DeleteKey("USERTOKEN");
-    }
-
     void Update() {
         if (_hideConnecting) {
             if (ConnectingPanel)
@@ -125,7 +116,7 @@ public class LoginUI : MonoBehaviour {
             _showLoginHintPass = false;
         }
 
-        if (_loginSuccess)
+		if (_loginSuccess)
         {
             string uName = string.Empty;
             string uToken = string.Empty;

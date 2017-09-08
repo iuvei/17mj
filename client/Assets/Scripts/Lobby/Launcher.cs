@@ -1678,8 +1678,32 @@ namespace com.Lobby
 
         }
 
+		public void setMailCallback(WebExceptionStatus status, string result)
+		{
+			if (status != WebExceptionStatus.Success)
+			{
+				Debug.Log("Failed! " + result);
+			}
+			//Debug.Log("setMailCallback =  " + result);
+
+			if (!string.IsNullOrEmpty (result))
+			{
+				CryptoPrefs.SetString("USERTYPE", "C");
+				CryptoPrefs.SetString("USERMAIL", result);
+				settingAccount.text = result;
+			}
+		}
+
         public void ShowLogoutPopup()
         {
+
+			//Change Mail
+			/*string mail = "orson.hsueh@gmail.com";
+			string sName = CryptoPrefs.GetString("USERNAME");
+			string sToken = CryptoPrefs.GetString("USERTOKEN");
+			MJApi.setUserMail(sToken, sName, mail, setMailCallback);*/
+
+
             GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
 
             if (popupLogout)

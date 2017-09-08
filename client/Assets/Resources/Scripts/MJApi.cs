@@ -93,6 +93,16 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
+	public static void setUserMail(string token, string name, string data, RequestCallBack callback)
+	{
+		string api = "V1/setUserMail";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Mail\":\"" + data + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
     public static void setPlayerName(string token, string oName, string uName, RequestCallBack callback)
     {
         string api = "V1/setPlayerName";

@@ -129,6 +129,7 @@ namespace com.Lobby
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
+		private bool _setCoin = false;
         [SerializeField]
         private Unimgpicker imagePicker;
         #endregion
@@ -1855,8 +1856,36 @@ namespace com.Lobby
             dailyBonusToday.ReadyTake();
         }
 
+		public void setCoinCallback(WebExceptionStatus status, string result)
+		{
+			if (status != WebExceptionStatus.Success)
+			{
+				Debug.Log("Failed! " + result);
+			}
+
+			if (!string.IsNullOrEmpty (result))
+			{
+				CryptoPrefs.SetString("USERCOIN", result);
+				_setCoin = true;
+			}
+		}
+
+		void Update() {
+			if (_setCoin) {
+				SetPlayerCoins ();
+				_setCoin = false;
+			}
+		}
         public void ShowDailyBonus()
         {
+			//Change Coin
+			/*
+			string oldCoin = CryptoPrefs.GetString("USERCOIN");
+			string newCoin = "10000";
+			string sName = CryptoPrefs.GetString("USERNAME");
+			string sToken = CryptoPrefs.GetString("USERTOKEN");
+			MJApi.setUserCoin(sToken, sName, oldCoin, newCoin, setCoinCallback);*/
+
             GameObject popupBG = dailyBonusPanel.transform.Find("popupBG").gameObject;
 
             if (popupDailyBonus)

@@ -9,7 +9,7 @@ public static class MJApi
     public static RequestCallBack _callback;
 
     //private static string serverUrl = "http://catpunch.co:9000/";
-    private static string serverUrl = "http://192.168.22.19:9000/";
+	private static string serverUrl = "https://17mj.ddns.net:9000/";
     private static string secretKey = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvbywbdGABb46cGzeevCMQU2LXvornsNkScfeCS9BmZ0KkebfYTvgvfLwUpl0QjR4LL5hHOYzaHxGQcVfvvY2wtiPRRMxGqhxVq";
 
     public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
@@ -103,6 +103,26 @@ public static class MJApi
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
+	public static void setUserCoin(string token, string name, string oldCoin, string newCoin, RequestCallBack callback)
+	{
+		string api = "V1/setUserCoin";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldCoin + "\", \"New\":\"" + newCoin + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void getUserDaily(string token, string name, RequestCallBack callback)
+	{
+		string api = "V1/getUserDaily";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
     public static void setPlayerName(string token, string oName, string uName, RequestCallBack callback)
     {
         string api = "V1/setPlayerName";
@@ -149,24 +169,5 @@ public static class MJApi
         string pdata = "[{\"Count\":\"" + count + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
-
-    public static void setBPItemNum(string token, string name, string itemNum, RequestCallBack callback)
-    {
-        string api = "V1/setBPItemNum";
-        string auth = "Bearer " + name + ":" + token;
-        string method = "PUT";
-        string pdata = "[" + itemNum + "]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
-    public static void setBPItemNum(string token, string name, int id, int num, RequestCallBack callback)
-    {
-        string api = "V1/setOneBPItemNum";
-        string auth = "Bearer " + name + ":" + token;
-        string method = "PUT";
-        string pdata = "[{\"Id\":"+ id +",\"Num\":" +  num +"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
 
 }

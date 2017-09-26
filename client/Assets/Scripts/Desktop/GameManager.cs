@@ -192,7 +192,9 @@ namespace com.Desktop
 					}
 				}
 				//string name = PhotonNetwork.room.Name;
-				string url = "rtmp://catpunch.co/live/" + name;
+
+				string url = "rtmp://17mj.ddns.net:9100/live/" + name;
+
 				if (!PhotonNetwork.isMasterClient) {
 					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
 					VideoRecordingBridge.StartPlay (url);

@@ -151,7 +151,7 @@ public class FBLoginButton : MonoBehaviour {
 
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("Failed! " + result);
+			Debug.Log("FB LoginCallback Failed! " + result);
         }
         else
         {
@@ -199,7 +199,7 @@ public class FBLoginButton : MonoBehaviour {
     {
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("Failed! " + result);
+			Debug.Log("FB setPhotoCallback Failed! " + result);
         }
         //Debug.Log("FBlogin setPhotoCallback =  " + result);
     }

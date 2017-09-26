@@ -105,7 +105,7 @@ public class GLoginButton : MonoBehaviour {
 
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("Failed! " + result);
+			Debug.Log("Google LoginCallback Failed! " + result);
         }
         else
         {
@@ -186,7 +186,7 @@ public class GLoginButton : MonoBehaviour {
     {
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("Failed! " + result);
+			Debug.Log("Google setPhotoCallback Failed! " + result);
         }
         //Debug.Log("Glogin setPhotoCallback =  " + result);
     }

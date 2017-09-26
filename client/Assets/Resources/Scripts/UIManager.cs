@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour {
     {
         if (status != WebExceptionStatus.Success)
         {
-            //Debug.Log("Failed! " + result);
+			Debug.Log("Play Now RegisterCallback Failed! " + result);
         }
         else
         {

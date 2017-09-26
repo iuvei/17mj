@@ -53,20 +53,21 @@ public class HorseLight : MonoBehaviour {
             MJApi.getBulletin(_bulletinNum, BulletinCallback);
     }
 
+	/*for test
     public void setBCallback(WebExceptionStatus status, string result)
     {
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("Failed! " + result);
+            Debug.Log("setB Failed! " + result);
         }
         //Debug.Log("setBCallback =  " + result);
-    }
+    }*/
 
     public void BulletinCallback(WebExceptionStatus status, string result)
     {
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("Failed! " + result);
+			Debug.Log("BulletinCallback Failed! " + result);
         }
         //Debug.Log("BulletinCallback =  " + result);
 

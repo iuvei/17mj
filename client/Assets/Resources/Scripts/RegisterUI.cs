@@ -120,7 +120,7 @@ public class RegisterUI : MonoBehaviour {
         {
             RegisterHint_Account.GetComponentInChildren<Text>().text = "此帳號已存在";
             RegisterHint_Account.SetActive(true);
-            //Debug.Log("Failed! " + result);
+			Debug.Log("AddUser RegisterCallback Failed! " + result);
         }
         else
         {

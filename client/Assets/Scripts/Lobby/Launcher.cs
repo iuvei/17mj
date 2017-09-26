@@ -214,7 +214,7 @@ namespace com.Lobby
         {
             if (status != WebExceptionStatus.Success)
             {
-                Debug.Log("Failed! " + result);
+				Debug.Log("setPhotoCallback Failed! " + result);
             }
             //Debug.Log("setPhotoCallback =  " + result);
         }
@@ -1683,7 +1683,7 @@ namespace com.Lobby
 		{
 			if (status != WebExceptionStatus.Success)
 			{
-				Debug.Log("Failed! " + result);
+				Debug.Log("setMailCallback Failed! " + result);
 			}
 			//Debug.Log("setMailCallback =  " + result);
 
@@ -1763,9 +1763,9 @@ namespace com.Lobby
 		public void SetPlayerAccount()
         {
 			string sType = CryptoPrefs.GetString("USERTYPE");
-			Debug.Log("sType=" + sType);
+			//Debug.Log("sType=" + sType);
             string sMail = CryptoPrefs.GetString("USERMAIL");
-			Debug.Log("sMail=" + sMail);
+			//Debug.Log("sMail=" + sMail);
 
             if (!string.IsNullOrEmpty(sMail))
 				settingAccount.text = sMail;
@@ -1828,7 +1828,7 @@ namespace com.Lobby
         {
             if (status != WebExceptionStatus.Success)
             {
-                Debug.Log("Failed! " + result);
+				Debug.Log("setNameCallback Failed! " + result);
             }
             //Debug.Log("setNameCallback =  " + result);
         }
@@ -1860,7 +1860,7 @@ namespace com.Lobby
 		{
 			if (status != WebExceptionStatus.Success)
 			{
-				Debug.Log("Failed! " + result);
+				Debug.Log("setCoinCallback Failed! " + result);
 			}
 
 			if (!string.IsNullOrEmpty (result))

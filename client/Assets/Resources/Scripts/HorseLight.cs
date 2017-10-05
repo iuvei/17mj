@@ -63,39 +63,35 @@ public class HorseLight : MonoBehaviour {
         //Debug.Log("setBCallback =  " + result);
     }*/
 
-    public void BulletinCallback(WebExceptionStatus status, string result)
+	public void BulletinCallback(WebExceptionStatus status, string result)
     {
-        if (status != WebExceptionStatus.Success)
-        {
-			Debug.Log("BulletinCallback Failed! " + result);
-        }
-        //Debug.Log("BulletinCallback =  " + result);
+		if (status != WebExceptionStatus.Success) {
+			Debug.Log ("BulletinCallback Failed! " + result);
+		} else {
+			//Debug.Log("BulletinCallback =  " + result);
 
-        string uBulletin = string.Empty;
-        dict = Json.Deserialize(result) as IDictionary;
-        if (dict["bulletin"] != null)
-        {
-            uBulletin = dict["bulletin"].ToString();
-            char[] delimiterChars = { ',' };
-            string[] words = uBulletin.Split(delimiterChars);
-            int i = 0;
-            foreach (string s in words)
-            {
-                _canMessages[i++] = s;
-                //Debug.Log("s =  " + s);
-            }
-        }
+			string uBulletin = string.Empty;
+			dict = Json.Deserialize (result) as IDictionary;
+			if (dict ["bulletin"] != null) {
+				uBulletin = dict ["bulletin"].ToString ();
+				char[] delimiterChars = { ',' };
+				string[] words = uBulletin.Split (delimiterChars);
+				int i = 0;
+				foreach (string s in words) {
+					_canMessages [i++] = s;
+					//Debug.Log("s =  " + s);
+				}
+			}
 
-        foreach (String key in dict.Keys)
-        {
-            //Debug.Log("key =  " + key);
-            if (key != "bulletin")
-            {
-                string doc = dict[key].ToString();
-                //Debug.Log("doc =  " + doc);
-               _rewardLists.Add(doc);
-            }
-        }
+			foreach (String key in dict.Keys) {
+				//Debug.Log("key =  " + key);
+				if (key != "bulletin") {
+					string doc = dict [key].ToString ();
+					//Debug.Log("doc =  " + doc);
+					_rewardLists.Add (doc);
+				}
+			}
+		}
 
         _readyToStart = true;
     }

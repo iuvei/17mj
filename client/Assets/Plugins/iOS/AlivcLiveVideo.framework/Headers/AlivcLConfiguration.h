@@ -154,6 +154,11 @@ typedef NS_ENUM(NSInteger, ALIVC_LIVE_WATERMASK_LOCATION) {
 @property (nonatomic, assign) CGSize videoSize;
 
 /*!
+ *  是否开启前置摄像头镜像
+ */
+@property (nonatomic, assign) BOOL frontMirror;
+
+/*!
  *  推流URL
  */
 @property (nonatomic, strong) NSString* url;

@@ -88,6 +88,7 @@ namespace com.Desktop
 		private bool _isgameover = false;
 
 		private MahPlayer _activePlayer = null;
+		private string liveUrl = string.Empty;
         #endregion
 
         private void Awake()
@@ -193,11 +194,11 @@ namespace com.Desktop
 				}
 				//string name = PhotonNetwork.room.Name;
 
-				string url = "rtmp://17mj.ddns.net:9100/live/" + name;
+				liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
 
 				if (!PhotonNetwork.isMasterClient) {
 					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
-					VideoRecordingBridge.StartPlay (url);
+					VideoRecordingBridge.StartPlay (liveUrl);
 					if (InvateBtn != null) {
 						if (_invitePlayPop) //邀請搖晃動畫
 							_invitePlayPop.DOScale(new Vector3(1.15f, 1.15f, 1), .8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
@@ -205,7 +206,7 @@ namespace com.Desktop
 					}
 					return;
 				}
-				VideoRecordingBridge.StartRecord (url);
+				VideoRecordingBridge.StartRecord (liveUrl);
 				if (InvateBtn != null) {
 					InvateBtn.gameObject.SetActive (false);
 				}
@@ -335,7 +336,7 @@ namespace com.Desktop
 
         public void onLivePlayREConnect()
         {
-            VideoRecordingBridge.REConnect();
+			VideoRecordingBridge.REConnect(liveUrl);
         }
 
 

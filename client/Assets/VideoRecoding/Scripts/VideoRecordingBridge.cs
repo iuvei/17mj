@@ -35,7 +35,8 @@ public class VideoRecordingBridge {
     #endif
 
 	public static void StartRecord(string str){
-		Debug.Log ("StartRecord('"+str+"')");
+		//Debug.Log ("StartRecord('"+str+"')");
+		Debug.Log ("StartRecord()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_startRecord (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
@@ -55,7 +56,7 @@ public class VideoRecordingBridge {
 	}
 
 	public static void StartPlay(string str){
-		Debug.Log ("StartPlay()");
+		Debug.Log ("StartPlay('"+str+"')");
         #if !UNITY_EDITOR && UNITY_IOS
 		_startPlay (str);
         #elif !UNITY_EDITOR && UNITY_ANDROID
@@ -95,12 +96,13 @@ public class VideoRecordingBridge {
 		#endif
 	}
 
-    public static void REConnect()
+	public static void REConnect(string str)
     {
         #if !UNITY_EDITOR && UNITY_IOS
         #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-		live.CallStatic("PlayStart");
+	Debug.Log ("REConnect="+str);
+	    live.CallStatic("PlayStart",str);
         #endif
     }
 

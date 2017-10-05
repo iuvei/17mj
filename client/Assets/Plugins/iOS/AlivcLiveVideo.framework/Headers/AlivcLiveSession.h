@@ -11,9 +11,9 @@
 #import "AlivcLConfiguration.h"
 
 typedef NS_ENUM(NSInteger, ALIVC_LIVE_BITRATE_STATUS) {
-    AlivcLiveBitrateRaise,
-    AlivcLiveBitrateDown,
-    AlivcLiveDataDiscard,
+    AlivcLiveBitrateRaise = 0,  // 码率上升
+    AlivcLiveBitrateDown,   // 码率下降
+    AlivcLiveDataDiscard,   // 丢弃缓存
 };
 
 @protocol AlivcLiveSessionDelegate;
@@ -140,6 +140,22 @@ typedef NS_ENUM(NSInteger, ALIVC_LIVE_BITRATE_STATUS) {
  */
 - (NSInteger)alivcLiveVideoBitRate;
 
+
+/*!
+ *  调整美颜程度
+ *
+ *  @param value 美颜程度 (0 - 1 初始美颜程度为1)
+ */
+- (void)alivcLiveVideoChangeSkinValue:(CGFloat)value;
+
+
+/*!
+ *  调整相机曝光度
+ *
+ *  @param value 曝光度 (-10 - 10 默认0)
+ */
+- (void)alivcLiveVideoChangeExposureValue:(CGFloat)value;
+
 @end
 
 
@@ -201,6 +217,6 @@ typedef NS_ENUM(NSInteger, ALIVC_LIVE_BITRATE_STATUS) {
 /*!
  * 重连超时
  */
-- (void)alivcLiveVideoReconnectTimeout:(AlivcLiveSession *)session;
+- (void)alivcLiveVideoReconnectTimeout:(AlivcLiveSession *)session error:(NSError *)error;
 
 @end

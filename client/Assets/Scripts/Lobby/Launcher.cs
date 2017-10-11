@@ -16,7 +16,7 @@ namespace com.Lobby
     {
 
         #region PUBLIC
-
+        public static Launcher instance;
         //客户端版本
         public string _gameVersion = "1.0";
 
@@ -58,6 +58,7 @@ namespace com.Lobby
         public RectTransform coinAdSign;
 
         public GameObject balloonPanel;
+        public bool coinAPIcallback = true;
 
         public Transform[] playRoomBtns;
         public Transform[] btmMenuBtns;
@@ -130,6 +131,7 @@ namespace com.Lobby
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
 		private bool _setCoin = false;
+        private string setCoinResult = string.Empty;
         [SerializeField]
         private Unimgpicker imagePicker;
         #endregion
@@ -137,6 +139,8 @@ namespace com.Lobby
 
         private void Awake()
         {
+            instance = this;
+
             //#不重要
             //强制Log等级为全部
             PhotonNetwork.logLevel = PhotonLogLevel.ErrorsOnly;
@@ -1616,7 +1620,7 @@ namespace com.Lobby
             int _time = UnityEngine.Random.Range(1, 5); //一次最多5顆
             for (int i = 0; i < _time; i++)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1f);
                 BirthBalloon();
             }
         }
@@ -1800,14 +1804,15 @@ namespace com.Lobby
 
         public void SetPlayerCoins()
         {
-            string sCoin = CryptoPrefs.GetString("USERCOIN");
+            string sCoin = string.Format("{0:0,0}", int.Parse(CryptoPrefs.GetString("USERCOIN")));
             if (!string.IsNullOrEmpty(sCoin))
             {
                 for (int i = 0; i < playerCoins.Length; i++)
                 {
-                    playerCoins[i].text = string.Format("{0:0,0}", int.Parse(sCoin));
+                    playerCoins[i].text = sCoin;
                 }
             }
+            coinAPIcallback = true;
         }
 
         public void SetUserOnline()
@@ -1865,27 +1870,36 @@ namespace com.Lobby
 
 			if (!string.IsNullOrEmpty (result))
 			{
-				CryptoPrefs.SetString("USERCOIN", result);
-				_setCoin = true;
+                //CryptoPrefs.SetString("USERCOIN", result);
+                setCoinResult = result;
+                _setCoin = true;
 			}
-		}
+
+            //coinAPIcallback = true;
+        }
 
 		void Update() {
 			if (_setCoin) {
-				SetPlayerCoins ();
-				_setCoin = false;
-			}
+                CryptoPrefs.SetString("USERCOIN", setCoinResult);
+                _setCoin = false;
+                SetPlayerCoins();
+            }
 		}
+
+        public void ChangeCoin(int _earnCoin) {
+            coinAPIcallback = false;
+            //Change Coin
+            string oldCoin =CryptoPrefs.GetString("USERCOIN");
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            string newCoin = (int.Parse(oldCoin) + _earnCoin).ToString();
+
+            MJApi.setUserCoin(sToken, sName, oldCoin.ToString(), newCoin, setCoinCallback);
+
+        }
+
         public void ShowDailyBonus()
         {
-			//Change Coin
-			/*
-			string oldCoin = CryptoPrefs.GetString("USERCOIN");
-			string newCoin = "10000";
-			string sName = CryptoPrefs.GetString("USERNAME");
-			string sToken = CryptoPrefs.GetString("USERTOKEN");
-			MJApi.setUserCoin(sToken, sName, oldCoin, newCoin, setCoinCallback);*/
-
             GameObject popupBG = dailyBonusPanel.transform.Find("popupBG").gameObject;
 
             if (popupDailyBonus)

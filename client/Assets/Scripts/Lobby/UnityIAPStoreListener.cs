@@ -149,22 +149,30 @@ public class UnityIAPStoreListener : IStoreListener
 
         if (validPurchase)
         {
+            int getCoin = 0;
             // Unlock the appropriate content here.
             switch (e.purchasedProduct.definition.id)
             {
                 case "Beginner Pack":
+                    getCoin = 5000;
                     break;
                 case "Happy Pack":
+                    getCoin = 10000;
                     break;
                 case "Adventurer Pack":
+                    getCoin = 50000;
                     break;
                 case "Master Pack":
+                    getCoin = 100000;
                     break;
                 case "Wealth Pack":
+                    getCoin = 500000;
                     break;
                 case "Professional Pack":
+                    getCoin = 1000000;
                     break;
             }
+            com.Lobby.Launcher.instance.ChangeCoin(getCoin);
         }
 
         return PurchaseProcessingResult.Complete;

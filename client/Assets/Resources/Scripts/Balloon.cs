@@ -16,9 +16,16 @@ public class Balloon : MonoBehaviour {
     }
 
     public void ClickBalloon() {
+        if (!com.Lobby.Launcher.instance.coinAPIcallback)
+            return;
+
+        if(PlayerPrefExtension.GetBool("Vibrate_enabled"))
+            Handheld.Vibrate();
         transform.DOScale(new Vector3(1.3f, 1.3f, 1), 0.2f).SetEase(Ease.OutElastic);
         _balloonImg.DOFade(0, 0.1f).SetEase(Ease.InSine);
         _particle.SetActive(true);
+
+        com.Lobby.Launcher.instance.ChangeCoin(2);
 
         if (_star) {
             _star.gameObject.SetActive(true);
@@ -28,5 +35,4 @@ public class Balloon : MonoBehaviour {
             _star.GetComponent<Image>().DOFade(0, 0.1f).SetDelay(0.5f);
         }
     }
-
 }

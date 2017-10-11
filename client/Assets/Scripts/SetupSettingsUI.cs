@@ -8,12 +8,14 @@ public class SetupSettingsUI : MonoBehaviour {
 	public Slider Sound_Silder;
 	public Toggle BGM_Toggle;
 	public Toggle Sound_Toggle;
-	private float bgm_volume;
+    public Toggle Vibrate_Toggle;
+    private float bgm_volume;
 	private float sound_volume;
 	private bool bgm_enabled;
 	private bool sound_enabled;
-	// Use this for initialization
-	void Start () {
+    private bool vibrate_enabled;
+    // Use this for initialization
+    void Start () {
 		loadPLayerPrefs ();
 		init_slider ();
 		init_toggle ();
@@ -39,8 +41,10 @@ public class SetupSettingsUI : MonoBehaviour {
 			this.sound_volume = .0f;
 		}
 
-		//Debug.Log ("SetupSettingsUI loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
-	}
+        this.vibrate_enabled = PlayerPrefExtension.GetBool("Vibrate_enabled");
+
+        //Debug.Log ("SetupSettingsUI loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
+    }
 
 	public void init_slider() {
 		if (BGM_Silder) {
@@ -62,7 +66,12 @@ public class SetupSettingsUI : MonoBehaviour {
 			Sound_Toggle.isOn = this.sound_enabled;
 			Sound_Toggle.onValueChanged.AddListener(delegate {SoundToggleValueChange(); });
 		}
-	}
+        if (Vibrate_Toggle)
+        {
+            Vibrate_Toggle.isOn = this.vibrate_enabled;
+            Vibrate_Toggle.onValueChanged.AddListener(delegate { VibrateToggleValueChange(); });
+        }
+    }
 
 	public void BGMValueChange()
 	{
@@ -99,4 +108,11 @@ public class SetupSettingsUI : MonoBehaviour {
 		loadPLayerPrefs ();
 		init_slider ();
 	}
+
+    public void VibrateToggleValueChange()
+    {
+        Debug.Log("Vibrate_Toggle.isOn=" + Vibrate_Toggle.isOn);
+        AudioManager.Instance.ControlVibrate(Vibrate_Toggle.isOn);
+        loadPLayerPrefs();
+    }
 }

@@ -19,10 +19,10 @@ public class AudioManager : MonoBehaviour
 	private float bgm_volume = 0.1f;
 	private bool bgm_enabled = false;
 	private bool sound_enabled = false;
+    private bool vibrate_enabled = false;
 
-
-	#region Singleton
-	private static AudioManager _instance = null;
+    #region Singleton
+    private static AudioManager _instance = null;
 
 	public static AudioManager Instance
 	{
@@ -70,8 +70,11 @@ public class AudioManager : MonoBehaviour
 		} else {
 			this.sound_volume = .0f;
 		}
-		//Debug.Log ("AudioManager loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
-	}
+
+        this.vibrate_enabled = PlayerPrefExtension.GetBool("Vibrate_enabled");
+
+        //Debug.Log ("AudioManager loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
+    }
 
 	private void loadAllSoundResources() {
 		//Debug.Log ("[c] 載入所有音效資源");
@@ -154,12 +157,18 @@ public class AudioManager : MonoBehaviour
 		PlayerPrefExtension.SetBool("Sound_enabled", isOn);
 	}
 
-	//public void unMuteBGM() {
-	//	this.bgm_volume = 1.0f;
-	//	this.bgmSource.volume = this.bgm_volume;
-	//}
+    public void ControlVibrate(bool isOn)
+    {
+        this.vibrate_enabled = isOn;
+        PlayerPrefExtension.SetBool("Vibrate_enabled", isOn);
+    }
 
-	public void ChangeSoundVolume(float _volume) {
+    //public void unMuteBGM() {
+    //	this.bgm_volume = 1.0f;
+    //	this.bgmSource.volume = this.bgm_volume;
+    //}
+
+    public void ChangeSoundVolume(float _volume) {
 		this.sound_volume = _volume;
 		this.seSources.ForEach(s => s.volume = this.sound_volume);
 		PlayerPrefs.SetFloat ("Sound_Volume", this.sound_volume);

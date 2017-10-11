@@ -53,16 +53,18 @@ public class UnityAds : MonoBehaviour {
     }
 
 
-    private void ShowEarnReward(ShowResult result, string reward = "$ 1,000")
+    private void ShowEarnReward(ShowResult result)
     {
+        int _reward = 0;
         string _title = string.Empty;
         string _content = string.Empty;
-
+        //_rewardCoin
         if (_earnRewardPanel) {
             switch (result) {
                 case ShowResult.Finished:
                     _title = "恭喜您獲得";
-                    _content = reward;
+                    _reward = Random.Range(1, 10)*200;
+                    _content = "$ " + string.Format("{0:0,0}", _reward);
                     break;
                 case ShowResult.Skipped:
                     _title = "真可惜，您跳過了廣告";
@@ -77,6 +79,7 @@ public class UnityAds : MonoBehaviour {
             _earnRewardTitle.text = _title;
             _earnRewardContent.text = _content;
 
+            com.Lobby.Launcher.instance.ChangeCoin(_reward);
             _earnRewardPanel.SetActive(true);
 
         }

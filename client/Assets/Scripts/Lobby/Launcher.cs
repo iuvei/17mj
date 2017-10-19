@@ -58,7 +58,7 @@ namespace com.Lobby
         public RectTransform coinAdSign;
 
         public GameObject balloonPanel;
-        public bool coinAPIcallback = true;
+        //public bool coinAPIcallback = true;
 
         public Transform[] playRoomBtns;
         public Transform[] btmMenuBtns;
@@ -88,6 +88,8 @@ namespace com.Lobby
         public Button btnStart;
 
 		public List<PhotonPlayer> Players = new List<PhotonPlayer>();
+
+        public enum SubPage { Main, List, Shop, Deposit, Bag, Rank, Active, Setting };
         #endregion
 
         #region PRIVATE 
@@ -130,6 +132,7 @@ namespace com.Lobby
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
+        private int localCoin = 0;
 		private bool _setCoin = false;
         private string setCoinResult = string.Empty;
         [SerializeField]
@@ -699,6 +702,8 @@ namespace com.Lobby
             if (btmMenuBtns[1])
                 btmMenuBtns[1].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
+            SetPlayerCoins(SubPage.Shop);
+
             if (shopPanel)
             {
                 shopPanel.transform.DOMoveX(-19.5f, 0, true);
@@ -720,6 +725,7 @@ namespace com.Lobby
             if (btmMenuBtns[3])
                 btmMenuBtns[3].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
+            SetPlayerCoins(SubPage.Bag);
             GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
 
             foreach (Transform child in bagItemTarget)
@@ -1223,6 +1229,7 @@ namespace com.Lobby
             if (btmMenuBtns[0])
                 btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
+            SetPlayerCoins(SubPage.Rank);
             BirtnRankItem(); //產生排行榜項目
 
             if (rankPanel)
@@ -1743,7 +1750,7 @@ namespace com.Lobby
             SetPlayerPhotos();
             SetPlayerNames();
 			SetPlayerAccount ();
-            SetPlayerCoins();
+            SetPlayerCoins(SubPage.Main);
             SetPlayerLevels();
             SetUserOnline();
         }
@@ -1802,17 +1809,34 @@ namespace com.Lobby
             }
         }
 
-        public void SetPlayerCoins()
+        public void SetPlayerCoins(SubPage _subpage)
         {
-            string sCoin = string.Format("{0:0,0}", int.Parse(CryptoPrefs.GetString("USERCOIN")));
+            int arrayIndex = 0;
+            string sCoin = CryptoPrefs.GetString("USERCOIN");
+            //Debug.Log("Get Local Coin = " + sCoin);
             if (!string.IsNullOrEmpty(sCoin))
             {
-                for (int i = 0; i < playerCoins.Length; i++)
-                {
-                    playerCoins[i].text = sCoin;
+                localCoin = int.Parse(sCoin);
+
+                switch (_subpage) {
+                    case SubPage.Main:
+                        arrayIndex = 0;
+                        break;
+                    case SubPage.Rank:
+                        arrayIndex = 1;
+                        break;
+                    case SubPage.Shop:
+                        arrayIndex = 2;
+                        break;
+                    case SubPage.Bag:
+                        arrayIndex = 3;
+                        break;
+                    default:
+                        break;
                 }
+                playerCoins[arrayIndex].text = string.Format("{0:0,0}", localCoin);
             }
-            coinAPIcallback = true;
+            //coinAPIcallback = true;
         }
 
         public void SetUserOnline()
@@ -1868,33 +1892,32 @@ namespace com.Lobby
 				Debug.Log("setCoinCallback Failed! " + result);
 			}
 
-			if (!string.IsNullOrEmpty (result))
+			else if (!string.IsNullOrEmpty (result))
 			{
-                //CryptoPrefs.SetString("USERCOIN", result);
                 setCoinResult = result;
+                //Debug.Log("CB: setCoinResult =  " + result);
                 _setCoin = true;
 			}
-
             //coinAPIcallback = true;
         }
 
 		void Update() {
 			if (_setCoin) {
-                CryptoPrefs.SetString("USERCOIN", setCoinResult);
                 _setCoin = false;
-                SetPlayerCoins();
+                CryptoPrefs.SetString("USERCOIN", setCoinResult);
+                SetPlayerCoins(SubPage.Main);
             }
 		}
 
         public void ChangeCoin(int _earnCoin) {
-            coinAPIcallback = false;
+            //coinAPIcallback = false;
             //Change Coin
-            string oldCoin =CryptoPrefs.GetString("USERCOIN");
-            string sName = CryptoPrefs.GetString("USERNAME");
+            string sName =  CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
-            string newCoin = (int.Parse(oldCoin) + _earnCoin).ToString();
+            string oldCoin = localCoin.ToString();
+            string newCoin = (localCoin + _earnCoin).ToString();
 
-            MJApi.setUserCoin(sToken, sName, oldCoin.ToString(), newCoin, setCoinCallback);
+            MJApi.setUserCoin(sToken, sName, oldCoin, newCoin, setCoinCallback);
 
         }
 

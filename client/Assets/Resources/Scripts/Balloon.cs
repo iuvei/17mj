@@ -16,8 +16,8 @@ public class Balloon : MonoBehaviour {
     }
 
     public void ClickBalloon() {
-        if (!com.Lobby.Launcher.instance.coinAPIcallback)
-            return;
+        //if (!com.Lobby.Launcher.instance.coinAPIcallback)
+        //    return;
 
         if(PlayerPrefExtension.GetBool("Vibrate_enabled"))
             Handheld.Vibrate();

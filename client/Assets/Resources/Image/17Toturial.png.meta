@@ -1,0 +1,378 @@
+fileFormatVersion: 2
+guid: 3886790c813d7a3489c8bc251fe58734
+timeCreated: 1508837009
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: 17Toturial_20
+    21300002: 17Toturial_19
+    21300004: 17Toturial_18
+    21300006: 17Toturial_17
+    21300008: 17Toturial_16
+    21300010: 17Toturial_15
+    21300012: 17Toturial_14
+    21300014: 17Toturial_13
+    21300016: 17Toturial_11
+    21300018: 17Toturial_10
+    21300020: 17Toturial_08
+    21300022: 17Toturial_07
+    21300024: 17Toturial_06
+    21300026: 17Toturial_04
+    21300028: 17Toturial_03
+    21300030: 17Toturial_05
+    21300032: 17Toturial_02
+    21300034: 17Toturial_01
+    21300036: 17Toturial_21
+    21300038: 17Toturial_12
+    21300040: 17Toturial_09
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 17Toturial_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1632
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_19
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 1632
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_18
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 1632
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1360
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_16
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 1360
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_15
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 1360
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1088
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_13
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 1088
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_11
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 1088
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 816
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_08
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 816
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_07
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 816
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_06
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 544
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_04
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 544
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_03
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 544
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_05
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 272
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_02
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 272
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_01
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 272
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_12
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 0
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: 17Toturial_09
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 0
+        width: 482.66666
+        height: 272
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -115,6 +115,7 @@ namespace com.Lobby
         private GameObject childSetting;
         private GameObject childSettingService;
         private GameObject childSettingRule;
+        private GameObject childSettingToturial;
         private GameObject recordPanel;
         private GameObject gamePanel;
         private GameObject profilePanel;
@@ -1432,6 +1433,7 @@ namespace com.Lobby
             childSetting.SetActive(false);
             childSettingService.SetActive(false);
             childSettingRule.SetActive(false);
+            childSettingToturial.SetActive(false);
 
             switch (_target)
             {
@@ -1463,6 +1465,16 @@ namespace com.Lobby
                     break;
                 case "Btn_rules": //條款頁
                     childSettingRule.SetActive(true);
+
+                    if (settingPanelNew)
+                    {
+                        settingPanelNew.transform.DOMoveX(-19.5f, 0, true);
+                        settingPanelNew.transform.DOMoveX(0, 0.3f, true).SetEase(Ease.OutCubic);
+                        ExitSetting();
+                    }
+                    break;
+                case "Btn_toturial": //教學說明頁
+                    childSettingToturial.SetActive(true);
 
                     if (settingPanelNew)
                     {
@@ -1595,6 +1607,7 @@ namespace com.Lobby
             }
 
             childSettingRule = settingPanelNew.transform.Find("Rule").gameObject;
+            childSettingToturial = settingPanelNew.transform.Find("Toturial").gameObject;
 
             actDailyPanel = activityPanel.transform.Find("Daily").gameObject;
             actMissionPanel= activityPanel.transform.Find("Mission").gameObject;

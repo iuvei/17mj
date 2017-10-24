@@ -170,4 +170,25 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
+	public static void setUserItem(string token, string name, int id, int old, int num, RequestCallBack callback)
+	{
+		string api = "V1/setUserItem";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\",  \"Id\":\"" + id + "\", \"Old\":\"" + old + "\", \"Num\":\"" + num + "\"}]";
+		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void getUserItem(string token, string name, int id, RequestCallBack callback)
+	{
+		string api = "V1/getUserItem";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+	    name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Id\":\"" + id + "\"}]";
+		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
+	}
+
+
 }

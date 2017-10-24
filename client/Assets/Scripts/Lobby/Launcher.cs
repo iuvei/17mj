@@ -404,7 +404,11 @@ namespace com.Lobby
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
 				customp.Add("CRoomName", cname);
-				_roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
+				#if UNITY_IOS
+                    _roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
+				#elif UNITY_ANDROID
+				    _roomname = "AJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
+				#endif
 				// 房間選項
 				RoomOptions roomOptions = new RoomOptions ();
 				roomOptions.isVisible = true;
@@ -774,8 +778,31 @@ namespace com.Lobby
             }
         }
 
+		public void getItemCallback(WebExceptionStatus status, string result)
+		{
+			if (status != WebExceptionStatus.Success)
+		    {
+			    Debug.Log("getItemCallback Failed! " + result);
+			}
+			//Debug.Log(" getItemCallback  =  " + result);
+			if (!string.IsNullOrEmpty (result))
+		    {
+		        string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
+				foreach (var substring in tokens) {
+					Debug.Log(" substring  =  " + substring);
+			    }
+		    }
+	    }
+
         //讀取背包資料
         private List<ItemInfo> loadItemData() {
+
+			/*for test
+			string sName = CryptoPrefs.GetString("USERNAME");
+			string sToken = CryptoPrefs.GetString("USERTOKEN");
+			int id = 1; //0:all
+			MJApi.getUserItem(sToken, sName, id, getItemCallback);*/
+
             ItemInfos itemInfos = new ItemInfos();
             ItemInfo data1 = new ItemInfo();
             data1.Id = 1;
@@ -978,8 +1005,25 @@ namespace com.Lobby
             createPopupPanel.transform.DOScale(Vector3.zero, 0.1f).SetEase(Ease.InSine);
         }
 
+		public void setItemCallback(WebExceptionStatus status, string result)
+		{
+	        if (status != WebExceptionStatus.Success)
+		    {
+				Debug.Log("setItemCallback Failed! " + result);
+		    }
+			//Debug.Log(" setItemCallback  =  " + result);
+		}
+
         public void ClickShopBuy()
         {
+			/*for test
+                string sName = CryptoPrefs.GetString("USERNAME");
+                string sToken = CryptoPrefs.GetString("USERTOKEN");
+                int id = 1;
+                int num = 1;
+                int old = 3;
+                MJApi.setUserItem(sToken, sName, id, old, num, setItemCallback);
+            */
             GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
             ShopItem _item = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItem>();
             //Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);

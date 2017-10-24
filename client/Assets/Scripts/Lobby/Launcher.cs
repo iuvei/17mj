@@ -1914,8 +1914,8 @@ namespace com.Lobby
             //Change Coin
             string sName =  CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
-            string oldCoin = localCoin.ToString();
-            string newCoin = (localCoin + _earnCoin).ToString();
+            int oldCoin = localCoin;
+            int newCoin = localCoin + _earnCoin;
 
             MJApi.setUserCoin(sToken, sName, oldCoin, newCoin, setCoinCallback);
 

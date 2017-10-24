@@ -103,7 +103,7 @@ public static class MJApi
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
-	public static void setUserCoin(string token, string name, string oldCoin, string newCoin, RequestCallBack callback)
+	public static void setUserCoin(string token, string name, int oldCoin, int newCoin, RequestCallBack callback)
 	{
 		string api = "V1/setUserCoin";
 		string auth = "Bearer " + secretKey;
@@ -161,7 +161,7 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-    public static void getBulletin(string count, RequestCallBack callback)
+    public static void getBulletin(int count, RequestCallBack callback)
     {
         string api = "V1/getBulletin";
         string auth = "Bearer " + secretKey;

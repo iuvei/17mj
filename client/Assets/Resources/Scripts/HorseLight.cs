@@ -21,7 +21,7 @@ public class HorseLight : MonoBehaviour {
     public bool _acceptPass = true; // 允許放行
 
     [HideInInspector]
-    public string _bulletinNum = "5"; // 取DB得獎人數量
+    public int _bulletinNum = 5; // 取DB得獎人數量
 
     private float _horseLightLength_1;
     private float _horseLightLength_2;

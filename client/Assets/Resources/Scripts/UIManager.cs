@@ -163,7 +163,7 @@ public class UIManager : MonoBehaviour {
         string uName = ran_names[idx];
 
         string id = RegisterUI.GetUniqueKey(24);
-        string mail = RegisterUI.GetUniqueKey(8);
+        string mail = RegisterUI.GetUniqueKey(8)+ "@17";
         string pass = RegisterUI.GetUniqueKey(8);
         string stype = "C";
 

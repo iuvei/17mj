@@ -126,9 +126,24 @@ namespace com.Lobby
         private GameObject actDailyPanel;
         private GameObject actMissionPanel;
         private Transform playerRankPanel;
+        private ScrollRect settingProfileSR;
         private Button replaceNickname;
         private InputField settingNickname;
 		private InputField settingAccount;
+        private Image settingLoginTypeImg;
+        private Text settingLoginTypeTxt;
+        private GameObject setLoginHint;
+        private Button joinMenber;
+        private Button bindAccount;
+        private Button replacePass;
+        private GameObject settingPanelBind;
+        private GameObject settingPanelPass;
+        private InputField settingBindMail;
+        private InputField settingBindPass1;
+        private InputField settingBindPass2;
+        private InputField settingReplacePassOld;
+        private InputField settingReplacePass1;
+        private InputField settingReplacePass2;
         private Transform popupDailyBonus;
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
@@ -1446,7 +1461,7 @@ namespace com.Lobby
             }
 
             if (dropDown) {
-                dropDown.DOMoveY(9.5f, 0, true);
+                dropDown.DOMoveY(12.2f, 0, true);
                 dropDown.DOMoveY(5.4f, 0.3f, true).SetEase(Ease.InSine).SetUpdate(true);
             }
         }
@@ -1465,7 +1480,7 @@ namespace com.Lobby
             if (dropDown)
             {
                 dropDown.DOMoveY(5.4f, 0, true);
-                dropDown.DOMoveY(9.5f, 0.3f, true).SetEase(Ease.InSine); ;
+                dropDown.DOMoveY(12.2f, 0.3f, true).SetEase(Ease.InSine); ;
             }
         }
 
@@ -1626,14 +1641,37 @@ namespace com.Lobby
 
             childSetting = settingPanelNew.transform.Find("Setting").gameObject;
             if (childSetting) {
-                profilePanel = childSetting.transform.Find("Profile").gameObject;
+                settingProfileSR = childSetting.transform.Find("Profile/Mask/Main").GetComponent<ScrollRect>();
+                profilePanel = childSetting.transform.Find("Profile/Mask/Main/Panel").gameObject;
                 gamePanel = childSetting.transform.Find("Game").gameObject;
                 recordPanel = childSetting.transform.Find("Record").gameObject;
 
                 if (profilePanel) {
-					settingNickname = profilePanel.transform.Find("IF_nick").GetComponent<InputField>();
+                    settingNickname = profilePanel.transform.Find("IF_nick").GetComponent<InputField>();
                     replaceNickname = profilePanel.transform.Find("Btn_changeName").GetComponent<Button>();
 					settingAccount = profilePanel.transform.Find("IF_acc").GetComponent<InputField>();
+                    settingLoginTypeImg = profilePanel.transform.Find("LoginTypeImg").GetComponent<Image>();
+                    settingLoginTypeTxt = profilePanel.transform.Find("Text_loignType").GetComponent<Text>();
+                    setLoginHint = profilePanel.transform.Find("Text_bindHint").gameObject;
+                    joinMenber = profilePanel.transform.Find("Btn_join").GetComponent<Button>();
+
+                    settingPanelBind = profilePanel.transform.Find("PanelBind").gameObject;
+                    settingPanelPass = profilePanel.transform.Find("PanelPass").gameObject;
+
+                    if (settingPanelBind) {
+                        bindAccount = settingPanelBind.transform.Find("Btn_bind").GetComponent<Button>();
+                        settingBindMail = settingPanelBind.transform.Find("IF_mail").GetComponent<InputField>();
+                        settingBindPass1 = settingPanelBind.transform.Find("IF_pass1").GetComponent<InputField>();
+                        settingBindPass2 = settingPanelBind.transform.Find("IF_pass2").GetComponent<InputField>();
+                    }
+
+                    if (settingPanelPass)
+                    {
+                        replacePass = settingPanelPass.transform.Find("Btn_changePass").GetComponent<Button>();
+                        settingReplacePassOld = settingPanelPass.transform.Find("IF_passOld").GetComponent<InputField>();
+                        settingReplacePass1 = settingPanelPass.transform.Find("IF_pass1").GetComponent<InputField>();
+                        settingReplacePass2 = settingPanelPass.transform.Find("IF_pass2").GetComponent<InputField>();
+                    }
                 }
                 
                 if (recordPanel)
@@ -1760,7 +1798,7 @@ namespace com.Lobby
 				CryptoPrefs.SetString("USERTYPE", "C");
 				CryptoPrefs.SetString("USERMAIL", result);
 				settingAccount.text = result;
-			}
+            }
 		}
 
         public void ShowLogoutPopup()
@@ -1837,6 +1875,8 @@ namespace com.Lobby
 
             if (!string.IsNullOrEmpty(sMail))
 				settingAccount.text = sMail;
+
+            ShowUserLoginType(sType);
         }
 
 		public void SetPlayerNames()
@@ -1976,6 +2016,54 @@ namespace com.Lobby
 
             MJApi.setUserCoin(sToken, sName, oldCoin, newCoin, setCoinCallback);
 
+        }
+
+        private void ShowUserLoginType(string _type) {
+            switch (_type) {
+                case "C":
+                    settingProfileSR.enabled = true;
+                    settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_17");
+                    settingLoginTypeTxt.text = "17玩麻將會員";
+                    setLoginHint.SetActive(false);
+                    joinMenber.gameObject.SetActive(false);
+                    settingPanelBind.SetActive(false);
+                    settingPanelPass.SetActive(true);
+                    break;
+                case "P":
+                    settingProfileSR.enabled = false;
+                    settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_guest");
+                    settingLoginTypeTxt.text = "訪客";
+                    setLoginHint.SetActive(true);
+                    joinMenber.gameObject.SetActive(true);
+                    settingPanelPass.SetActive(false);
+                    break;
+                case "G":
+                    settingProfileSR.enabled = false;
+                    settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_goo");
+                    settingLoginTypeTxt.text = "Google+ 會員";
+                    setLoginHint.SetActive(false);
+                    joinMenber.gameObject.SetActive(false);
+                    settingPanelBind.SetActive(false);
+                    settingPanelPass.SetActive(false);
+                    break;
+                case "F":
+                    settingProfileSR.enabled = false;
+                    settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_fb");
+                    settingLoginTypeTxt.text = "facebook 會員";
+                    setLoginHint.SetActive(false);
+                    joinMenber.gameObject.SetActive(false);
+                    settingPanelBind.SetActive(false);
+                    settingPanelPass.SetActive(false);
+                    break;
+            }
+        }
+
+        public void ClickJoinMenber()
+        {
+            joinMenber.gameObject.SetActive(false);
+            setLoginHint.SetActive(false);
+            settingPanelBind.SetActive(true);
+            settingProfileSR.enabled = true;
         }
 
         public void ShowDailyBonus()

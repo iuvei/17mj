@@ -93,13 +93,23 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-	public static void setUserMail(string token, string name, string data, RequestCallBack callback)
+	public static void setUserMail(string token, string name, string data, string pwd, RequestCallBack callback)
 	{
 		string api = "V1/setUserMail";
 		string auth = "Bearer " + secretKey;
 		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Mail\":\"" + data + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Pwd\":\"" + pwd + "\", \"Mail\":\"" + data + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void setUserPwd(string token, string name, string mail, string oldpwd, string pwd, RequestCallBack callback)
+	{
+		string api = "V1/setUserPwd";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Pwd\":\"" + pwd + "\",  \"Mail\":\"" + mail + "\", \"Old\":\"" + oldpwd + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 

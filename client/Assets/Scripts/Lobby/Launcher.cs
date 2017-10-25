@@ -1791,7 +1791,7 @@ namespace com.Lobby
 			{
 				Debug.Log("setMailCallback Failed! " + result);
 			}
-			//Debug.Log("setMailCallback =  " + result);
+			Debug.Log("setMailCallback =  " + result);
 
 			if (!string.IsNullOrEmpty (result))
 			{
@@ -1800,15 +1800,36 @@ namespace com.Lobby
 				settingAccount.text = result;
             }
 		}
+		/*
+		public void setPwdCallback(WebExceptionStatus status, string result)
+		{
+ 		    if (status != WebExceptionStatus.Success)
+ 			{
+ 				Debug.Log("setPwdCallback Failed! " + result);
+ 			}
+ 			Debug.Log("setPwdCallback =  " + result);
+ 		}*/
+		
 
         public void ShowLogoutPopup()
         {
 
 			//Change Mail
-			/*string mail = "orson.hsueh@gmail.com";
+			/*
+            string mail = RegisterUI.GetUniqueKey(4) + "@gmail.com";
 			string sName = CryptoPrefs.GetString("USERNAME");
 			string sToken = CryptoPrefs.GetString("USERTOKEN");
-			MJApi.setUserMail(sToken, sName, mail, setMailCallback);*/
+			string passwd = "1234";
+ 			Debug.Log("mail  =  " + mail);
+ 			MJApi.setUserMail(sToken, sName, mail, passwd, setMailCallback);*/
+			
+			/*change Passwd
+ 			string sName = CryptoPrefs.GetString("USERNAME");
+ 			string sToken = CryptoPrefs.GetString("USERTOKEN");
+ 			string mail = CryptoPrefs.GetString("USERMAIL");
+ 			string old = "123456";
+ 			string passwd = "1234";
+ 			MJApi.setUserPwd(sToken, sName, mail, old, passwd, setPwdCallback);*/
 
 
             GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;

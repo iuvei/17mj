@@ -134,23 +134,6 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-    public static void setPlayer(string token, string name, string pdata, RequestCallBack callback)
-    {
-        string api = "V1/setPlayer";
-        string auth = "Bearer " + name + ":" + token;
-        string method = "PUT";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
-    public static void getPlayer(string token, string name, RequestCallBack callback)
-    {
-        string api = "V1/getPlayer";
-        string auth = "Bearer " + name + ":" + token;
-        string method = "GET";
-        string pdata = string.Empty;
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
     public static void setBulletin(string type, string data, RequestCallBack callback)
     {
         string api = "V1/setBulletin";
@@ -187,6 +170,16 @@ public static class MJApi
 		string method = "POST";
 	    name = StringToUnicode(name);
 		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Id\":\"" + id + "\"}]";
+		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void getUserNum(string token, string name, RequestCallBack callback)
+	{
+		string api = "V1/getUserNum";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\"}]";
 		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
 	}
 

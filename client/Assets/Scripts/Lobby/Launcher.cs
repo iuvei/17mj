@@ -63,6 +63,8 @@ namespace com.Lobby
         public Transform[] playRoomBtns;
         public Transform[] btmMenuBtns;
 
+        public GameObject connectingPanel;
+        public GameObject actionDonePanel;
         public GameObject dailyBonusPanel;
         public Transform dailyBonusTarget;
 
@@ -127,6 +129,7 @@ namespace com.Lobby
         private GameObject actMissionPanel;
         private Transform playerRankPanel;
         private ScrollRect settingProfileSR;
+        private Scrollbar settingProfileScr;
         private Button replaceNickname;
         private InputField settingNickname;
 		private InputField settingAccount;
@@ -144,13 +147,27 @@ namespace com.Lobby
         private InputField settingReplacePassOld;
         private InputField settingReplacePass1;
         private InputField settingReplacePass2;
+        private Text settingBindCbHint;
+        private Text settingRePassCbHint;
+        private Transform _connectingSign;
+        private Text _connectingText;
+        private Text _actionText;
         private Transform popupDailyBonus;
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
         private int localCoin = 0;
-		private bool _setCoin = false;
+        private bool _needHideConnect = false;
+        private bool _setCoin = false;
         private string setCoinResult = string.Empty;
+        private bool _resetUserType = false;
+        private string resetUserTypeResult = string.Empty;
+        private bool _resetPass = false;
+        private string resetPassResult = string.Empty;
+        private bool _getOnline = false;
+        private string getOnlineResult = string.Empty;
+        private int _randomOnlineUsers;
+
         [SerializeField]
         private Unimgpicker imagePicker;
         #endregion
@@ -1281,6 +1298,13 @@ namespace com.Lobby
             Transform depositeFlash = depositPanel.transform.Find("bg/flash");
             if(depositeFlash)
                 depositeFlash.DOLocalRotate(new Vector3(0, 0, 180), 10f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+
+            //設定連線中動畫
+            if (connectingPanel)
+            {
+                _connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).Pause();
+                _connectingText.DOText("連線中...", 3).SetLoops(-1, LoopType.Restart).Pause();
+            }
         }
 
         //---
@@ -1642,6 +1666,7 @@ namespace com.Lobby
             childSetting = settingPanelNew.transform.Find("Setting").gameObject;
             if (childSetting) {
                 settingProfileSR = childSetting.transform.Find("Profile/Mask/Main").GetComponent<ScrollRect>();
+                settingProfileScr = childSetting.transform.Find("Profile/Mask/Main/Scrollbar").GetComponent<Scrollbar>();
                 profilePanel = childSetting.transform.Find("Profile/Mask/Main/Panel").gameObject;
                 gamePanel = childSetting.transform.Find("Game").gameObject;
                 recordPanel = childSetting.transform.Find("Record").gameObject;
@@ -1663,6 +1688,7 @@ namespace com.Lobby
                         settingBindMail = settingPanelBind.transform.Find("IF_mail").GetComponent<InputField>();
                         settingBindPass1 = settingPanelBind.transform.Find("IF_pass1").GetComponent<InputField>();
                         settingBindPass2 = settingPanelBind.transform.Find("IF_pass2").GetComponent<InputField>();
+                        settingBindCbHint = settingPanelBind.transform.Find("Text_bindCbHint").GetComponent<Text>();
                     }
 
                     if (settingPanelPass)
@@ -1671,6 +1697,7 @@ namespace com.Lobby
                         settingReplacePassOld = settingPanelPass.transform.Find("IF_passOld").GetComponent<InputField>();
                         settingReplacePass1 = settingPanelPass.transform.Find("IF_pass1").GetComponent<InputField>();
                         settingReplacePass2 = settingPanelPass.transform.Find("IF_pass2").GetComponent<InputField>();
+                        settingRePassCbHint = settingPanelPass.transform.Find("Text_rePassCbHint").GetComponent<Text>();
                     }
                 }
                 
@@ -1707,6 +1734,17 @@ namespace com.Lobby
                 }
             }
             BirthDailyBonusItem();
+
+            if (connectingPanel) {
+                _connectingSign = connectingPanel.transform.Find("Image/Img");
+                _connectingText = connectingPanel.transform.Find("Image/Text").GetComponent<Text>();
+            }
+
+            if (actionDonePanel)
+            {
+                _actionText = actionDonePanel.transform.Find("main/Txt").GetComponent<Text>();
+            }
+            
         }
 
         public void ClickBalloonBtn() {
@@ -1785,54 +1823,40 @@ namespace com.Lobby
 
         }
 
-		public void setMailCallback(WebExceptionStatus status, string result)
+        public void setMailCallback(WebExceptionStatus status, string result)
 		{
-			if (status != WebExceptionStatus.Success)
+            _needHideConnect = true; //需要關閉連線視窗
+            resetUserTypeResult = result;
+            _resetUserType = true;
+            if (status != WebExceptionStatus.Success)
 			{
 				Debug.Log("setMailCallback Failed! " + result);
 			}
-			Debug.Log("setMailCallback =  " + result);
-
-			if (!string.IsNullOrEmpty (result))
+			else if (!string.IsNullOrEmpty (result))
 			{
-				CryptoPrefs.SetString("USERTYPE", "C");
-				CryptoPrefs.SetString("USERMAIL", result);
-				settingAccount.text = result;
+                //Debug.Log("setMailCallback =  " + result);
             }
 		}
-		/*
+
 		public void setPwdCallback(WebExceptionStatus status, string result)
 		{
- 		    if (status != WebExceptionStatus.Success)
- 			{
- 				Debug.Log("setPwdCallback Failed! " + result);
- 			}
- 			Debug.Log("setPwdCallback =  " + result);
- 		}*/
+            _needHideConnect = true; //需要關閉連線視窗
+            resetPassResult = result;
+            _resetPass = true;
+            if (status != WebExceptionStatus.Success)
+            {
+                Debug.Log("setPwdCallback Failed! " + result);
+            }
+            else if (!string.IsNullOrEmpty(result))
+            {
+                Debug.Log("setPwdCallback =  " + result);
+            }
+ 		}
 		
 
         public void ShowLogoutPopup()
         {
-
-			//Change Mail
-			/*
-            string mail = RegisterUI.GetUniqueKey(4) + "@gmail.com";
-			string sName = CryptoPrefs.GetString("USERNAME");
-			string sToken = CryptoPrefs.GetString("USERTOKEN");
-			string passwd = "1234";
- 			Debug.Log("mail  =  " + mail);
- 			MJApi.setUserMail(sToken, sName, mail, passwd, setMailCallback);*/
-			
-			/*change Passwd
- 			string sName = CryptoPrefs.GetString("USERNAME");
- 			string sToken = CryptoPrefs.GetString("USERTOKEN");
- 			string mail = CryptoPrefs.GetString("USERMAIL");
- 			string old = "123456";
- 			string passwd = "1234";
- 			MJApi.setUserPwd(sToken, sName, mail, old, passwd, setPwdCallback);*/
-
-
-            GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
+            GameObject popupBG = childSetting.transform.Find("Profile/popupBG").gameObject;
 
             if (popupLogout)
             {
@@ -1848,7 +1872,7 @@ namespace com.Lobby
 
         public void ExitLogoutPopup()
         {
-            GameObject popupBG = profilePanel.transform.Find("popupBG").gameObject;
+            GameObject popupBG = childSetting.transform.Find("Profile/popupBG").gameObject;
 
             if (popupLogout)
             {
@@ -1959,11 +1983,22 @@ namespace com.Lobby
 
         public void SetUserOnline()
         {
-            string sOnline = CryptoPrefs.GetString("USERONLINE");
-            if (!string.IsNullOrEmpty(sOnline))
+            _randomOnlineUsers = UnityEngine.Random.Range(8000, 12000);
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            MJApi.getUserNum(sToken, sName, getUserNumCallback);
+        }
+
+        public void getUserNumCallback(WebExceptionStatus status, string result)
+        {
+            if (status != WebExceptionStatus.Success)
             {
-                userOnline.text = "在線人數 " + string.Format("{0:0,0}", int.Parse(sOnline));
+                Debug.Log("getUserNumCallback Failed! " + result);
             }
+            else {
+                getOnlineResult = result;
+            }
+            _getOnline = true;
         }
 
         public void NicknameChange() {
@@ -2019,13 +2054,87 @@ namespace com.Lobby
             //coinAPIcallback = true;
         }
 
+        private void ConnectPanelSwitch(bool _turnOn) {
+            if (_turnOn)
+            {
+                _connectingSign.DOPlay();
+                _connectingText.DOPlay();
+                connectingPanel.SetActive(true); //開啟連線視窗
+            }
+            else {
+                connectingPanel.SetActive(false); //關閉連線視窗
+                _connectingSign.DOPause();
+                _connectingText.DOPause();
+            }
+        }
+
 		void Update() {
+
+            if (_needHideConnect) {
+                ConnectPanelSwitch(false); //關閉連線視窗
+                _needHideConnect = false;
+            }
+
 			if (_setCoin) {
                 _setCoin = false;
                 CryptoPrefs.SetString("USERCOIN", setCoinResult);
                 SetPlayerCoins(SubPage.Main);
             }
-		}
+            if (_getOnline) {
+                _getOnline = false;
+                userOnline.text = "在線人數 " + string.Format("{0:0,0}", _randomOnlineUsers + int.Parse(getOnlineResult)); 
+            }
+
+            if (_resetUserType)
+            {
+                actionDonePanel.SetActive(true);
+                _resetUserType = false;
+                Debug.Log("綁定帳號 " + resetUserTypeResult);
+
+                if (resetUserTypeResult == "The remote server returned an error: (401) Unauthorized.")
+                {
+                    _actionText.text = "此信箱已被註冊";
+                }
+                else if (resetUserTypeResult != "OK")
+                {
+                    _actionText.text = "綁定失敗";
+                }
+                else {
+                    _actionText.text = "綁定成功";
+                    CryptoPrefs.SetString("USERTYPE", "C");
+                    CryptoPrefs.SetString("USERMAIL", settingBindMail.text);
+                    SetPlayerAccount();
+
+                    settingBindMail.text = string.Empty;
+                    settingBindPass1.text = string.Empty;
+                    settingBindPass2.text = string.Empty;
+                    settingBindCbHint.gameObject.SetActive(false);
+                }
+            }
+
+            if (_resetPass)
+            {
+                actionDonePanel.SetActive(true);
+                _resetPass = false;
+                Debug.Log("更新密碼 " + resetPassResult);
+
+                if (resetPassResult == "The remote server returned an error: (401) Unauthorized.")
+                {
+                    _actionText.text = "原始密碼輸入錯誤";
+                }
+                else if (resetPassResult != "OK")
+                {
+                    _actionText.text = "密碼更改失敗";
+                }
+                else {
+                    _actionText.text = "密碼更改成功";
+                    settingReplacePassOld.text = string.Empty;
+                    settingReplacePass1.text = string.Empty;
+                    settingReplacePass2.text = string.Empty;
+                    settingRePassCbHint.gameObject.SetActive(false);
+                }
+            }
+        }
 
         public void ChangeCoin(int _earnCoin) {
             //coinAPIcallback = false;
@@ -2040,43 +2149,41 @@ namespace com.Lobby
         }
 
         private void ShowUserLoginType(string _type) {
+            bool isScrollable = false;
+            bool isShowBindHint = false;
+            bool isShowJoinBtn = false;
+            bool isShowPanelBind = false;
+            bool isShowPanelPass = false;
+            
             switch (_type) {
                 case "C":
-                    settingProfileSR.enabled = true;
+                    isScrollable = true;
                     settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_17");
                     settingLoginTypeTxt.text = "17玩麻將會員";
-                    setLoginHint.SetActive(false);
-                    joinMenber.gameObject.SetActive(false);
-                    settingPanelBind.SetActive(false);
-                    settingPanelPass.SetActive(true);
+                    isShowPanelPass = true;
                     break;
                 case "P":
-                    settingProfileSR.enabled = false;
                     settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_guest");
                     settingLoginTypeTxt.text = "訪客";
-                    setLoginHint.SetActive(true);
-                    joinMenber.gameObject.SetActive(true);
-                    settingPanelPass.SetActive(false);
+                    isShowBindHint = true;
+                    isShowJoinBtn = true;
                     break;
                 case "G":
-                    settingProfileSR.enabled = false;
                     settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_goo");
                     settingLoginTypeTxt.text = "Google+ 會員";
-                    setLoginHint.SetActive(false);
-                    joinMenber.gameObject.SetActive(false);
-                    settingPanelBind.SetActive(false);
-                    settingPanelPass.SetActive(false);
                     break;
                 case "F":
-                    settingProfileSR.enabled = false;
                     settingLoginTypeImg.sprite = Resources.Load<Sprite>("Image/Icon_fb");
                     settingLoginTypeTxt.text = "facebook 會員";
-                    setLoginHint.SetActive(false);
-                    joinMenber.gameObject.SetActive(false);
-                    settingPanelBind.SetActive(false);
-                    settingPanelPass.SetActive(false);
                     break;
             }
+
+            settingProfileSR.enabled = isScrollable;
+            settingProfileScr.value = isScrollable ? 1 : 0;
+            setLoginHint.SetActive(isShowBindHint);
+            joinMenber.gameObject.SetActive(isShowJoinBtn);
+            settingPanelBind.SetActive(isShowPanelBind);
+            settingPanelPass.SetActive(isShowPanelPass);
         }
 
         public void ClickJoinMenber()
@@ -2085,7 +2192,82 @@ namespace com.Lobby
             setLoginHint.SetActive(false);
             settingPanelBind.SetActive(true);
             settingProfileSR.enabled = true;
+            settingProfileScr.value = 0;
         }
+
+        public void ClickReplacePass() {
+            // change Passwd
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            string mail = CryptoPrefs.GetString("USERMAIL");
+            string replacePassOld = settingReplacePassOld.text;
+            string replacePass1 = settingReplacePass1.text;
+            string replacePass2 = settingReplacePass2.text;
+            GameObject replacePassHint = settingRePassCbHint.gameObject;
+
+            //檢查密碼是否合法
+            if (!CheckInput.instance.CheckPass(replacePassOld))
+            {
+                settingRePassCbHint.text = "原始密碼輸入錯誤";
+                replacePassHint.SetActive(true);
+            }
+            if (!CheckInput.instance.CheckPass(replacePass1) || !CheckInput.instance.CheckPass(replacePass2))
+            {
+                settingRePassCbHint.text = "新密碼格式錯誤";
+                replacePassHint.SetActive(true);
+            }
+            else if (replacePass1 != replacePass2)
+            {
+                settingRePassCbHint.text = "兩次密碼不符";
+                replacePassHint.SetActive(true);
+            }
+            else
+            {
+                MJApi.setUserPwd(sToken, sName, mail, replacePassOld, replacePass1, setPwdCallback);
+                ConnectPanelSwitch(true); //開啟連線視窗
+            }
+        }
+
+        public void ClickBindMail()
+        {
+            //Change Mail
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            string bindMail = settingBindMail.text;
+            string bindPass1 = settingBindPass1.text;
+            string bindPass2 = settingBindPass2.text;
+            GameObject bindPassHint = settingBindCbHint.gameObject;
+
+            //檢查欄位是否合法
+            if (!CheckInput.instance.CheckEmail(bindMail))
+            {
+                settingBindCbHint.text = "電子信箱格式錯誤";
+                bindPassHint.SetActive(true);
+            }
+
+            //檢查密碼是否合法
+            else if (!CheckInput.instance.CheckPass(bindPass1) || !CheckInput.instance.CheckPass(bindPass2))
+            {
+                settingBindCbHint.text = "新密碼格式錯誤";
+                bindPassHint.SetActive(true);
+            }
+            else if (bindPass1 != bindPass2)
+            {
+                settingBindCbHint.text = "兩次密碼不符";
+                bindPassHint.SetActive(true);
+            }
+            else
+            {
+                MJApi.setUserMail(sToken, sName, bindMail, bindPass1, setMailCallback);
+                ConnectPanelSwitch(true); //開啟連線視窗
+            }
+        }
+
+        public void ClickActionDoneBtn() {
+            actionDonePanel.SetActive(false);
+            _actionText.text = string.Empty;
+        }
+
 
         public void ShowDailyBonus()
         {

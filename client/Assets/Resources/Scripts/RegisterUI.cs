@@ -130,6 +130,9 @@ public class RegisterUI : MonoBehaviour {
             string uToken = string.Empty;
             string uLevel = string.Empty;
             string uCoin = string.Empty;
+			string ufLogin = string.Empty;
+			string ulTotal = string.Empty;
+
 
             IDictionary dict = Json.Deserialize(result) as IDictionary;
             if (dict["Name"] != null)
@@ -152,6 +155,16 @@ public class RegisterUI : MonoBehaviour {
                 uCoin = dict["Coin"].ToString();
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
+			if (dict["fLogin"] != null)
+			{
+				ufLogin = dict["fLogin"].ToString();
+				CryptoPrefs.SetString("USERFLOGIN", ufLogin);
+			}
+			if (dict["LoginTotal"] != null)
+			{
+				ulTotal = dict["LoginTotal"].ToString();
+				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
+			}
             ResetAllInput();
             UIManager.instance.StartSetEnterLoading(); //載入下個場景
         }

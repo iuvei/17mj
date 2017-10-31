@@ -123,16 +123,6 @@ public static class MJApi
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
-	public static void getUserDaily(string token, string name, RequestCallBack callback)
-	{
-		string api = "V1/getUserDaily";
-		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
-		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\"}]";
-		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-	}
-
     public static void setPlayerName(string token, string oName, string uName, RequestCallBack callback)
     {
         string api = "V1/setPlayerName";

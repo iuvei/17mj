@@ -211,6 +211,8 @@ public class FBLoginButton : MonoBehaviour {
             string uToken = string.Empty;
             string uLevel = string.Empty;
             string uCoin = string.Empty;
+			string ufLogin = string.Empty;
+			string ulTotal = string.Empty;
 
 
             if (dict["Name"] != null)
@@ -233,6 +235,16 @@ public class FBLoginButton : MonoBehaviour {
                 uCoin = dict["Coin"].ToString();
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
+			if (dict["fLogin"] != null)
+			{
+				ufLogin = dict["fLogin"].ToString();
+				CryptoPrefs.SetString("USERFLOGIN", ufLogin);
+			}
+			if (dict["LoginTotal"] != null)
+			{
+				ulTotal = dict["LoginTotal"].ToString();
+				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
+			}
             _loginSuccess = false;
             _loginDone = true;
         }

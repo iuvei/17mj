@@ -194,6 +194,8 @@ public class UIManager : MonoBehaviour {
             string uToken = string.Empty;
             string uLevel = string.Empty;
             string uCoin = string.Empty;
+			string ufLogin = string.Empty;
+			string ulTotal = string.Empty;
 
             if (dict["Name"] != null)
             {
@@ -215,6 +217,17 @@ public class UIManager : MonoBehaviour {
                 uCoin = dict["Coin"].ToString();
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
+			if (dict["fLogin"] != null)
+			{
+				ufLogin = dict["fLogin"].ToString();
+				CryptoPrefs.SetString("USERFLOGIN", ufLogin);
+			}
+			if (dict["LoginTotal"] != null)
+			{
+				ulTotal = dict["LoginTotal"].ToString();
+				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
+			}
+
             EnterLoading.instance._autoToNextScene = true;
 
             _registerSuccess = false;

@@ -123,6 +123,9 @@ public class LoginUI : MonoBehaviour {
             string uLevel = string.Empty;
             string uCoin = string.Empty;
             string uPhoto = string.Empty;
+			string ufLogin = string.Empty;
+			string ulTotal = string.Empty;
+
             string[] tokens = loginResult.Split(new string[] { "," }, StringSplitOptions.None);
 
             if (tokens[0] != null)
@@ -145,9 +148,19 @@ public class LoginUI : MonoBehaviour {
                 uCoin = tokens[3];
                 CryptoPrefs.SetString("USERCOIN", uCoin);
             }
-            if (tokens[4] != null && tokens[4] != "undefined")
+			if (tokens[4] != null)
+			{
+				ufLogin = tokens[4];
+				CryptoPrefs.SetString("USERFLOGIN", ufLogin);
+			}
+			if (tokens[5] != null)
+			{
+				ufLogin = tokens[5];
+				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
+			}
+            if (tokens[6] != null && tokens[6] != "undefined")
             {
-                uPhoto = tokens[4];
+                uPhoto = tokens[6];
                 CryptoPrefs.SetString("USERPHOTO", uPhoto);
             }
             UIManager.instance.StartSetEnterLoading(); //載入下個場景

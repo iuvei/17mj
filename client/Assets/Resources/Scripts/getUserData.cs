@@ -49,13 +49,6 @@ public class getUserData : MonoBehaviour {
             coin.text = string.Format("{0:0,0}", int.Parse(sCoin));
         }
 
-        sOnline = CryptoPrefs.GetString("USERONLINE");
-        if (!string.IsNullOrEmpty(sOnline))
-        {
-            Text online = OnlineText.GetComponent<Text>();
-            online.text = "在線人數 " + sOnline;
-        }
-
     }
  
 }

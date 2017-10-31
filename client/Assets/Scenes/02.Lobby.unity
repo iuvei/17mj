@@ -13481,7 +13481,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 1273215183}
+  - {fileID: 1330619983}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -25066,35 +25066,6 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 665124400}
---- !u!21 &666086169
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 2DxFX/Standard/Liquid
-  m_Shader: {fileID: 4800000, guid: 910822b3116d8c949b6aa4aab2f52a49, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - EValue: 0.2
-    - Light: 0
-    - _Alpha: 0
-    - _Distortion: 0.1
-    - _Speed: 0.5
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &671012945
 GameObject:
   m_ObjectHideFlags: 0
@@ -26720,6 +26691,35 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 750040198}
+--- !u!21 &751582192
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 2DxFX/Standard/Liquid
+  m_Shader: {fileID: 4800000, guid: 910822b3116d8c949b6aa4aab2f52a49, type: 3}
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - EValue: 0.2
+    - Light: 0
+    - _Alpha: 0
+    - _Distortion: 0.1
+    - _Speed: 0.5
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &753094177
 GameObject:
   m_ObjectHideFlags: 0
@@ -41775,35 +41775,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1270966796}
---- !u!21 &1273215183
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 2DxFX/Standard/Liquid
-  m_Shader: {fileID: 4800000, guid: 910822b3116d8c949b6aa4aab2f52a49, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - EValue: 0.16
-    - Light: 0
-    - _Alpha: 0
-    - _Distortion: 0.19
-    - _Speed: 0.52
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1274458078
 GameObject:
   m_ObjectHideFlags: 0
@@ -43309,7 +43280,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 449015468}
-        m_MethodName: GoShopSaid
+        m_MethodName: CheckWallet
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -43613,6 +43584,35 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1330438795}
+--- !u!21 &1330619983
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 2DxFX/Standard/Liquid
+  m_Shader: {fileID: 4800000, guid: 910822b3116d8c949b6aa4aab2f52a49, type: 3}
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - EValue: 0.16
+    - Light: 0
+    - _Alpha: 0
+    - _Distortion: 0.19
+    - _Speed: 0.52
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1334113311
 GameObject:
   m_ObjectHideFlags: 0
@@ -50845,7 +50845,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 666086169}
+  - {fileID: 751582192}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -61658,7 +61658,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: cda30bd0c6bbf144ba37287e16d2cb73, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 56657e3627a08064f9db5e37d3db20fa, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

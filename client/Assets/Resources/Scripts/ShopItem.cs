@@ -13,6 +13,7 @@ public class ShopItem : MonoBehaviour {
     public string Name;
     [HideInInspector]
     public int Price;
+    public int Id;
 
     private bool _changeFlag = false;
     private Sprite _spot1;
@@ -28,6 +29,7 @@ public class ShopItem : MonoBehaviour {
         _targetImg.SetNativeSize();
         _targetName.text = info.Name;
         _targetPrice.text = string.Format("{0:0,0}", info.Price);
+        Id = info.Id;
     }
 
     private void ChangeSpotSprite() {

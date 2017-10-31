@@ -156,6 +156,8 @@ namespace com.Lobby
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
+        private Image btmDepositLight;
+        private bool _changeFlag = true;
         private int localCoin = 0;
         private bool _needHideConnect = false;
         private bool _setCoin = false;
@@ -167,6 +169,12 @@ namespace com.Lobby
         private bool _getOnline = false;
         private string getOnlineResult = string.Empty;
         private int _randomOnlineUsers;
+        private string getItemNumResult = string.Empty;
+        private bool _setItem = false;
+        private string setItemResult = string.Empty;
+        private bool _getBag = false;
+        private int _currentItemId = 0;
+        private SubPage currentPage = SubPage.Main; 
 
         [SerializeField]
         private Unimgpicker imagePicker;
@@ -564,7 +572,7 @@ namespace com.Lobby
         }
 
         /// <summary>
-        /// 進入房間
+        /// 進入房間getItemCallback
         /// </summary>
         /// <returns></returns>
         IEnumerator GetInRoom()
@@ -739,7 +747,8 @@ namespace com.Lobby
             if (btmMenuBtns[1])
                 btmMenuBtns[1].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
-            SetPlayerCoins(SubPage.Shop);
+            currentPage = SubPage.Shop;
+            SetPlayerCoins();
 
             if (shopPanel)
             {
@@ -754,30 +763,80 @@ namespace com.Lobby
             {
                 shopPanel.transform.DOMoveX(0, 0, true);
                 shopPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+                currentPage = SubPage.Main;
+                SetPlayerCoins();
             }
         }
 
         public void ClickBag()
         {
+            // 讀背包清單
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            int id = 0;
+            MJApi.getUserItem(sToken, sName, id, getItemCallback);
+            connectingPanel.SetActive(true); //開啟連線視窗
+
             if (btmMenuBtns[3])
                 btmMenuBtns[3].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
-            SetPlayerCoins(SubPage.Bag);
+            //currentPage = SubPage.Bag;
+            //SetPlayerCoins();
+            //GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
+
+            //foreach (Transform child in bagItemTarget)
+            //    Destroy(child.gameObject);
+
+            ////玩家的背包資料
+            //List<ItemInfo> itemInfos = loadUserItemData();
+
+            //if (itemInfos.Count == 0)
+            //{
+            //    if (bagEmpty)
+            //        bagEmpty.SetActive(true);
+            //}
+            //else {
+            //    if (bagEmpty)
+            //        bagEmpty.SetActive(false);
+
+            //    foreach (ItemInfo info in itemInfos)
+            //    {
+            //        GameObject go = GameObject.Instantiate(Resources.Load("Prefab/bagItem") as GameObject);
+            //        BagItemInfo bagInfo = go.GetComponent<BagItemInfo>();
+            //        bagInfo.setInfo(info);
+
+            //        go.transform.SetParent(bagItemTarget);
+            //        RectTransform rectT = go.GetComponent<RectTransform>();
+            //        rectT.localPosition = Vector3.zero;
+            //        rectT.localScale = Vector3.one;
+            //    }
+            //}
+
+            //if (bagPanel)
+            //{
+            //    bagPanel.transform.DOMoveX(-19.5f, 0, true);
+            //    bagPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
+            //}
+        }
+
+        private void paintBagUI() {
+            currentPage = SubPage.Bag;
+            SetPlayerCoins();
             GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
 
             foreach (Transform child in bagItemTarget)
                 Destroy(child.gameObject);
 
             //玩家的背包資料
-            List<ItemInfo> itemInfos = loadItemData();
-            //itemInfos.Clear(); //清空
+            List<ItemInfo> itemInfos = loadUserItemData();
 
             if (itemInfos.Count == 0)
             {
                 if (bagEmpty)
                     bagEmpty.SetActive(true);
             }
-            else {
+            else
+            {
                 if (bagEmpty)
                     bagEmpty.SetActive(false);
 
@@ -807,57 +866,73 @@ namespace com.Lobby
             {
                 bagPanel.transform.DOMoveX(0, 0, true);
                 bagPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+                currentPage = SubPage.Main;
+                SetPlayerCoins();
             }
         }
 
 		public void getItemCallback(WebExceptionStatus status, string result)
 		{
-			if (status != WebExceptionStatus.Success)
+            _getBag = true;
+            Debug.Log("getItemCallback " + result);
+            if (status != WebExceptionStatus.Success)
 		    {
-			    Debug.Log("getItemCallback Failed! " + result);
+                getItemNumResult = "getItemCallback Failed!";
+                Debug.Log("getItemCallback Failed! " + result);
 			}
-			//Debug.Log(" getItemCallback  =  " + result);
-			if (!string.IsNullOrEmpty (result))
+			else if (!string.IsNullOrEmpty (result))
 		    {
-		        string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
-				foreach (var substring in tokens) {
-					Debug.Log(" substring  =  " + substring);
-			    }
+                getItemNumResult = result;
+                string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
+                //Debug.Log(" getItemCallback  =  " + result);
 		    }
-	    }
+        }
 
         //讀取背包資料
-        private List<ItemInfo> loadItemData() {
-
-			/*for test
-			string sName = CryptoPrefs.GetString("USERNAME");
-			string sToken = CryptoPrefs.GetString("USERTOKEN");
-			int id = 1; //0:all
-			MJApi.getUserItem(sToken, sName, id, getItemCallback);*/
+        private List<ItemInfo> loadUserItemData()
+        {
+            string[] tokens = getItemNumResult.Split(new string[] { "," }, StringSplitOptions.None);
+            int sItems = tokens.Length / 2;
+            //Debug.Log(" 商品項目數量  =  " + sItems);
 
             ItemInfos itemInfos = new ItemInfos();
-            ItemInfo data1 = new ItemInfo();
-            data1.Id = 1;
-            data1.Name = "渡假別墅";
-            data1.Num = 1;
-            data1.Path2D = 1;
-            itemInfos.dataList.Add(data1);
-
-            ItemInfo data2 = new ItemInfo();
-            data2.Id = 2;
-            data2.Name = "金元寶";
-            data2.Num = 3;
-            data2.Path2D = 2;
-            itemInfos.dataList.Add(data2);
-
-            ItemInfo data3 = new ItemInfo();
-            data3.Id = 3;
-            data3.Name = "I-RIMO鑽戒";
-            data3.Num = 4;
-            data3.Path2D = 3;
-            itemInfos.dataList.Add(data3);
-            
+            if (sItems != 0) {
+                for (int i = 0; i < sItems; i++)
+                {
+                    ItemInfo data = new ItemInfo();
+                    data.Id = int.Parse(tokens[2*i]);
+                    data.Name = ItemNameList(data.Id); 
+                    data.Num = int.Parse(tokens[2*i+1]);
+                    data.Path2D = data.Id;
+                    itemInfos.dataList.Add(data);
+                }
+            }
             return itemInfos.dataList;
+        }
+
+        private string ItemNameList(int _id) {
+            string _itemName = string.Empty;
+            switch (_id) {
+                case 1:
+                    _itemName = "渡假別墅";
+                    break;
+                case 2:
+                    _itemName = "高級腕錶";
+                    break;
+                case 3:
+                    _itemName = "金元寶";
+                    break;
+                case 4:
+                    _itemName = "I-RIMO鑽戒";
+                    break;
+                case 5:
+                    _itemName = "高級房車";
+                    break;
+                case 6:
+                    _itemName = "香奈兒包";
+                    break;
+            }
+            return _itemName;
         }
 
         public void RoomListToggle(bool isOn)
@@ -1039,23 +1114,28 @@ namespace com.Lobby
 
 		public void setItemCallback(WebExceptionStatus status, string result)
 		{
-	        if (status != WebExceptionStatus.Success)
-		    {
-				Debug.Log("setItemCallback Failed! " + result);
-		    }
-			//Debug.Log(" setItemCallback  =  " + result);
-		}
+            _needHideConnect = true; //需要關閉連線視窗
+            _setItem = true;
+
+            if (status != WebExceptionStatus.Success)
+            {
+                setItemResult = result;
+                Debug.Log("setItemCallback Failed! " + result);
+            }
+            else if(!string.IsNullOrEmpty(result))
+            {
+                Debug.Log(" setItemCallback  =  " + result);
+                string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
+                if (tokens[0] == "OK")
+                    setItemResult = tokens[1];
+                else
+                    setItemResult = "something wrong!";
+            }
+
+        }
 
         public void ClickShopBuy()
         {
-			/*for test
-                string sName = CryptoPrefs.GetString("USERNAME");
-                string sToken = CryptoPrefs.GetString("USERTOKEN");
-                int id = 1;
-                int num = 1;
-                int old = 3;
-                MJApi.setUserItem(sToken, sName, id, old, num, setItemCallback);
-            */
             GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
             ShopItem _item = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItem>();
             //Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);
@@ -1065,6 +1145,14 @@ namespace com.Lobby
             _popupBuyItemPrice.text = String.Format("{0:0,0}", currentPrice);
             _popupBuyItemNum.text = currentNum.ToString();
             _popupBuyItemTotal.text = String.Format("{0:0,0}", currentPrice);
+            _currentItemId = _item.Id;
+
+            // 取得目前該商品數量
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            
+            MJApi.getUserItem(sToken, sName, _currentItemId, getItemCallback);
+            ConnectPanelSwitch(true); //開啟連線視窗
 
             if (popupBuy)
             {
@@ -1112,7 +1200,37 @@ namespace com.Lobby
             }
         }
 
-        public void GoShopSaid()
+        public void CheckWallet() {
+            string sCoin = CryptoPrefs.GetString("USERCOIN"); //取得目前餘額
+            int tPrice = (currentNum * currentPrice);
+            if (int.Parse(sCoin) >= tPrice)
+            {
+                ClickBuyItem(-tPrice);     //改變商品數量
+                ConnectPanelSwitch(true); //開啟連線視窗
+            }
+            else {
+                GoShopSad();
+            }
+        }
+
+        public void ClickBuyItem(int _tPrice) {
+            // 購買商品
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            int oldCoin = localCoin;
+            int newCoin = localCoin + _tPrice;
+
+            string currentItemNum = (string.IsNullOrEmpty(getItemNumResult)) ? "0" : getItemNumResult;
+            int oldNum = int.Parse(currentItemNum);
+            int finalNum = currentNum + oldNum;
+            MJApi.setUserItem(sToken, sName, _currentItemId, oldNum, finalNum, oldCoin, newCoin, setItemCallback);
+        }
+
+        private void SetUserCoin() {
+
+        }
+
+        public void GoShopSad()
         {
             popupSad.transform.DOScale(Vector3.zero, 0);
             popupSad.transform.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutBack);
@@ -1178,41 +1296,48 @@ namespace com.Lobby
 
         private List<ShopItemInfo> loadShopData()
         {
+            int priceIdx = 1; //物價指數
             ShopItemInfos itemInfos = new ShopItemInfos();
             ShopItemInfo data1 = new ShopItemInfo();
+            data1.Id = 1;
             data1.Name = "渡假別墅";
             data1.Path2D = 1;
-            data1.Price = 20000;
+            data1.Price = 40 * priceIdx;
             itemInfos.dataList.Add(data1);
 
             ShopItemInfo data2 = new ShopItemInfo();
+            data2.Id = 2;
             data2.Name = "高級腕錶";
             data2.Path2D = 2;
-            data2.Price = 15000;
+            data2.Price = 30 * priceIdx;
             itemInfos.dataList.Add(data2);
 
             ShopItemInfo data3 = new ShopItemInfo();
+            data3.Id = 3;
             data3.Name = "金元寶";
             data3.Path2D = 3;
-            data3.Price = 5000;
+            data3.Price = 10 * priceIdx;
             itemInfos.dataList.Add(data3);
 
             ShopItemInfo data4 = new ShopItemInfo();
+            data4.Id = 4;
             data4.Name = "I-RIMO鑽戒";
             data4.Path2D = 4;
-            data4.Price = 65000;
+            data4.Price = 130 * priceIdx;
             itemInfos.dataList.Add(data4);
 
             ShopItemInfo data5 = new ShopItemInfo();
+            data5.Id = 5;
             data5.Name = "高級房車";
             data5.Path2D = 5;
-            data5.Price = 25000;
+            data5.Price = 50 * priceIdx;
             itemInfos.dataList.Add(data5);
 
             ShopItemInfo data6 = new ShopItemInfo();
+            data6.Id = 6;
             data6.Name = "香奈兒包";
             data6.Path2D = 6;
-            data6.Price = 10000;
+            data6.Price = 20 * priceIdx;
             itemInfos.dataList.Add(data6);
 
             return itemInfos.dataList;
@@ -1305,6 +1430,20 @@ namespace com.Lobby
                 _connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).Pause();
                 _connectingText.DOText("連線中...", 3).SetLoops(-1, LoopType.Restart).Pause();
             }
+
+            if(btmDepositLight)
+                InvokeRepeating("ChangeSpotSprite", .5f, .5f);
+
+        }
+
+        private void ChangeSpotSprite()
+        {
+            string _num = (_changeFlag) ? "1" : "2";
+            if (btmDepositLight)
+                btmDepositLight.sprite = Resources.Load<Sprite>("Image/menuL" + _num);
+
+            _changeFlag = !_changeFlag;
+  
         }
 
         //---
@@ -1313,7 +1452,8 @@ namespace com.Lobby
             if (btmMenuBtns[0])
                 btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 
-            SetPlayerCoins(SubPage.Rank);
+            currentPage = SubPage.Rank;
+            SetPlayerCoins();
             BirtnRankItem(); //產生排行榜項目
 
             if (rankPanel)
@@ -1329,6 +1469,8 @@ namespace com.Lobby
             {
                 rankPanel.transform.DOMoveX(0, 0, true);
                 rankPanel.transform.DOMoveX(-19.5f, 0.5f, true).SetEase(Ease.OutCubic);
+                currentPage = SubPage.Main;
+                SetPlayerCoins();
             }
         }
 
@@ -1649,6 +1791,7 @@ namespace com.Lobby
         }
 
         private void SubPageInit() {
+            currentPage = SubPage.Main;
             if (roomlistPanel) {
                 toggleAll = roomlistPanel.transform.Find("Panel_title/Title/Btn_all").GetComponent<Toggle>();
                 roomlistEmpty = roomlistPanel.transform.Find("Empty").gameObject;
@@ -1741,10 +1884,12 @@ namespace com.Lobby
             }
 
             if (actionDonePanel)
-            {
                 _actionText = actionDonePanel.transform.Find("main/Txt").GetComponent<Text>();
-            }
-            
+
+            if(btmMenuBtns[2])
+                btmDepositLight = btmMenuBtns[2].Find("light").GetComponent<Image>();
+
+
         }
 
         public void ClickBalloonBtn() {
@@ -1890,7 +2035,7 @@ namespace com.Lobby
             SetPlayerPhotos();
             SetPlayerNames();
 			SetPlayerAccount ();
-            SetPlayerCoins(SubPage.Main);
+            SetPlayerCoins();
             SetPlayerLevels();
             SetUserOnline();
         }
@@ -1951,8 +2096,9 @@ namespace com.Lobby
             }
         }
 
-        public void SetPlayerCoins(SubPage _subpage)
+        public void SetPlayerCoins()
         {
+            SubPage _subpage = currentPage;
             int arrayIndex = 0;
             string sCoin = CryptoPrefs.GetString("USERCOIN");
             //Debug.Log("Get Local Coin = " + sCoin);
@@ -2078,11 +2224,12 @@ namespace com.Lobby
 			if (_setCoin) {
                 _setCoin = false;
                 CryptoPrefs.SetString("USERCOIN", setCoinResult);
-                SetPlayerCoins(SubPage.Main);
+                SetPlayerCoins();
             }
             if (_getOnline) {
                 _getOnline = false;
-                userOnline.text = "在線人數 " + string.Format("{0:0,0}", _randomOnlineUsers + int.Parse(getOnlineResult)); 
+                getOnlineResult = (string.IsNullOrEmpty(getOnlineResult)) ? "0": getOnlineResult;
+                userOnline.text = "在線人數 " + string.Format("{0:0,0}", _randomOnlineUsers + int.Parse(getOnlineResult));
             }
 
             if (_resetUserType)
@@ -2132,6 +2279,46 @@ namespace com.Lobby
                     settingReplacePass1.text = string.Empty;
                     settingReplacePass2.text = string.Empty;
                     settingRePassCbHint.gameObject.SetActive(false);
+                }
+            }
+
+            if (_setItem)
+            {
+                actionDonePanel.SetActive(true);
+                _setItem = false;
+                Debug.Log("購買商品 " + setItemResult);
+
+                if (setItemResult == "The remote server returned an error: (401) Unauthorized.")
+                {
+                    _actionText.text = "購買失敗";
+                }
+                else if (setItemResult == "something wrong!")
+                {
+                    _actionText.text = "發生不明錯誤";
+                }
+                else
+                {
+                    CryptoPrefs.SetString("USERCOIN", setItemResult);
+                    SetPlayerCoins();
+                    _actionText.text = "購買成功";
+                    ExitShopBuy();     //關閉購買視窗
+                }
+            }
+
+            if (_getBag) {
+                connectingPanel.SetActive(false); //關閉連線視窗
+                _getBag = false;
+                Debug.Log("背包內容物 " + getItemNumResult);
+
+                if (getItemNumResult == "getItemCallback Failed!")
+                {
+                    actionDonePanel.SetActive(true);
+                    _actionText.text = "發生錯誤";
+                }
+                else
+                {
+                    if(currentPage != SubPage.Shop)
+                        paintBagUI();
                 }
             }
         }

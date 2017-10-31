@@ -183,5 +183,27 @@ public static class MJApi
 		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
 	}
 
+	public static void setUserWin(string token, string name, int oldWin, int newWin, RequestCallBack callback)
+	{
+		string api = "V1/setUserWin";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldWin + "\", \"New\":\"" + newWin + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void setUserLose(string token, string name, int oldLose, int newLose, RequestCallBack callback)
+	{
+		string api = "V1/setUserLose";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldLose + "\", \"New\":\"" + newLose + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+
+
 
 }

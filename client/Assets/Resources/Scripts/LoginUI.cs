@@ -125,6 +125,9 @@ public class LoginUI : MonoBehaviour {
             string uPhoto = string.Empty;
 			string ufLogin = string.Empty;
 			string ulTotal = string.Empty;
+			string uWin = string.Empty;
+			string uLose = string.Empty;
+
 
             string[] tokens = loginResult.Split(new string[] { "," }, StringSplitOptions.None);
 
@@ -155,12 +158,22 @@ public class LoginUI : MonoBehaviour {
 			}
 			if (tokens[5] != null)
 			{
-				ufLogin = tokens[5];
+				ulTotal = tokens[5];
 				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
 			}
-            if (tokens[6] != null && tokens[6] != "undefined")
+			if (tokens[6] != null)
+			{
+				uWin = tokens[6];
+				CryptoPrefs.SetString("USERWIN", uWin);
+			}
+			if (tokens[7] != null)
+			{
+				uLose = tokens[7];
+				CryptoPrefs.SetString("USERLOSE", uLose);
+			}
+            if (tokens[8] != null && tokens[8] != "undefined")
             {
-                uPhoto = tokens[6];
+                uPhoto = tokens[8];
                 CryptoPrefs.SetString("USERPHOTO", uPhoto);
             }
             UIManager.instance.StartSetEnterLoading(); //載入下個場景

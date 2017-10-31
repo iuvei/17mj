@@ -52,5 +52,7 @@ public class Logout : MonoBehaviour {
 		CryptoPrefs.DeleteKey("USERMAIL");
 		CryptoPrefs.DeleteKey("USERFLOGIN");
 		CryptoPrefs.DeleteKey("USERLOGINTOTAL");
+		CryptoPrefs.DeleteKey("USERWIN");
+		CryptoPrefs.DeleteKey("USERLOSE");
     }
 }

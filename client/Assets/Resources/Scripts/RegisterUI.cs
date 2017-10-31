@@ -132,6 +132,8 @@ public class RegisterUI : MonoBehaviour {
             string uCoin = string.Empty;
 			string ufLogin = string.Empty;
 			string ulTotal = string.Empty;
+			string uWin = string.Empty;
+			string uLose = string.Empty;
 
 
             IDictionary dict = Json.Deserialize(result) as IDictionary;
@@ -164,6 +166,16 @@ public class RegisterUI : MonoBehaviour {
 			{
 				ulTotal = dict["LoginTotal"].ToString();
 				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
+			}
+			if (dict["Win"] != null)
+			{
+				uWin = dict["Win"].ToString();
+				CryptoPrefs.SetString("USERWIN", uWin);
+			}
+			if (dict["Lose"] != null)
+			{
+				uLose = dict["Lose"].ToString();
+				CryptoPrefs.SetString("USERLOSE", uLose);
 			}
             ResetAllInput();
             UIManager.instance.StartSetEnterLoading(); //載入下個場景

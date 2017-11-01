@@ -153,6 +153,7 @@ namespace com.Lobby
         private Text _connectingText;
         private Text _actionText;
         private Transform popupDailyBonus;
+        private Text popupDailyBonusText;
         private Image dailyBonuGirlEye;
         private Image dailyBonuSparkle;
         private DailyBonus dailyBonusToday;
@@ -691,7 +692,10 @@ namespace com.Lobby
 			StopCoroutine (HideLoading());
             //roomPanel.transform.DOScaleY(1, 1f);
 
-            Invoke("DailyFirstLogin", 0.8f); // 出現每日登入獎勵畫面
+            string uFirstLogin = CryptoPrefs.GetString("USERFLOGIN");
+            //Debug.Log("初次登入嗎 " + uFirstLogin + " / 本月登入次數 " + uTotalLogin);
+            if(uFirstLogin == "T")
+                Invoke("DailyFirstLogin", 0.8f); // 出現每日登入獎勵畫面
         }
 
 		public void UpdateRoomInfo()
@@ -1872,6 +1876,7 @@ namespace com.Lobby
 
                 if (popupDailyBonus)
                 {
+                    popupDailyBonusText = popupDailyBonus.Find("month").GetComponent<Text>();
                     dailyBonuGirlEye = popupDailyBonus.Find("Girl/eye").GetComponent<Image>();
                     dailyBonuSparkle = popupDailyBonus.Find("spakle").GetComponent<Image>();
                 }
@@ -2181,7 +2186,7 @@ namespace com.Lobby
 
         private void DailyFirstLogin() {
             ShowDailyBonus();
-            dailyBonusToday.ReadyTake();
+            dailyBonusToday.ReadyTake();  //顯示領取動畫
         }
 
 		public void setCoinCallback(WebExceptionStatus status, string result)
@@ -2493,8 +2498,15 @@ namespace com.Lobby
 
         public void BirthDailyBonusItem()
         {
+            string uFirstLogin = CryptoPrefs.GetString("USERFLOGIN");
+            string uTotalLogin = CryptoPrefs.GetString("USERLOGINTOTAL");
+            int _tLoginTime = int.Parse(uTotalLogin);
+            int _takedDay = (uFirstLogin == "T") ? _tLoginTime - 1 : _tLoginTime;
             DateTime myDate = DateTime.Now;
             int maxDay = 30;
+
+            if (popupDailyBonusText)
+                popupDailyBonusText.text = myDate.Month + "月份";
 
             switch (myDate.Month) {
                 case 1:case 3:case 5:case 7:case 8:case 10:case 12:
@@ -2517,18 +2529,18 @@ namespace com.Lobby
                 DailyBonus db = go.GetComponent<DailyBonus>();
                 db.ShowDate(i+1);
 
-                if (i + 1 >= myDate.Day)
-                    db.NotTake(i+1);
+                if (i >= _takedDay)
+                    db.NotTake(i + 1);
                 else
                     db.AlreadyTake();
-
+ 
                 go.transform.SetParent(dailyBonusTarget);
                 go.name = (i + 1).ToString();
                 RectTransform rectT = go.GetComponent<RectTransform>();
                 rectT.localPosition = Vector3.zero;
                 rectT.localScale = Vector3.one;
 
-                if (i + 1 == myDate.Day)
+                if (i + 1 == _tLoginTime) //改 myDate.Day 就變日期
                     dailyBonusToday = db; //當天
             }
         }

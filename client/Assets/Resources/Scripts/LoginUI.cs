@@ -130,6 +130,7 @@ public class LoginUI : MonoBehaviour {
 
 
             string[] tokens = loginResult.Split(new string[] { "," }, StringSplitOptions.None);
+            Debug.Log("loginResult: " + loginResult);
 
             if (tokens[0] != null)
             {

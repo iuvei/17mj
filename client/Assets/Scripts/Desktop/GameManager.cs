@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Net;
 
 namespace com.Desktop
 {
@@ -65,6 +66,13 @@ namespace com.Desktop
         public RectTransform _invitePlayPop;
         //public Animator AllCanvasAnim; // 過場移入
         //public Animator GameInfoAnim;  //局風顯示
+
+        private bool _callWinAddAPI = false;
+        private bool _callLoseAddAPI = false;
+        private bool _readyWinAdd = false;
+        private bool _readyLoseAdd = false;
+        private string _readyWinAddresult = string.Empty;
+        private string _readyLoseAddresult = string.Empty;
 
         #region 
         /// <summary>
@@ -1051,7 +1059,6 @@ namespace com.Desktop
 			}
 		}
 
-
         [PunRPC]
         void WinPai(int[] param)
         {
@@ -1070,11 +1077,93 @@ namespace com.Desktop
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
+                    _callWinAddAPI = true;
 				} else {
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
+                    _callLoseAddAPI = true;
 				}
+            }
+        }
+
+        public void setUserWinCallback(WebExceptionStatus status, string result)
+        {
+            _readyWinAddresult = result;
+            _readyWinAdd = true;
+            if (status != WebExceptionStatus.Success)
+            {
+                Debug.Log("setUserWinCallback Failed! " + result);
+            }
+            else if (!string.IsNullOrEmpty(result))
+            {
+                Debug.Log("CB: setUserWinCallback =  " + result);
+            }
+        }
+
+        public void setUserLoseCallback(WebExceptionStatus status, string result)
+        {
+            _readyLoseAddresult = result;
+            _readyLoseAdd = true;
+            if (status != WebExceptionStatus.Success)
+            {
+                Debug.Log("setUserLoseCallback Failed! " + result);
+            }
+            else if (!string.IsNullOrEmpty(result))
+            {
+                Debug.Log("CB: setUserLoseCallback =  " + result);
+            }
+        }
+
+        void Update()
+        {
+            if (_readyWinAdd) {
+                _readyWinAdd = false;
+                CryptoPrefs.SetString("USERWIN", _readyWinAddresult);
+            }
+
+            if (_readyLoseAdd)
+            {
+                _readyLoseAdd = false;
+                CryptoPrefs.SetString("USERLOSE", _readyLoseAddresult);
+            }
+
+            if (_callWinAddAPI) {
+                _callWinAddAPI = false;
+
+                //傳送勝敗場數
+                string sToken = CryptoPrefs.GetString("USERTOKEN");
+                string sName = CryptoPrefs.GetString("USERNAME");
+                string sWin = CryptoPrefs.GetString("USERWIN");
+                string sLose = CryptoPrefs.GetString("USERLOSE");
+                int sOldWin = (string.IsNullOrEmpty(sWin)) ? 0 : int.Parse(sWin);
+                int sOldLose = (string.IsNullOrEmpty(sLose)) ? 0 : int.Parse(sLose);
+                float sRate = 0;
+
+                if (sOldWin != 0)
+                    sRate = (sOldWin + 1) * 100 / (sOldWin + sOldLose);
+                //MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
+                Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
+            }
+
+
+            if (_callLoseAddAPI)
+            {
+                _callLoseAddAPI = false;
+
+                //傳送勝敗場數
+                string sToken = CryptoPrefs.GetString("USERTOKEN");
+                string sName = CryptoPrefs.GetString("USERNAME");
+                string sWin = CryptoPrefs.GetString("USERWIN");
+                string sLose = CryptoPrefs.GetString("USERLOSE");
+                int sOldWin = (string.IsNullOrEmpty(sWin)) ? 0 : int.Parse(sWin);
+                int sOldLose = (string.IsNullOrEmpty(sLose)) ? 0 : int.Parse(sLose);
+                float sRate = 0;
+
+                if (sOldWin != 0)
+                    sRate = (sOldWin) * 100 / (sOldWin + sOldLose + 1);
+                //MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
+                Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
 			}
         }
 

@@ -198,7 +198,7 @@ namespace com.Desktop
 
 				if (!PhotonNetwork.isMasterClient) {
 					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
-					VideoRecordingBridge.StartPlay (liveUrl);
+					VideoRecordingBridge.StartPlay (liveUrl,name);
 					if (InvateBtn != null) {
 						if (_invitePlayPop) //邀請搖晃動畫
 							_invitePlayPop.DOScale(new Vector3(1.15f, 1.15f, 1), .8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);

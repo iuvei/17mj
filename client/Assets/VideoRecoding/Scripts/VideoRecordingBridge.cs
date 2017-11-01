@@ -14,7 +14,7 @@ public class VideoRecordingBridge {
 	[DllImport("__Internal")]
 	private static extern void _stopRecord ();
 	[DllImport("__Internal")]
-	private static extern void _startPlay (string str);
+	private static extern void _startPlay (string url, string room);
 	[DllImport("__Internal")]
 	private static extern void _stopPlay ();
 	[DllImport("__Internal")]
@@ -55,13 +55,13 @@ public class VideoRecordingBridge {
 		#endif
 	}
 
-	public static void StartPlay(string str){
+	public static void StartPlay(string str, string room){
 		Debug.Log ("StartPlay('"+str+"')");
         #if !UNITY_EDITOR && UNITY_IOS
-		_startPlay (str);
+	    _startPlay (str,room);
         #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-		live.CallStatic("PlayStart",str);
+		live.CallStatic("PlayStart",str,room);
         #endif
     }
 

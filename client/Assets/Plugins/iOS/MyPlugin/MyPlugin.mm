@@ -103,7 +103,7 @@ static dispatch_once_t _onceToken;
 -(void)goToFirstTrailer3 {
     NSLog(@"goToFirstTrailer3()");
     NSString *arg = @"rtmp://catpunch.co/live/livestream";
-    [self startPlay:arg];
+    [self startPlay:arg:arg];
 }
 
 -(void)goToFirstTrailer4 {
@@ -353,12 +353,18 @@ static dispatch_once_t _onceToken;
     self.liveSession = nil;
 }
 
--(void)initPlayer{
+-(void)initPlayer: (NSString *)room
+{
     NSLog(@"initPlayer()....%@", self);
     CGFloat ApplicationW = [[UIScreen mainScreen] bounds].size.width;
     CGFloat ApplicationH = [[UIScreen mainScreen] bounds].size.height;
     self.mShowView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
+
+    NSString *textType = [room substringToIndex:1];
+    NSString *ans = @"M";
+    if([textType isEqualToString:ans]){
+       self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
+    }
     self.mShowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
     [self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
     
@@ -379,10 +385,10 @@ static dispatch_once_t _onceToken;
                                              selector:@selector(OnVideoError:) name:AliVcMediaPlayerPlaybackErrorNotification object:self.player];
 }
 
--(void)startPlay: (NSString *)url
+-(void)startPlay:(NSString *)url :(NSString *)room
 {
     if(self.player==nil)
-        [self initPlayer];
+        [self initPlayer:room ];
     NSLog(@"startPlay()....%@", url);
     //传入播放地址，准备播放
     NSURL *mUrl = [[NSURL alloc] initWithString:url];
@@ -507,10 +513,10 @@ extern "C" {
         MyPlugin *obj = [MyPlugin sharedInstance];
         [obj stopPlay];
     }
-    void _startPlay (const char *str){
+    void _startPlay (const char *str, const char *str1){
         MyPlugin *obj = [MyPlugin sharedInstance];
-        NSString *arg = [NSString stringWithUTF8String: str];
-        //NSURL *url = [[NSURL alloc] initWithString: arg];
-        [obj startPlay : arg];
+        NSString *url = [NSString stringWithUTF8String: str];
+        NSString *room = [NSString stringWithUTF8String: str1];
+        [obj startPlay :url :room];
     }
 }

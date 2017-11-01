@@ -1245,6 +1245,12 @@ namespace com.Desktop
             }
         }
 
+		void OnApplicationPause(bool pauseStatus)
+		{
+			if (pauseStatus == true)
+				Back ();
+		}
+
         public void Back()
         {
 			//Debug.Log ("Back()");

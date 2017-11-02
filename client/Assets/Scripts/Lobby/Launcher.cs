@@ -783,44 +783,6 @@ namespace com.Lobby
 
             if (btmMenuBtns[3])
                 btmMenuBtns[3].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
-
-            //currentPage = SubPage.Bag;
-            //SetPlayerCoins();
-            //GameObject bagEmpty = bagPanel.transform.Find("empty").gameObject;
-
-            //foreach (Transform child in bagItemTarget)
-            //    Destroy(child.gameObject);
-
-            ////玩家的背包資料
-            //List<ItemInfo> itemInfos = loadUserItemData();
-
-            //if (itemInfos.Count == 0)
-            //{
-            //    if (bagEmpty)
-            //        bagEmpty.SetActive(true);
-            //}
-            //else {
-            //    if (bagEmpty)
-            //        bagEmpty.SetActive(false);
-
-            //    foreach (ItemInfo info in itemInfos)
-            //    {
-            //        GameObject go = GameObject.Instantiate(Resources.Load("Prefab/bagItem") as GameObject);
-            //        BagItemInfo bagInfo = go.GetComponent<BagItemInfo>();
-            //        bagInfo.setInfo(info);
-
-            //        go.transform.SetParent(bagItemTarget);
-            //        RectTransform rectT = go.GetComponent<RectTransform>();
-            //        rectT.localPosition = Vector3.zero;
-            //        rectT.localScale = Vector3.one;
-            //    }
-            //}
-
-            //if (bagPanel)
-            //{
-            //    bagPanel.transform.DOMoveX(-19.5f, 0, true);
-            //    bagPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
-            //}
         }
 
         private void paintBagUI() {
@@ -2500,7 +2462,8 @@ namespace com.Lobby
         {
             string uFirstLogin = CryptoPrefs.GetString("USERFLOGIN");
             string uTotalLogin = CryptoPrefs.GetString("USERLOGINTOTAL");
-            int _tLoginTime = int.Parse(uTotalLogin);
+            int _tLoginTime = (int.Parse(uTotalLogin) == 0) ? 1 : int.Parse(uTotalLogin);
+            Debug.Log("登入總次數 = " + _tLoginTime);
             int _takedDay = (uFirstLogin == "T") ? _tLoginTime - 1 : _tLoginTime;
             DateTime myDate = DateTime.Now;
             int maxDay = 30;

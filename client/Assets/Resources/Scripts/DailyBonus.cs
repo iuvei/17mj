@@ -27,6 +27,8 @@ public class DailyBonus : MonoBehaviour {
         tdSeq.AppendInterval(0.2f);
         tdSeq.Append(_takeMask.DOFade(0.9f, 0.3f).SetLoops(2, LoopType.Yoyo));
         tdSeq.OnComplete(ShowTakeMask).SetUpdate(true);
+
+        CryptoPrefs.SetString("USERFLOGIN", "F"); //標記今天已登入
     }
 
     //尚未領取

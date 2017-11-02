@@ -183,23 +183,23 @@ public static class MJApi
 		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
 	}
 
-	public static void setUserWin(string token, string name, int oldWin, int newWin, float rate, RequestCallBack callback)
+	public static void setUserWin(string token, string name, int oldWin, int newWin, int rate, RequestCallBack callback)
 	{
 		string api = "V1/setUserWin";
 		string auth = "Bearer " + secretKey;
 		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldWin + "\", \"New\":\"" + newWin + "\",  \"Rate\":\"" + rate.ToString("0.00") + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldWin + "\", \"New\":\"" + newWin + "\",  \"Rate\":\"" + rate + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
-	public static void setUserLose(string token, string name, int oldLose, int newLose, float rate, RequestCallBack callback)
+	public static void setUserLose(string token, string name, int oldLose, int newLose, int rate, RequestCallBack callback)
 	{
 		string api = "V1/setUserLose";
 		string auth = "Bearer " + secretKey;
 		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldLose + "\", \"New\":\"" + newLose + "\", \"Rate\":\"" + rate.ToString("0.00") + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldLose + "\", \"New\":\"" + newLose + "\", \"Rate\":\"" + rate + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 

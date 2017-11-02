@@ -67,8 +67,6 @@ namespace com.Desktop
         //public Animator AllCanvasAnim; // 過場移入
         //public Animator GameInfoAnim;  //局風顯示
 
-        private bool _callWinAddAPI = false;
-        private bool _callLoseAddAPI = false;
         private bool _readyWinAdd = false;
         private bool _readyLoseAdd = false;
         private string _readyWinAddresult = string.Empty;
@@ -1072,18 +1070,35 @@ namespace com.Desktop
 				string winner = mplayer.playerName.text;
 				Debug.LogError ("[RPC] 玩家(" + winner + ") 胡牌了!");
 				text.text = winner;
-				if (mplayer.ID == PhotonNetwork.player.ID) {
+
+                //傳送勝敗場數
+                string sToken = CryptoPrefs.GetString("USERTOKEN");
+                string sName = CryptoPrefs.GetString("USERNAME");
+                string sWin = CryptoPrefs.GetString("USERWIN");
+                string sLose = CryptoPrefs.GetString("USERLOSE");
+                int sOldWin = (string.IsNullOrEmpty(sWin)) ? 0 : int.Parse(sWin);
+                int sOldLose = (string.IsNullOrEmpty(sLose)) ? 0 : int.Parse(sLose);
+                int sRate = 0;
+
+                if (mplayer.ID == PhotonNetwork.player.ID) {
 					//Debug.LogError ("[RPC] 你贏了 ");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
-                    _callWinAddAPI = true;
+
+                    if (sOldWin != 0)
+                        sRate = (sOldWin + 1) * 10000 / (sOldWin + sOldLose + 1);
+                    MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
 				} else {
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
-                    _callLoseAddAPI = true;
+
+                    if (sOldWin != 0)
+                        sRate = (sOldWin) * 10000 / (sOldWin + sOldLose + 1);
+                    MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
 				}
+                Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
             }
         }
 
@@ -1128,43 +1143,6 @@ namespace com.Desktop
                 CryptoPrefs.SetString("USERLOSE", _readyLoseAddresult);
             }
 
-            if (_callWinAddAPI) {
-                _callWinAddAPI = false;
-
-                //傳送勝敗場數
-                string sToken = CryptoPrefs.GetString("USERTOKEN");
-                string sName = CryptoPrefs.GetString("USERNAME");
-                string sWin = CryptoPrefs.GetString("USERWIN");
-                string sLose = CryptoPrefs.GetString("USERLOSE");
-                int sOldWin = (string.IsNullOrEmpty(sWin)) ? 0 : int.Parse(sWin);
-                int sOldLose = (string.IsNullOrEmpty(sLose)) ? 0 : int.Parse(sLose);
-                float sRate = 0;
-
-                if (sOldWin != 0)
-                    sRate = (sOldWin + 1) * 100 / (sOldWin + sOldLose);
-                //MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
-                Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
-            }
-
-
-            if (_callLoseAddAPI)
-            {
-                _callLoseAddAPI = false;
-
-                //傳送勝敗場數
-                string sToken = CryptoPrefs.GetString("USERTOKEN");
-                string sName = CryptoPrefs.GetString("USERNAME");
-                string sWin = CryptoPrefs.GetString("USERWIN");
-                string sLose = CryptoPrefs.GetString("USERLOSE");
-                int sOldWin = (string.IsNullOrEmpty(sWin)) ? 0 : int.Parse(sWin);
-                int sOldLose = (string.IsNullOrEmpty(sLose)) ? 0 : int.Parse(sLose);
-                float sRate = 0;
-
-                if (sOldWin != 0)
-                    sRate = (sOldWin) * 100 / (sOldWin + sOldLose + 1);
-                //MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
-                Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
-			}
         }
 
         private IEnumerator _OverPanel(float time = 0.1f)

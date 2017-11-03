@@ -87,8 +87,10 @@ public class ForgotUI : MonoBehaviour
     // 確定驗證碼
     public void AcceptAuthCode()
     {
-        //接確認驗證碼API setAuthCode( forgotMail, forgotConfirmCode, ForgotCodeCallback);
-        //******************
+		string forgotMail = _mail.text;
+		string forgotConfirmCode = _confirmCode.text;
+
+        MJApi.setAuthCode(forgotMail, forgotConfirmCode, ForgotCodeCallback);
 
         GoResetPassPage(); //前往重設密碼 (之後接完API移除)
     }
@@ -180,8 +182,6 @@ public class ForgotUI : MonoBehaviour
         }
         else
         {
-            //接重置密碼 API setForgetPwd(mail, pass, Callback);
-
             //重置所有欄位 回登入頁 (之後放到CB中)
             UIManager.instance.ExitForgotPage();
         }

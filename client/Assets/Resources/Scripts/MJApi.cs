@@ -65,12 +65,12 @@ public static class MJApi
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
-    public static void setForgetPwd(string name, string pass, string nick_name, string code, RequestCallBack callback)
+	public static void setAuthCode(string mail, string code, RequestCallBack callback)
     {
-        string api = "V1/setForgetPwd";
+		string api = "V1/setAuthCode";
         string auth = "Bearer " + secretKey;
         string method = "POST";
-        string pdata = "[{\"Name\":\"" + name + "\", \"Pass\":\"" + pass + "\", \"NickName\":\"" + nick_name + "\", \"Code\":\"" + code + "\"}]";
+		string pdata = "[{\"Mail\":\"" + mail + "\", \"Code\":\"" + code + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 

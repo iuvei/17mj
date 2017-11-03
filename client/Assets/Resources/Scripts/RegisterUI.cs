@@ -21,9 +21,14 @@ public class RegisterUI : MonoBehaviour {
     public string registerMail;
     public string registerPass1;
     public string registerNickName;
+    public GameObject connectingPanel;  //連線視窗
 
     public string[] _canNickName; //罐頭暱稱
     private string _defaultNickName = "大島柚子"; //預設暱稱
+
+    private bool _registerCb = false;
+    private string registerCbResult = string.Empty;
+    private bool _needHideConnect = false;
 
     void Awake()
     {
@@ -48,6 +53,86 @@ public class RegisterUI : MonoBehaviour {
 
         ResetAllInput();
     }
+
+    void Update()
+    {
+        if (_needHideConnect)
+        {
+            ConnectPanelSwitch(false); //關閉連線視窗
+            _needHideConnect = false;
+        }
+
+        if (_registerCb) {
+            _registerCb = false;
+            if (registerCbResult == "此帳號已存在")
+            {
+                RegisterHint_Account.GetComponentInChildren<Text>().text = "此帳號已存在";
+                RegisterHint_Account.SetActive(true);
+            }
+            else
+            {
+                //Debug.Log("ConnectSuccess! " + result);
+
+                string uName = string.Empty;
+                string uToken = string.Empty;
+                string uLevel = string.Empty;
+                string uCoin = string.Empty;
+                string ufLogin = string.Empty;
+                string ulTotal = string.Empty;
+                string uWin = string.Empty;
+                string uLose = string.Empty;
+
+
+                IDictionary dict = Json.Deserialize(registerCbResult) as IDictionary;
+                if (dict["Name"] != null)
+                {
+                    uName = dict["Name"].ToString();
+                    CryptoPrefs.SetString("USERNAME", uName);
+                }
+                if (dict["Token"] != null)
+                {
+                    uToken = dict["Token"].ToString();
+                    CryptoPrefs.SetString("USERTOKEN", uToken);
+                }
+                if (dict["Level"] != null)
+                {
+                    uLevel = dict["Level"].ToString();
+                    CryptoPrefs.SetString("USERLEVEL", uLevel);
+                }
+                if (dict["Coin"] != null)
+                {
+                    uCoin = dict["Coin"].ToString();
+                    CryptoPrefs.SetString("USERCOIN", uCoin);
+                }
+                if (dict["fLogin"] != null)
+                {
+                    ufLogin = dict["fLogin"].ToString();
+                    CryptoPrefs.SetString("USERFLOGIN", ufLogin);
+                }
+                if (dict["LoginTotal"] != null)
+                {
+                    ulTotal = dict["LoginTotal"].ToString();
+                    CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
+                }
+                if (dict["Win"] != null)
+                {
+                    uWin = dict["Win"].ToString();
+                    CryptoPrefs.SetString("USERWIN", uWin);
+                }
+                if (dict["Lose"] != null)
+                {
+                    uLose = dict["Lose"].ToString();
+                    CryptoPrefs.SetString("USERLOSE", uLose);
+                }
+                ResetAllInput();
+                UIManager.instance.StartSetEnterLoading(); //載入下個場景
+            }
+            Button btn = RegisterBtn.GetComponent<Button>();
+            btn.interactable = true;
+        }
+
+    }
+
 
     public static string GetUniqueKey(int maxSize)
     {
@@ -109,6 +194,7 @@ public class RegisterUI : MonoBehaviour {
 				CryptoPrefs.SetString("USERTYPE", stype);
 				CryptoPrefs.SetString("USERMAIL", registerMail);
                 MJApi.AddMember(id, registerMail, registerPass1, registerNickName, stype, RegisterCallback);
+                ConnectPanelSwitch(true); //開啟連線視窗
             }
         }
     }
@@ -116,72 +202,14 @@ public class RegisterUI : MonoBehaviour {
     //註冊 Callback
     private void RegisterCallback(WebExceptionStatus status, string result)
     {
+        _needHideConnect = true; //需要關閉連線視窗
+        registerCbResult = result;
         if (status != WebExceptionStatus.Success)
         {
-            RegisterHint_Account.GetComponentInChildren<Text>().text = "此帳號已存在";
-            RegisterHint_Account.SetActive(true);
-			Debug.Log("AddUser RegisterCallback Failed! " + result);
+            Debug.Log("AddUser RegisterCallback Failed! " + result);
+            registerCbResult = "此帳號已存在";
         }
-        else
-        {
-            //Debug.Log("ConnectSuccess! " + result);
-
-            string uName = string.Empty;
-            string uToken = string.Empty;
-            string uLevel = string.Empty;
-            string uCoin = string.Empty;
-			string ufLogin = string.Empty;
-			string ulTotal = string.Empty;
-			string uWin = string.Empty;
-			string uLose = string.Empty;
-
-
-            IDictionary dict = Json.Deserialize(result) as IDictionary;
-            if (dict["Name"] != null)
-            {
-                uName = dict["Name"].ToString();
-                CryptoPrefs.SetString("USERNAME", uName);
-            }
-            if (dict["Token"] != null)
-            {
-                uToken = dict["Token"].ToString();
-                CryptoPrefs.SetString("USERTOKEN", uToken);
-            }
-            if (dict["Level"] != null)
-            {
-                uLevel = dict["Level"].ToString();
-                CryptoPrefs.SetString("USERLEVEL", uLevel);
-            }
-            if (dict["Coin"] != null)
-            {
-                uCoin = dict["Coin"].ToString();
-                CryptoPrefs.SetString("USERCOIN", uCoin);
-            }
-			if (dict["fLogin"] != null)
-			{
-				ufLogin = dict["fLogin"].ToString();
-				CryptoPrefs.SetString("USERFLOGIN", ufLogin);
-			}
-			if (dict["LoginTotal"] != null)
-			{
-				ulTotal = dict["LoginTotal"].ToString();
-				CryptoPrefs.SetString("USERLOGINTOTAL", ulTotal);
-			}
-			if (dict["Win"] != null)
-			{
-				uWin = dict["Win"].ToString();
-				CryptoPrefs.SetString("USERWIN", uWin);
-			}
-			if (dict["Lose"] != null)
-			{
-				uLose = dict["Lose"].ToString();
-				CryptoPrefs.SetString("USERLOSE", uLose);
-			}
-            ResetAllInput();
-            UIManager.instance.StartSetEnterLoading(); //載入下個場景
-        }
-        Button btn = RegisterBtn.GetComponent<Button>();
-        btn.interactable = true;
+        _registerCb = true;
     }
 
     public void ResetAllInput() {
@@ -219,4 +247,11 @@ public class RegisterUI : MonoBehaviour {
         targetHint.GetComponentInParent<InputField>().ActivateInputField();
     }
 
+    private void ConnectPanelSwitch(bool _turnOn)
+    {
+        if (_turnOn)
+            connectingPanel.SetActive(true); //開啟連線視窗
+        else
+            connectingPanel.SetActive(false); //關閉連線視窗
+    }
 }

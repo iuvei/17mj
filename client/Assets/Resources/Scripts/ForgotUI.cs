@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Net;
+using DG.Tweening;
 
 public class ForgotUI : MonoBehaviour
 {
@@ -30,16 +31,86 @@ public class ForgotUI : MonoBehaviour
     public Button buttonPassAccept;      // 密碼確定鈕
     public Sprite[] changePassButtonBG;
     public Sprite[] EyeButton;           // 顯示密碼 眼睛圖
+    public GameObject connectingPanel;  //連線視窗
+
+    private string playerMail = string.Empty; //暫存玩家信箱
+    private bool _needHideConnect = false;
+    private bool _sendAuthCodeCb = false;
+    private bool _forgotCodeCb = false;
+    private bool _setUserPwdCb = false;
+    private string sendAuthCodeCbResult = string.Empty;
+    private string forgotCodeCbResult = string.Empty;
+    private string setUserPwdCbResult = string.Empty;
+
 
     void Start()
     {
         instance = this;
     }
 
+    void Update() {
+
+        if (_needHideConnect)
+        {
+            ConnectPanelSwitch(false); //關閉連線視窗
+            _needHideConnect = false;
+        }
+
+        if (_forgotCodeCb) {
+            _forgotCodeCb = false;
+
+            if (forgotCodeCbResult == "OK")
+            {
+                GoResetPassPage(); //前往重設密碼
+            }
+            else
+            {
+                _confirmCode.text = ""; //清空驗證碼欄位
+                ButtonUISwitch(btnAccept, true); //確定驗證碼按鈕UI變化
+                ShowHint(_codeHint, "輸入錯誤，請重新輸入");
+            }
+        }
+
+
+        if (_sendAuthCodeCb) {
+            _sendAuthCodeCb = false;
+
+            if (sendAuthCodeCbResult == "OK")
+            {
+                ButtonUISwitch(btnSendCode, true); //發送驗證碼按鈕變色
+                _timeHint.GetComponent<CountDown>().Show(30); //倒數
+                ShowHint(_mailHint, "驗證碼已發送，請至信箱收信");
+            } else if (sendAuthCodeCbResult == "Already Sent.")
+            {
+                ShowHint(_mailHint, "已寄出，請稍後再試");
+            } else {
+                ShowHint(_mailHint, "此帳戶不存在");
+            }
+        }
+
+        if (_setUserPwdCb)
+        {
+            _setUserPwdCb = false;
+
+            if (setUserPwdCbResult == "OK")
+            {
+                //重置所有欄位 回登入頁
+                UIManager.instance.ExitForgotPage();
+            }
+            else
+            {
+                Debug.Log("重置密碼失敗 = " + setUserPwdCbResult);
+                ShowHint(_passHint, "不明原因錯誤，請稍後再試");
+            }
+        }
+
+    }
+
     // 發送驗證碼按鈕
     public void SendConfirm()
     {
         string forgotMail = _mail.text;
+        playerMail = forgotMail;
 
         Text ForgotHintText = _mailHint.GetComponent<Text>();
 
@@ -51,36 +122,21 @@ public class ForgotUI : MonoBehaviour
         else
         {
             MJApi.getAuthCode(forgotMail, AuthCodeCallback);
-
-            //成功後改變按鈕UI並倒數 (接完API後移除)
-            ButtonUISwitch(btnSendCode, true); //發送驗證碼按鈕變色
-            _timeHint.GetComponent<CountDown>().Show(15); //倒數
-            ShowHint(_mailHint, "驗證碼已發送，請至信箱收信");
+            ConnectPanelSwitch(true); //開啟連線視窗
         }
     }
 
     //發送驗證碼 Callback
     private void AuthCodeCallback(WebExceptionStatus status, string result)
     {
+        _needHideConnect = true; //需要關閉連線視窗
+        sendAuthCodeCbResult = result;
+        _sendAuthCodeCb = true;
+
         Debug.Log("Status = " + status + ", result = " + result);
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("發送驗證碼 AuthCodeCallback Statue != WebExceptionStatus.Success ");
-            ShowHint(_mailHint, "此帳戶不存在");
-        }
-        else
-        {
-            if (result == "Already Sent.")
-            {
-                ShowHint(_mailHint, "已寄出，請稍後再試");
-            }
-            else
-            {
-                Debug.Log(result);
-                ButtonUISwitch(btnSendCode, true); //發送驗證碼按鈕變色
-                _timeHint.GetComponent<CountDown>().Show(15); //倒數
-                ShowHint(_mailHint, "驗證碼已發送，請至信箱收信");
-            }
         }
     }
 
@@ -91,28 +147,23 @@ public class ForgotUI : MonoBehaviour
 		string forgotConfirmCode = _confirmCode.text;
 
         MJApi.setAuthCode(forgotMail, forgotConfirmCode, ForgotCodeCallback);
-
-        GoResetPassPage(); //前往重設密碼 (之後接完API移除)
+        ConnectPanelSwitch(true); //開啟連線視窗
     }
 
     //確認驗證碼 Callback
     private void ForgotCodeCallback(WebExceptionStatus status, string result)
     {
-
+        _needHideConnect = true; //需要關閉連線視窗
+        forgotCodeCbResult = result;
+        _forgotCodeCb = true;
         if (status != WebExceptionStatus.Success)
         {
             Debug.Log("確認驗證碼 ForgotCodeCallback Statue != WebExceptionStatus.Success ");
             Debug.Log("Statue = " + status + ", result = " + result);
-
-            _confirmCode.text = ""; //清空驗證碼欄位
-            ButtonUISwitch(btnAccept, true); //確定驗證碼按鈕UI變化
-
-            ShowHint(_codeHint, "輸入錯誤，請重新輸入");
         }
         else
         {
             Debug.Log("確認驗證碼成功 result =" + result);
-            GoResetPassPage(); //前往重設密碼
         }
     }
 
@@ -182,26 +233,25 @@ public class ForgotUI : MonoBehaviour
         }
         else
         {
-            //重置所有欄位 回登入頁 (之後放到CB中)
-            UIManager.instance.ExitForgotPage();
+            MJApi.setForgetPwd(playerMail, resetPass1, setUserPwdCallback);
+            ConnectPanelSwitch(true); //開啟連線視窗
         }
     }
 
-    //忘記密碼 Callback
-    private void ForgotCallback(WebExceptionStatus status, string result)
+    //忘記密碼 - 重置密碼 Callback
+    private void setUserPwdCallback(WebExceptionStatus status, string result)
     {
+        _needHideConnect = true; //需要關閉連線視窗
+        setUserPwdCbResult = result;
+        _setUserPwdCb = true;
+
         if (status != WebExceptionStatus.Success)
         {
-            Debug.Log("忘記密碼 重置 ForgotCallback Statue != WebExceptionStatus.Success ");
-            Debug.Log("Statue = " + status + ", result = " + result);
-            ShowHint(_passHint, "不明原因錯誤，請稍後再試");
+            Debug.Log("重置密碼 Statue != WebExceptionStatus.Success ");
         }
         else
         {
             Debug.Log("重置成功 " + result);
-
-            //重置所有欄位 回登入頁
-            UIManager.instance.ExitForgotPage();
         }
     }
 
@@ -306,5 +356,13 @@ public class ForgotUI : MonoBehaviour
         _passEye1.sprite = EyeButton[0];
         _passEye2.sprite = EyeButton[0];
         ForgotPage2.SetActive(false);
+    }
+
+    private void ConnectPanelSwitch(bool _turnOn)
+    {
+        if (_turnOn)
+            connectingPanel.SetActive(true); //開啟連線視窗
+        else
+            connectingPanel.SetActive(false); //關閉連線視窗
     }
 }

@@ -128,6 +128,11 @@ namespace com.Lobby
         private GameObject actDailyPanel;
         private GameObject actMissionPanel;
         private Transform playerRankPanel;
+        private Text playerRankText;
+        private Text playerRankLv;
+        private Text playerRankWin;
+        private Text playerRankLose;
+        private Text playerRankProb;
         private ScrollRect settingProfileSR;
         private Scrollbar settingProfileScr;
         private Button replaceNickname;
@@ -160,20 +165,26 @@ namespace com.Lobby
         private Image btmDepositLight;
         private bool _changeFlag = true;
         private int localCoin = 0;
-        private bool _needHideConnect = false;
+        private List<string> rankTotalDatas = new List<string>();
         private bool _setCoin = false;
-        private string setCoinResult = string.Empty;
         private bool _resetUserType = false;
-        private string resetUserTypeResult = string.Empty;
         private bool _resetPass = false;
-        private string resetPassResult = string.Empty;
+        private bool _resetName = false;
         private bool _getOnline = false;
-        private string getOnlineResult = string.Empty;
-        private int _randomOnlineUsers;
-        private string getItemNumResult = string.Empty;
         private bool _setItem = false;
-        private string setItemResult = string.Empty;
         private bool _getBag = false;
+        private bool _getRank = false;
+        private bool _needHideConnect = false;
+        private bool _setUserPhoto = false;
+        private string setCoinResult = string.Empty;
+        private string resetUserTypeResult = string.Empty;
+        private string resetPassResult = string.Empty;
+        private string resetNameResult = string.Empty;
+        private string getItemNumResult = string.Empty;
+        private string setItemResult = string.Empty;
+        private string getOnlineResult = string.Empty;
+        private string getRankResult = string.Empty;
+        private int _randomOnlineUsers;
         private int _currentItemId = 0;
         private SubPage currentPage = SubPage.Main; 
 
@@ -249,23 +260,31 @@ namespace com.Lobby
                     Sprite sp = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
                     playerPhotos[2].sprite = sp;
                     CryptoPrefs.SetString("USERPHOTO", Convert.ToBase64String(texture.EncodeToJPG()));
-                    SetPlayerPhotos();
+                    //SetPlayerPhotos();
 
                     string sName = CryptoPrefs.GetString("USERNAME");
                     string sToken = CryptoPrefs.GetString("USERTOKEN");
                     string sPhoto = CryptoPrefs.GetString("USERPHOTO");
                     MJApi.setUserPhoto(sToken, sName, sPhoto, setPhotoCallback);
+                    connectingPanel.SetActive(true); //開啟連線視窗
                 }
             }          
         }
 
         public void setPhotoCallback(WebExceptionStatus status, string result)
         {
+            _needHideConnect = true; //需要關閉連線視窗
             if (status != WebExceptionStatus.Success)
             {
 				Debug.Log("setPhotoCallback Failed! " + result);
             }
-            //Debug.Log("setPhotoCallback =  " + result);
+            else
+            {
+                _setUserPhoto = true;
+                                       
+            }
+
+            Debug.Log("setPhotoCallback =  " + result);
         }
 
         void Start()
@@ -839,6 +858,7 @@ namespace com.Lobby
 
 		public void getItemCallback(WebExceptionStatus status, string result)
 		{
+            _needHideConnect = true; //需要關閉連線視窗
             _getBag = true;
             Debug.Log("getItemCallback " + result);
             if (status != WebExceptionStatus.Success)
@@ -1412,15 +1432,34 @@ namespace com.Lobby
   
         }
 
-        //---
         public void ClickRank()
         {
+            // 讀排行榜
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sToken = CryptoPrefs.GetString("USERTOKEN");
+            MJApi.getGameList(sToken, sName, getRankDataCallback);
+            ConnectPanelSwitch(true); //開啟連線視窗
+
             if (btmMenuBtns[0])
                 btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
+            
 
+            //currentPage = SubPage.Rank;
+            //SetPlayerCoins();
+            //BirthRankItem(); //產生排行榜項目
+            
+            //if (rankPanel)
+            //{
+            //    rankPanel.transform.DOMoveX(-19.5f, 0, true);
+            //    rankPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
+            //}
+        }
+
+        private void paintRankUI() {
             currentPage = SubPage.Rank;
             SetPlayerCoins();
-            BirtnRankItem(); //產生排行榜項目
+
+            BirthRankItem(); //產生排行榜項目
 
             if (rankPanel)
             {
@@ -1428,6 +1467,7 @@ namespace com.Lobby
                 rankPanel.transform.DOMoveX(0, 0.5f, true).SetEase(Ease.OutCubic);
             }
         }
+
 
         public void ExitRank()
         {
@@ -1440,12 +1480,13 @@ namespace com.Lobby
             }
         }
 
-        public void BirtnRankItem()
+        public void BirthRankItem()
         {
             foreach (Transform child in rankItemTarget)
                 Destroy(child.gameObject);
 
             List<RankItemInfo> rankItemInfos = loadRankData();
+            //rankItemInfos.Clear(); //清空
             foreach (RankItemInfo info in rankItemInfos)
             {
                 GameObject go = GameObject.Instantiate(Resources.Load("Prefab/rankItem") as GameObject);
@@ -1461,68 +1502,36 @@ namespace com.Lobby
 
         private List<RankItemInfo> loadRankData()
         {
+            rankTotalDatas.Clear();
+            string[] tokens = getRankResult.Split(new string[] { "," }, StringSplitOptions.None);
+            int _oncePrint = 5;
+            Debug.Log("排行榜共 " + tokens.Length / 7 + "筆資料");
+
+            for (int i = 0; i < tokens.Length; i++)
+                rankTotalDatas.Add(tokens[i]);
+
+            // 填入自己的資料
+            playerRankText.text = "我的排名\n" + rankTotalDatas[0];
+            playerRankLv.text = "Lv " + rankTotalDatas[1];
+            playerRankWin.text = string.Format("勝：{0:#,0}", rankTotalDatas[4]);
+            playerRankLose.text = string.Format("敗：{0:#,0}", rankTotalDatas[5]);
+            playerRankProb.text = string.Format("    勝率：{0:0.##}%", int.Parse(rankTotalDatas[6]) / 100f);
+            rankTotalDatas.RemoveRange(0, 7);
+
             RankItemInfos itemInfos = new RankItemInfos();
-            RankItemInfo data1 = new RankItemInfo();
-            data1.Rank = 1;
-            //data1.Photo = 1;
-            data1.Name = "萱萱寶貝";
-            data1.Lv = 192;
-            data1.Win = 1223;
-            data1.Lose = 5;
-            data1.Probability = 76.9f;
-            itemInfos.dataList.Add(data1);
+            _oncePrint = (rankTotalDatas.Count >= 35) ? 5 : rankTotalDatas.Count / 7;
 
-            RankItemInfo data2 = new RankItemInfo();
-            data2.Rank = 2;
-            //data2.Photo = 2;
-            data2.Name = "萌萌小野兔Q妹";
-            data2.Lv = 188;
-            data2.Win = 8392;
-            data2.Lose = 129;
-            data2.Probability = 94.1f;
-            itemInfos.dataList.Add(data2);
-
-            RankItemInfo data3 = new RankItemInfo();
-            data3.Rank = 3;
-            //data3.Photo = 3;
-            data3.Name = "飛炫北鼻萱萱";
-            data3.Lv = 220;
-            data3.Win = 3223;
-            data3.Lose = 215;
-            data3.Probability = 88.9f;
-            itemInfos.dataList.Add(data3);
-
-            RankItemInfo data4 = new RankItemInfo();
-            data4.Rank = 4;
-            //data4.Photo = 4;
-            data4.Name = "大老闆抽雪茄";
-            data4.Lv = 109;
-            data4.Win = 291;
-            data4.Lose = 9;
-            data4.Probability = 87.1f;
-            itemInfos.dataList.Add(data4);
-
-            RankItemInfo data5 = new RankItemInfo();
-            data5.Rank = 5;
-            //data1.Photo = 5;
-            data5.Name = "永遠第五人";
-            data5.Lv = 79;
-            data5.Win = 542;
-            data5.Lose = 12;
-            data5.Probability = 69.3f;
-            itemInfos.dataList.Add(data5);
-
-            return itemInfos.dataList;
+            return loadNextRankData(_oncePrint);
         }
 
         public void ReadyToLoadNextRank() {
-            int num = rankItemTarget.childCount;
-            CanvasGroup empty = rankPanel.transform.Find("empty").GetComponent<CanvasGroup>();
+            int num = (rankTotalDatas.Count >= 35) ? 5 : rankTotalDatas.Count / 7;
+            CanvasGroup empty = rankPanel.transform.Find("empty").GetComponent<CanvasGroup>(); // 已無更多資料
 
             if (rankScrollbar.value == 0) {
-                if (num < 20)
+                if (rankTotalDatas.Count > 0)
                 {
-                    List<RankItemInfo> rankItemInfos = loadNextRankData(num);
+                    List<RankItemInfo> rankItemInfos = loadNextRankData(num); // 生成下一批列表
                     foreach (RankItemInfo info in rankItemInfos)
                     {
                         GameObject go = GameObject.Instantiate(Resources.Load("Prefab/rankItem") as GameObject);
@@ -1544,9 +1553,25 @@ namespace com.Lobby
 
         }
 
-        private List<RankItemInfo> loadNextRankData(int cuurTotal) {
+        private List<RankItemInfo> loadNextRankData(int _oncePrint) {
             RankItemInfos itemInfos = new RankItemInfos();
+            for (int i = 0; i < _oncePrint; i++) 
+            {
+                RankItemInfo data = new RankItemInfo();
+                data.Rank = int.Parse(rankTotalDatas[7 * i]);
+                data.Photo = rankTotalDatas[7 * i + 1];
+                data.Name = rankTotalDatas[7 * i + 2];
+                data.Lv = int.Parse(rankTotalDatas[7 * i + 3]);
+                data.Win = int.Parse(rankTotalDatas[7 * i + 4]);
+                data.Lose = int.Parse(rankTotalDatas[7 * i + 5]);
+                data.Probability = int.Parse(rankTotalDatas[7 * i + 6]) / 100f;
+                itemInfos.dataList.Add(data);
+            }
 
+            rankTotalDatas.RemoveRange(0, _oncePrint * 7);
+            Debug.Log("rankDatas剩 " + rankTotalDatas.Count + "筆資料");
+
+            /*
             string[] ran_names = {
                 "雲盤金城武",
                 "高雄彭玉燕",
@@ -1565,7 +1590,7 @@ namespace com.Lobby
                 "基隆日本橋"
             };
             
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++) // 一次產生十筆假名單
             {
                 RankItemInfo data1 = new RankItemInfo();
                 data1.Rank = cuurTotal + i + 1;
@@ -1577,7 +1602,7 @@ namespace com.Lobby
                 data1.Probability = UnityEngine.Random.Range(10f, 50f);
                 itemInfos.dataList.Add(data1);
             }
-
+            */
             return itemInfos.dataList;
         }
 
@@ -1830,9 +1855,17 @@ namespace com.Lobby
             actDailyPanel = activityPanel.transform.Find("Daily").gameObject;
             actMissionPanel= activityPanel.transform.Find("Mission").gameObject;
 
-            if (rankPanel)
+            if (rankPanel) {
                 playerRankPanel = rankPanel.transform.Find("playerRank");
-
+                if (playerRankPanel) {
+                    playerRankText = playerRankPanel.transform.Find("Rank/Text").GetComponent<Text>();
+                    playerRankLv = playerRankPanel.transform.Find("NameLv/Lv").GetComponent<Text>();
+                    playerRankWin = playerRankPanel.transform.Find("WinLose/Win").GetComponent<Text>();
+                    playerRankLose = playerRankPanel.transform.Find("WinLose/Lose").GetComponent<Text>();
+                    playerRankProb = playerRankPanel.transform.Find("Probability/Prob").GetComponent<Text>();
+                }
+            }
+                
             if (dailyBonusPanel) {
                 popupDailyBonus = dailyBonusPanel.transform.Find("main");
 
@@ -1964,7 +1997,21 @@ namespace com.Lobby
                 Debug.Log("setPwdCallback =  " + result);
             }
  		}
-		
+
+        public void getRankDataCallback(WebExceptionStatus status, string result)
+        {
+            _needHideConnect = true; //需要關閉連線視窗
+            getRankResult = result;
+            _getRank = true;
+            if (status != WebExceptionStatus.Success)
+            {
+                Debug.Log("getRankDataCallback Failed! " + result);
+            }
+            else if (!string.IsNullOrEmpty(result))
+            {
+                //Debug.Log("getRankDataCallback =  " + result);
+            }
+        }
 
         public void ShowLogoutPopup()
         {
@@ -2114,32 +2161,29 @@ namespace com.Lobby
             _getOnline = true;
         }
 
-        public void NicknameChange() {
-            if (replaceNickname)
-                replaceNickname.interactable = true;
-        }
-
         public void setNameCallback(WebExceptionStatus status, string result)
         {
+            _needHideConnect = true; //需要關閉連線視窗
+            resetNameResult = result;
+            _resetName = true;
             if (status != WebExceptionStatus.Success)
             {
-				Debug.Log("setNameCallback Failed! " + result);
+                Debug.Log("setNameCallback Failed! " + result);
             }
-            //Debug.Log("setNameCallback =  " + result);
+            else
+            {
+                //Debug.Log("setNameCallback =  " + result);
+            }
         }
 
         public void SaveNickname()
         {
             if (settingNickname) {
                 string oName = CryptoPrefs.GetString("USERNAME");
-                CryptoPrefs.SetString("USERNAME", settingNickname.text);
                 string sToken = CryptoPrefs.GetString("USERTOKEN");
                 MJApi.setPlayerName(sToken, oName, settingNickname.text, setNameCallback);
-                SetPlayerNames();
+                ConnectPanelSwitch(true); //開啟連線視窗
             }
-
-            if (replaceNickname)
-                replaceNickname.interactable = false;
         }
 		
         public void ClickReplacePhoto() {
@@ -2170,9 +2214,9 @@ namespace com.Lobby
         private void ConnectPanelSwitch(bool _turnOn) {
             if (_turnOn)
             {
+                connectingPanel.SetActive(true); //開啟連線視窗
                 _connectingSign.DOPlay();
                 _connectingText.DOPlay();
-                connectingPanel.SetActive(true); //開啟連線視窗
             }
             else {
                 connectingPanel.SetActive(false); //關閉連線視窗
@@ -2249,6 +2293,28 @@ namespace com.Lobby
                 }
             }
 
+            if (_resetName)
+            {
+                actionDonePanel.SetActive(true);
+                _resetName = false;
+                Debug.Log("更改暱稱 " + resetNameResult);
+
+                if (resetNameResult == "The remote server returned an error: (401) Unauthorized.")
+                {
+                    _actionText.text = "參數錯誤";
+                }
+                else if (resetNameResult != "OK")
+                {
+                    _actionText.text = "暱稱更改失敗";
+                }
+                else
+                {
+                    _actionText.text = "暱稱更改成功";
+                    CryptoPrefs.SetString("USERNAME", settingNickname.text);
+                    SetPlayerNames();
+                }
+            }
+
             if (_setItem)
             {
                 actionDonePanel.SetActive(true);
@@ -2273,7 +2339,6 @@ namespace com.Lobby
             }
 
             if (_getBag) {
-                connectingPanel.SetActive(false); //關閉連線視窗
                 _getBag = false;
                 Debug.Log("背包內容物 " + getItemNumResult);
 
@@ -2288,6 +2353,29 @@ namespace com.Lobby
                         paintBagUI();
                 }
             }
+
+            if (_getRank)
+            {
+                _getRank = false;
+                Debug.Log("排行榜 " + getRankResult);
+
+                if (getRankResult == "getItemCallback Failed!")
+                {
+                    actionDonePanel.SetActive(true);
+                    _actionText.text = "發生錯誤";
+                }
+                else
+                {
+                    paintRankUI();
+                }
+            }
+
+            if (_setUserPhoto)
+            {
+                _setUserPhoto = false;
+                SetPlayerPhotos();
+            }
+            
         }
 
         public void ChangeCoin(int _earnCoin) {
@@ -2463,7 +2551,7 @@ namespace com.Lobby
             string uFirstLogin = CryptoPrefs.GetString("USERFLOGIN");
             string uTotalLogin = CryptoPrefs.GetString("USERLOGINTOTAL");
             int _tLoginTime = (int.Parse(uTotalLogin) == 0) ? 1 : int.Parse(uTotalLogin);
-            Debug.Log("登入總次數 = " + _tLoginTime);
+            //Debug.Log("登入總次數 = " + _tLoginTime);
             int _takedDay = (uFirstLogin == "T") ? _tLoginTime - 1 : _tLoginTime;
             DateTime myDate = DateTime.Now;
             int maxDay = 30;

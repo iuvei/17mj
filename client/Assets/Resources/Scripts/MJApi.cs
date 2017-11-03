@@ -213,5 +213,12 @@ public static class MJApi
 		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
 	}
 
-
+    public static void setForgetPwd(string mail, string pwd, RequestCallBack callback)
+    {
+        string api = "V1/setForgetPwd";
+        string auth = "Bearer " + secretKey;
+        string method = "POST";
+        string pdata = "[{\"Mail\":\"" + mail + "\", \"PWD\":\"" + pwd + "\"}]";
+        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+    }
 }

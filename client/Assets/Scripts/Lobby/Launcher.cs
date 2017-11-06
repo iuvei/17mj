@@ -796,8 +796,7 @@ namespace com.Lobby
             // 讀背包清單
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
-            int id = 0;
-            MJApi.getUserItem(sToken, sName, id, getItemCallback);
+            MJApi.getUserItem(sToken, sName, 0, getItemCallback);
             connectingPanel.SetActive(true); //開啟連線視窗
 
             if (btmMenuBtns[3])
@@ -870,7 +869,7 @@ namespace com.Lobby
 		    {
                 getItemNumResult = result;
                 string[] tokens = result.Split(new string[] { "," }, StringSplitOptions.None);
-                //Debug.Log(" getItemCallback  =  " + result);
+                Debug.Log(" getItemCallback  =  " + result);
 		    }
         }
 
@@ -1122,7 +1121,7 @@ namespace com.Lobby
 
         public void ClickShopBuy()
         {
-            GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
+            //GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
             ShopItem _item = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<ShopItem>();
             //Debug.Log("name = " + _info.ItemName + "  price = " + _info.ItemPrice);
             currentNum = 1;
@@ -1140,15 +1139,15 @@ namespace com.Lobby
             MJApi.getUserItem(sToken, sName, _currentItemId, getItemCallback);
             ConnectPanelSwitch(true); //開啟連線視窗
 
-            if (popupBuy)
-            {
-                if (popupBG) {
-                    popupBG.SetActive(true);
-                    popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
-                }
-                popupBuy.transform.DOScale(Vector3.zero, 0);
-                popupBuy.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-            }
+            //if (popupBuy)
+            //{
+            //    if (popupBG) {
+            //        popupBG.SetActive(true);
+            //        popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+            //    }
+            //    popupBuy.transform.DOScale(Vector3.zero, 0);
+            //    popupBuy.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            //}
         }
 
         public void ExitShopBuy()
@@ -1191,7 +1190,7 @@ namespace com.Lobby
             int tPrice = (currentNum * currentPrice);
             if (int.Parse(sCoin) >= tPrice)
             {
-                ClickBuyItem(-tPrice);     //改變商品數量
+                ClickBuyItem(-tPrice);    //改變商品數量
                 ConnectPanelSwitch(true); //開啟連線視窗
             }
             else {
@@ -1210,6 +1209,8 @@ namespace com.Lobby
             int oldNum = int.Parse(currentItemNum);
             int finalNum = currentNum + oldNum;
             MJApi.setUserItem(sToken, sName, _currentItemId, oldNum, finalNum, oldCoin, newCoin, setItemCallback);
+
+            Debug.Log("購買商品: 原始金幣: " + oldCoin + " ; 購買後餘額: " + newCoin + " ; 購買商品ID: " + _currentItemId + " ; 該商品持有數: " + oldNum + " ; 購買後持有數: " + finalNum);
         }
 
         private void SetUserCoin() {
@@ -2115,12 +2116,13 @@ namespace com.Lobby
             SubPage _subpage = currentPage;
             int arrayIndex = 0;
             string sCoin = CryptoPrefs.GetString("USERCOIN");
-            //Debug.Log("Get Local Coin = " + sCoin);
-            if (!string.IsNullOrEmpty(sCoin))
+            Debug.Log("Get Local Coin = " + sCoin);
+            if (!string.IsNullOrEmpty(sCoin) && Int32.TryParse(sCoin, out localCoin))
             {
-                localCoin = int.Parse(sCoin);
+                //localCoin = int.Parse(sCoin);
 
-                switch (_subpage) {
+                switch (_subpage)
+                {
                     case SubPage.Main:
                         arrayIndex = 0;
                         break;
@@ -2137,6 +2139,10 @@ namespace com.Lobby
                         break;
                 }
                 playerCoins[arrayIndex].text = string.Format("{0:0,0}", localCoin);
+            }
+            else
+            {
+                Debug.Log("localCoin 金幣數量異常 " + sCoin);
             }
             //coinAPIcallback = true;
         }
@@ -2234,8 +2240,10 @@ namespace com.Lobby
 
 			if (_setCoin) {
                 _setCoin = false;
-                CryptoPrefs.SetString("USERCOIN", setCoinResult);
-                SetPlayerCoins();
+                if (Int32.TryParse(setCoinResult, out localCoin)) {
+                    CryptoPrefs.SetString("USERCOIN", setCoinResult);
+                    SetPlayerCoins();
+                }
             }
             if (_getOnline) {
                 _getOnline = false;
@@ -2331,9 +2339,15 @@ namespace com.Lobby
                 }
                 else
                 {
-                    CryptoPrefs.SetString("USERCOIN", setItemResult);
-                    SetPlayerCoins();
-                    _actionText.text = "購買成功";
+                    if (Int32.TryParse(setItemResult, out localCoin))
+                    {
+                        CryptoPrefs.SetString("USERCOIN", setItemResult);
+                        SetPlayerCoins();
+                        _actionText.text = "購買成功";
+                    }
+                    else {
+                        _actionText.text = "發生異常";
+                    }
                     ExitShopBuy();     //關閉購買視窗
                 }
             }
@@ -2349,8 +2363,21 @@ namespace com.Lobby
                 }
                 else
                 {
-                    if(currentPage != SubPage.Shop)
+                    if (currentPage != SubPage.Shop)
                         paintBagUI();
+                    else {
+                        GameObject popupBG = shopPanel.transform.Find("popupBG").gameObject;
+                        if (popupBuy)
+                        {
+                            if (popupBG)
+                            {
+                                popupBG.SetActive(true);
+                                popupBG.GetComponent<Image>().DOFade(0.6f, 0.3f);
+                            }
+                            popupBuy.transform.DOScale(Vector3.zero, 0);
+                            popupBuy.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                        }
+                    }
                 }
             }
 

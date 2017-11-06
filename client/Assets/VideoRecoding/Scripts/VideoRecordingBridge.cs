@@ -81,8 +81,8 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_moveRight ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		//setup();
-		//live.CallStatic("PlayStop");
+		setup();
+	    live.CallStatic("MoveRight");
 		#endif
 	}
 
@@ -91,8 +91,8 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_moveLeft ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		//setup();
-		//live.CallStatic("PlayStop");
+		setup();
+	    live.CallStatic("MoveLeft");
 		#endif
 	}
 
@@ -101,7 +101,7 @@ public class VideoRecordingBridge {
         #if !UNITY_EDITOR && UNITY_IOS
         #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
-	Debug.Log ("REConnect="+str);
+		Debug.Log ("REConnect="+str);
 	    live.CallStatic("PlayStart",str);
         #endif
     }

@@ -426,7 +426,7 @@ namespace com.Desktop
 				return;
 			} else {
 				foreach (MahPlayer mp in Users) {
-					if (player.ID == mp.photonPlayer.ID) {
+					if (mp.photonPlayer!=null && player.ID == mp.photonPlayer.ID) {
 						GameStop ();
 					}
 				}
@@ -456,6 +456,9 @@ namespace com.Desktop
 						Users [1].ID = pp.ID;
 						Users [1].photonPlayer = pp;
 						Users [1].isAI = false;
+						Users [1].keepedMah.Clear ();
+						Users [1].ponMah.Clear ();
+						Users [1].abandanedMah.Clear ();
 						//Users [1].AutoPlay = false;
 						ids [0] = pp.ID;
 						//break;
@@ -463,6 +466,9 @@ namespace com.Desktop
 						Users [0].ID = PhotonNetwork.player.ID;
 						Users [0].photonPlayer = PhotonNetwork.player;
 						Users [0].isAI = false;
+						Users [0].keepedMah.Clear ();
+						Users [0].ponMah.Clear ();
+						Users [0].abandanedMah.Clear ();
 						//Users [0].AutoPlay = false;
 						ids [1] = PhotonNetwork.player.ID;
 					}
@@ -495,6 +501,9 @@ namespace com.Desktop
 				Users [i].ID = id;
 				Users [i].photonPlayer = PhotonPlayer.Find(id);
 				Users [i].isAI = false;
+				Users [i].keepedMah.Clear ();
+				Users [i].ponMah.Clear ();
+				Users [i].abandanedMah.Clear ();
 				//Users [i].AutoPlay = false;
 				i++;
 			}
@@ -998,7 +1007,8 @@ namespace com.Desktop
 					Speak (pai_id);
 				} else {
 					if (!PhotonNetwork.player.IsMasterClient) {
-						mplayer.keepedMah.RemoveAt (0);
+						if(mplayer.keepedMah.Count>0)
+							mplayer.keepedMah.RemoveAt (0);
 					}
 					i = mplayer.keepedMah.Count;
 					j = mplayer.ponMah.Count;
@@ -1333,8 +1343,8 @@ namespace com.Desktop
 
 		void OnApplicationPause(bool pauseStatus)
 		{
-			if (pauseStatus == true)
-				Back ();
+			//if (pauseStatus == true)
+			//	Back ();
 		}
 
         public void Back()

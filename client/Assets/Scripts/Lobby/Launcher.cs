@@ -369,6 +369,7 @@ namespace com.Lobby
         public override void OnPhotonCreateRoomFailed(object[] codeAndMsg)
         {
             Debug.Log("Launcher Create Room faileds");
+			Connect();
         }
         public void SetPlayerName()
         {
@@ -450,10 +451,10 @@ namespace com.Lobby
 
         public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
         {
-			Debug.Log ("OnPhotonPlayerDisconnected()");
+			Debug.Log ("OnPhotonPlayerDisconnected()"+otherPlayer.NickName+"斷線了");
 			Players.Remove (otherPlayer);
 			UpdateRoomInfo ();
-			ExitRoom ();
+			//ExitRoom ();
             //GameObject g = playersPanel.FindChild(otherPlayer.NickName).gameObject;
             //Destroy(g);
         }
@@ -464,11 +465,10 @@ namespace com.Lobby
         public void CreateRoom()
         {
 			//Debug.Log (this.name+".CreateRoom()");
-            if (PhotonNetwork.connected)
-            {
+			if (PhotonNetwork.connected) {
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
-				customp.Add("CRoomName", cname);
+				customp.Add ("CRoomName", cname);
 				#if UNITY_IOS
                     _roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
 				#elif UNITY_ANDROID
@@ -480,17 +480,20 @@ namespace com.Lobby
 				roomOptions.isOpen = true;
 				roomOptions.maxPlayers = _roommax;
 				roomOptions.customRoomProperties = customp;
-				roomOptions.customRoomPropertiesForLobby = new string[] {"CRoomName"};
+				roomOptions.customRoomPropertiesForLobby = new string[] { "CRoomName" };
 				//Debug.Log ();
-                //创建房间成功
-				if (PhotonNetwork.CreateRoom(_roomname, roomOptions, null))
-                {
+				//创建房间成功
+				if (PhotonNetwork.CreateRoom (_roomname, roomOptions, null)) {
 					//Debug.Log (PhotonNetwork.room);
-					Debug.Log("Launcher.CreateRoom('#"+_roomname+ " success!!')");
-                    //StartCoroutine(ChangeRoom());
+					Debug.Log ("Launcher.CreateRoom('#" + _roomname + " success!!')");
+					//StartCoroutine(ChangeRoom());
 					//ChangeRoom();
-                }
-            }
+				}
+			} else {
+				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				Connect ();
+				CreateRoom ();
+			}
         }
 
 		/// <summary>
@@ -501,7 +504,10 @@ namespace com.Lobby
 			Debug.Log ("ShowRoomList()");
             if(playRoomBtns[2])
                 playRoomBtns[2].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
-
+			if (!PhotonNetwork.connected) {
+				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				Connect ();
+			}
             //Debug.Log ("GetRoomList()");
             if (roomlistPanel) {
 				roomlistPanel.SetActive (true);
@@ -683,14 +689,19 @@ namespace com.Lobby
 					}
 				}
 			} else {
-				Debug.LogError ("網路連線失敗");
+				Debug.LogError ("網路連線失敗!!...重新連線中...");
 				Connect ();
 			}
 		}
 
 		private void joinRoom(string name) {
-			Debug.Log ("joinRoom("+name+")");
-			PhotonNetwork.JoinRoom (name);
+			if (PhotonNetwork.connected) {
+				Debug.Log ("joinRoom(" + name + ")");
+				PhotonNetwork.JoinRoom (name);
+			} else {
+				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				Connect ();
+			}
 		}
 
 		public void setProcess(float t)

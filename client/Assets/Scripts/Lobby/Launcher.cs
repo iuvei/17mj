@@ -218,8 +218,12 @@ namespace com.Lobby
 				"台北郭金發",
 				"基隆日本橋"
 			};
-			int idx = UnityEngine.Random.Range(0, ran_names.Length-1 );
-			PhotonNetwork.playerName = ran_names[idx];
+			Debug.Log ("name="+PhotonNetwork.playerName);
+			Debug.Log ("nickname="+PhotonNetwork.player.NickName);
+			if (PhotonNetwork.player.NickName == "") {
+				int idx = UnityEngine.Random.Range (0, ran_names.Length - 1);
+				PhotonNetwork.player.NickName = ran_names [idx];
+			}
 
             //#关键
             //我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
@@ -368,8 +372,9 @@ namespace com.Lobby
         }
         public void SetPlayerName()
         {
-			//Debug.Log ("SetPlayerName("+PhotonNetwork.player.NickName+")");
+			Debug.Log ("SetPlayerName("+PhotonNetwork.player.NickName+")");
 			nameField.text = PhotonNetwork.player.NickName;
+			Debug.Log ("nickname="+PhotonNetwork.player.NickName);
         }
 
         public override void OnReceivedRoomListUpdate()
@@ -2086,7 +2091,9 @@ namespace com.Lobby
 
 		public void SetPlayerNames()
 		{
+			Debug.Log ("SetPlayerNames()");
 			string sName = CryptoPrefs.GetString("USERNAME");
+			Debug.Log ("sName="+sName);
 			if (!string.IsNullOrEmpty(sName))
 			{
 				for (int i = 0; i < playerNames.Length; i++)
@@ -2096,6 +2103,7 @@ namespace com.Lobby
 
 				if(settingNickname) //設定頁暱稱欄位
 					settingNickname.text = sName;
+				PhotonNetwork.player.NickName = sName;
 			}
 		}
 

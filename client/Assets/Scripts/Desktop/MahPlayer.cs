@@ -176,7 +176,7 @@ namespace com.Desktop
 		/// </summary>
 		public void checkPai(int pai_id, bool ismopai = false)
 		{
-			//Debug.LogError ("[c] 檢查手中的牌("+pai_id+", "+ismopai+")("+photonPlayer.NickName+")");
+			Debug.LogError ("[c] 檢查手中的牌("+pai_id+", "+ismopai+")("+photonPlayer.NickName+")");
 			bool isCanWin = false;
 			bool isCanPon = false;
 			bool isCanGan = false;
@@ -199,7 +199,8 @@ namespace com.Desktop
 
 			if (!isCanWin && !isCanPon && !isCanGan && !isCanChi)
 			{//不跳出選單, 直接摸一張牌
-				//Debug.Log ("[c] !display pass button");
+				Debug.Log ("[c] !display pass button");
+				Debug.Log (isCanWin + " " + isCanPon + " " + isCanGan + " " + isCanChi);
 				if (btnPass) {
 					btnPass.gameObject.SetActive (false);
 					btnPass.transform.parent.parent.gameObject.SetActive (false);
@@ -209,7 +210,7 @@ namespace com.Desktop
 			}
 			else
 			{
-				//Debug.Log ("[c] display pass button");
+				Debug.Log ("[c] display pass button");
 				if (btnPass) {
 					btnPass.gameObject.SetActive (true);
 					btnPass.transform.parent.parent.gameObject.SetActive (true);

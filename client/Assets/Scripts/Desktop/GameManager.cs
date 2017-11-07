@@ -250,6 +250,7 @@ namespace com.Desktop
 
         // 邀請玩麻將
         public void ClickInvatePlay() {
+			Debug.Log ("ClickInvatePlay()");
 			if (PhotonNetwork.playerList.Length < 2) {
 				Debug.Log ("兩個人以上才能開桌");
 				return;
@@ -616,7 +617,7 @@ namespace com.Desktop
         public void doHandleDaPai(int playerid, int mid) {
 			//Debug.LogError ("[s] doHandleDaPai("+playerid+", "+mid+")");
 			if (!PhotonNetwork.isMasterClient) {
-				//Debug.LogError ("Server Exec Only!! doHandleDaPai()");
+				Debug.LogError ("doHandleDaPai() Server Exec Only!! doHandleDaPai()");
 				return;
 			} else {
 				if (mid != 0) {
@@ -868,9 +869,10 @@ namespace com.Desktop
 		void ShowActivePlayer(int[] param)
         {
 			int player_id = (int)param[0];
-			//Debug.LogError ("[RPC] 輪到玩家(id="+player_id+")");
+			Debug.LogError ("[RPC] 輪到玩家(id="+player_id+")");
 			MahPlayer mplayer =  Users.Find (x => x.ID.Equals (player_id));
 			if (mplayer!=null && !(mplayer.isAI||mplayer.AutoPlay)) {
+				Debug.Log ("!!!!!!!!!!!!!!!!!!!!!!!!");
 				mplayer.checkPai (_lastDaPai, false);
 				mplayer.timer.time = MaxWaitTime;
 				mplayer.timer.Show (0.9f);
@@ -945,6 +947,7 @@ namespace com.Desktop
 					j = mplayer.ponMah.Count;
 					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "(" + i + "+" + j + ")");
 					mplayer.DaPaiToAban (pai_id, AbanMjs.Count);
+					_lastDaPai = pai_id;
 					Speak (pai_id);
 				}
 				playDaiPaiSound ();

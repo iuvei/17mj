@@ -18,9 +18,10 @@ public class Balloon : MonoBehaviour {
     public void ClickBalloon() {
         //if (!com.Lobby.Launcher.instance.coinAPIcallback)
         //    return;
-
+		#if UNITY_IOS || UNITY_ANDROID
         if(PlayerPrefExtension.GetBool("Vibrate_enabled"))
             Handheld.Vibrate();
+		#endif
         transform.DOScale(new Vector3(1.3f, 1.3f, 1), 0.2f).SetEase(Ease.OutElastic);
         _balloonImg.DOFade(0, 0.1f).SetEase(Ease.InSine);
         _particle.SetActive(true);

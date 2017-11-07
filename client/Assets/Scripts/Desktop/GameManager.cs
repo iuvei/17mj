@@ -204,7 +204,9 @@ namespace com.Desktop
 
 				if (!PhotonNetwork.isMasterClient) {
 					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+					#if UNITY_IOS || UNITY_ANDROID
 					VideoRecordingBridge.StartPlay (liveUrl,name);
+					#endif
 					if (InvateBtn != null) {
 						if (_invitePlayPop) //邀請搖晃動畫
 							_invitePlayPop.DOScale(new Vector3(1.15f, 1.15f, 1), .8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
@@ -212,7 +214,9 @@ namespace com.Desktop
 					}
 					return;
 				}
+				#if UNITY_IOS || UNITY_ANDROID
 				VideoRecordingBridge.StartRecord (liveUrl);
+				#endif
 				if (InvateBtn != null) {
 					InvateBtn.gameObject.SetActive (false);
 				}
@@ -342,7 +346,9 @@ namespace com.Desktop
 
         public void onLivePlayREConnect()
         {
+			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.REConnect(liveUrl);
+			#endif
         }
 
 
@@ -1232,8 +1238,10 @@ namespace com.Desktop
         public void Back()
         {
 			//Debug.Log ("Back()");
+			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.StopRecord ();
 			VideoRecordingBridge.StopPlay ();
+			#endif
             PhotonNetwork.LeaveRoom();
             //SceneManager.LoadScene("Game");
         }
@@ -1241,8 +1249,10 @@ namespace com.Desktop
 		public void OnLeftRoom()
 		{
 			//Debug.Log("OnLeftRoom (local)");
+			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.StopRecord ();
 			VideoRecordingBridge.StopPlay ();
+			#endif
 			SceneManager.LoadScene("02.Lobby");
 			// back to main menu        
 			//Application.LoadLevel(Application.loadedLevelName);
@@ -1314,7 +1324,9 @@ namespace com.Desktop
 			//VideoCanvas.transform.DOScaleX (1, 0);
 			AllCanvas.transform.DOMoveX (-14, 0, true);
 			AllCanvas.transform.DOMoveX(0, 1, false).SetEase(Ease.InOutBack).OnComplete(ShowInfo);
+			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.MoveRight ();
+			#endif
 			//VideoCanvas.transform.DOScaleX (0.3f, 1).SetEase(Ease.InOutBack);
             //Invoke("ShowInfo", 0.45f);
 			//ShowInfo();
@@ -1326,7 +1338,9 @@ namespace com.Desktop
             OverPanel.gameObject.SetActive(false);
             AllCanvas.transform.DOMoveX (0, 0, true);
 			AllCanvas.transform.DOMoveX (-14, 1, false).SetEase(Ease.InOutBack);
+			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.MoveLeft ();
+			#endif
 		}
 
         public void ShowInfo()

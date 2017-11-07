@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_IPHONE || UNITY_ANDROID
 using UnityEngine.Advertisements;
+#endif
 
 public class UnityAds : MonoBehaviour {
     public GameObject _earnRewardPanel;
@@ -25,12 +27,16 @@ public class UnityAds : MonoBehaviour {
 
     public void ShowRewardedAd()
     {
+		#if UNITY_IPHONE || UNITY_ANDROID
         if (Advertisement.IsReady("rewardedVideo"))
         {
             var options = new ShowOptions { resultCallback = HandleShowResult };
             Advertisement.Show("rewardedVideo", options);
         }
+		#endif
     }
+
+	#if UNITY_IPHONE || UNITY_ANDROID
 
     private void HandleShowResult(ShowResult result)
     {
@@ -84,6 +90,7 @@ public class UnityAds : MonoBehaviour {
 
         }
     }
+	#endif
 
     public void ClickAcceptEarnReward() {
         if (_earnRewardPanel)

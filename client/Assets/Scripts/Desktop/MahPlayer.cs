@@ -174,20 +174,23 @@ namespace com.Desktop
 		/// <summary>
 		/// 檢查手中的牌
 		/// </summary>
-		public void checkPai(int pai_id, bool ismopai = false)
+		public bool checkPai(int pai_id, bool ismopai = false)
 		{
 			Debug.LogError ("[c] 檢查手中的牌("+pai_id+", "+ismopai+")("+photonPlayer.NickName+")");
 			bool isCanWin = false;
 			bool isCanPon = false;
 			bool isCanGan = false;
 			bool isCanChi = false;
+			bool showmenu = false;
 			int chitype = 0;
 			if (pai_id > 0) {
 				isCanWin = MahJongTools.IsCanHU (keepedMah, pai_id);
 				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id);
 				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, ismopai, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, pai_id, out chitype, ismopai);
+				Debug.Log (isCanWin+" "+isCanPon+" "+isCanGan+" "+isCanChi+" ");
 			}
+			showmenu = isCanWin || isCanPon || isCanGan || isCanChi;
 			if(btnWin)
 				btnWin.gameObject.SetActive(isCanWin);
 			if(btnPon)
@@ -197,9 +200,9 @@ namespace com.Desktop
 			if(btnGang)
 				btnGang.gameObject.SetActive(isCanGan);
 
-			if (!isCanWin && !isCanPon && !isCanGan && !isCanChi)
+			if (!showmenu)
 			{//不跳出選單, 直接摸一張牌
-				Debug.Log ("[c] !display pass button");
+				Debug.Log ("[c] !showmenu");
 				Debug.Log (isCanWin + " " + isCanPon + " " + isCanGan + " " + isCanChi);
 				if (btnPass) {
 					btnPass.gameObject.SetActive (false);
@@ -210,12 +213,13 @@ namespace com.Desktop
 			}
 			else
 			{
-				Debug.Log ("[c] display pass button");
+				Debug.Log ("[c] showmenu");
 				if (btnPass) {
 					btnPass.gameObject.SetActive (true);
 					btnPass.transform.parent.parent.gameObject.SetActive (true);
 				}
 			}
+			return showmenu;
 		}
 
 		public void clearPAI()

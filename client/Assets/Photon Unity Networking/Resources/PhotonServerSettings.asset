@@ -15,9 +15,9 @@ MonoBehaviour:
   VoiceAppID: 
   ChatAppID: 991357f6-efcd-4df3-8c3d-e5d49d6f9bc6
   HostType: 1
-  PreferredRegion: 2
+  PreferredRegion: 3
   EnabledRegions: -1
-  Protocol: 1
+  Protocol: 0
   ServerAddress: app.exitgamescloud.com
   ServerPort: 5055
   VoiceServerPort: 5055

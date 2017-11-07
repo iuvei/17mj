@@ -86,7 +86,7 @@ namespace com.Desktop
 		//private int moMahId = 0;
 		private int _lastMoPaiPlayerID = -1;
 		private int _lastDaPaiPlayerID = -1;
-		private int MaxWaitTime = 15;
+		private int MaxWaitTime = 100;
 		private int _remainTime = 0;
 		private string _gameVersion = "1.0";
 		private int _targetid = 0;
@@ -355,7 +355,7 @@ namespace com.Desktop
 
 		public void OnDisconnectedFromPhoton()
 		{
-			Debug.LogError("OnDisconnectedFromPhoton");
+			Debug.LogError("OnDisconnectedFromPhoton()");
 
 			// Back to main menu        
 			//Application.LoadLevel(Application.loadedLevelName);
@@ -363,7 +363,7 @@ namespace com.Desktop
 
 		public void OnPhotonPlayerConnected(PhotonPlayer player)
 		{
-			Debug.Log("OnPhotonPlayerConnected: " + player.NickName);
+			Debug.LogError("OnPhotonPlayerConnected(): " + player.NickName);
 			if (Online != null) {
 				Online.text = PhotonNetwork.playerList.Length.ToString();
 			}
@@ -376,11 +376,23 @@ namespace com.Desktop
 
 		public void OnPhotonPlayerDisconnected(PhotonPlayer player)
 		{
+			Debug.LogError("OnPhotonPlayerDisconnected(): " + player.NickName+ " "+player.IsMasterClient);
 			if (ChatText != null) {
 				ChatText.text += player.NickName+"離開這個房間\n";
 			}
 			int ppl =  PhotonNetwork.playerList.Length;
 			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
+			if (player.IsMasterClient) {
+				//房主離開 結束遊戲房 回到大廳
+				PhotonNetwork.LeaveRoom();
+				return;
+			} else {
+				foreach (MahPlayer mp in Users) {
+					if (player.ID == mp.photonPlayer.ID) {
+						GameStop ();
+					}
+				}
+			}
 		}
 
         private void doShuffleMah()
@@ -623,7 +635,7 @@ namespace com.Desktop
 				if (mid != 0) {
 					if (_activePlayer != null && _activePlayer.ID==playerid && _activePlayer.ID != _lastDaPaiPlayerID) {
 						_lastDaPaiPlayerID = _activePlayer.ID;
-						_lastDaPai = mid;
+						//_lastDaPai = mid;
 						_activePlayer.handleDaPai (mid);
 					}
 				}
@@ -651,6 +663,10 @@ namespace com.Desktop
 				//Debug.LogError ("[s] 4.doMoPai()");
 				//players[0].GetMahJong(true);
 				if (_activePlayer != null && _activePlayer.ID != _lastMoPaiPlayerID) {
+					if (_activePlayer.checkPai (_lastDaPai, false)) {
+						Debug.Log ("xxxxxxxxxxxxx");
+						yield return null;
+					}
 					//_activePlayer.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
 					//Debug.LogError ("[s] 4.doMoPai("+_activePlayer.photonPlayer.NickName+")");
 					//Debug.Log("xxxxxx_activePlayer.state="+_activePlayer.state+" "+_activePlayer.photonPlayer.NickName);
@@ -666,6 +682,7 @@ namespace com.Desktop
 					//Debug.LogError ("[s] 4.doMoPai(GotID="+GotID+", isfirst="+isfirst+")");
 					//Debug.LogError ("[s] 4. doMoPai("+_activePlayer.photonPlayer.NickName+", GotID="+GotID+")");
 					_activePlayer.handleMoPai (GotID, getRemainPai());
+					_activePlayer.checkPai (GotID, true);
 				}
 			}
         }
@@ -900,6 +917,7 @@ namespace com.Desktop
 					}
 					i = mplayer.keepedMah.Count;
 					j = mplayer.ponMah.Count;
+					mplayer.checkPai (pai_id, true);
 					//Debug.LogError ("[RPC] " + mplayer.name + "摸牌 " + pname + "(" + i + "+" + j + ")");
 					mplayer.createPaiToMo (pai_id);
 				} else {
@@ -936,8 +954,9 @@ namespace com.Desktop
 					mplayer.DaPaiToAban (pai_id, AbanMjs.Count);
 					i = mplayer.keepedMah.Count;
 					j = mplayer.ponMah.Count;
-					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "(" + i + "+" + j + ")");
+					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "("+pai_id+")"+ "[" + i + "+" + j + "]");
 					mplayer.HideMenu ();
+					_lastDaPai = pai_id;
 					Speak (pai_id);
 				} else {
 					if (!PhotonNetwork.player.IsMasterClient) {
@@ -945,7 +964,8 @@ namespace com.Desktop
 					}
 					i = mplayer.keepedMah.Count;
 					j = mplayer.ponMah.Count;
-					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "(" + i + "+" + j + ")");
+					//Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "(" + i + "+" + j + ")");
+					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "("+pai_id+")"+ "[" + i + "+" + j + "]");
 					mplayer.DaPaiToAban (pai_id, AbanMjs.Count);
 					_lastDaPai = pai_id;
 					Speak (pai_id);

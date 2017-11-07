@@ -364,9 +364,9 @@ static dispatch_once_t _onceToken;
     NSString *ans = @"M";
     if([textType isEqualToString:ans]){
        self.mShowView.transform = CGAffineTransformMakeRotation(M_PI);
+       [self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
     }
     self.mShowView.layer.anchorPoint = CGPointMake(0.5, 0.5);
-    [self.mShowView setBounds: CGRectMake(0, 0, ApplicationW/3, ApplicationH)];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [_rootView addSubview: self.mShowView];

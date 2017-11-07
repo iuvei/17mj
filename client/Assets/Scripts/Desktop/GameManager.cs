@@ -64,6 +64,7 @@ namespace com.Desktop
 		public Text RoomUserName;
         public RectTransform SettingCanvas;
         public RectTransform _invitePlayPop;
+        public Image VideoBG;
         //public Animator AllCanvasAnim; // 過場移入
         //public Animator GameInfoAnim;  //局風顯示
 
@@ -71,6 +72,19 @@ namespace com.Desktop
         private bool _readyLoseAdd = false;
         private string _readyWinAddresult = string.Empty;
         private string _readyLoseAddresult = string.Empty;
+
+        private Color _colorAplha = new Color(0, 0, 0, 0);
+        private Color _colorWhite = new Color(1, 1, 1, 1);
+
+        //結算畫面UI
+        private Image _winPhoto;
+        private Text _winName;
+        private Text _winLv;
+        private Text _winCoin;
+        private Image _losPhoto;
+        private Text _losName;
+        private Text _losLv;
+        private Text _losCoin;
 
         #region 
         /// <summary>
@@ -166,6 +180,28 @@ namespace com.Desktop
 		}
 
 
+        private void InitUILayout() {
+            if (OverPanel) {
+                Transform _winnerP;
+                Transform _loserP;
+                _winnerP = OverPanel.transform.Find("Winner");
+                _loserP = OverPanel.transform.Find("Loser");
+
+                if (_winnerP) {
+                    _winPhoto = _winnerP.transform.Find("outline/Photo").GetComponent<Image>();
+                    _winName = _winnerP.transform.Find("Name").GetComponent<Text>();
+                    _winLv = _winnerP.transform.Find("Lv").GetComponent<Text>();
+                    _winCoin = _winnerP.transform.Find("Coin").GetComponent<Text>();
+                }
+
+                if (_loserP) {
+                    _losPhoto = _loserP.transform.Find("outline/Photo").GetComponent<Image>();
+                    _losName = _loserP.transform.Find("Name").GetComponent<Text>();
+                    _losLv = _loserP.transform.Find("Lv").GetComponent<Text>();
+                    _losCoin = _loserP.transform.Find("Coin").GetComponent<Text>();
+                }
+            }
+        }
 
 		private void OnFailedToConnect(NetworkConnectionError error)
 		{
@@ -246,6 +282,8 @@ namespace com.Desktop
 
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
             //Debug.Log ("Start()");
+
+            InitUILayout();
         }
 
         // 邀請玩麻將
@@ -1111,6 +1149,7 @@ namespace com.Desktop
 
                 if (mplayer.ID == PhotonNetwork.player.ID) {
 					//Debug.LogError ("[RPC] 你贏了 ");
+                    SetWinnerInfo("Win");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
@@ -1119,6 +1158,7 @@ namespace com.Desktop
                         sRate = (sOldWin + 1) * 10000 / (sOldWin + sOldLose + 1);
                     MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
 				} else {
+                    SetWinnerInfo("Lose");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
@@ -1128,6 +1168,45 @@ namespace com.Desktop
                     MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
 				}
                 Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
+            }
+        }
+
+        private void SetWinnerInfo(string _PlayerResult) {
+            string sName = CryptoPrefs.GetString("USERNAME");
+            string sPhoto = CryptoPrefs.GetString("USERPHOTO");
+            string sLv = CryptoPrefs.GetString("USERLEVEL");
+            string sCoin = CryptoPrefs.GetString("USERCOIN");
+            string oName = CryptoPrefs.GetString("OPPNAME");
+            string oPhoto = CryptoPrefs.GetString("OPPPHOTO");
+            string oLv = CryptoPrefs.GetString("OPPLEVEL");
+            string oCoin = CryptoPrefs.GetString("OPPCOIN");
+
+            if (_PlayerResult == "Win") {
+                if (!string.IsNullOrEmpty(sPhoto))
+                {
+                    Texture2D newPhoto = new Texture2D(1, 1);
+                    newPhoto.LoadImage(Convert.FromBase64String(sPhoto));
+                    newPhoto.Apply();
+                    _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                }
+
+                _winName.text = sName;
+                _winLv.text = sLv;
+                _winCoin.text = String.Format("{0:0,0}", int.Parse(sCoin));
+            }
+            else if(_PlayerResult == "Lose")
+            {
+                //if (!string.IsNullOrEmpty(oPhoto))
+                //{
+                //    Texture2D newPhoto = new Texture2D(1, 1);
+                //    newPhoto.LoadImage(Convert.FromBase64String(oPhoto));
+                //    newPhoto.Apply();
+                //    _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                //}
+
+                //_winName.text = oName;
+                //_winLv.text = oLv;
+                //_winCoin.text = String.Format("{0:0,0}", int.Parse(oCoin));
             }
         }
 
@@ -1344,8 +1423,11 @@ namespace com.Desktop
         //畫面移入
         private void LayoutStart()
         {
-			//VideoCanvas.transform.DOScaleX (1, 0);
-			AllCanvas.transform.DOMoveX (-14, 0, true);
+            if (VideoBG) //直播畫面背景圖
+                VideoBG.color = _colorAplha;
+
+            //VideoCanvas.transform.DOScaleX (1, 0);
+            AllCanvas.transform.DOMoveX (-14, 0, true);
 			AllCanvas.transform.DOMoveX(0, 1, false).SetEase(Ease.InOutBack).OnComplete(ShowInfo);
 			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.MoveRight ();
@@ -1357,6 +1439,9 @@ namespace com.Desktop
 
 		private void LayoutEnd()
 		{
+            if (VideoBG)  //直播畫面背景圖
+                VideoBG.color = _colorWhite;
+
             ExitSetting();
             OverPanel.gameObject.SetActive(false);
             AllCanvas.transform.DOMoveX (0, 0, true);

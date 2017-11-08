@@ -32,6 +32,7 @@ public class CardDance : MonoBehaviour {
     private int _sign = 1;
 
     void Start () {
+
         _sign = (cardDirection ==  CardDirection.VerticalRight) ? -1 : 1;
 
         sequence = DOTween.Sequence();
@@ -73,13 +74,16 @@ public class CardDance : MonoBehaviour {
                 switch (danceType) {
                     case DanceType.Default:
                         sequence.Insert(_t, ts.DOBlendableMoveBy(new Vector3(-0.142f * _sign, 0.185f, 0),0.2f)).SetEase(Ease.Linear);
-                        sequence.Insert(_t, ts.DOMove(ts.position, 0.2f).SetEase(Ease.Linear).SetDelay(0.2f));
+                        //sequence.Insert(_t, ts.DOMove(ts.position, 0.2f).SetEase(Ease.Linear).SetDelay(0.2f));
+                        sequence.Insert(_t, ts.DOBlendableMoveBy(new Vector3(0.142f * _sign, -0.185f, 0), 0.2f).SetEase(Ease.Linear).SetDelay(0.2f)); //因應RWD
                         break;
                     case DanceType.Swing:
                         sequence.Insert(_t, ts.DOBlendableMoveBy(new Vector3(-0.242f * _sign, 0, 0), 0.2f)).SetEase(Ease.Linear);
-                        sequence.Insert(_t, ts.DOMove(ts.position, 0.2f).SetEase(Ease.Linear).SetDelay(0.2f));
+                        //sequence.Insert(_t, ts.DOMove(ts.position, 0.2f).SetEase(Ease.Linear).SetDelay(0.2f));
+                        sequence.Insert(_t, ts.DOBlendableMoveBy(new Vector3(0.242f * _sign, 0, 0), 0.2f).SetEase(Ease.Linear).SetDelay(0.2f));//因應RWD
                         sequence.Insert(_t, ts.DOBlendableMoveBy(new Vector3(0.242f * _sign, 0, 0), 0.2f).SetEase(Ease.Linear).SetDelay(0.4f));
-                        sequence.Insert(_t, ts.DOMove(ts.position, 0.2f).SetEase(Ease.Linear).SetDelay(0.6f));
+                        //sequence.Insert(_t, ts.DOMove(ts.position, 0.2f).SetEase(Ease.Linear).SetDelay(0.6f));
+                        sequence.Insert(_t, ts.DOBlendableMoveBy(new Vector3(-0.242f * _sign, 0, 0), 0.2f).SetEase(Ease.Linear).SetDelay(0.6f));//因應RWD
                         break;
                 }
                 break;

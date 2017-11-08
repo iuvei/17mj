@@ -1200,10 +1200,10 @@ namespace com.Desktop
             string sPhoto = CryptoPrefs.GetString("USERPHOTO");
             string sLv = CryptoPrefs.GetString("USERLEVEL");
             string sCoin = CryptoPrefs.GetString("USERCOIN");
-            string oName = CryptoPrefs.GetString("OPPNAME");
-            string oPhoto = CryptoPrefs.GetString("OPPPHOTO");
-            string oLv = CryptoPrefs.GetString("OPPLEVEL");
-            string oCoin = CryptoPrefs.GetString("OPPCOIN");
+            //string oName = CryptoPrefs.GetString("OPPNAME");
+            //string oPhoto = CryptoPrefs.GetString("OPPPHOTO");
+            //string oLv = CryptoPrefs.GetString("OPPLEVEL");
+            //string oCoin = CryptoPrefs.GetString("OPPCOIN");
 
             if (_PlayerResult == "Win") {
                 if (!string.IsNullOrEmpty(sPhoto))
@@ -1215,7 +1215,7 @@ namespace com.Desktop
                 }
 
                 _winName.text = sName;
-                _winLv.text = sLv;
+                _winLv.text = "Lv " + sLv;
                 _winCoin.text = String.Format("{0:0,0}", int.Parse(sCoin));
             }
             else if(_PlayerResult == "Lose")

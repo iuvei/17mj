@@ -1387,10 +1387,12 @@ namespace com.Lobby
                 Transform cardFa = playRoomBtns[1].Find("02/card_fa");
                 Transform cardBai = playRoomBtns[1].Find("02/card_bai");
 
-                cardChun.DOMove(new Vector3(2.51f, 0.51f, -2.1f), 1.5f).SetLoops(-1, LoopType.Yoyo);
+                //cardChun.DOMove(new Vector3(2.51f, 0.51f, -2.1f), 1.5f).SetLoops(-1, LoopType.Yoyo); // 因應RWD
+                cardChun.DOBlendableMoveBy(new Vector3(1.27f, 0.03f, -0.1f), 1.5f).SetLoops(-1, LoopType.Yoyo);
                 cardChun.DORotate(new Vector3(0, 0, -24.552f), 1.5f).SetLoops(-1, LoopType.Yoyo);
                 cardFa.DOScale(new Vector3(1.05f, 1.05f, 1), 1.5f).SetEase(Ease.OutElastic).SetLoops(-1, LoopType.Yoyo);
-                cardBai.DOMove(new Vector3(1.24f, 0.48f, -2f), 1.5f).SetLoops(-1, LoopType.Yoyo);
+                //cardBai.DOMove(new Vector3(1.24f, 0.48f, -2f), 1.5f).SetLoops(-1, LoopType.Yoyo); // 因應RWD
+                cardBai.DOBlendableMoveBy(new Vector3(-1.27f, -0.03f, 0.1f), 1.5f).SetLoops(-1, LoopType.Yoyo);
                 cardBai.DORotate(new Vector3(0, 0, 20.797f), 1.5f).SetLoops(-1, LoopType.Yoyo);
             }
 
@@ -1412,7 +1414,9 @@ namespace com.Lobby
                 dBSeq.Insert(0, dailyBonuSparkle.DOFade(1, 0.3f));
                 dBSeq.Insert(0, dailyBonuSparkle.transform.DOScale(new Vector3(1, 1, 1), 0.6f));
                 dBSeq.Insert(0, dailyBonuSparkle.transform.DORotate(new Vector3(0, 0, 30), 0.1f).SetEase(Ease.Linear).SetLoops(3, LoopType.Yoyo));
-                dBSeq.Insert(0.1f, dailyBonuSparkle.transform.DOPath(waypoints, 0.5f, PathType.CatmullRom, PathMode.TopDown2D, 5).SetEase(Ease.OutQuad));
+                //dBSeq.Insert(0.1f, dailyBonuSparkle.transform.DOPath(waypoints, 0.5f, PathType.CatmullRom, PathMode.TopDown2D, 5).SetEase(Ease.OutQuad)); //因應RWD 以下兩行
+                dBSeq.Insert(0.1f, dailyBonuSparkle.transform.DOBlendableMoveBy(new Vector3(0.2f, -0.1f, -1f), 0.2f).SetEase(Ease.Linear));
+                dBSeq.Insert(0.3f, dailyBonuSparkle.transform.DOBlendableMoveBy(new Vector3(1f, 0.6f, 0f), 0.3f).SetEase(Ease.OutQuad));
                 dBSeq.Insert(0.5f, dailyBonuSparkle.DOFade(0, 0.1f));
                 dBSeq.AppendInterval(1);
                 dBSeq.SetLoops(-1, LoopType.Restart).SetUpdate(true);

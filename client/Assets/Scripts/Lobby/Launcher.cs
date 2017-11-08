@@ -218,8 +218,8 @@ namespace com.Lobby
 				"台北郭金發",
 				"基隆日本橋"
 			};
-			Debug.Log ("name="+PhotonNetwork.playerName);
-			Debug.Log ("nickname="+PhotonNetwork.player.NickName);
+			//Debug.Log ("name="+PhotonNetwork.playerName);
+			//Debug.Log ("nickname="+PhotonNetwork.player.NickName);
 			if (PhotonNetwork.player.NickName == "") {
 				int idx = UnityEngine.Random.Range (0, ran_names.Length - 1);
 				PhotonNetwork.player.NickName = ran_names [idx];
@@ -373,9 +373,9 @@ namespace com.Lobby
         }
         public void SetPlayerName()
         {
-			Debug.Log ("SetPlayerName("+PhotonNetwork.player.NickName+")");
+			//Debug.Log ("SetPlayerName("+PhotonNetwork.player.NickName+")");
 			nameField.text = PhotonNetwork.player.NickName;
-			Debug.Log ("nickname="+PhotonNetwork.player.NickName);
+			//Debug.Log ("nickname="+PhotonNetwork.player.NickName);
         }
 
         public override void OnReceivedRoomListUpdate()
@@ -2102,9 +2102,9 @@ namespace com.Lobby
 
 		public void SetPlayerNames()
 		{
-			Debug.Log ("SetPlayerNames()");
+			//Debug.Log ("SetPlayerNames()");
 			string sName = CryptoPrefs.GetString("USERNAME");
-			Debug.Log ("sName="+sName);
+			//Debug.Log ("sName="+sName);
 			if (!string.IsNullOrEmpty(sName))
 			{
 				for (int i = 0; i < playerNames.Length; i++)
@@ -2135,7 +2135,7 @@ namespace com.Lobby
             SubPage _subpage = currentPage;
             int arrayIndex = 0;
             string sCoin = CryptoPrefs.GetString("USERCOIN");
-            Debug.Log("Get Local Coin = " + sCoin);
+            //Debug.Log("Get Local Coin = " + sCoin);
             if (!string.IsNullOrEmpty(sCoin) && Int32.TryParse(sCoin, out localCoin))
             {
                 //localCoin = int.Parse(sCoin);

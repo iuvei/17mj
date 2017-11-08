@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Net;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace com.Desktop
 {
@@ -215,7 +216,7 @@ namespace com.Desktop
 			if (PhotonNetwork.room != null) {
 				string name = PhotonNetwork.room.Name;
 				if (ChatText != null) {
-					ChatText.text += "房間編號#"+name+"\n";
+					ChatText.text += "房間編號: #"+name+"\n";
 				}
 				if (RoomUserName != null) {
 					//PhotonNetwork.playerList
@@ -227,11 +228,12 @@ namespace com.Desktop
 						}
 
 					}
-					if(mp!=null) {
-						RoomUserName.text = mp.NickName;
-						if (ChatText != null) {
-							ChatText.text += "房間名稱:"+mp.NickName+"\n";
-						}
+					Hashtable cp = PhotonNetwork.room.customProperties;
+					string cname = (string)cp ["CRoomName"];
+					RoomUserName.text = cname;
+					if (ChatText != null) {
+						ChatText.text += "房間名稱: "+cname+"的房間\n";
+						ChatText.text += "你進入這個房間\n";
 					}
 				}
 				//string name = PhotonNetwork.room.Name;
@@ -408,26 +410,38 @@ namespace com.Desktop
 			if (ChatText != null) {
 				ChatText.text += player.NickName+"進入這個房間\n";
 			}
-			int ppl =  PhotonNetwork.playerList.Length;
+			int ppl =  PhotonNetwork.room.PlayerCount;
 			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
 		}
 
 		public void OnPhotonPlayerDisconnected(PhotonPlayer player)
 		{
-			Debug.LogError("OnPhotonPlayerDisconnected(): " + player.NickName+ " "+player.IsMasterClient);
-			if (ChatText != null) {
-				ChatText.text += player.NickName+"離開這個房間\n";
-			}
-			int ppl =  PhotonNetwork.playerList.Length;
-			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
-			if (player.IsMasterClient) {
+			Debug.LogError("OnPhotonPlayerDisconnected(): " + player.NickName+ " 是否為房主:"+player.IsMasterClient);
+			//Debug.Log (PhotonNetwork.player.IsMasterClient);
+			//PhotonNetwork.room.MasterClientId
+			//if (player.ID==PhotonNetwork.room.MasterClientId) {
+			Hashtable cp = PhotonNetwork.room.customProperties;
+			string cname = (string)cp ["CRoomName"];
+			if (player.NickName==cname) {
+				Debug.LogError("[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳");
+				if (ChatText != null) {
+					ChatText.text += "[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳\n";
+				}
 				//房主離開 結束遊戲房 回到大廳
 				PhotonNetwork.LeaveRoom();
 				return;
 			} else {
+				int ppl =  PhotonNetwork.room.PlayerCount;
+				photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
+				if (ChatText != null) {
+					ChatText.text += player.NickName+"離開這個房間\n";
+				}
 				foreach (MahPlayer mp in Users) {
 					if (mp.photonPlayer!=null && player.ID == mp.photonPlayer.ID) {
 						GameStop ();
+						if (ChatText != null) {
+							ChatText.text += "終止麻將遊戲！\n";
+						}
 					}
 				}
 			}

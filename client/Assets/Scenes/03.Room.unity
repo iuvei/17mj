@@ -2311,7 +2311,7 @@ MonoBehaviour:
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Kakaly
@@ -10537,7 +10537,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 321275714}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -24202,6 +24202,7 @@ GameObject:
   - component: {fileID: 1832743555}
   - component: {fileID: 1832743554}
   - component: {fileID: 1832743553}
+  - component: {fileID: 1832743558}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -24279,6 +24280,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1832743558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1832743552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28bef253017858b4fa5598c33f3c845b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1834217270
 GameObject:
   m_ObjectHideFlags: 0

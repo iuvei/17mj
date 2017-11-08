@@ -322,7 +322,7 @@ namespace com.Lobby
         /// <summary>
         /// 连接到大厅
         /// </summary>
-        private void Connect()
+        public void Connect()
         {
             isConnecting = true;
 			setProcess (0.1f);

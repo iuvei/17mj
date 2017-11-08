@@ -207,8 +207,43 @@ namespace com.Desktop
 		private void OnFailedToConnect(NetworkConnectionError error)
 		{
 			Debug.LogError(this.name+" fail to Connect");
+			//Launcher.instance.Connect ();
 		}
 
+		public void StopLive()
+		{
+			Debug.LogError ("StopLive()");
+			if (PhotonNetwork.isMasterClient) {
+				#if UNITY_IOS || UNITY_ANDROID
+				VideoRecordingBridge.StopRecord ();
+				#endif
+			} else {
+				#if UNITY_IOS || UNITY_ANDROID
+				VideoRecordingBridge.StopPlay ();
+				#endif
+			}
+		}
+
+		public void StartLive()
+		{
+			Debug.LogError ("StartLive()");
+			//string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
+			if (PhotonNetwork.room != null) {
+				string name = PhotonNetwork.room.Name;
+				string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
+				if (PhotonNetwork.isMasterClient) {
+					Debug.LogError ("[s] PhotonNetwork.isMasterClient");
+					#if UNITY_IOS || UNITY_ANDROID
+					VideoRecordingBridge.StartRecord (liveUrl);
+					#endif
+				} else {
+					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+					#if UNITY_IOS || UNITY_ANDROID
+					VideoRecordingBridge.StartPlay (liveUrl, name);
+					#endif
+				}
+			}
+		}
 
 		public override void OnJoinedRoom()
 		{
@@ -220,14 +255,14 @@ namespace com.Desktop
 				}
 				if (RoomUserName != null) {
 					//PhotonNetwork.playerList
-					PhotonPlayer mp = null;
-					foreach(PhotonPlayer pp in PhotonNetwork.playerList) {
-						if (pp.IsMasterClient) {
-							mp = pp;
-							break;
-						}
-
-					}
+					//PhotonPlayer mp = null;
+					//foreach(PhotonPlayer pp in PhotonNetwork.playerList) {
+					//	if (pp.IsMasterClient) {
+					//		mp = pp;
+					//		break;
+					//	}
+					//
+					//}
 					Hashtable cp = PhotonNetwork.room.customProperties;
 					string cname = (string)cp ["CRoomName"];
 					RoomUserName.text = cname;
@@ -236,27 +271,23 @@ namespace com.Desktop
 						ChatText.text += "你進入這個房間\n";
 					}
 				}
-				//string name = PhotonNetwork.room.Name;
 
-				liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
+				StartLive ();
+				//string name = PhotonNetwork.room.Name;
+				//liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
 
 				if (!PhotonNetwork.isMasterClient) {
 					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
-					#if UNITY_IOS || UNITY_ANDROID
-					VideoRecordingBridge.StartPlay (liveUrl,name);
-					#endif
 					if (InvateBtn != null) {
 						if (_invitePlayPop) //邀請搖晃動畫
-							_invitePlayPop.DOScale(new Vector3(1.15f, 1.15f, 1), .8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+							_invitePlayPop.DOScale (new Vector3 (1.15f, 1.15f, 1), .8f).SetEase (Ease.Linear).SetLoops (-1, LoopType.Yoyo);
 						InvateBtn.gameObject.SetActive (true);
+					} else {
+						if (InvateBtn != null) {
+							InvateBtn.gameObject.SetActive (false);
+						}
 					}
-					return;
-				}
-				#if UNITY_IOS || UNITY_ANDROID
-				VideoRecordingBridge.StartRecord (liveUrl);
-				#endif
-				if (InvateBtn != null) {
-					InvateBtn.gameObject.SetActive (false);
+					//return;
 				}
 			}
 		}
@@ -1357,8 +1388,28 @@ namespace com.Desktop
 
 		void OnApplicationPause(bool pauseStatus)
 		{
-			//if (pauseStatus == true)
-			//	Back ();
+			Debug.LogError ("OnApplicationPause(" + pauseStatus + ")");
+			if (pauseStatus == true) {
+				//	Back ();
+				StopLive();
+			}
+		}
+
+		void OnApplicationFocus(bool isFocus){
+			Debug.LogError ("OnApplicationFocus("+isFocus+")");
+			if (isFocus) {
+				
+				//onLivePlayREConnect ();
+				//#if UNITY_IOS || UNITY_ANDROID
+				//VideoRecordingBridge.StartRecord();
+				//VideoRecordingBridge.StartPlay ();
+				//#endif
+				StartLive();
+				if(com.Lobby.Launcher.instance)
+					com.Lobby.Launcher.instance.Connect ();
+				//gameState.text = "Focus";
+				//renderer.material.color = Color.green;
+			}
 		}
 
         public void Back()

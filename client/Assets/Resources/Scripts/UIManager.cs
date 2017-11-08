@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour {
     private Transform _connectingSign;
     private Text _connectingText;
     private Text _loadingText;
+    private Transform _slogan;
 
     void Start() {
         instance = this;
@@ -41,6 +42,7 @@ public class UIManager : MonoBehaviour {
             enterLoadingPanel = MainPanel.Find("LoadingPanel");
 
             _loadingText = enterLoadingPanel.Find("LoadingBar/Text").GetComponent<Text>();
+            _slogan = loginPanel.transform.Find("slogan");
 
             if (!loginPanel)
                 Debug.Log("No found LoginPanel");
@@ -70,7 +72,9 @@ public class UIManager : MonoBehaviour {
             Debug.LogError("No found GameLobbyButton");
 
         InitialLoginPanel();
+        InitialAnim();
         StartCoroutine("PlayOP");
+        
 
     }
 
@@ -267,4 +271,11 @@ public class UIManager : MonoBehaviour {
         }
     }
 
+    private void InitialAnim() {
+        if (_slogan)
+        {
+            _slogan.DOScale(new Vector3(1.05f, 1.05f, 1), 0.8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+            //_slogan.DOBlendableMoveBy(new Vector3(0, -0.1f, 0f), 1.6f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+        }
+    }
 }

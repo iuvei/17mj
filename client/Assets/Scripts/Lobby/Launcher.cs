@@ -1434,8 +1434,8 @@ namespace com.Lobby
             //設定連線中動畫
             if (connectingPanel)
             {
-                _connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart).Pause();
-                _connectingText.DOText("連線中...", 3).SetLoops(-1, LoopType.Restart).Pause();
+                _connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart); //.Pause();
+                _connectingText.DOText("連線中...", 3).SetLoops(-1, LoopType.Restart); //.Pause();
             }
 
             if(btmDepositLight)
@@ -2172,7 +2172,7 @@ namespace com.Lobby
 
         public void SetUserOnline()
         {
-            _randomOnlineUsers = UnityEngine.Random.Range(8000, 12000);
+            _randomOnlineUsers = UnityEngine.Random.Range(1, 100) * 1000;
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
             MJApi.getUserNum(sToken, sName, getUserNumCallback);
@@ -2244,13 +2244,13 @@ namespace com.Lobby
             if (_turnOn)
             {
                 connectingPanel.SetActive(true); //開啟連線視窗
-                _connectingSign.DOPlay();
-                _connectingText.DOPlay();
+                //_connectingSign.DOPlay();
+                //_connectingText.DOPlay();
             }
             else {
                 connectingPanel.SetActive(false); //關閉連線視窗
-                _connectingSign.DOPause();
-                _connectingText.DOPause();
+                //_connectingSign.DOPause();
+                //_connectingText.DOPause();
             }
         }
 

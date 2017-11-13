@@ -46,7 +46,7 @@ public class VideoRecordingBridge {
     }
 
     public static void StopRecord(){
-		Debug.Log ("StopRecord()");
+		//Debug.Log ("StopRecord()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopRecord ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
@@ -56,7 +56,7 @@ public class VideoRecordingBridge {
 	}
 
 	public static void StartPlay(string str, string room){
-		Debug.Log ("StartPlay('"+str+"')");
+		//Debug.Log ("StartPlay('"+str+"')");
         #if !UNITY_EDITOR && UNITY_IOS
 	    _startPlay (str,room);
         #elif !UNITY_EDITOR && UNITY_ANDROID
@@ -67,7 +67,7 @@ public class VideoRecordingBridge {
 
 
     public static void StopPlay(){
-		Debug.Log ("StopPlay()");
+		//Debug.Log ("StopPlay()");
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopPlay ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID

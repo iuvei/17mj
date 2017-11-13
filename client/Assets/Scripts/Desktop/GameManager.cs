@@ -323,29 +323,53 @@ namespace com.Desktop
         public void ClickInvatePlay() {
 			Debug.Log ("ClickInvatePlay()");
 			if (PhotonNetwork.playerList.Length < 2) {
-				Debug.Log ("兩個人以上才能開桌");
+				//Debug.Log ("兩個人以上才能開桌玩麻將");
+				ShowAlert ("麻將要兩個人才能玩!", 5.0f);
 				return;
 			}
+			string name = string.Empty;
+			int tid = 0;
+			if (PhotonNetwork.player.IsMasterClient) {
+				//如果是房主
+				PhotonPlayer notmaster = null;
+				int i = 0;
+				foreach (PhotonPlayer pp in PhotonNetwork.playerList) {
+					if (!pp.IsMasterClient) {
+						notmaster = pp;
+						break;
+					}
+					i++;
+				}
+				Debug.Log ("i="+i);
+				name = notmaster.NickName;
+				tid = notmaster.ID;
+				ShowAlert ("你邀請房間內的玩家["+name+"]一起玩麻將, 等待回應中...", 5.0f);
+			} else {
+				//如果不是房主
+				name = PhotonNetwork.masterClient.NickName;
+				tid = PhotonNetwork.masterClient.ID;
+				ShowAlert ("你邀請房主["+name+"]一起玩麻將, 等待回應中...", 5.0f);
+			}
 
-			string name = PhotonNetwork.masterClient.NickName;
-			ShowAlert ("你邀請房主["+name+"]一起玩麻將, 等待回應中...", 5.0f);
-
-			int[] param = { (int)PhotonNetwork.player.ID };
-			photonView.RPC("InvatePlayMJ", PhotonTargets.MasterClient, param);
+			int[] param = { (int)PhotonNetwork.player.ID,(int)tid };
+			photonView.RPC("InvatePlayMJ", PhotonTargets.All, param);
 
         }
 
 		[PunRPC]
 		private void InvatePlayMJ(int[] param)
 		{
-			int player_id = (int)param [0];
-			Debug.LogError ("[RPC] InvatePlayMJ(id="+player_id+")");
-			List<PhotonPlayer> all = PhotonNetwork.playerList.ToList ();
-			PhotonPlayer pplayer = all.Find(x => x.ID.Equals (player_id));
-			string name = string.Empty;
-			if (pplayer != null) {
+			int player_a = (int)param [0];
+			int player_b = (int)param [1];
+			Debug.LogError ("[RPC] InvatePlayMJ(id="+player_a+","+player_b+")");
+			//List<PhotonPlayer> all = PhotonNetwork.playerList.ToList ();
+			//PhotonPlayer pplayer = all.Find(x => x.ID.Equals (player_id));
+			//string name = string.Empty;
+			if (PhotonNetwork.player.ID== player_b) {
 				//mplayer.handlePon (_lastDaPai);
-				name = pplayer.NickName;
+				List<PhotonPlayer> all = PhotonNetwork.playerList.ToList ();
+				PhotonPlayer aa = all.Find(x => x.ID.Equals (player_a));
+				name = aa.NickName;
 				if (PanelInvate != null) {
 					Text txt = PanelInvate.GetComponentInChildren<Text> ();
 					txt.text = name;
@@ -374,6 +398,17 @@ namespace com.Desktop
 
 		public void InvateYES()
 		{
+			Debug.Log ("InvateYES()");
+			if (PanelInvate != null) {
+				PanelInvate.SetActive (false);
+			}
+			photonView.RPC("AnswerYES", PhotonTargets.All, null);
+		}
+
+		[PunRPC]
+		public void AnswerYES()
+		{
+			Debug.Log ("AnswerYES()");
 			//if (OverPanel != null) {
 			//	OverPanel.gameObject.SetActive (false);
 			//}

@@ -69,4 +69,5 @@ MonoBehaviour:
   - BroadcastOnlinePpl
   - ExitGame
   - GameStart
+  - AnswerYES
   DisableAutoOpenWizard: 1

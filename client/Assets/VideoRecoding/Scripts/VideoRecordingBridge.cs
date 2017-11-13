@@ -102,7 +102,7 @@ public class VideoRecordingBridge {
         #elif !UNITY_EDITOR && UNITY_ANDROID
 		setup();
 		Debug.Log ("REConnect="+str);
-	    live.CallStatic("PlayStart",str);
+        live.CallStatic("MoveLeft");
         #endif
     }
 

@@ -1244,8 +1244,9 @@ namespace com.Desktop
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
 
-                    if (sOldWin != 0)
+                    //if (sOldWin != 0)
                         sRate = (sOldWin + 1) * 10000 / (sOldWin + sOldLose + 1);
+
                     MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
 				} else {
                     SetWinnerInfo("Lose");
@@ -1253,7 +1254,7 @@ namespace com.Desktop
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
 
-                    if (sOldWin != 0)
+                    //if (sOldWin != 0)
                         sRate = (sOldWin) * 10000 / (sOldWin + sOldLose + 1);
                     MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
 				}

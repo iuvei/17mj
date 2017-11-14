@@ -61,10 +61,8 @@ public class LoginUI : MonoBehaviour {
 		} else {
             string stype = "C";
 
-            if (ConnectingPanel) {
-                ConnectingPanel.SetActive(true);
-                UIManager.instance.PlayConnectingAnim();
-            }
+			AccountManager.Instance.ShowConnecting ();
+
 			CryptoPrefs.SetString("USERTYPE", stype);
 			CryptoPrefs.SetString("USERMAIL", userName);
             MJApi.Login(stype, userName, userPass, LoginCallback);
@@ -77,6 +75,7 @@ public class LoginUI : MonoBehaviour {
         //    ConnectingPanel.SetActive(false);
         //    UIManager.instance.StopConnectingAnim();
         //}
+		AccountManager.Instance.HideConnecting ();
             
         _hideConnecting = true;
 
@@ -100,11 +99,7 @@ public class LoginUI : MonoBehaviour {
 
     void Update() {
         if (_hideConnecting) {
-            if (ConnectingPanel)
-            {
-                ConnectingPanel.SetActive(false);
-                UIManager.instance.StopConnectingAnim();
-            }
+			AccountManager.Instance.HideConnecting ();
 
             _hideConnecting = false;
         }

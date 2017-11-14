@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 public class GLoginButton : MonoBehaviour {
     public Button[] _gLoginBtn;
-    public GameObject ConnectingPanel; // 連線中
+    //public GameObject ConnectingPanel; // 連線中
 
     private static AndroidJavaObject login = null;
     private static AndroidJavaObject currentActivity = null;
@@ -68,10 +68,7 @@ public class GLoginButton : MonoBehaviour {
 			string type = "C1";
 			_setPhotoDone = true;
 			MJApi.Login(type, cName, cToken, LoginCallback);
-			if (ConnectingPanel) {
-				ConnectingPanel.SetActive(true);
-				UIManager.instance.PlayConnectingAnim();
-			}
+			AccountManager.Instance.ShowConnecting ();
 		}
 	}
 
@@ -98,10 +95,7 @@ public class GLoginButton : MonoBehaviour {
 
     private void LoginCallback(WebExceptionStatus status, string result)
     {
-        if (ConnectingPanel) {
-            ConnectingPanel.SetActive(false);
-            UIManager.instance.StopConnectingAnim();
-        }    
+		AccountManager.Instance.HideConnecting ();   
 
         if (status != WebExceptionStatus.Success)
         {
@@ -174,10 +168,7 @@ public class GLoginButton : MonoBehaviour {
                 //Debug.Log("Call MJApi.login ===");
                 MJApi.Login(stype, uMail, token, LoginCallback);
             }
-            if (ConnectingPanel) {
-                ConnectingPanel.SetActive(true);
-                UIManager.instance.PlayConnectingAnim();
-            }
+			AccountManager.Instance.ShowConnecting ();
             //UIManager.instance.StartSetEnterLoading();
         }
     }

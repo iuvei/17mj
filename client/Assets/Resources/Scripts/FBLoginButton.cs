@@ -10,7 +10,7 @@ using System.Net;
 public class FBLoginButton : MonoBehaviour {
 
     public Button[] _fbLoginBtn;
-    public GameObject ConnectingPanel; // 連線中
+    //public GameObject ConnectingPanel; // 連線中
 
     private bool _loginSuccess = false;  //設定資料
     private IDictionary dict;
@@ -90,7 +90,7 @@ public class FBLoginButton : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Failed to Initialize the Facebook SDK");
+			Debug.LogError("Failed to Initialize the Facebook SDK");
         }
     }
 
@@ -144,10 +144,7 @@ public class FBLoginButton : MonoBehaviour {
 
     private void LoginCallback(WebExceptionStatus status, string result)
     {
-        if (ConnectingPanel) {
-            ConnectingPanel.SetActive(false);
-            UIManager.instance.StopConnectingAnim();
-        }
+		AccountManager.Instance.HideConnecting ();
 
         if (status != WebExceptionStatus.Success)
         {
@@ -188,11 +185,7 @@ public class FBLoginButton : MonoBehaviour {
         {
             MJApi.Login(stype, fbMail, token, LoginCallback);
         }
-        if (ConnectingPanel) {
-            ConnectingPanel.SetActive(true);
-            UIManager.instance.PlayConnectingAnim();
-        }
-        //UIManager.instance.StartSetEnterLoading();
+		AccountManager.Instance.ShowConnecting ();
     }
 
     public void setPhotoCallback(WebExceptionStatus status, string result)

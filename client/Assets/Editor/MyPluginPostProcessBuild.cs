@@ -26,9 +26,10 @@ public class MyPluginPostProcessBuild
 			// background location useage key (new in iOS 8)
 			rootDict.SetString("NSMicrophoneUsageDescription", "Microphone Access Warning");
 			rootDict.SetString("NSCameraUsageDescription", "Camera Access Warning");
-                        rootDict.SetString("NSPhotoLibraryUsageDescription", "Photo Library Access Warning");
+            rootDict.SetString("NSPhotoLibraryUsageDescription", "Photo Library Access Warning");
 			rootDict.SetString ("UIBackgroundModes", "remote-notification");
-                        rootDict.SetString ("UIRequiresFullScreen", "YES");
+            rootDict.SetString ("UIRequiresFullScreen", "YES");
+			rootDict.SetString ("App Uses Non-Exempt Encryption", "NO");
 
 			// background modes
 			PlistElementArray bgModes = rootDict.CreateArray("UIBackgroundModes");

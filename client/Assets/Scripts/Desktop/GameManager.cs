@@ -212,7 +212,7 @@ namespace com.Desktop
 
 		public void StopLive()
 		{
-			Debug.LogError ("StopLive()");
+			//Debug.LogError ("StopLive()");
 			if (PhotonNetwork.isMasterClient) {
 				#if UNITY_IOS || UNITY_ANDROID
 				VideoRecordingBridge.StopRecord ();
@@ -226,18 +226,18 @@ namespace com.Desktop
 
 		public void StartLive()
 		{
-			Debug.LogError ("StartLive()");
+			//Debug.Log ("StartLive()");
 			//string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
 			if (PhotonNetwork.room != null) {
 				string name = PhotonNetwork.room.Name;
 				string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
 				if (PhotonNetwork.isMasterClient) {
-					Debug.LogError ("[s] PhotonNetwork.isMasterClient");
+					//Debug.Log ("[s] PhotonNetwork.isMasterClient");
 					#if UNITY_IOS || UNITY_ANDROID
 					VideoRecordingBridge.StartRecord (liveUrl);
 					#endif
 				} else {
-					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+					//Debug.Log ("[s] !PhotonNetwork.isMasterClient");
 					#if UNITY_IOS || UNITY_ANDROID
 					VideoRecordingBridge.StartPlay (liveUrl, name);
 					#endif
@@ -247,7 +247,9 @@ namespace com.Desktop
 
 		public override void OnJoinedRoom()
 		{
-			Debug.LogError ("OnJoinedRoom()");
+			//Debug.Log ("OnJoinedRoom()");
+			//com.Lobby.Launcher.instance.ConnectPanelSwitch(false);
+			AccountManager.Instance.HideConnecting ();
 			if (PhotonNetwork.room != null) {
 				string name = PhotonNetwork.room.Name;
 				if (ChatText != null) {
@@ -277,7 +279,7 @@ namespace com.Desktop
 				//liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
 
 				if (!PhotonNetwork.isMasterClient) {
-					Debug.LogError ("[s] !PhotonNetwork.isMasterClient");
+					//Debug.Log ("[s] !PhotonNetwork.isMasterClient");
 					if (InvateBtn != null) {
 						if (_invitePlayPop) //邀請搖晃動畫
 							_invitePlayPop.DOScale (new Vector3 (1.15f, 1.15f, 1), .8f).SetEase (Ease.Linear).SetLoops (-1, LoopType.Yoyo);
@@ -1244,9 +1246,8 @@ namespace com.Desktop
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
 
-                    //if (sOldWin != 0)
+                    if (sOldWin != 0)
                         sRate = (sOldWin + 1) * 10000 / (sOldWin + sOldLose + 1);
-
                     MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
 				} else {
                     SetWinnerInfo("Lose");
@@ -1254,7 +1255,7 @@ namespace com.Desktop
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
 
-                    //if (sOldWin != 0)
+                    if (sOldWin != 0)
                         sRate = (sOldWin) * 10000 / (sOldWin + sOldLose + 1);
                     MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
 				}
@@ -1424,7 +1425,7 @@ namespace com.Desktop
 
 		void OnApplicationPause(bool pauseStatus)
 		{
-			Debug.LogError ("OnApplicationPause(" + pauseStatus + ")");
+			//Debug.Log ("OnApplicationPause(" + pauseStatus + ")");
 			if (pauseStatus == true) {
 				//	Back ();
 				StopLive();
@@ -1432,7 +1433,7 @@ namespace com.Desktop
 		}
 
 		void OnApplicationFocus(bool isFocus){
-			Debug.LogError ("OnApplicationFocus("+isFocus+")");
+			//Debug.Log ("OnApplicationFocus("+isFocus+")");
 			if (isFocus) {
 				
 				//onLivePlayREConnect ();
@@ -1450,12 +1451,19 @@ namespace com.Desktop
 
         public void Back()
         {
-			//Debug.Log ("Back()");
+			Debug.Log ("Back()");
 			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.StopRecord ();
 			VideoRecordingBridge.StopPlay ();
 			#endif
-            PhotonNetwork.LeaveRoom();
+			AccountManager.Instance.ShowConnecting ();
+			//com.Lobby.Launcher.instance.ConnectPanelSwitch (true);
+			if (PhotonNetwork.connected) {
+				PhotonNetwork.LeaveRoom ();
+			} else {
+				//ConnectionState ();
+				PhotonNetwork.LoadLevel ("02.Lobby");
+			}
             //SceneManager.LoadScene("Game");
         }
 
@@ -1466,7 +1474,8 @@ namespace com.Desktop
 			VideoRecordingBridge.StopRecord ();
 			VideoRecordingBridge.StopPlay ();
 			#endif
-			SceneManager.LoadScene("02.Lobby");
+			//SceneManager.LoadScene("02.Lobby");
+			PhotonNetwork.LoadLevel ("02.Lobby");
 			// back to main menu        
 			//Application.LoadLevel(Application.loadedLevelName);
 		}

@@ -74,6 +74,7 @@ namespace com.Lobby
         public Text[] playerLvs;
         public Text userOnline;
 
+		public GameObject alertPanel;
 
         //房间列表
         public RectTransform LobbyPanel;
@@ -300,7 +301,7 @@ namespace com.Lobby
             SetPlayerName();
 
             lobbyPanel.transform.DOScaleY(1, 1f);
-            btnExit.onClick.AddListener(delegate { StartCoroutine(ExitRoom()); });
+            //btnExit.onClick.AddListener(delegate { StartCoroutine(ExitRoom()); });
             btnStart.onClick.AddListener(delegate { StartGame(); });
 
             hint = rListPanel.parent.GetComponentInChildren<Text>();
@@ -316,7 +317,9 @@ namespace com.Lobby
 		public override void OnJoinedLobby()
 		{
 			//PhotonNetwork.JoinRandomRoom();
-			Debug.LogError(this.name+".OnJoinedLobby()");
+			//Debug.Log("OnJoinedLobby()");
+			//ShowAlert ("已進入遊戲大廳...");
+			AccountManager.Instance.HideConnecting ();
 		}
 
         /// <summary>
@@ -329,6 +332,7 @@ namespace com.Lobby
             //已經連接上了服務器
             if (PhotonNetwork.connected)
             {
+				AccountManager.Instance.HideConnecting ();
 				setProcess (1.0f);
                 //Debug.Log("Connected");
 				if (loadingPanel) {
@@ -338,6 +342,7 @@ namespace com.Lobby
             }
             else
             {
+				AccountManager.Instance.ShowConnecting ();
 				setProcess (0.7f);
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
             }
@@ -348,9 +353,11 @@ namespace com.Lobby
         /// </summary>
         public override void OnConnectedToPhoton()
         {
-			Debug.LogError (this.name+".OnConnectedToPhoton()");
+			//Debug.Log("OnConnectedToPhoton()");
             base.OnConnectedToPhoton();
 			setProcess (1.0f);
+			AccountManager.Instance.HideConnecting ();
+			//ShowAlert ("成功連接遊戲大廳...");
 			//if (loadingPanel) {
 				//loadingPanel.SetActive (false);
 			//}
@@ -362,7 +369,8 @@ namespace com.Lobby
         /// <param name="error"></param>
         private void OnFailedToConnect(NetworkConnectionError error)
         {
-            Debug.Log("fail to Connect");
+			Debug.LogError("OnFailedToConnect()");
+			ShowAlert ("連接大廳失敗...網路重新連線...");
 			Connect ();
         }
 
@@ -404,7 +412,9 @@ namespace com.Lobby
 
         public override void OnJoinedRoom()
         {
+			AccountManager.Instance.HideConnecting ();
 			Debug.Log ("OnJoinedRoom()");
+			ShowAlert ("你進入房間...");
 			//Debug.Log("OnJoinedRoom()");
 			PhotonNetwork.LoadLevel ("03.Room");
 			//SetPlayerName();
@@ -454,9 +464,6 @@ namespace com.Lobby
 			Debug.Log ("OnPhotonPlayerDisconnected()"+otherPlayer.NickName+"斷線了");
 			Players.Remove (otherPlayer);
 			UpdateRoomInfo ();
-			//ExitRoom ();
-            //GameObject g = playersPanel.FindChild(otherPlayer.NickName).gameObject;
-            //Destroy(g);
         }
 
         /// <summary>
@@ -465,6 +472,7 @@ namespace com.Lobby
         public void CreateRoom()
         {
 			//Debug.Log (this.name+".CreateRoom()");
+			AccountManager.Instance.HideConnecting ();
 			if (PhotonNetwork.connected) {
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
@@ -485,12 +493,17 @@ namespace com.Lobby
 				//创建房间成功
 				if (PhotonNetwork.CreateRoom (_roomname, roomOptions, null)) {
 					//Debug.Log (PhotonNetwork.room);
-					Debug.Log ("Launcher.CreateRoom('#" + _roomname + " success!!')");
+					Debug.Log ("房間創建成功!\n房間ID：" + _roomname);
+					//ShowAlert ("房間創建成功!\n房間ID：" + _roomname);
 					//StartCoroutine(ChangeRoom());
 					//ChangeRoom();
+					//ConnectPanelSwitch (true);
+					AccountManager.Instance.ShowConnecting ();
 				}
 			} else {
+				AccountManager.Instance.HideConnecting ();
 				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				ShowAlert ("網路連線失敗!!...重新連線中...");
 				Connect ();
 				CreateRoom ();
 			}
@@ -501,11 +514,12 @@ namespace com.Lobby
 		/// </summary>
 		public void ShowRoomList()
 		{
-			Debug.Log ("ShowRoomList()");
+			//Debug.Log ("ShowRoomList()");
             if(playRoomBtns[2])
                 playRoomBtns[2].DOScale(0.95f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
 			if (!PhotonNetwork.connected) {
 				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				ShowAlert ("網路連線失敗!!...重新連線中...");
 				Connect ();
 			}
             //Debug.Log ("GetRoomList()");
@@ -581,7 +595,7 @@ namespace com.Lobby
 				Debug.Log ("[s] PhotonNetwork.playerList.Length <2");
 			}
         }
-
+		/*
         /// <summary>
         /// 退出房間
         /// </summary>
@@ -589,8 +603,10 @@ namespace com.Lobby
         IEnumerator ExitRoom()
         {
 			Debug.Log ("ExitRoom()");
+			ShowAlert ("ExitRoom()");
 			if (waitroomPanel) {
 				waitroomPanel.transform.DOScaleY (0, 0.8f);
+				AccountManager.Instance.ShowConnecting ();
 				PhotonNetwork.LeaveRoom ();
 				yield return new WaitForSeconds (1);
 				waitroomPanel.SetActive (false);
@@ -601,6 +617,7 @@ namespace com.Lobby
             //yield return new WaitForSeconds(1f);
             //lobbyPanel.transform.DOScaleY(1, 1f);
         }
+		*/
 
         /// <summary>
         /// 進入房間getItemCallback
@@ -609,6 +626,7 @@ namespace com.Lobby
         IEnumerator GetInRoom()
         {
 			Debug.Log ("GetInRoom()");
+			ShowAlert ("GetInRoom()");
             //lobbyPanel.transform.DOScaleY(0,.8f);
 			if (waitroomPanel) {
 				waitroomPanel.SetActive (true);
@@ -637,13 +655,15 @@ namespace com.Lobby
 		public void OnCreatedRoom()
 		{
 			//Debug.Log("OnCreatedRoom()");
+			AccountManager.Instance.HideConnecting ();
 			//PhotonNetwork.LoadLevel("Stage01");
 			PhotonNetwork.LoadLevel ("03.Room");
+			AccountManager.Instance.ShowConnecting ();
 		}
 
 		IEnumerator reloadRoomlist()
 		{
-			Debug.Log ("reloadRoomlist()");
+			//Debug.Log ("reloadRoomlist()");
 			//Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
 			if (hint) {
 				hint.gameObject.SetActive (true);
@@ -690,16 +710,21 @@ namespace com.Lobby
 				}
 			} else {
 				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				ShowAlert ("網路連線失敗!!...重新連線中...");
 				Connect ();
 			}
 		}
 
 		private void joinRoom(string name) {
 			if (PhotonNetwork.connected) {
-				Debug.Log ("joinRoom(" + name + ")");
+				//ShowAlert ("進入房間中...");
+				//Debug.Log ("joinRoom(" + name + ")");
+				AccountManager.Instance.ShowConnecting ();
 				PhotonNetwork.JoinRoom (name);
 			} else {
+				AccountManager.Instance.HideConnecting ();
 				Debug.LogError ("網路連線失敗!!...重新連線中...");
+				ShowAlert ("網路連線失敗!!...重新連線中...");
 				Connect ();
 			}
 		}
@@ -1153,7 +1178,7 @@ namespace com.Lobby
             string sToken = CryptoPrefs.GetString("USERTOKEN");
             
             MJApi.getUserItem(sToken, sName, _currentItemId, getItemCallback);
-            ConnectPanelSwitch(true); //開啟連線視窗
+			AccountManager.Instance.ShowConnecting ();
 
             //if (popupBuy)
             //{
@@ -1207,7 +1232,7 @@ namespace com.Lobby
             if (int.Parse(sCoin) >= tPrice)
             {
                 ClickBuyItem(-tPrice);    //改變商品數量
-                ConnectPanelSwitch(true); //開啟連線視窗
+				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
             else {
                 GoShopSad();
@@ -1459,7 +1484,7 @@ namespace com.Lobby
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
             MJApi.getGameList(sToken, sName, getRankDataCallback);
-            ConnectPanelSwitch(true); //開啟連線視窗
+			AccountManager.Instance.ShowConnecting (); //開啟連線視窗
 
             if (btmMenuBtns[0])
                 btmMenuBtns[0].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
@@ -2175,6 +2200,7 @@ namespace com.Lobby
             _randomOnlineUsers = UnityEngine.Random.Range(1, 100) * 1000;
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
+			//Debug.Log ("SetUserOnline("+sName+" "+sToken+")");
             MJApi.getUserNum(sToken, sName, getUserNumCallback);
         }
 
@@ -2182,7 +2208,7 @@ namespace com.Lobby
         {
             if (status != WebExceptionStatus.Success)
             {
-                Debug.Log("getUserNumCallback Failed! " + result);
+				Debug.LogError("getUserNumCallback Failed! " + result);
             }
             else {
                 getOnlineResult = result;
@@ -2211,7 +2237,7 @@ namespace com.Lobby
                 string oName = CryptoPrefs.GetString("USERNAME");
                 string sToken = CryptoPrefs.GetString("USERTOKEN");
                 MJApi.setPlayerName(sToken, oName, settingNickname.text, setNameCallback);
-                ConnectPanelSwitch(true); //開啟連線視窗
+				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
         }
 		
@@ -2240,24 +2266,28 @@ namespace com.Lobby
             //coinAPIcallback = true;
         }
 
-        private void ConnectPanelSwitch(bool _turnOn) {
+		/*
+        public void ConnectPanelSwitch(bool _turnOn) {
             if (_turnOn)
             {
-                connectingPanel.SetActive(true); //開啟連線視窗
+				if(connectingPanel)
+                	connectingPanel.SetActive(true); //開啟連線視窗
                 //_connectingSign.DOPlay();
                 //_connectingText.DOPlay();
             }
             else {
-                connectingPanel.SetActive(false); //關閉連線視窗
+				if(connectingPanel)
+                	connectingPanel.SetActive(false); //關閉連線視窗
                 //_connectingSign.DOPause();
                 //_connectingText.DOPause();
             }
         }
+        */
 
 		void Update() {
 
             if (_needHideConnect) {
-                ConnectPanelSwitch(false); //關閉連線視窗
+				AccountManager.Instance.HideConnecting (); //關閉連線視窗
                 _needHideConnect = false;
             }
 
@@ -2516,7 +2546,7 @@ namespace com.Lobby
             else
             {
                 MJApi.setUserPwd(sToken, sName, mail, replacePassOld, replacePass1, setPwdCallback);
-                ConnectPanelSwitch(true); //開啟連線視窗
+				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
         }
 
@@ -2551,7 +2581,7 @@ namespace com.Lobby
             else
             {
                 MJApi.setUserMail(sToken, sName, bindMail, bindPass1, setMailCallback);
-                ConnectPanelSwitch(true); //開啟連線視窗
+				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
         }
 
@@ -2645,6 +2675,25 @@ namespace com.Lobby
                     dailyBonusToday = db; //當天
             }
         }
+
+		public void ShowAlert(string msg, float t = 0)
+		{
+			if (alertPanel != null) {
+				Text txt = alertPanel.GetComponentInChildren<Text> ();
+				txt.text = msg;
+				alertPanel.SetActive (true);
+				if (t > 0) {
+					Invoke ("HideAlert", t);
+				}
+			}
+		}
+
+		public void HideAlert()
+		{
+			if (alertPanel != null) {
+				alertPanel.SetActive (false);
+			}
+		}
 
     }
 }

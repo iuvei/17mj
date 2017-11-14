@@ -39,8 +39,8 @@ public class LoginUI : MonoBehaviour {
             Debug.Log("No found Login LoginHint_Password");
         else
             _loginHintPass = ClubLoginHint_Password.GetComponentInChildren<Text>();
-        if (!ConnectingPanel)
-            Debug.Log("No found Login Connecting Panel");
+        //if (!ConnectingPanel)
+        //    Debug.Log("No found Login Connecting Panel");
         
     }
 
@@ -71,12 +71,7 @@ public class LoginUI : MonoBehaviour {
 
     public void LoginCallback(WebExceptionStatus status, string result)
     {
-        //if (ConnectingPanel) {
-        //    ConnectingPanel.SetActive(false);
-        //    UIManager.instance.StopConnectingAnim();
-        //}
-		AccountManager.Instance.HideConnecting ();
-            
+		AccountManager.Instance.HideConnecting ();  
         _hideConnecting = true;
 
         if (status!=WebExceptionStatus.Success){

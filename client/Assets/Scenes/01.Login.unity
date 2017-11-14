@@ -198,7 +198,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &42840584
 MonoBehaviour:
@@ -363,7 +363,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &251698836
 MonoBehaviour:
@@ -545,6 +545,10 @@ Prefab:
       propertyPath: _gLoginBtn.Array.data[1]
       value: 
       objectReference: {fileID: 1259344515}
+    - target: {fileID: 1797909378584736, guid: 33db82c80757d4d9b8248362511bc53e, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33db82c80757d4d9b8248362511bc53e, type: 2}
   m_IsPrefabParent: 0
@@ -1210,7 +1214,7 @@ Prefab:
         type: 2}
       propertyPath: ConnectingPanel
       value: 
-      objectReference: {fileID: 1216782071}
+      objectReference: {fileID: 0}
     - target: {fileID: 223615990831302278, guid: 00097b7523e99e5478941c7381653fae,
         type: 2}
       propertyPath: m_RenderMode
@@ -1664,12 +1668,12 @@ Prefab:
         type: 2}
       propertyPath: connectingPanel
       value: 
-      objectReference: {fileID: 1216782071}
+      objectReference: {fileID: 0}
     - target: {fileID: 114172040005714870, guid: 00097b7523e99e5478941c7381653fae,
         type: 2}
       propertyPath: connectingPanel
       value: 
-      objectReference: {fileID: 1216782071}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 00097b7523e99e5478941c7381653fae, type: 2}
   m_IsPrefabParent: 0
@@ -1761,11 +1765,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1914329522683734, guid: 00097b7523e99e5478941c7381653fae,
     type: 2}
   m_PrefabInternal: {fileID: 828418901}
---- !u!1 &1216782071 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1397491065332656, guid: 33db82c80757d4d9b8248362511bc53e,
-    type: 2}
-  m_PrefabInternal: {fileID: 745518904}
 --- !u!1 &1259344512 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1407950662533376, guid: 00097b7523e99e5478941c7381653fae,
@@ -1849,7 +1848,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365006645
 GameObject:
@@ -2004,7 +2003,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1382854424
 MonoBehaviour:

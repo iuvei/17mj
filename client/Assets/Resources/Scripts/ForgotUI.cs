@@ -361,8 +361,8 @@ public class ForgotUI : MonoBehaviour
     private void ConnectPanelSwitch(bool _turnOn)
     {
         if (_turnOn)
-            connectingPanel.SetActive(true); //開啟連線視窗
+			AccountManager.Instance.ShowConnecting ();
         else
-            connectingPanel.SetActive(false); //關閉連線視窗
+			AccountManager.Instance.HideConnecting ();
     }
 }

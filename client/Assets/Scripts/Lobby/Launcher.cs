@@ -271,7 +271,7 @@ namespace com.Lobby
                     string sToken = CryptoPrefs.GetString("USERTOKEN");
                     string sPhoto = CryptoPrefs.GetString("USERPHOTO");
                     MJApi.setUserPhoto(sToken, sName, sPhoto, setPhotoCallback);
-                    connectingPanel.SetActive(true); //開啟連線視窗
+					AccountManager.Instance.ShowConnecting (); //開啟連線視窗
                 }
             }          
         }
@@ -838,7 +838,7 @@ namespace com.Lobby
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
             MJApi.getUserItem(sToken, sName, 0, getItemCallback);
-            connectingPanel.SetActive(true); //開啟連線視窗
+			AccountManager.Instance.ShowConnecting (); //開啟連線視窗
 
             if (btmMenuBtns[3])
                 btmMenuBtns[3].DOScale(1.05f, 0.1f).SetEase(Ease.InOutBack).SetLoops(2, LoopType.Yoyo);
@@ -2266,25 +2266,6 @@ namespace com.Lobby
 			}
             //coinAPIcallback = true;
         }
-
-		/*
-        public void ConnectPanelSwitch(bool _turnOn) {
-            if (_turnOn)
-            {
-				if(connectingPanel)
-                	connectingPanel.SetActive(true); //開啟連線視窗
-                //_connectingSign.DOPlay();
-                //_connectingText.DOPlay();
-            }
-            else {
-				if(connectingPanel)
-                	connectingPanel.SetActive(false); //關閉連線視窗
-                //_connectingSign.DOPause();
-                //_connectingText.DOPause();
-            }
-        }
-        */
-
 
 		void Update() {
 

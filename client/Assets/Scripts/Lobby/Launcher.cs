@@ -1382,6 +1382,7 @@ namespace com.Lobby
                 diceSeq3.Insert(2.7f, diceR.GetComponent<SpriteRenderer>().DOFade(0, 0.2f));
                 diceSeq3.SetLoops(-1, LoopType.Restart);
 
+                
                 //中發白
                 Transform cardChun = playRoomBtns[1].Find("02/card_chun");
                 Transform cardFa = playRoomBtns[1].Find("02/card_fa");
@@ -1440,7 +1441,6 @@ namespace com.Lobby
 
             if(btmDepositLight)
                 InvokeRepeating("ChangeSpotSprite", .5f, .5f);
-
         }
 
         private void ChangeSpotSprite()
@@ -1907,7 +1907,8 @@ namespace com.Lobby
             if (actionDonePanel)
                 _actionText = actionDonePanel.transform.Find("main/Txt").GetComponent<Text>();
 
-            if(btmMenuBtns[2])
+
+            if (btmMenuBtns[2])
                 btmDepositLight = btmMenuBtns[2].Find("light").GetComponent<Image>();
 
 
@@ -2253,6 +2254,7 @@ namespace com.Lobby
                 //_connectingText.DOPause();
             }
         }
+
 
 		void Update() {
 

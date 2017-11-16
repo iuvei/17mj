@@ -2243,7 +2243,7 @@ namespace com.Lobby
         }
 		
         public void ClickReplacePhoto() {
-            imagePicker.Show("Select Image", "unimgpicker", "ImagePicker", 1024);
+            imagePicker.Show("Select Image", "unimgpicker", "ImagePicker", 256);
         }
 
         private void DailyFirstLogin() {

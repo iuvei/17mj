@@ -27,8 +27,9 @@ public class HorseRun : MonoBehaviour {
             
 			if (_HorseText && _HorseText.rectTransform.anchoredPosition.x > _horseLength * (-1))
             {
+                //Debug.Log("_HorseText.rectTransform.anchoredPosition.x: " + _HorseText.rectTransform.anchoredPosition.x);
                 //Debug.Log("HorseText = " + _HorseText + " /RunSpeed =  " + HorseLight.instance.RunSpeed);
-                _HorseText.rectTransform.anchoredPosition = new Vector2(_HorseText.rectTransform.anchoredPosition.x - HorseLight.instance.RunSpeed, _HorseText.rectTransform.anchoredPosition.y);
+                _HorseText.rectTransform.anchoredPosition = new Vector2(_HorseText.rectTransform.anchoredPosition.x - HorseLight.instance.RunSpeed, 0);
                 //放行下一得獎者
                 if (!_passFlag && _HorseText.rectTransform.anchoredPosition.x < _horseLength * (-1) + 360) {
                     _passFlag = true;

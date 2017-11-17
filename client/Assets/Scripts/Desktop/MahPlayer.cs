@@ -21,6 +21,7 @@ namespace com.Desktop
     {
         #region 玩家的牌
 		public int ID = 0;
+		public string NickName = string.Empty;
 		public bool isAI = false;
 		private bool _autoPlay = false;
 		public bool AutoPlay
@@ -66,6 +67,7 @@ namespace com.Desktop
 		/// <summary>
 		/// 摸的牌
 		/// </summary>
+		public int moMah = 0;
 		public GameObject plane_mo;
 
 		public Transform tmp;
@@ -102,8 +104,6 @@ namespace com.Desktop
         public Timer timer;
         #endregion
 
-		private int moMahId = 0;
-
         private void Start()
         {
             //注册RaiseEvent事件函数
@@ -118,13 +118,14 @@ namespace com.Desktop
         /// </summary>
         private void BundleUIEvent()
         {
-			Debug.Log ("[c] "+this.name+".BundleUI("+photonPlayer.NickName+")");
+			//this.NickName = photonPlayer.NickName;
+			//Debug.Log ("[c] "+this.name+".BundleUI("+photonPlayer.NickName+")");
 			if (photonPlayer != null) {
+				this.NickName = photonPlayer.NickName;
 				playerName.text = photonPlayer.NickName;
 			}
 
 			if (this.ID == PhotonNetwork.player.ID) {
-
 				HideMenu ();
 				if (btnWin != null) {
 					btnWin.onClick.RemoveAllListeners ();
@@ -176,7 +177,12 @@ namespace com.Desktop
 		/// </summary>
 		public bool checkPai(int pai_id, bool ismopai = false)
 		{
-			Debug.LogError ("[c] 檢查手中的牌("+pai_id+", "+ismopai+")("+photonPlayer.NickName+")");
+			string mname = Mahjong.getName (pai_id);
+			if(ismopai)
+				Debug.LogError ("[c] "+photonPlayer.NickName+"檢查自己摸的牌 "+mname+"("+pai_id+") 與手牌");
+			else
+				Debug.LogError ("[c] "+photonPlayer.NickName+"檢查上家打的牌 "+mname+"("+pai_id+") 與手牌");
+			
 			bool isCanWin = false;
 			bool isCanPon = false;
 			bool isCanGan = false;
@@ -184,26 +190,29 @@ namespace com.Desktop
 			bool showmenu = false;
 			int chitype = 0;
 			if (pai_id > 0) {
-				isCanWin = MahJongTools.IsCanHU (keepedMah, pai_id);
-				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id);
+				isCanWin = MahJongTools.IsCanHU (keepedMah, pai_id, ismopai);
+				isCanPon = MahJongTools.IsCanPon (keepedMah, pai_id, ismopai);
 				isCanGan = MahJongTools.IsCanGan (keepedMah, pai_id, ismopai, ponMah);
 				isCanChi = MahJongTools.IsCanChi (keepedMah, pai_id, out chitype, ismopai);
-				Debug.Log (isCanWin+" "+isCanPon+" "+isCanGan+" "+isCanChi+" ");
+				//Debug.Log ("胡("+isCanWin+") 碰("+isCanPon+") 槓("+isCanGan+") 吃("+isCanChi+")");
 			}
 			showmenu = isCanWin || isCanPon || isCanGan || isCanChi;
-			if(btnWin)
-				btnWin.gameObject.SetActive(isCanWin);
-			if(btnPon)
-				btnPon.gameObject.SetActive(isCanPon);
-			if(btnChi)
-				btnChi.gameObject.SetActive(isCanChi);
-			if(btnGang)
-				btnGang.gameObject.SetActive(isCanGan);
+			if (isCanWin) {
+				if(btnWin)
+					btnWin.gameObject.SetActive (isCanWin);
+			} else {
+				if (btnPon)
+					btnPon.gameObject.SetActive (isCanPon);
+				if (btnChi)
+					btnChi.gameObject.SetActive (isCanChi);
+				if (btnGang)
+					btnGang.gameObject.SetActive (isCanGan);
+			}
 
 			if (!showmenu)
 			{//不跳出選單, 直接摸一張牌
-				Debug.Log ("[c] !showmenu");
-				Debug.Log (isCanWin + " " + isCanPon + " " + isCanGan + " " + isCanChi);
+				//Debug.Log ("[c] "+this.name+"不跳出選單");
+				//Debug.Log (isCanWin + " " + isCanPon + " " + isCanGan + " " + isCanChi);
 				if (btnPass) {
 					btnPass.gameObject.SetActive (false);
 					btnPass.transform.parent.parent.gameObject.SetActive (false);
@@ -213,7 +222,7 @@ namespace com.Desktop
 			}
 			else
 			{
-				Debug.Log ("[c] showmenu");
+				//Debug.Log ("[c] "+this.name+"跳出選單"+btnPass);
 				if (btnPass) {
 					btnPass.gameObject.SetActive (true);
 					btnPass.transform.parent.parent.gameObject.SetActive (true);
@@ -224,7 +233,7 @@ namespace com.Desktop
 
 		public void clearPAI()
 		{
-			Debug.Log ("[c] "+this.name+".clearPAI()");
+			//Debug.Log ("[c] "+this.name+".clearPAI()");
 			for (int i = plane_keep.transform.childCount - 1; i >= 0; i--) {
 				Destroy(plane_keep.transform.GetChild(i).gameObject);
 			}
@@ -244,7 +253,7 @@ namespace com.Desktop
         /// </summary>
         public void ShowPAI()
         {
-			Debug.Log ("[c] "+this.name+".ShowPAI()");
+			//Debug.Log ("[c] "+this.name+".ShowPAI()");
             BundleUIEvent();
 			if (this.ID==PhotonNetwork.player.ID) {
 				keepedMah.Sort ();
@@ -280,8 +289,25 @@ namespace com.Desktop
         /// </summary>
 		public void fromMoToKeep(int GotID)
         {
-			//Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
+			Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
 			if (this.ID==PhotonNetwork.player.ID) {
+				if (GotID != 0) {
+					Debug.Log ("!!! keepedMah.Add("+GotID+")");
+					//keepedMah.Sort();
+					this.keepedMah.Add (GotID);
+					this.keepedMah.Sort ();
+					string mm = string.Empty;
+					int i = 0;
+					foreach (int ma in this.keepedMah) {
+						//Debug.Log (ma);
+						mm += ma.ToString();
+						if(i<keepedMah.Count-1)
+							mm += ",";
+						i++;
+					}
+					Debug.LogError ("* fromMoToKeep() count="+this.keepedMah.Count+" keepedMah=["+mm+"]");
+
+				}
 				Transform t1 = plane_mo.transform.Find (GotID + "");
 				if (t1 != null) {
 					GameObject g = t1.gameObject;
@@ -303,9 +329,11 @@ namespace com.Desktop
 
 		public void createPaiToMo(int mahID)
 		{
-			Debug.LogError ("[c] "+this.name+".createPaiToMo(id="+mahID+")");
+			//Debug.LogError ("[c] "+this.name+" createPaiToMo(id="+mahID+")");
 			if (this.ID==PhotonNetwork.player.ID) {
-				this.moMahId = mahID;
+				Debug.LogError ("[c] "+this.name+" createPaiToMo(id="+mahID+")");
+				this.moMah = mahID;
+				Debug.Log ("createPaiToMo() this.moMah="+this.moMah);
 				//bool isZimo = MahJongTools.IsCanHU (keepedMah, GotID);
 				GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
 				d.name = mahID + "";
@@ -333,6 +361,7 @@ namespace com.Desktop
 			Vector2 dp = new Vector2((cnt-1)*74+37, -(int)(cnt / 18)*90+45);
 			RectTransform apos = GameManager.Instance.abanPos;
 			if (this.ID==PhotonNetwork.player.ID) {
+				Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
 				//Debug.Log ("QQQQQQQQQ");
 				Transform t1 = plane_mo.transform.Find (mahID + "");
 				if (t1 == null) {
@@ -361,8 +390,10 @@ namespace com.Desktop
 						t1.transform.localRotation = Quaternion.identity;
 					});
 				}
-				if (this.moMahId != mahID) {
-					this.fromMoToKeep (this.moMahId);
+				if (this.moMah != mahID && this.moMah !=0) {
+					Debug.Log ("this.moMah="+this.moMah);
+					this.fromMoToKeep (this.moMah);
+					this.moMah = 0;
 				}
 			} else {
 				//GotID = 0;
@@ -519,7 +550,8 @@ namespace com.Desktop
 				return;
 			}
 			this.state = PLAYERSTATE.MOPAING;//更改為摸牌狀態
-			keepedMah.Add (mahID);
+			this.moMah = mahID;
+			//keepedMah.Add (mahID);
 			//Debug.LogError ("[s] "+this.photonPlayer.NickName+".handleMoPai("+mahID+", "+keepedMah.Count+")");
 			//string amahname = string.Empty;
 			//keepedMah.Add (mahID);
@@ -543,6 +575,10 @@ namespace com.Desktop
 			this.state = PLAYERSTATE.WAITING;//更改為摸牌狀態
 			keepedMah.Remove(mahID);
 			abandanedMah.Add(mahID);
+			//if (this.moMah != 0 ) {
+			//	keepedMah.Add (this.moMah);
+			//	this.moMah = 0;
+			//}
 			//GameManager.Instance.doHandleDaPai(
 			//Debug.LogError ("[s] "+this.photonPlayer.NickName+".handleDaPai("+mahID+")");
 			string amahname = string.Empty;
@@ -581,21 +617,21 @@ namespace com.Desktop
 						t1.SetParent (go.transform);
 						t1.localScale = Vector3.one;
 					} else {
-						Debug.Log ("t1="+t1);
+						Debug.LogError ("t1=null");
 					}
 					Transform t2 = plane_keep.transform.Find (mahID + "");
 					if (t2 != null) {
 						t2.SetParent (go.transform);
 						t2.localScale = Vector3.one;
 					} else {
-						Debug.Log ("t2="+t2);
+						Debug.LogError ("t2=null");
 					}
 					Transform t3 = plane_keep.transform.Find (mahID + "");
 					if (t3 != null) {
 						t3.SetParent (go.transform);
 						t3.localScale = Vector3.one;
 					} else {
-						Debug.Log ("t3="+t3);
+						Debug.LogError ("t3=null");
 					}
 					go.transform.SetParent (plane_pon.transform);
 					go.transform.localScale = Vector3.one;
@@ -649,7 +685,7 @@ namespace com.Desktop
 
 		public void handleChi(int mahID)
 		{
-			//Debug.LogError ("[s] handleChi("+mahID+")");
+			Debug.LogError ("[s] handleChi("+mahID+")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			int chitype = 0;
@@ -687,11 +723,21 @@ namespace com.Desktop
 					photonView.RPC ("ChiPai", PhotonTargets.All, param);
 				}
 			}
+			string mm = string.Empty;
+			int i = 0;
+			foreach (int ma in this.keepedMah) {
+				//Debug.Log (ma);
+				mm += ma.ToString();
+				if(i<keepedMah.Count-1)
+					mm += ",";
+				i++;
+			}
+			Debug.LogError ("* handleChi() keepedMah.count="+this.keepedMah.Count+" keepedMah=["+mm+"]");
 		}
 
 		public void collectChiPai(int mahID, int chitype)
 		{
-			//Debug.LogError ("[RPC] collectChiPai(" + mahID + ", chitype="+chitype+")");
+			Debug.LogError ("[RPC] collectChiPai(" + mahID + ", chitype="+chitype+")");
 			string amahname = string.Empty;
 			amahname = Mahjong.getName (mahID);
 			Transform t1;
@@ -1146,12 +1192,12 @@ namespace com.Desktop
 			int curr = 0;
 
 
-			iscan = AICheckPai(this.moMahId);
+			iscan = AICheckPai(this.moMah);
 			if (iscan) {
-				isCanWin = MahJongTools.IsCanHU (keepedMah, this.moMahId);
-				isCanPon = MahJongTools.IsCanPon (keepedMah, this.moMahId);
-				isCanGan = MahJongTools.IsCanGan (keepedMah, this.moMahId, false, ponMah);
-				isCanChi = MahJongTools.IsCanChi (keepedMah, this.moMahId, out chitype, false);
+				isCanWin = MahJongTools.IsCanHU (keepedMah, this.moMah);
+				isCanPon = MahJongTools.IsCanPon (keepedMah, this.moMah);
+				isCanGan = MahJongTools.IsCanGan (keepedMah, this.moMah, false, ponMah);
+				isCanChi = MahJongTools.IsCanChi (keepedMah, this.moMah, out chitype, false);
 				if (isCanWin) {
 					GameManager.Instance.doHandleWin (this.ID);
 				} else {
@@ -1217,9 +1263,9 @@ namespace com.Desktop
 
 		public void doMoPai()
 		{
-			this.moMahId = GameManager.Instance.getMahjongPai ();				
+			this.moMah = GameManager.Instance.getMahjongPai ();				
 			int remain = GameManager.Instance.getRemainPai ();
-			handleMoPai (moMahId, remain);
+			handleMoPai (moMah, remain);
 		}
 
 		public void sortPai()

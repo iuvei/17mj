@@ -48,7 +48,7 @@ namespace com.Desktop
 		//	27, 27, 28, 28, 29, 29, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37};
 		//private int[] ID1 = { 18, 19, 21, 22, 23 };
 		private static string[] ccame = {
-			"", "紅中", "發財", "白板", "東風", "南風", "西風", "北風"
+			"", "中", "發", "白", "東", "南", "西", "北"
 		};
         //private List<int> _list = new List<int>();
 		private Queue<int> _list = new Queue<int>();

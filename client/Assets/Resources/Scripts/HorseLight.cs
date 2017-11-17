@@ -46,38 +46,12 @@ public class HorseLight : MonoBehaviour {
         //MJApi.setBulletin("Reward", "恭喜林小晴1獲得500顆寶石!", setBCallback);
 
         InvokeRepeating("RegularCallBulletin", 0, 150);
-
-		/*for test
-		string sName = CryptoPrefs.GetString("USERNAME");
-		string sToken = CryptoPrefs.GetString("USERTOKEN");
-		MJApi.getUserNum(sToken, sName, getUserNumCallback);*/
     }
-
-	/*for test
-	public void getUserNumCallback(WebExceptionStatus status, string result)
-    {
-        if (status != WebExceptionStatus.Success)
-        {
-			Debug.Log("getUserNumCallback Failed! " + result);
-        }
-		Debug.Log("getUserNumCallback =  " + result);
-    }*/
-
 
     private void RegularCallBulletin() {
         if (_rewardLists.Count < 10)
             MJApi.getBulletin(_bulletinNum, BulletinCallback);
     }
-
-	/*for test
-    public void setBCallback(WebExceptionStatus status, string result)
-    {
-        if (status != WebExceptionStatus.Success)
-        {
-            Debug.Log("setB Failed! " + result);
-        }
-        //Debug.Log("setBCallback =  " + result);
-    }*/
 
 	public void BulletinCallback(WebExceptionStatus status, string result)
     {

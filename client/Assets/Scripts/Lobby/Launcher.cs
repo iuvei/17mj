@@ -2269,6 +2269,19 @@ namespace com.Lobby
 
 		void Update() {
 
+			if (Input.GetKeyUp(KeyCode.Escape))
+			{
+				if (Application.platform == RuntimePlatform.Android)
+				{
+					AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+					activity.Call<bool>("moveTaskToBack", true);
+				}
+				else
+				{
+					Application.Quit();
+				}
+			}
+
             if (_needHideConnect) {
 				AccountManager.Instance.HideConnecting (); //關閉連線視窗
                 _needHideConnect = false;

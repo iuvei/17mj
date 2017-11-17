@@ -2243,7 +2243,7 @@ namespace com.Lobby
         }
 		
         public void ClickReplacePhoto() {
-            imagePicker.Show("Select Image", "unimgpicker", "ImagePicker", 1024);
+            imagePicker.Show("Select Image", "unimgpicker", "ImagePicker", 256);
         }
 
         private void DailyFirstLogin() {
@@ -2268,6 +2268,19 @@ namespace com.Lobby
         }
 
 		void Update() {
+
+			if (Input.GetKeyUp(KeyCode.Escape))
+			{
+				if (Application.platform == RuntimePlatform.Android)
+				{
+					AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+					activity.Call<bool>("moveTaskToBack", true);
+				}
+				else
+				{
+					Application.Quit();
+				}
+			}
 
             if (_needHideConnect) {
 				AccountManager.Instance.HideConnecting (); //關閉連線視窗

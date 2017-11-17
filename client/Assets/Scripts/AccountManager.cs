@@ -9,7 +9,9 @@ public class AccountManager : MonoBehaviour {
 	public GameObject ConnectingPanel; // 連線中
 	private Transform _connectingSign;
 	private Text _connectingText;
-	void Awake () {
+    private bool _needShowConnect = false;
+    private bool _needHideConnect = false;
+    void Awake () {
 		if (Instance != null && Instance != this)
 		{
 			Destroy(gameObject);
@@ -33,20 +35,29 @@ public class AccountManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (_needShowConnect) {
+            _needShowConnect = false;
+            ConnectingPanel.SetActive(true);
+            //PlayConnectingAnim();
+        }
+
+        if (_needHideConnect)
+        {
+            _needHideConnect = false;
+            ConnectingPanel.SetActive(false);
+            //StopConnectingAnim();
+        }
+    }
 
 	public void ShowConnecting() {
 		if (ConnectingPanel) {
-			ConnectingPanel.SetActive (true);
-			PlayConnectingAnim ();
+            _needShowConnect = true;
 		}
 	}
 
 	public void HideConnecting() {
 		if (ConnectingPanel) {
-			ConnectingPanel.SetActive(false);
-			StopConnectingAnim();
+            _needHideConnect = true;
 		}
 	}
 	public void ConnectingAnim() {

@@ -7,6 +7,7 @@
 //
 
 #import "Picker.h"
+#import "UIImage+FixOrientation.h"
 
 #pragma mark Config
 
@@ -58,6 +59,8 @@ const char* MESSAGE_FAILED_COPY = "Failed to copy the image";
         [self dismissPicker];
         return;
     }
+
+    image = [image imageWithFixedOrientation];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     if (paths.count == 0) {
@@ -67,19 +70,24 @@ const char* MESSAGE_FAILED_COPY = "Failed to copy the image";
     }
     
     NSString *imageName = self.outputFileName;
-    if ([imageName hasSuffix:@".png"] == NO) {
-        imageName = [imageName stringByAppendingString:@".png"];
+    if ([imageName hasSuffix:@".jpg"] == NO) {
+        imageName = [imageName stringByAppendingString:@".jpg"];
     }
     
     NSString *imageSavePath = [(NSString *)[paths objectAtIndex:0] stringByAppendingPathComponent:imageName];
-    NSData *png = UIImagePNGRepresentation(image);
-    if (png == nil) {
+
+    UIGraphicsBeginImageContext(CGSizeMake(256,256));
+    [image drawInRect:CGRectMake(0, 0, 256, 256)];
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *jpg = UIImageJPEGRepresentation(image,1.0);
+    if (jpg == nil) {
         UnitySendMessage(CALLBACK_OBJECT, CALLBACK_METHOD_FAILURE, MESSAGE_FAILED_COPY);
         [self dismissPicker];
         return;
     }
     
-    BOOL success = [png writeToFile:imageSavePath atomically:YES];
+    BOOL success = [jpg writeToFile:imageSavePath atomically:YES];
     if (success == NO) {
         UnitySendMessage(CALLBACK_OBJECT, CALLBACK_METHOD_FAILURE, MESSAGE_FAILED_COPY);
         [self dismissPicker];

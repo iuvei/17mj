@@ -8,6 +8,7 @@
 
 #import "Picker.h"
 #import "UIImage+FixOrientation.h"
+#import <math.h>
 
 #pragma mark Config
 
@@ -76,11 +77,43 @@ const char* MESSAGE_FAILED_COPY = "Failed to copy the image";
     
     NSString *imageSavePath = [(NSString *)[paths objectAtIndex:0] stringByAppendingPathComponent:imageName];
 
-    UIGraphicsBeginImageContext(CGSizeMake(256,256));
-    [image drawInRect:CGRectMake(0, 0, 256, 256)];
+    CGSize imageSize = image.size;
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat targetWidth = 256;
+    CGFloat targetHeight = 256;
+    CGFloat scaleFactor = 0.0;
+    CGFloat scaledWidth = targetWidth;
+    CGFloat scaledHeight = targetHeight;
+    CGPoint thumbnailPoint = CGPointMake(0.0,0.0);
+
+    CGFloat widthFactor = targetWidth / width;
+    CGFloat heightFactor = targetHeight / height;
+    widthFactor = fmin(widthFactor,1);
+    heightFactor = fmin(heightFactor,1);
+    scaleFactor = fmin(heightFactor,widthFactor);
+    scaledWidth= width * scaleFactor;
+    scaledHeight = height * scaleFactor;
+
+    if (widthFactor > heightFactor)
+    {
+        thumbnailPoint.y = (targetHeight - scaledHeight) * 0.5;
+    }
+    else if (widthFactor < heightFactor)
+    {
+        thumbnailPoint.x = (targetWidth - scaledWidth) * 0.5;
+    }
+
+    UIGraphicsBeginImageContext(CGSizeMake(scaledWidth,scaledHeight));
+    CGRect thumbnailRect = CGRectZero;
+    thumbnailRect.origin = thumbnailPoint;
+    thumbnailRect.size.width= scaledWidth;
+    thumbnailRect.size.height = scaledHeight;
+    [image drawInRect:thumbnailRect];
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    NSData *jpg = UIImageJPEGRepresentation(image,1.0);
+
+    NSData *jpg = UIImageJPEGRepresentation(image,0.7);
     if (jpg == nil) {
         UnitySendMessage(CALLBACK_OBJECT, CALLBACK_METHOD_FAILURE, MESSAGE_FAILED_COPY);
         [self dismissPicker];

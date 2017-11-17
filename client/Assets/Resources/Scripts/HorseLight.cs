@@ -29,8 +29,6 @@ public class HorseLight : MonoBehaviour {
 
     private bool _horseEmpty_1 = true;
     private bool _horseEmpty_2 = true;
-    private bool _horseReadyRun_1 = false;
-    private bool _horseReadyRun_2 = false;
     private IDictionary dict;
 
     private int _cuurSpeed;
@@ -93,17 +91,20 @@ public class HorseLight : MonoBehaviour {
             _readyToStart = false;
         }
 
+        /*
         //偵測是否準備起跑
         if (_acceptPass) {
             if (_horseReadyRun_1)
             {
                 _horseLightText_1.GetComponent<HorseRun>()._horseRun = true;
+                _horseLightText_1.GetComponent<HorseRun>().StartCoroutine("HorseStandby");
                 _horseReadyRun_1 = false;
                 _acceptPass = false;
             }
             else if (_horseReadyRun_2)
             {
                 _horseLightText_2.GetComponent<HorseRun>()._horseRun = true;
+                _horseLightText_2.GetComponent<HorseRun>().StartCoroutine("HorseStandby");
                 _horseReadyRun_2 = false;
                 _acceptPass = false;
             }
@@ -112,6 +113,8 @@ public class HorseLight : MonoBehaviour {
                     InvokeRepeating("CheckNewRewardList", 3, 3);
             }
         }
+        */
+
     }
 
     //[0] 進入點
@@ -177,10 +180,7 @@ public class HorseLight : MonoBehaviour {
 				_horseLightText_2.GetComponent<HorseRun> ()._horseLength = _horseLightLength_2;
 			}
                 break;
-            default:
-                break;
         }
-
         ReadyRunHorse(index);
     }
 
@@ -193,7 +193,7 @@ public class HorseLight : MonoBehaviour {
                     StartCoroutine("CalculateHorseLength", index);
                 }
                 else {
-                    _horseReadyRun_1 = true;
+                    CallHorseRun(index);
                     //Debug.Log("跑馬燈1長度 = " + _horseLightLength_1 + " 經過時間: " + Time.fixedTime + " 內容 = " + _horseLightText_1.text);
                 }
                 break;
@@ -202,12 +202,37 @@ public class HorseLight : MonoBehaviour {
                     StartCoroutine("CalculateHorseLength", index);
                 }
                 else {
-                    _horseReadyRun_2 = true;
+                    CallHorseRun(index);
                     //Debug.Log("跑馬燈2長度 = " + _horseLightLength_2 + " 經過時間: " + Time.fixedTime + " 內容 = " + _horseLightText_2.text);
                 }
                 break;
-            default:
-                break;
+        }
+    }
+
+    //[5] 呼叫馬兒跑
+    private void CallHorseRun(int index)
+    {
+        //偵測是否準備起跑
+        if (_acceptPass) {
+            switch (index)
+            {
+                case 1:
+                    _horseLightText_1.GetComponent<HorseRun>()._horseRun = true;
+                    _horseLightText_1.GetComponent<HorseRun>().StartCoroutine("HorseStandby");
+                    _acceptPass = false;
+                    break;
+
+                case 2:
+                    _horseLightText_2.GetComponent<HorseRun>()._horseRun = true;
+                    _horseLightText_2.GetComponent<HorseRun>().StartCoroutine("HorseStandby");
+                    _acceptPass = false;
+                    break;
+
+                default:
+                    if (!_fixedTimeCheck)
+                        InvokeRepeating("CheckNewRewardList", 3, 3);
+                    break;
+            }
         }
     }
 
@@ -218,21 +243,19 @@ public class HorseLight : MonoBehaviour {
 		case "Text_Msg1":
 			if (_horseLightText_1) {
 				_horseLightText_1.text = "";
-				_horseLightText_1.rectTransform.anchoredPosition = new Vector2 (870, _horseLightText_1.rectTransform.anchoredPosition.y);
+				_horseLightText_1.rectTransform.anchoredPosition = new Vector2 (870, 0);
 			}
                 _horseEmpty_1 = true;
                 break;
 		case "Text_Msg2":
 			if (_horseLightText_2) {
 				_horseLightText_2.text = "";
-				_horseLightText_2.rectTransform.anchoredPosition = new Vector2 (870, _horseLightText_2.rectTransform.anchoredPosition.y);
+				_horseLightText_2.rectTransform.anchoredPosition = new Vector2 (870, 0);
 			}
                 _horseEmpty_2 = true;
                 break;
-            default:
-                break;
         }
-        ReadyToStart();
+        //ReadyToStart(); //前一句過中點即呼叫，所以這裡不用
     }
 
     //[7] 固定時間檢查有無新名單

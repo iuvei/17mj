@@ -1566,6 +1566,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             {
                 Debug.LogError("Operation failed: " + operationResponse.ToStringFull() + " Server: " + this.Server);
             }
+			AccountManager.Instance.HideConnecting ();
         }
 
         // use the "secret" or "token" whenever we get it. doesn't really matter if it's in AuthResponse.

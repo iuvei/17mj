@@ -225,8 +225,16 @@ public class RegisterUI : MonoBehaviour {
     //判斷有無填暱稱欄位
     private string CheckNickName() {
         string _nickName;
-        if (RegisterName.text != "")
+        if (RegisterName.text != "") {
             _nickName = RegisterName.text;
+            bool isContComma = _nickName.Contains(",");
+
+            if (isContComma)
+            {
+                _nickName = _nickName.Replace(",", "，");
+                RegisterName.text = _nickName;
+            }
+        }
         else {
             if (_canNickName.Length == 0)
                 _nickName = _defaultNickName;

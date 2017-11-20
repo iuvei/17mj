@@ -2237,7 +2237,15 @@ namespace com.Lobby
             if (settingNickname) {
                 string oName = CryptoPrefs.GetString("USERNAME");
                 string sToken = CryptoPrefs.GetString("USERTOKEN");
-                MJApi.setPlayerName(sToken, oName, settingNickname.text, setNameCallback);
+
+                string checkedName = settingNickname.text;
+                bool isContComma = checkedName.Contains(",");
+                if (isContComma) {
+                    checkedName = checkedName.Replace(",", "，");
+                    settingNickname.text = checkedName;
+                }
+                
+                MJApi.setPlayerName(sToken, oName, checkedName, setNameCallback);
 				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
         }

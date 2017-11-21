@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 99120389}
   - component: {fileID: 99120388}
   m_Layer: 5
-  m_Name: playerB_name
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1195,7 +1195,7 @@ GameObject:
   - component: {fileID: 106882879}
   - component: {fileID: 106882878}
   m_Layer: 5
-  m_Name: playerB_Info (1)
+  m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8802,7 +8802,7 @@ GameObject:
   - component: {fileID: 783770833}
   - component: {fileID: 783770832}
   m_Layer: 5
-  m_Name: playerB_Lv
+  m_Name: Lv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16845,7 +16845,7 @@ GameObject:
   - component: {fileID: 1220585146}
   - component: {fileID: 1220585147}
   m_Layer: 5
-  m_Name: playerB_Coin
+  m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17333,7 +17333,7 @@ GameObject:
   - component: {fileID: 1265005962}
   - component: {fileID: 1265005961}
   m_Layer: 5
-  m_Name: playerBPhoto
+  m_Name: Photo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

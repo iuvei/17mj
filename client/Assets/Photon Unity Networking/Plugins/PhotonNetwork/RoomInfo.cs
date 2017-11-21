@@ -79,6 +79,13 @@ public class RoomInfo
     public int PlayerCount { get; private set; }
 
     /// <summary>
+    /// Only used internally in lobby, to display oppsite information in room (while you're in).
+    /// </summary>
+    public string Photo { get; set; }
+    public string Level { get; set; }
+    public string Coin { get; set; }
+
+    /// <summary>
     /// State if the local client is already in the game or still going to join it on gameserver (in lobby always false).
     /// </summary>
     public bool IsLocalClientInside { get; set; }
@@ -277,6 +284,15 @@ public class RoomInfo
 
     [Obsolete("Please use IsVisible (updated case for naming).")]
     public bool visible { get { return this.IsVisible; } }
+
+    [Obsolete("Please use Photo (updated case for naming).")]
+    public string photo { get { return this.Photo; } }
+
+    [Obsolete("Please use Level (updated case for naming).")]
+    public string level { get { return this.Level; } }
+
+    [Obsolete("Please use Coin (updated case for naming).")]
+    public string coin { get { return this.Coin; } }
 
     #endregion
 }

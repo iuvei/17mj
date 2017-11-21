@@ -373,7 +373,19 @@ namespace com.Desktop
 				name = aa.NickName;
 				if (PanelInvate != null) {
 					Text txt = PanelInvate.GetComponentInChildren<Text> ();
-					txt.text = name;
+                    /*
+                    Image pho = PanelInvate.transform.Find("Info/Photo").GetComponent<Image>();
+                    Text lv = PanelInvate.transform.Find("Info/Lv").GetComponent<Text>();
+                    Text coin = PanelInvate.transform.Find("Info/Coin/UserCoin").GetComponent<Text>();
+
+                    Texture2D newPhoto = new Texture2D(1, 1);
+                    newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
+                    newPhoto.Apply();
+                    pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    lv.text = "Lv " + aa.Level;
+                    coin.text = String.Format("{0:#,0}", aa.Coin);
+                    */
+                    txt.text = name;
 					PanelInvate.SetActive (true);
 				}
 			}

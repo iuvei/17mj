@@ -64,6 +64,13 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
     }
 
+    /// <summary>
+    /// Only used internally in lobby, to display oppsite information in room (while you're in).
+    /// </summary>
+    public string Photo { get; set; }
+    public string Level { get; set; }
+    public string Coin { get; set; }
+
     /// <summary>UserId of the player, available when the room got created with RoomOptions.PublishUserId = true.</summary>
     /// <remarks>Useful for PhotonNetwork.FindFriends and blocking slots in a room for expected players (e.g. in PhotonNetwork.CreateRoom).</remarks>
     public string UserId { get; internal set; }
@@ -425,6 +432,15 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
 
     [Obsolete("Please use AllProperties (updated case for naming).")]
     public Hashtable allProperties { get { return this.AllProperties; } }
+
+    [Obsolete("Please use Photo (updated case for naming).")]
+    public string photo { get { return this.Photo; } }
+
+    [Obsolete("Please use Level (updated case for naming).")]
+    public string level { get { return this.Level; } }
+
+    [Obsolete("Please use Coin (updated case for naming).")]
+    public string coin { get { return this.Coin; } }
 
     #endregion
 }

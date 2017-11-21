@@ -54,5 +54,9 @@ public class Logout : MonoBehaviour {
 		CryptoPrefs.DeleteKey("USERLOGINTOTAL");
 		CryptoPrefs.DeleteKey("USERWIN");
 		CryptoPrefs.DeleteKey("USERLOSE");
+        CryptoPrefs.DeleteKey("OPPNAME");
+        CryptoPrefs.DeleteKey("OPPPHOTO");
+        CryptoPrefs.DeleteKey("OPPLEVEL");
+        CryptoPrefs.DeleteKey("OPPCOIN");
     }
 }

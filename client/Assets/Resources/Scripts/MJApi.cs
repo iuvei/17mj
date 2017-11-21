@@ -8,7 +8,6 @@ public static class MJApi
     public delegate void RequestCallBack(WebExceptionStatus status, string result);
     public static RequestCallBack _callback;
 
-    //private static string serverUrl = "http://catpunch.co:9000/";
 	private static string serverUrl = "https://17mj.ddns.net:9000/";
     private static string secretKey = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvbywbdGABb46cGzeevCMQU2LXvornsNkScfeCS9BmZ0KkebfYTvgvfLwUpl0QjR4LL5hHOYzaHxGQcVfvvY2wtiPRRMxGqhxVq";
 
@@ -92,6 +91,17 @@ public static class MJApi
         string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
+
+	public static void getUserPhoto(string token, string name, string data, RequestCallBack callback)
+	{
+		string api = "V1/getUserPhoto";
+		string auth = "Bearer " + secretKey;
+		name = StringToUnicode(name);
+		string method = "POST";
+		data = StringToUnicode(data);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
 
 	public static void setUserMail(string token, string name, string data, string pwd, RequestCallBack callback)
 	{

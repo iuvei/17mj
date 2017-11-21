@@ -477,6 +477,8 @@ namespace com.Lobby
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
 				customp.Add ("CRoomName", cname);
+				string sToken = CryptoPrefs.GetString ("USERTOKEN");
+				customp.Add ("UserToken", sToken);
 				#if UNITY_IOS
                     _roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
 				#elif UNITY_ANDROID
@@ -488,7 +490,7 @@ namespace com.Lobby
 				roomOptions.isOpen = true;
 				roomOptions.maxPlayers = _roommax;
 				roomOptions.customRoomProperties = customp;
-				roomOptions.customRoomPropertiesForLobby = new string[] { "CRoomName" };
+				roomOptions.customRoomPropertiesForLobby = new string[] { "CRoomName","UserToken" };
 				//Debug.Log ();
 				//创建房间成功
 				if (PhotonNetwork.CreateRoom (_roomname, roomOptions, null)) {
@@ -661,9 +663,18 @@ namespace com.Lobby
 			AccountManager.Instance.ShowConnecting ();
 		}
 
+		public void getPhotoCallback(WebExceptionStatus status, string result)
+		{
+			if (status != WebExceptionStatus.Success)
+			{
+				Debug.Log("getPhotoCallback Failed! " + result);
+			}
+			Debug.Log("getPhotoCallback =  " + result);
+		}
+
+
 		IEnumerator reloadRoomlist()
 		{
-			//Debug.Log ("reloadRoomlist()");
 			//Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
 			if (hint) {
 				hint.gameObject.SetActive (true);
@@ -679,21 +690,35 @@ namespace com.Lobby
 			//hint.gameObject.SetActive (false);
 			yield return new WaitForSeconds(1.0f);
 
+			string sPName = string.Empty;
+
 			if (PhotonNetwork.connected) {
 				RoomInfo[] lists = PhotonNetwork.GetRoomList ();
 				if (lists.Length > 0) {
 					foreach (RoomInfo ri in lists) {
 						GameObject g = GameObject.Instantiate (Resources.Load ("Lobby/RoomItem") as GameObject);
-						g.transform.parent = rListPanel;
+						g.transform.SetParent(rListPanel,false);
 						g.transform.localScale = Vector3.one;
 						g.transform.localPosition = Vector3.zero;
 						Text txt = g.GetComponentInChildren<Text> ();
+						int player_count = ri.playerCount;
+
 						Hashtable cp = ri.customProperties;
 						if (cp ["CRoomName"] != null) {
 							string name = cp ["CRoomName"].ToString ();
 							txt.text = name;
 						}
-						//txt.text = ri.Name;
+
+						if (cp ["UserToken"] != null) {
+							string token = cp ["UserToken"].ToString ();
+
+							if (string.IsNullOrEmpty (sPName)) {
+								sPName = token;
+							} else {
+								sPName = sPName + "," + token;
+							}
+						}
+
 						Button bt = g.GetComponent<Button> ();
 						bt.onClick.AddListener (delegate {
 							joinRoom (ri.Name);
@@ -712,6 +737,13 @@ namespace com.Lobby
 				Debug.LogError ("網路連線失敗!!...重新連線中...");
 				ShowAlert ("網路連線失敗!!...重新連線中...");
 				Connect ();
+			}
+
+			if (!string.IsNullOrEmpty (sPName)) {
+				string sName = CryptoPrefs.GetString ("USERNAME");
+				string sToken = CryptoPrefs.GetString ("USERTOKEN");
+				sPName = sPName + ",";
+				MJApi.getUserPhoto (sToken, sName, sPName, getPhotoCallback);
 			}
 		}
 
@@ -2238,15 +2270,14 @@ namespace com.Lobby
                 string oName = CryptoPrefs.GetString("USERNAME");
                 string sToken = CryptoPrefs.GetString("USERTOKEN");
 
-                string checkedName = settingNickname.text;
-                bool isContComma = checkedName.Contains(",");
-                if (isContComma) {
-                    checkedName = checkedName.Replace(",", "，");
-                    settingNickname.text = checkedName;
-                }
-                
-                MJApi.setPlayerName(sToken, oName, checkedName, setNameCallback);
-				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
+	            string checkedName = settingNickname.text;
+		        bool isContComma = checkedName.Contains(",");
+		        if (isContComma) {
+		            checkedName = checkedName.Replace(",", "，");
+				    settingNickname.text = checkedName;
+	            }
+		        MJApi.setPlayerName(sToken, oName, checkedName, setNameCallback);
+		        AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
         }
 		

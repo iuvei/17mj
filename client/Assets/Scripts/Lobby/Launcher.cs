@@ -487,9 +487,9 @@ namespace com.Lobby
 				AccountManager.Instance.ShowConnecting ();
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
-                PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
-                PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
-                PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
+                //PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
+                //PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
+                //PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
 
 
                 customp.Add ("CRoomName", cname);
@@ -2183,7 +2183,7 @@ namespace com.Lobby
                     playerPhotos[i].sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                 }
 
-                PhotonNetwork.player.Photo = sPhoto;
+                //PhotonNetwork.player.Photo = sPhoto;
             }
             
         }
@@ -2229,7 +2229,7 @@ namespace com.Lobby
                     playerLvs[i].text = "Lv " + sLevel;
                 }
 
-                PhotonNetwork.player.Level = sLevel;
+                //PhotonNetwork.player.Level = sLevel;
             }
         }
 
@@ -2261,7 +2261,7 @@ namespace com.Lobby
                         break;
                 }
                 playerCoins[arrayIndex].text = string.Format("{0:0,0}", localCoin);
-                PhotonNetwork.player.Coin = sCoin;
+                //PhotonNetwork.player.Coin = sCoin;
             }
             else
             {

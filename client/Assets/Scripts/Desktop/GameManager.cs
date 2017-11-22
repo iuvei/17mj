@@ -340,9 +340,11 @@ namespace com.Desktop
 			int tid = 0;
 
             Debug.Log("pppppppppp");
-            PhotonNetwork.player.Level = "7"; // CryptoPrefs.GetString("USERLEVEL");
-            PhotonNetwork.player.Photo = "7"; //CryptoPrefs.GetString("USERPHOTO");
-            PhotonNetwork.player.Coin = "7"; //CryptoPrefs.GetString("USERCOIN");
+			string rnd = UnityEngine.Random.Range (1, 100).ToString();
+			PhotonNetwork.player.Level = rnd; // CryptoPrefs.GetString("USERLEVEL");
+			//PhotonNetwork.player.NickName = rnd;
+            //PhotonNetwork.player.Photo = "7"; //CryptoPrefs.GetString("USERPHOTO");
+            //PhotonNetwork.player.Coin = "7"; //CryptoPrefs.GetString("USERCOIN");
 
             if (PhotonNetwork.player.IsMasterClient) {
 				//如果是房主
@@ -356,7 +358,7 @@ namespace com.Desktop
                     }
 					i++;
 				}
-				Debug.Log ("i="+i);
+				//Debug.Log ("i="+i);
                 name = notmaster.NickName;
 				tid = notmaster.ID;
 				ShowAlert ("你邀請房間內的玩家["+name+"]一起玩麻將, 等待回應中...", 5.0f);
@@ -397,8 +399,8 @@ namespace com.Desktop
                     //newPhoto.Apply();
                     //pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                     lv.text = "Lv " + aa.Level;
-                    coin.text = String.Format("{0:#,0}", aa.Coin);
-                    Debug.Log("Lv = " + aa.Level + " ; Coin =  " + aa.Coin);
+                    //coin.text = String.Format("{0:#,0}", aa.Coin);
+                    Debug.Log("Lv = " + aa.Level);
                     txt.text = name;
 					PanelInvate.SetActive (true);
 				}

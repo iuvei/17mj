@@ -63,7 +63,7 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
             PhotonNetwork.playerName = value;   // this will sync the local player's name in a room
         }
     }
-
+	/*
     //CSU-----
     private string photoField = "";
     /// <summary>
@@ -81,6 +81,7 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
             PhotonNetwork.playerPhoto = value;   // this will sync the local player's photo in a room
         }
     }
+	*/
 
     private string levelField = "";
     /// <summary>
@@ -94,11 +95,21 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
         set
         {
+			if (!IsLocal)
+			{
+				Debug.LogError("Error: Cannot change the level of a remote player!");
+				//return;
+			}
+			if (string.IsNullOrEmpty(value) || value.Equals(this.levelField))
+			{
+				return;
+			}
             this.levelField = value;
             PhotonNetwork.playerLevel = value;   // this will sync the local player's level in a room
         }
     }
 
+	/*
     private string coinField = "";
     /// <summary>
     /// Only used internally in lobby, to display oppsite information in room (while you're in).
@@ -115,6 +126,7 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
             PhotonNetwork.playerCoin = value;   // this will sync the local player's coin in a room
         }
     }
+    */
 
     //---------------
 
@@ -157,6 +169,7 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
             Hashtable allProps = new Hashtable();
             allProps.Merge(this.CustomProperties);
             allProps[ActorProperties.PlayerName] = this.NickName;
+			allProps[ActorProperties.PlayerLevel] = this.Level;
             return allProps;
         }
     }
@@ -166,19 +179,35 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
     public object TagObject;
 
 
-    /// <summary>
-    /// Creates a PhotonPlayer instance.
-    /// </summary>
-    /// <param name="isLocal">If this is the local peer's player (or a remote one).</param>
-    /// <param name="actorID">ID or ActorNumber of this player in the current room (a shortcut to identify each player in room)</param>
-    /// <param name="name">Name of the player (a "well known property").</param>
-    public PhotonPlayer(bool isLocal, int actorID, string name)
+   	/// <summary>
+   	/// Initializes a new instance of the <see cref="PhotonPlayer"/> class.
+   	/// </summary>
+   	/// <param name="isLocal">If set to <c>true</c> is local.</param>
+   	/// <param name="actorID">Actor I.</param>
+   	/// <param name="name">Name.</param>
+   	/// <param name="level">Level.</param>
+	public PhotonPlayer(bool isLocal, int actorID, string name, string level)
     {
         this.CustomProperties = new Hashtable();
         this.IsLocal = isLocal;
         this.actorID = actorID;
         this.nameField = name;
+		this.levelField = level;
     }
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="PhotonPlayer"/> class.
+	/// </summary>
+	/// <param name="isLocal">If set to <c>true</c> is local.</param>
+	/// <param name="actorID">Actor I.</param>
+	/// <param name="name">Name.</param>
+	public PhotonPlayer(bool isLocal, int actorID, string name)
+	{
+		this.CustomProperties = new Hashtable();
+		this.IsLocal = isLocal;
+		this.actorID = actorID;
+		this.nameField = name;
+	}
 
     /// <summary>
     /// Internally used to create players from event Join
@@ -238,6 +267,10 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         {
             this.UserId = (string)properties[ActorProperties.UserId];
         }
+		if (properties.ContainsKey(ActorProperties.PlayerLevel))
+		{
+			this.Level = (string)properties[ActorProperties.PlayerLevel];
+		}
         if (properties.ContainsKey(ActorProperties.IsInactive))
         {
             this.IsInactive = (bool)properties[ActorProperties.IsInactive]; //TURNBASED new well-known propery for players
@@ -462,6 +495,9 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
     [Obsolete("Please use NickName (updated case for naming).")]
     public string name { get { return this.NickName; } set { this.NickName = value; } }
 
+	[Obsolete("Please use Level (updated case for naming).")]
+	public string level { get { return this.Level; } set { this.Level = value; } }
+
     [Obsolete("Please use UserId (updated case for naming).")]
     public string userId { get { return this.UserId; } internal set { this.UserId = value; } }
 
@@ -481,14 +517,14 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
     public Hashtable allProperties { get { return this.AllProperties; } }
 
     //CSU----
-    [Obsolete("Please use Photo (updated case for naming).")]
-    public string photo { get { return this.NickName; } set { this.Photo = value; } }
+    //[Obsolete("Please use Photo (updated case for naming).")]
+    //public string photo { get { return this.NickName; } set { this.Photo = value; } }
 
-    [Obsolete("Please use Level (updated case for naming).")]
-    public string level { get { return this.Level; } set { this.Level = value; } }
+    //[Obsolete("Please use Level (updated case for naming).")]
+    //public string level { get { return this.Level; } set { this.Level = value; } }
 
-    [Obsolete("Please use Coin (updated case for naming).")]
-    public string coin { get { return this.Coin; } set { this.Coin = value; } }
+    //[Obsolete("Please use Coin (updated case for naming).")]
+    //public string coin { get { return this.Coin; } set { this.Coin = value; } }
     //-----
 
     #endregion

@@ -315,7 +315,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-
+	/*
     //CSU----------------------
     private string playerphoto = "";
 
@@ -346,8 +346,9 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             //}
         }
     }
+	*/
 
-    private string playerlevel = "";
+	private string playerlevel = string.Empty;
 
     public string PlayerLevel
     {
@@ -358,26 +359,27 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
         set
         {
-            //if (string.IsNullOrEmpty(value) || value.Equals(this.playerlevel))
-            //{
-            //    return;
-            //}
+            if (string.IsNullOrEmpty(value) || value.Equals(this.playerlevel))
+            {
+                return;
+            }
             
-            //if (this.LocalPlayer != null)
-            //{
-            //    this.LocalPlayer.Level = value;
-            //}
+            if (this.LocalPlayer != null)
+            {
+                this.LocalPlayer.Level = value;
+            }
             
             this.playerlevel = value;
-            /*
+            
             if (this.CurrentRoom != null)
             {
                 // Only when in a room
                 this.SendPlayerLevel();
-            }*/
+            }
         }
     }
 
+	/*
     private string playercoin = "";
 
     public string PlayerCoin
@@ -407,6 +409,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             //}
         }
     }
+    */
     //
 
     // "public" access to the current game - is null unless a room is joined on a gameserver
@@ -1100,6 +1103,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 int actorNr;
                 Hashtable props;
                 string newName;
+				string newLevel;
                 PhotonPlayer target;
 
                 foreach (object key in pActorProperties.Keys)
@@ -1107,11 +1111,12 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                     actorNr = (int)key;
                     props = (Hashtable)pActorProperties[key];
                     newName = (string)props[ActorProperties.PlayerName];
+					newLevel = (string)props[ActorProperties.PlayerLevel];
 
                     target = this.GetPlayerWithId(actorNr);
                     if (target == null)
                     {
-                        target = new PhotonPlayer(false, actorNr, newName);
+						target = new PhotonPlayer(false, actorNr, newName, newLevel);
                         this.AddNewPlayer(actorNr, target);
                     }
 
@@ -1318,20 +1323,20 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
 
         // CSU-----
-        if (this.mPlayerphotoHasToBeUpdated)
-        {
-            this.SendPlayerPhoto();
-        }
+        //if (this.mPlayerphotoHasToBeUpdated)
+        //{
+        //    this.SendPlayerPhoto();
+        //}
 
         if (this.mPlayerlevelHasToBeUpdated)
         {
             this.SendPlayerLevel();
         }
 
-        if (this.mPlayercoinHasToBeUpdated)
-        {
-            this.SendPlayerCoin();
-        }
+        //if (this.mPlayercoinHasToBeUpdated)
+        //{
+        //    this.SendPlayerCoin();
+        //}
         //---
 
         switch (operationResponse.OperationCode)
@@ -1609,7 +1614,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-
+	/*
     //CSU-------------
     private void SendPlayerPhoto()
     {
@@ -1632,6 +1637,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
+	*/
 
     private void SendPlayerLevel()
     {
@@ -1654,7 +1660,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-
+	/*
     private void SendPlayerCoin()
     {
         if (this.State == ClientState.Joining)
@@ -1676,6 +1682,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
+    */
     //-----
 
     private Hashtable GetLocalActorProperties()
@@ -1687,6 +1694,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
         Hashtable actorProperties = new Hashtable();
         actorProperties[ActorProperties.PlayerName] = this.PlayerName;
+		actorProperties[ActorProperties.PlayerLevel] = this.PlayerLevel;
         return actorProperties;
     }
 

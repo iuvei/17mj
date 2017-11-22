@@ -310,6 +310,7 @@ public static class PhotonNetwork
         }
     }
 
+	/*
     //CSU-------------
     public static string playerPhoto
     {
@@ -323,6 +324,7 @@ public static class PhotonNetwork
             networkingPeer.PlayerPhoto = value;
         }
     }
+	*/
 
     public static string playerLevel
     {
@@ -338,6 +340,7 @@ public static class PhotonNetwork
         }
     }
 
+	/*
     public static string playerCoin
     {
         get
@@ -350,6 +353,7 @@ public static class PhotonNetwork
             networkingPeer.PlayerCoin = value;
         }
     }
+    */
     //---
 
     /// <summary>The list of players in the current room, including the local player.</summary>

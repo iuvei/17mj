@@ -167,6 +167,7 @@ namespace com.Lobby
         private bool _changeFlag = true;
         private int localCoin = 0;
         private List<string> rankTotalDatas = new List<string>();
+        private List<string> roomTotalDatas = new List<string>();
         private bool _setCoin = false;
         private bool _resetUserType = false;
         private bool _resetPass = false;
@@ -175,6 +176,7 @@ namespace com.Lobby
         private bool _setItem = false;
         private bool _getBag = false;
         private bool _getRank = false;
+        private bool _getRoomPhoto = false;
         private bool _needHideConnect = false;
         private bool _setUserPhoto = false;
         private string setCoinResult = string.Empty;
@@ -185,9 +187,12 @@ namespace com.Lobby
         private string setItemResult = string.Empty;
         private string getOnlineResult = string.Empty;
         private string getRankResult = string.Empty;
+        private string getRoomPhotoResult = string.Empty;
         private int _randomOnlineUsers;
         private int _currentItemId = 0;
-        private SubPage currentPage = SubPage.Main; 
+        private SubPage currentPage = SubPage.Main;
+        private RoomInfo[] _roomLists;
+
 
         [SerializeField]
         private Unimgpicker imagePicker;
@@ -419,9 +424,14 @@ namespace com.Lobby
 			PhotonNetwork.LoadLevel ("03.Room");
 			//SetPlayerName();
 			this.Players = PhotonNetwork.playerList.ToList ();
-			UpdateRoomInfo ();
+
+            //CSU PhotonPlayer aa = Players.Find(x => x.ID.Equals(player_a));
+
+            UpdateRoomInfo ();
+
+
             //StartCoroutine(GetInRoom());
-			/*
+            /*
             Text[] ts = playersPanel.GetComponentsInChildren<Text>();
             foreach (Text t in ts)
             {
@@ -442,7 +452,7 @@ namespace com.Lobby
 
         public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
         {
-			Debug.Log ("OnPhotonPlayerConnected()");
+            Debug.Log ("OnPhotonPlayerConnected()");
 			Players.Add (newPlayer);
 			//Debug.Log ("cnt="+Players.Count);
 			UpdateRoomInfo ();
@@ -477,7 +487,14 @@ namespace com.Lobby
 				AccountManager.Instance.ShowConnecting ();
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
-				customp.Add ("CRoomName", cname);
+                PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
+                PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
+                PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
+
+
+                customp.Add ("CRoomName", cname);
+				string sToken = CryptoPrefs.GetString ("USERTOKEN");
+				customp.Add ("UserToken", sToken);
 				#if UNITY_IOS
                     _roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
 				#elif UNITY_ANDROID
@@ -491,7 +508,7 @@ namespace com.Lobby
 				roomOptions.isOpen = true;
 				roomOptions.maxPlayers = _roommax;
 				roomOptions.customRoomProperties = customp;
-				roomOptions.customRoomPropertiesForLobby = new string[] { "CRoomName" };
+				roomOptions.customRoomPropertiesForLobby = new string[] { "CRoomName","UserToken" };
 				//Debug.Log ();
 				//创建房间成功
 				if (PhotonNetwork.CreateRoom (_roomname, roomOptions, null)) {
@@ -665,9 +682,23 @@ namespace com.Lobby
 			AccountManager.Instance.ShowConnecting ();
 		}
 
+		public void getPhotoCallback(WebExceptionStatus status, string result)
+		{
+            getRoomPhotoResult = result;
+            _getRoomPhoto = true;
+
+            if (status != WebExceptionStatus.Success)
+			{
+                getRoomPhotoResult = "getRoomPhotoCallback Failed!";
+                Debug.Log("getRoomPhotoCallback Failed! " + result);
+			}
+
+            Debug.Log("getRoomPhotoCallback " + result);
+        }
+
+
 		IEnumerator reloadRoomlist()
 		{
-			//Debug.Log ("reloadRoomlist()");
 			//Text hint = rListPanel.parent.GetComponentInChildren<Text> ();
 			if (hint) {
 				hint.gameObject.SetActive (true);
@@ -683,26 +714,51 @@ namespace com.Lobby
 			//hint.gameObject.SetActive (false);
 			yield return new WaitForSeconds(1.0f);
 
+			string sPName = string.Empty;
+
 			if (PhotonNetwork.connected) {
-				RoomInfo[] lists = PhotonNetwork.GetRoomList ();
-				if (lists.Length > 0) {
-					foreach (RoomInfo ri in lists) {
+                _roomLists = PhotonNetwork.GetRoomList();
+                if (_roomLists.Length > 0) {
+					foreach (RoomInfo ri in _roomLists) {
+                        /*
 						GameObject g = GameObject.Instantiate (Resources.Load ("Lobby/RoomItem") as GameObject);
-						g.transform.parent = rListPanel;
+						g.transform.SetParent(rListPanel,false);
 						g.transform.localScale = Vector3.one;
 						g.transform.localPosition = Vector3.zero;
-						Text txt = g.GetComponentInChildren<Text> ();
-						Hashtable cp = ri.customProperties;
-						if (cp ["CRoomName"] != null) {
+                        Text txtName = g.transform.Find("Name").GetComponent<Text>();
+                        Text txtNum = g.transform.Find("People/Num").GetComponent<Text>();
+                        
+                        int player_count = ri.PlayerCount;
+                        */
+                        Hashtable cp = ri.CustomProperties;
+
+                        /*
+                        if (cp ["CRoomName"] != null) {
 							string name = cp ["CRoomName"].ToString ();
-							txt.text = name;
-						}
-						//txt.text = ri.Name;
+                            //txtName.text = name;
+                            //txtNum.text = String.Format("{0:#,0}", player_count);
+                            //Debug.Log("API 中 塞入順序 name = " + name);
+                        }
+                        */
+
+                        if (cp ["UserToken"] != null) {
+							string token = cp ["UserToken"].ToString ();
+
+							if (string.IsNullOrEmpty (sPName)) {
+								sPName = token;
+							} else {
+								sPName = sPName + "," + token;
+							}
+                        }
+
+                        /*
 						Button bt = g.GetComponent<Button> ();
 						bt.onClick.AddListener (delegate {
 							joinRoom (ri.Name);
 						});
+                        */
 					}
+
 					if (hint) {
 						hint.gameObject.SetActive (false);
 					}
@@ -717,6 +773,14 @@ namespace com.Lobby
 				ShowAlert ("網路連線失敗!!...重新連線中...");
 				Connect ();
 			}
+
+			if (!string.IsNullOrEmpty (sPName)) {
+                string sName = CryptoPrefs.GetString ("USERNAME");
+				string sToken = CryptoPrefs.GetString ("USERTOKEN");
+				sPName = sPName + ",";
+				MJApi.getUserPhoto (sToken, sName, sPName, getPhotoCallback);
+                AccountManager.Instance.ShowConnecting(); //開啟連線視窗
+            }
 		}
 
 		private void joinRoom(string name) {
@@ -1104,10 +1168,10 @@ namespace com.Lobby
         }
 
         public void ClickConfirmCreateRoom() {
-            for (int i = 0; i < _createRoomType.Length ; i++)
-            {
+            //for (int i = 0; i < _createRoomType.Length ; i++)
+            //{
                 //Debug.Log("開房設定: " + _createRoomType[i][_createRoomTypeIndex[i]] + " ; ");
-            }
+            //}
 
             CreateRoom();
         }
@@ -2118,7 +2182,10 @@ namespace com.Lobby
                 {
                     playerPhotos[i].sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                 }
+
+                PhotonNetwork.player.Photo = sPhoto;
             }
+            
         }
 
 		public void SetPlayerAccount()
@@ -2161,6 +2228,8 @@ namespace com.Lobby
                 {
                     playerLvs[i].text = "Lv " + sLevel;
                 }
+
+                PhotonNetwork.player.Level = sLevel;
             }
         }
 
@@ -2192,6 +2261,7 @@ namespace com.Lobby
                         break;
                 }
                 playerCoins[arrayIndex].text = string.Format("{0:0,0}", localCoin);
+                PhotonNetwork.player.Coin = sCoin;
             }
             else
             {
@@ -2241,8 +2311,15 @@ namespace com.Lobby
             if (settingNickname) {
                 string oName = CryptoPrefs.GetString("USERNAME");
                 string sToken = CryptoPrefs.GetString("USERTOKEN");
-                MJApi.setPlayerName(sToken, oName, settingNickname.text, setNameCallback);
-				AccountManager.Instance.ShowConnecting (); //開啟連線視窗
+
+	            string checkedName = settingNickname.text;
+		        bool isContComma = checkedName.Contains(",");
+		        if (isContComma) {
+		            checkedName = checkedName.Replace(",", "，");
+				    settingNickname.text = checkedName;
+	            }
+		        MJApi.setPlayerName(sToken, oName, checkedName, setNameCallback);
+		        AccountManager.Instance.ShowConnecting (); //開啟連線視窗
             }
         }
 		
@@ -2455,7 +2532,101 @@ namespace com.Lobby
                 _setUserPhoto = false;
                 SetPlayerPhotos();
             }
-            
+
+            if (_getRoomPhoto)
+            {
+                _needHideConnect = true; //需要關閉連線視窗
+                _getRoomPhoto = false;
+
+                if (getRoomPhotoResult == "getRoomPhotoCallback Failed!")
+                {
+                    actionDonePanel.SetActive(true);
+                    _actionText.text = "發生錯誤";
+                }
+                else
+                {
+                    paintRoomUI(getRoomPhotoResult);
+                }
+                //_needHideConnect = true; //需要關閉連線視窗
+            }
+
+        }
+
+
+        private void paintRoomUI(string _cb) {
+            string[] tokens = _cb.Split(new string[] { "," }, StringSplitOptions.None);
+
+            int _totalRooms = tokens.Length / 4;
+            int _count = 0;
+            roomTotalDatas.Clear();
+
+            //Debug.Log("共 " + _totalRooms + " 間房; 資料筆數" + tokens.Length);
+
+            for (int i = 0; i < tokens.Length; i++)
+                roomTotalDatas.Add(tokens[i]);
+
+			foreach (RoomInfo ri in _roomLists)
+            {
+                GameObject g = GameObject.Instantiate (Resources.Load ("Lobby/RoomItem") as GameObject);
+				g.transform.SetParent(rListPanel,false);
+				g.transform.localScale = Vector3.one;
+				g.transform.localPosition = Vector3.zero;
+                Text txtName = g.transform.Find("Name").GetComponent<Text>();
+                Text txtNum = g.transform.Find("People/Num").GetComponent<Text>();
+                Image _img = g.transform.Find("PhotoMask/Photo").GetComponent<Image>();
+
+                int player_count = ri.PlayerCount;
+                Hashtable cp = ri.CustomProperties;
+
+                if (cp ["CRoomName"] != null) {
+					string name = cp ["CRoomName"].ToString ();
+                    txtName.text = name;
+                    txtNum.text = String.Format("{0:#,0}", player_count);
+                }
+
+                ri.Photo = roomTotalDatas[_count * 4 + 1];
+                ri.Level = roomTotalDatas[_count * 4 + 2];
+                ri.Coin = roomTotalDatas[_count * 4 + 3];
+
+                SetRoomListPhoto(roomTotalDatas[_count * 4 + 1], _img);
+
+                Button bt = g.GetComponent<Button> ();
+				bt.onClick.AddListener (delegate {
+                    joinRoom (ri.Name);
+                    CryptoPrefs.SetString("OPPNAME", ri.Name);
+                    CryptoPrefs.SetString("OPPPHOTO", ri.Photo);
+                    CryptoPrefs.SetString("OPPLEVEL", ri.Level);
+                    CryptoPrefs.SetString("OPPCOIN", ri.Coin);
+                });
+
+                _count += 1;
+            }
+
+        }
+
+        private void SetRoomListPhoto(string _photoType, Image _photoImg) {
+
+            if (_photoType == "0") //圖片隨機
+            {
+                _photoImg.sprite = Resources.Load<Sprite>("Image/Rank/temp/" + UnityEngine.Random.Range(1, 8));
+            }
+            else
+            {
+                string sPhoto;
+                if (_photoType == "1") // 玩家自身
+                    sPhoto = CryptoPrefs.GetString("USERPHOTO");
+                else
+                    sPhoto = _photoType;  // 其他玩家
+
+                if (!string.IsNullOrEmpty(sPhoto))
+                {
+                    Texture2D newPhoto = new Texture2D(1, 1);
+                    newPhoto.LoadImage(System.Convert.FromBase64String(sPhoto));
+                    newPhoto.Apply();
+
+                    _photoImg.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                }
+            }
         }
 
         public void ChangeCoin(int _earnCoin) {
@@ -2467,7 +2638,6 @@ namespace com.Lobby
             int newCoin = localCoin + _earnCoin;
 
             MJApi.setUserCoin(sToken, sName, oldCoin, newCoin, setCoinCallback);
-
         }
 
         private void ShowUserLoginType(string _type) {

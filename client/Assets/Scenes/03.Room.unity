@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 99120389}
   - component: {fileID: 99120388}
   m_Layer: 5
-  m_Name: playerB_name
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -882,7 +882,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 149, y: 77.5}
+  m_AnchoredPosition: {x: 155, y: 77.5}
   m_SizeDelta: {x: 208, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &99120388
@@ -1195,7 +1195,7 @@ GameObject:
   - component: {fileID: 106882879}
   - component: {fileID: 106882878}
   m_Layer: 5
-  m_Name: playerB_Info (1)
+  m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2960,6 +2960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 0
+  NickName: 
   isAI: 0
   isDealer: 0
   isPlaying: 1
@@ -2969,6 +2970,7 @@ MonoBehaviour:
   plane_abandan: {fileID: 32485373}
   ponMah: 
   plane_pon: {fileID: 1667076758}
+  moMah: 0
   plane_mo: {fileID: 1389523933}
   tmp: {fileID: 708908345}
   state: 0
@@ -8800,7 +8802,7 @@ GameObject:
   - component: {fileID: 783770833}
   - component: {fileID: 783770832}
   m_Layer: 5
-  m_Name: playerB_Lv
+  m_Name: Lv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8822,7 +8824,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 149, y: 26.5}
+  m_AnchoredPosition: {x: 155, y: 26.5}
   m_SizeDelta: {x: 208, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &783770832
@@ -8894,6 +8896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 0
+  NickName: 
   isAI: 0
   isDealer: 0
   isPlaying: 1
@@ -8903,6 +8906,7 @@ MonoBehaviour:
   plane_abandan: {fileID: 32485373}
   ponMah: 
   plane_pon: {fileID: 1516050699}
+  moMah: 0
   plane_mo: {fileID: 1847680615}
   tmp: {fileID: 2039228792}
   state: 0
@@ -11151,7 +11155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 149, y: 77.5}
+  m_AnchoredPosition: {x: 156, y: 77.5}
   m_SizeDelta: {x: 208, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &939615187
@@ -16841,7 +16845,7 @@ GameObject:
   - component: {fileID: 1220585146}
   - component: {fileID: 1220585147}
   m_Layer: 5
-  m_Name: playerB_Coin
+  m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16865,7 +16869,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 246.9, y: -48.5}
+  m_AnchoredPosition: {x: 252, y: -48.5}
   m_SizeDelta: {x: 208, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1220585147
@@ -17329,7 +17333,7 @@ GameObject:
   - component: {fileID: 1265005962}
   - component: {fileID: 1265005961}
   m_Layer: 5
-  m_Name: playerBPhoto
+  m_Name: Photo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17352,7 +17356,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 77.49999, y: 0}
-  m_SizeDelta: {x: 116, y: 136}
+  m_SizeDelta: {x: 136, y: 136}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1265005961
 MonoBehaviour:
@@ -20988,7 +20992,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 77.49999, y: 0}
-  m_SizeDelta: {x: 116, y: 136}
+  m_SizeDelta: {x: 136, y: 136}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1492149603
 MonoBehaviour:
@@ -23395,7 +23399,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 246.9, y: -48.5}
+  m_AnchoredPosition: {x: 254, y: -48.5}
   m_SizeDelta: {x: 208, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1749789908
@@ -26693,7 +26697,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 149, y: 26.5}
+  m_AnchoredPosition: {x: 156, y: 26.5}
   m_SizeDelta: {x: 208, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2067975782
@@ -27056,7 +27060,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 77.49999, y: 0}
-  m_SizeDelta: {x: 116, y: 136}
+  m_SizeDelta: {x: 136, y: 136}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2103057453
 MonoBehaviour:

@@ -310,6 +310,48 @@ public static class PhotonNetwork
         }
     }
 
+    //CSU-------------
+    public static string playerPhoto
+    {
+        get
+        {
+            return networkingPeer.PlayerPhoto;
+        }
+
+        set
+        {
+            networkingPeer.PlayerPhoto = value;
+        }
+    }
+
+    public static string playerLevel
+    {
+        get
+        {
+            return networkingPeer.PlayerLevel;
+        }
+
+        set
+        {
+            networkingPeer.PlayerLevel = value;
+            
+        }
+    }
+
+    public static string playerCoin
+    {
+        get
+        {
+            return networkingPeer.PlayerCoin;
+        }
+
+        set
+        {
+            networkingPeer.PlayerCoin = value;
+        }
+    }
+    //---
+
     /// <summary>The list of players in the current room, including the local player.</summary>
     /// <remarks>
     /// This list is only valid, while the client is in a room.

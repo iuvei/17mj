@@ -289,10 +289,10 @@ namespace com.Desktop
         /// </summary>
 		public void fromMoToKeep(int GotID)
         {
-			Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
+			//Debug.LogError ("[c] "+this.name+".fromMoToKeep(id="+GotID+")");
 			if (this.ID==PhotonNetwork.player.ID) {
 				if (GotID != 0) {
-					Debug.Log ("!!! keepedMah.Add("+GotID+")");
+					//Debug.Log ("!!! keepedMah.Add("+GotID+")");
 					//keepedMah.Sort();
 					this.keepedMah.Add (GotID);
 					this.keepedMah.Sort ();
@@ -305,7 +305,7 @@ namespace com.Desktop
 							mm += ",";
 						i++;
 					}
-					Debug.LogError ("* fromMoToKeep() count="+this.keepedMah.Count+" keepedMah=["+mm+"]");
+					//Debug.LogError ("* fromMoToKeep() count="+this.keepedMah.Count+" keepedMah=["+mm+"]");
 
 				}
 				Transform t1 = plane_mo.transform.Find (GotID + "");
@@ -331,9 +331,9 @@ namespace com.Desktop
 		{
 			//Debug.LogError ("[c] "+this.name+" createPaiToMo(id="+mahID+")");
 			if (this.ID==PhotonNetwork.player.ID) {
-				Debug.LogError ("[c] "+this.name+" createPaiToMo(id="+mahID+")");
+				//Debug.LogError ("[c] "+this.name+" createPaiToMo(id="+mahID+")");
 				this.moMah = mahID;
-				Debug.Log ("createPaiToMo() this.moMah="+this.moMah);
+				//Debug.Log ("createPaiToMo() this.moMah="+this.moMah);
 				//bool isZimo = MahJongTools.IsCanHU (keepedMah, GotID);
 				GameObject d = Instantiate (Resources.Load ("MahJong/" + mahID) as GameObject);
 				d.name = mahID + "";
@@ -361,7 +361,7 @@ namespace com.Desktop
 			Vector2 dp = new Vector2((cnt-1)*74+37, -(int)(cnt / 18)*90+45);
 			RectTransform apos = GameManager.Instance.abanPos;
 			if (this.ID==PhotonNetwork.player.ID) {
-				Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
+				//Debug.LogError ("[c] "+this.name+" DaPaiToAban(id="+mahID+", cnt="+cnt+")");
 				//Debug.Log ("QQQQQQQQQ");
 				Transform t1 = plane_mo.transform.Find (mahID + "");
 				if (t1 == null) {
@@ -391,7 +391,7 @@ namespace com.Desktop
 					});
 				}
 				if (this.moMah != mahID && this.moMah !=0) {
-					Debug.Log ("this.moMah="+this.moMah);
+					//Debug.Log ("this.moMah="+this.moMah);
 					this.fromMoToKeep (this.moMah);
 					this.moMah = 0;
 				}

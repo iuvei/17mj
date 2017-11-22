@@ -274,7 +274,7 @@ namespace com.Desktop
 					mm += ",";
 				i++;
 			}
-			Debug.LogError ("* IsCanPon() count="+mahs.Count+" pais=["+mm+"]");
+			//Debug.LogError ("* IsCanPon() count="+mahs.Count+" pais=["+mm+"]");
             bool isCanPon = false;
 
             List<int> currentMahes = mahs.FindAll(delegate (int a)
@@ -326,7 +326,7 @@ namespace com.Desktop
 				i++;
 			}
 			//Debug.Log ("IsCanGang() mahs.Count="+mahs.Count);
-			Debug.LogError ("* IsCanGang() count="+mahs.Count+" pais=["+mm+"]");
+			//Debug.LogError ("* IsCanGang() count="+mahs.Count+" pais=["+mm+"]");
             bool isCanGang = false;
 
             List<int> currentMahes = mahs.FindAll(delegate (int a)
@@ -334,7 +334,7 @@ namespace com.Desktop
                 return a == MahID;
             });
 			
-            if (currentMahes.Count == 3)
+			if (!ismopai && currentMahes.Count == 3)
 			{
 				//Debug.Log ("mm=["+mm+"] Count="+mahs.Count);
 				isCanGang = true;
@@ -375,7 +375,7 @@ namespace com.Desktop
 					mm += ",";
 				i++;
 			}
-			Debug.LogError ("* IsCanChi() count="+mahs.Count+" pais=["+mm+"]");
+			//Debug.LogError ("* IsCanChi() count="+mahs.Count+" pais=["+mm+"]");
 			bool iscanchi = false;
 			chitype = 0;
 

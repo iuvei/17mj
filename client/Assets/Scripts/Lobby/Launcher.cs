@@ -472,8 +472,9 @@ namespace com.Lobby
         public void CreateRoom()
         {
 			//Debug.Log (this.name+".CreateRoom()");
-			AccountManager.Instance.HideConnecting ();
+			//AccountManager.Instance.ShowConnecting ();
 			if (PhotonNetwork.connected) {
+				AccountManager.Instance.ShowConnecting ();
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
 				customp.Add ("CRoomName", cname);
@@ -481,6 +482,8 @@ namespace com.Lobby
                     _roomname = "MJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
 				#elif UNITY_ANDROID
 				    _roomname = "AJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
+				#elif UNITY_STANDALONE
+					_roomname = "SJ"+UnityEngine.Random.Range(0, 1000000000).ToString();
 				#endif
 				// 房間選項
 				RoomOptions roomOptions = new RoomOptions ();
@@ -492,6 +495,7 @@ namespace com.Lobby
 				//Debug.Log ();
 				//创建房间成功
 				if (PhotonNetwork.CreateRoom (_roomname, roomOptions, null)) {
+					//AccountManager.Instance.HideConnecting ();
 					//Debug.Log (PhotonNetwork.room);
 					Debug.Log ("房間創建成功!\n房間ID：" + _roomname);
 					//ShowAlert ("房間創建成功!\n房間ID：" + _roomname);
@@ -502,10 +506,10 @@ namespace com.Lobby
 				}
 			} else {
 				AccountManager.Instance.HideConnecting ();
-				Debug.LogError ("網路連線失敗!!...重新連線中...");
-				ShowAlert ("網路連線失敗!!...重新連線中...");
+				Debug.LogError ("網路連線失敗!!...重新連線中1...");
+				ShowAlert ("網路連線失敗!!...重新連線中1...");
 				Connect ();
-				CreateRoom ();
+				//CreateRoom ();
 			}
         }
 

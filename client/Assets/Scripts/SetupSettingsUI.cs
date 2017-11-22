@@ -85,7 +85,7 @@ public class SetupSettingsUI : MonoBehaviour {
 
 	public void BGMToggleValueChange()
 	{
-		Debug.Log("BGM_Toggle.isOn="+BGM_Toggle.isOn);
+		//Debug.Log("BGM_Toggle.isOn="+BGM_Toggle.isOn);
 		AudioManager.Instance.ControlBGM (BGM_Toggle.isOn);
 		loadPLayerPrefs ();
 		init_slider ();
@@ -93,7 +93,7 @@ public class SetupSettingsUI : MonoBehaviour {
 
 	public void SoundValueChange()
 	{
-		Debug.Log(Sound_Silder.value);
+		//Debug.Log(Sound_Silder.value);
 		if (Sound_Silder.value > 0)
 			Sound_Toggle.isOn = true;
 		//else
@@ -103,7 +103,7 @@ public class SetupSettingsUI : MonoBehaviour {
 
 	public void SoundToggleValueChange()
 	{
-		Debug.Log("Sound_Toggle.isOn="+Sound_Toggle.isOn);
+		//Debug.Log("Sound_Toggle.isOn="+Sound_Toggle.isOn);
 		AudioManager.Instance.ControlSound (Sound_Toggle.isOn);
 		loadPLayerPrefs ();
 		init_slider ();
@@ -111,7 +111,7 @@ public class SetupSettingsUI : MonoBehaviour {
 
     public void VibrateToggleValueChange()
     {
-        Debug.Log("Vibrate_Toggle.isOn=" + Vibrate_Toggle.isOn);
+        //Debug.Log("Vibrate_Toggle.isOn=" + Vibrate_Toggle.isOn);
         AudioManager.Instance.ControlVibrate(Vibrate_Toggle.isOn);
         loadPLayerPrefs();
     }

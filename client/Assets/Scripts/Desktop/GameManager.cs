@@ -1082,7 +1082,7 @@ namespace com.Desktop
 					mplayer.DaPaiToAban (pai_id, AbanMjs.Count);
 					i = mplayer.keepedMah.Count;
 					j = mplayer.ponMah.Count;
-					Debug.LogError ("[RPC] " + mplayer.name + "出牌 " + pai_name + "("+pai_id+")"+ "[" + i + "+" + j + "]");
+					Debug.LogError ("[RPC] " + mplayer.NickName + "出牌 " + pai_name + "("+pai_id+")"+ "[" + i + "+" + j + "]");
 					mplayer.HideMenu ();
 					_lastDaPai = pai_id;
 					Speak (pai_id);

@@ -255,16 +255,24 @@ namespace com.Desktop
 					ChatText.text += "房間編號: #"+name+"\n";
 				}
 				if (RoomUserName != null) {
-					//PhotonNetwork.playerList
-					//PhotonPlayer mp = null;
-					//foreach(PhotonPlayer pp in PhotonNetwork.playerList) {
-					//	if (pp.IsMasterClient) {
-					//		mp = pp;
-					//		break;
-					//	}
-					//
-					//}
-					Hashtable cp = PhotonNetwork.room.customProperties;
+                    //PhotonNetwork.playerList
+                    //PhotonPlayer mp = null;
+                    //foreach (PhotonPlayer pp in PhotonNetwork.playerList)
+                    //{
+                    //    if (pp.IsMasterClient)
+                    //    {
+                    //        mp = pp;
+                    //        break;
+                    //    }
+                    //}
+
+                    //if (!PhotonNetwork.player.IsMasterClient) {
+                    //    PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
+                    //    PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
+                    //    PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
+                    //}
+
+                    Hashtable cp = PhotonNetwork.room.customProperties;
 					string cname = (string)cp ["CRoomName"];
 					RoomUserName.text = cname;
 					if (ChatText != null) {
@@ -330,24 +338,31 @@ namespace com.Desktop
 			}
 			string name = string.Empty;
 			int tid = 0;
-			if (PhotonNetwork.player.IsMasterClient) {
+
+            Debug.Log("pppppppppp");
+            PhotonNetwork.player.Level = "7"; // CryptoPrefs.GetString("USERLEVEL");
+            PhotonNetwork.player.Photo = "7"; //CryptoPrefs.GetString("USERPHOTO");
+            PhotonNetwork.player.Coin = "7"; //CryptoPrefs.GetString("USERCOIN");
+
+            if (PhotonNetwork.player.IsMasterClient) {
 				//如果是房主
 				PhotonPlayer notmaster = null;
 				int i = 0;
 				foreach (PhotonPlayer pp in PhotonNetwork.playerList) {
-					if (!pp.IsMasterClient) {
-						notmaster = pp;
-						break;
-					}
+                    if (!pp.IsMasterClient)
+                    {
+                        notmaster = pp;
+                        break;
+                    }
 					i++;
 				}
 				Debug.Log ("i="+i);
-				name = notmaster.NickName;
+                name = notmaster.NickName;
 				tid = notmaster.ID;
 				ShowAlert ("你邀請房間內的玩家["+name+"]一起玩麻將, 等待回應中...", 5.0f);
 			} else {
-				//如果不是房主
-				name = PhotonNetwork.masterClient.NickName;
+                //如果不是房主
+                name = PhotonNetwork.masterClient.NickName;
 				tid = PhotonNetwork.masterClient.ID;
 				ShowAlert ("你邀請房主["+name+"]一起玩麻將, 等待回應中...", 5.0f);
 			}
@@ -373,18 +388,17 @@ namespace com.Desktop
 				name = aa.NickName;
 				if (PanelInvate != null) {
 					Text txt = PanelInvate.GetComponentInChildren<Text> ();
-                    /*
                     Image pho = PanelInvate.transform.Find("Info/Photo").GetComponent<Image>();
                     Text lv = PanelInvate.transform.Find("Info/Lv").GetComponent<Text>();
                     Text coin = PanelInvate.transform.Find("Info/Coin/UserCoin").GetComponent<Text>();
 
-                    Texture2D newPhoto = new Texture2D(1, 1);
-                    newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
-                    newPhoto.Apply();
-                    pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    //Texture2D newPhoto = new Texture2D(1, 1);
+                    //newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
+                    //newPhoto.Apply();
+                    //pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                     lv.text = "Lv " + aa.Level;
                     coin.text = String.Format("{0:#,0}", aa.Coin);
-                    */
+                    Debug.Log("Lv = " + aa.Level + " ; Coin =  " + aa.Coin);
                     txt.text = name;
 					PanelInvate.SetActive (true);
 				}
@@ -489,7 +503,7 @@ namespace com.Desktop
 			if (ChatText != null) {
 				ChatText.text += player.NickName+"進入這個房間\n";
 			}
-			int ppl =  PhotonNetwork.room.PlayerCount;
+            int ppl =  PhotonNetwork.room.PlayerCount;
 			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
 		}
 

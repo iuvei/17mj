@@ -316,10 +316,108 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
     }
 
+    //CSU----------------------
+    private string playerphoto = "";
+
+    public string PlayerPhoto
+    {
+        get
+        {
+            return this.playerphoto;
+        }
+
+        set
+        {
+            //if (string.IsNullOrEmpty(value) || value.Equals(this.playerphoto))
+            //{
+            //    return;
+            //}
+
+            //if (this.LocalPlayer != null)
+            //{
+            //    this.LocalPlayer.Photo = value;
+            //}
+
+            this.playerphoto = value;
+            //if (this.CurrentRoom != null)
+            //{
+            //    // Only when in a room
+            //    this.SendPlayerPhoto();
+            //}
+        }
+    }
+
+    private string playerlevel = "";
+
+    public string PlayerLevel
+    {
+        get
+        {
+            return this.playerlevel;
+        }
+
+        set
+        {
+            //if (string.IsNullOrEmpty(value) || value.Equals(this.playerlevel))
+            //{
+            //    return;
+            //}
+            
+            //if (this.LocalPlayer != null)
+            //{
+            //    this.LocalPlayer.Level = value;
+            //}
+            
+            this.playerlevel = value;
+            /*
+            if (this.CurrentRoom != null)
+            {
+                // Only when in a room
+                this.SendPlayerLevel();
+            }*/
+        }
+    }
+
+    private string playercoin = "";
+
+    public string PlayerCoin
+    {
+        get
+        {
+            return this.playercoin;
+        }
+
+        set
+        {
+            //if (string.IsNullOrEmpty(value) || value.Equals(this.playercoin))
+            //{
+            //    return;
+            //}
+
+            //if (this.LocalPlayer != null)
+            //{
+            //    this.LocalPlayer.Coin = value;
+            //}
+
+            this.playercoin = value;
+            //if (this.CurrentRoom != null)
+            //{
+            //    // Only when in a room
+            //    this.SendPlayerCoin();
+            //}
+        }
+    }
+    //
+
     // "public" access to the current game - is null unless a room is joined on a gameserver
     // isLocalClientInside becomes true when op join result is positive on GameServer
     private bool mPlayernameHasToBeUpdated;
 
+    //CSU----
+    private bool mPlayerphotoHasToBeUpdated;
+    private bool mPlayerlevelHasToBeUpdated;
+    private bool mPlayercoinHasToBeUpdated;
+    //---
 
     public Room CurrentRoom
     {
@@ -1219,6 +1317,23 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             this.SendPlayerName();
         }
 
+        // CSU-----
+        if (this.mPlayerphotoHasToBeUpdated)
+        {
+            this.SendPlayerPhoto();
+        }
+
+        if (this.mPlayerlevelHasToBeUpdated)
+        {
+            this.SendPlayerLevel();
+        }
+
+        if (this.mPlayercoinHasToBeUpdated)
+        {
+            this.SendPlayerCoin();
+        }
+        //---
+
         switch (operationResponse.OperationCode)
         {
             case OperationCode.CreateGame:
@@ -1494,6 +1609,74 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
+
+    //CSU-------------
+    private void SendPlayerPhoto()
+    {
+        if (this.State == ClientState.Joining)
+        {
+            // this means, the join on the gameServer is sent (with an outdated photo). send the new when in game
+            this.mPlayerphotoHasToBeUpdated = true;
+            return;
+        }
+
+        if (this.LocalPlayer != null)
+        {
+            this.LocalPlayer.Photo = this.PlayerPhoto;
+            Hashtable properties = new Hashtable();
+            properties[ActorProperties.PlayerPhoto] = this.PlayerPhoto;
+            if (this.LocalPlayer.ID > 0)
+            {
+                this.OpSetPropertiesOfActor(this.LocalPlayer.ID, properties, null);
+                this.mPlayerphotoHasToBeUpdated = false;
+            }
+        }
+    }
+
+    private void SendPlayerLevel()
+    {
+        if (this.State == ClientState.Joining)
+        {
+            // this means, the join on the gameServer is sent (with an outdated level). send the new when in game
+            this.mPlayerlevelHasToBeUpdated = true;
+            return;
+        }
+
+        if (this.LocalPlayer != null)
+        {
+            this.LocalPlayer.Level = this.PlayerLevel;
+            Hashtable properties = new Hashtable();
+            properties[ActorProperties.PlayerLevel] = this.PlayerLevel;
+            if (this.LocalPlayer.ID > 0)
+            {
+                this.OpSetPropertiesOfActor(this.LocalPlayer.ID, properties, null);
+                this.mPlayerlevelHasToBeUpdated = false;
+            }
+        }
+    }
+
+    private void SendPlayerCoin()
+    {
+        if (this.State == ClientState.Joining)
+        {
+            // this means, the join on the gameServer is sent (with an outdated coin). send the new when in game
+            this.mPlayercoinHasToBeUpdated = true;
+            return;
+        }
+
+        if (this.LocalPlayer != null)
+        {
+            this.LocalPlayer.Coin = this.PlayerCoin;
+            Hashtable properties = new Hashtable();
+            properties[ActorProperties.PlayerCoin] = this.PlayerCoin;
+            if (this.LocalPlayer.ID > 0)
+            {
+                this.OpSetPropertiesOfActor(this.LocalPlayer.ID, properties, null);
+                this.mPlayercoinHasToBeUpdated = false;
+            }
+        }
+    }
+    //-----
 
     private Hashtable GetLocalActorProperties()
     {

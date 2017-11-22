@@ -64,12 +64,59 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
     }
 
+    //CSU-----
+    private string photoField = "";
     /// <summary>
     /// Only used internally in lobby, to display oppsite information in room (while you're in).
     /// </summary>
-    public string Photo { get; set; }
-    public string Level { get; set; }
-    public string Coin { get; set; }
+    public string Photo
+    {
+        get
+        {
+            return this.photoField;
+        }
+        set
+        {
+            this.photoField = value;
+            PhotonNetwork.playerPhoto = value;   // this will sync the local player's photo in a room
+        }
+    }
+
+    private string levelField = "";
+    /// <summary>
+    /// Only used internally in lobby, to display oppsite information in room (while you're in).
+    /// </summary>
+    public string Level
+    {
+        get
+        {
+            return this.levelField;
+        }
+        set
+        {
+            this.levelField = value;
+            PhotonNetwork.playerLevel = value;   // this will sync the local player's level in a room
+        }
+    }
+
+    private string coinField = "";
+    /// <summary>
+    /// Only used internally in lobby, to display oppsite information in room (while you're in).
+    /// </summary>
+    public string Coin
+    {
+        get
+        {
+            return this.coinField;
+        }
+        set
+        {
+            this.coinField = value;
+            PhotonNetwork.playerCoin = value;   // this will sync the local player's coin in a room
+        }
+    }
+
+    //---------------
 
     /// <summary>UserId of the player, available when the room got created with RoomOptions.PublishUserId = true.</summary>
     /// <remarks>Useful for PhotonNetwork.FindFriends and blocking slots in a room for expected players (e.g. in PhotonNetwork.CreateRoom).</remarks>
@@ -433,14 +480,16 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
     [Obsolete("Please use AllProperties (updated case for naming).")]
     public Hashtable allProperties { get { return this.AllProperties; } }
 
+    //CSU----
     [Obsolete("Please use Photo (updated case for naming).")]
-    public string photo { get { return this.Photo; } }
+    public string photo { get { return this.NickName; } set { this.Photo = value; } }
 
     [Obsolete("Please use Level (updated case for naming).")]
-    public string level { get { return this.Level; } }
+    public string level { get { return this.Level; } set { this.Level = value; } }
 
     [Obsolete("Please use Coin (updated case for naming).")]
-    public string coin { get { return this.Coin; } }
+    public string coin { get { return this.Coin; } set { this.Coin = value; } }
+    //-----
 
     #endregion
 }

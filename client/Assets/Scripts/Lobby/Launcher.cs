@@ -424,9 +424,11 @@ namespace com.Lobby
 			PhotonNetwork.LoadLevel ("03.Room");
 			//SetPlayerName();
 			this.Players = PhotonNetwork.playerList.ToList ();
-			UpdateRoomInfo ();
 
-            //CSU ....... .PhotonPlayer aa = Players.Find(x => x.ID.Equals(player_a));
+            //CSU PhotonPlayer aa = Players.Find(x => x.ID.Equals(player_a));
+
+            UpdateRoomInfo ();
+
 
             //StartCoroutine(GetInRoom());
             /*
@@ -450,7 +452,7 @@ namespace com.Lobby
 
         public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
         {
-			Debug.Log ("OnPhotonPlayerConnected()");
+            Debug.Log ("OnPhotonPlayerConnected()");
 			Players.Add (newPlayer);
 			//Debug.Log ("cnt="+Players.Count);
 			UpdateRoomInfo ();
@@ -484,7 +486,12 @@ namespace com.Lobby
 			if (PhotonNetwork.connected) {
 				Hashtable customp = new Hashtable ();
 				string cname = PhotonNetwork.player.NickName;
-				customp.Add ("CRoomName", cname);
+                PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
+                PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
+                PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
+
+
+                customp.Add ("CRoomName", cname);
 				string sToken = CryptoPrefs.GetString ("USERTOKEN");
 				customp.Add ("UserToken", sToken);
 				#if UNITY_IOS
@@ -1157,10 +1164,10 @@ namespace com.Lobby
         }
 
         public void ClickConfirmCreateRoom() {
-            for (int i = 0; i < _createRoomType.Length ; i++)
-            {
+            //for (int i = 0; i < _createRoomType.Length ; i++)
+            //{
                 //Debug.Log("開房設定: " + _createRoomType[i][_createRoomTypeIndex[i]] + " ; ");
-            }
+            //}
 
             CreateRoom();
         }
@@ -2171,7 +2178,10 @@ namespace com.Lobby
                 {
                     playerPhotos[i].sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                 }
+
+                PhotonNetwork.player.Photo = sPhoto;
             }
+            
         }
 
 		public void SetPlayerAccount()
@@ -2214,6 +2224,8 @@ namespace com.Lobby
                 {
                     playerLvs[i].text = "Lv " + sLevel;
                 }
+
+                PhotonNetwork.player.Level = sLevel;
             }
         }
 
@@ -2245,6 +2257,7 @@ namespace com.Lobby
                         break;
                 }
                 playerCoins[arrayIndex].text = string.Format("{0:0,0}", localCoin);
+                PhotonNetwork.player.Coin = sCoin;
             }
             else
             {

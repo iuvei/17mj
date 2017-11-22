@@ -1006,7 +1006,13 @@ using ExitGames.Client.Photon;
 
         /// <summary>(253) UserId of the player. Sent when room gets created with RoomOptions.PublishUserId = true.</summary>
         public const byte UserId = 253;
-    }
+
+        //CSU---
+        public const byte PlayerPhoto = 252;
+        public const byte PlayerLevel = 251;
+        public const byte PlayerCoin = 250;
+        //---
+}
 
 
     /// <summary>
@@ -1326,7 +1332,13 @@ using ExitGames.Client.Photon;
 
         /// <summary>(191) An int parameter summarizing several boolean room-options with bit-flags.</summary>
         public const byte RoomOptionFlags = 191;
-    }
+
+        //CSU---
+        public const byte Photo = 190;
+        public const byte Level = 189;
+        public const byte Coin = 188;
+        //---
+}
 
 
     /// <summary>

@@ -339,12 +339,9 @@ namespace com.Desktop
 			string name = string.Empty;
 			int tid = 0;
 
-            Debug.Log("pppppppppp");
-			string rnd = UnityEngine.Random.Range (1, 100).ToString();
-			PhotonNetwork.player.Level = rnd; // CryptoPrefs.GetString("USERLEVEL");
-			//PhotonNetwork.player.NickName = rnd;
-            //PhotonNetwork.player.Photo = "7"; //CryptoPrefs.GetString("USERPHOTO");
-            //PhotonNetwork.player.Coin = "7"; //CryptoPrefs.GetString("USERCOIN");
+            PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
+            PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
+            PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
 
             if (PhotonNetwork.player.IsMasterClient) {
 				//如果是房主
@@ -394,13 +391,13 @@ namespace com.Desktop
                     Text lv = PanelInvate.transform.Find("Info/Lv").GetComponent<Text>();
                     Text coin = PanelInvate.transform.Find("Info/Coin/UserCoin").GetComponent<Text>();
 
-                    //Texture2D newPhoto = new Texture2D(1, 1);
-                    //newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
-                    //newPhoto.Apply();
-                    //pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    Texture2D newPhoto = new Texture2D(1, 1);
+                    newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
+                    newPhoto.Apply();
+                    pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                     lv.text = "Lv " + aa.Level;
-                    //coin.text = String.Format("{0:#,0}", aa.Coin);
-                    Debug.Log("Lv = " + aa.Level);
+                    coin.text = String.Format("{0:#,0}", aa.Coin);
+                    //Debug.Log("Lv = " + aa.Level);
                     txt.text = name;
 					PanelInvate.SetActive (true);
 				}

@@ -63,7 +63,7 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
             PhotonNetwork.playerName = value;   // this will sync the local player's name in a room
         }
     }
-	/*
+
     //CSU-----
     private string photoField = "";
     /// <summary>
@@ -77,11 +77,19 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
         set
         {
+            if (!IsLocal)
+            {
+                Debug.LogError("Error: Cannot change the photo of a remote player!");
+                //return;
+            }
+            if (string.IsNullOrEmpty(value) || value.Equals(this.photoField))
+            {
+                return;
+            }
             this.photoField = value;
             PhotonNetwork.playerPhoto = value;   // this will sync the local player's photo in a room
         }
     }
-	*/
 
     private string levelField = "";
     /// <summary>
@@ -109,7 +117,6 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
     }
 
-	/*
     private string coinField = "";
     /// <summary>
     /// Only used internally in lobby, to display oppsite information in room (while you're in).
@@ -122,11 +129,19 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
         set
         {
+            if (!IsLocal)
+            {
+                Debug.LogError("Error: Cannot change the coin of a remote player!");
+                //return;
+            }
+            if (string.IsNullOrEmpty(value) || value.Equals(this.coinField))
+            {
+                return;
+            }
             this.coinField = value;
             PhotonNetwork.playerCoin = value;   // this will sync the local player's coin in a room
         }
     }
-    */
 
     //---------------
 
@@ -169,7 +184,9 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
             Hashtable allProps = new Hashtable();
             allProps.Merge(this.CustomProperties);
             allProps[ActorProperties.PlayerName] = this.NickName;
+            allProps[ActorProperties.PlayerPhoto] = this.Photo;
 			allProps[ActorProperties.PlayerLevel] = this.Level;
+            allProps[ActorProperties.PlayerCoin] = this.Coin;
             return allProps;
         }
     }
@@ -186,13 +203,15 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
    	/// <param name="actorID">Actor I.</param>
    	/// <param name="name">Name.</param>
    	/// <param name="level">Level.</param>
-	public PhotonPlayer(bool isLocal, int actorID, string name, string level)
+	public PhotonPlayer(bool isLocal, int actorID, string name, string level, string photo, string coin)
     {
         this.CustomProperties = new Hashtable();
         this.IsLocal = isLocal;
         this.actorID = actorID;
         this.nameField = name;
 		this.levelField = level;
+		this.photoField = photo;
+		this.coinField = coin;
     }
 
 	/// <summary>
@@ -269,8 +288,17 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         }
 		if (properties.ContainsKey(ActorProperties.PlayerLevel))
 		{
-			this.Level = (string)properties[ActorProperties.PlayerLevel];
-		}
+            this.levelField = (string)properties[ActorProperties.PlayerLevel];
+        }
+        if (properties.ContainsKey(ActorProperties.PlayerPhoto))
+        {
+            this.photoField = (string)properties[ActorProperties.PlayerPhoto];
+        }
+        if (properties.ContainsKey(ActorProperties.PlayerCoin))
+        {
+            this.coinField = (string)properties[ActorProperties.PlayerCoin];
+        }
+		
         if (properties.ContainsKey(ActorProperties.IsInactive))
         {
             this.IsInactive = (bool)properties[ActorProperties.IsInactive]; //TURNBASED new well-known propery for players
@@ -495,9 +523,15 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
     [Obsolete("Please use NickName (updated case for naming).")]
     public string name { get { return this.NickName; } set { this.NickName = value; } }
 
+	[Obsolete("Please use Photo (updated case for naming).")]
+	public string photo { get { return this.Photo; } set { this.Photo = value; } }
+
 	[Obsolete("Please use Level (updated case for naming).")]
 	public string level { get { return this.Level; } set { this.Level = value; } }
-
+	
+	[Obsolete("Please use Coin (updated case for naming).")]
+	public string coin { get { return this.Level; } set { this.Coin = value; } }
+	
     [Obsolete("Please use UserId (updated case for naming).")]
     public string userId { get { return this.UserId; } internal set { this.UserId = value; } }
 

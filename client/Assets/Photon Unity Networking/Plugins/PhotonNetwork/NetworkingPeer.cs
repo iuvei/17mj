@@ -315,9 +315,9 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-	/*
+
     //CSU----------------------
-    private string playerphoto = "";
+    private string playerphoto = string.Empty;
 
     public string PlayerPhoto
     {
@@ -328,25 +328,24 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
         set
         {
-            //if (string.IsNullOrEmpty(value) || value.Equals(this.playerphoto))
-            //{
-            //    return;
-            //}
+            if (string.IsNullOrEmpty(value) || value.Equals(this.playerphoto))
+            {
+                return;
+            }
 
-            //if (this.LocalPlayer != null)
-            //{
-            //    this.LocalPlayer.Photo = value;
-            //}
+            if (this.LocalPlayer != null)
+            {
+                this.LocalPlayer.Photo = value;
+            }
 
             this.playerphoto = value;
-            //if (this.CurrentRoom != null)
-            //{
-            //    // Only when in a room
-            //    this.SendPlayerPhoto();
-            //}
+            if (this.CurrentRoom != null)
+            {
+                // Only when in a room
+                this.SendPlayerPhoto();
+            }
         }
     }
-	*/
 
 	private string playerlevel = string.Empty;
 
@@ -379,8 +378,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
     }
 
-	/*
-    private string playercoin = "";
+    private string playercoin = string.Empty;
 
     public string PlayerCoin
     {
@@ -391,25 +389,24 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
         set
         {
-            //if (string.IsNullOrEmpty(value) || value.Equals(this.playercoin))
-            //{
-            //    return;
-            //}
+            if (string.IsNullOrEmpty(value) || value.Equals(this.playercoin))
+            {
+                return;
+            }
 
-            //if (this.LocalPlayer != null)
-            //{
-            //    this.LocalPlayer.Coin = value;
-            //}
+            if (this.LocalPlayer != null)
+            {
+                this.LocalPlayer.Coin = value;
+            }
 
             this.playercoin = value;
-            //if (this.CurrentRoom != null)
-            //{
-            //    // Only when in a room
-            //    this.SendPlayerCoin();
-            //}
+            if (this.CurrentRoom != null)
+            {
+                // Only when in a room
+                this.SendPlayerCoin();
+            }
         }
     }
-    */
     //
 
     // "public" access to the current game - is null unless a room is joined on a gameserver
@@ -1104,6 +1101,8 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 Hashtable props;
                 string newName;
 				string newLevel;
+				string newPhoto;
+				string newCoin;
                 PhotonPlayer target;
 
                 foreach (object key in pActorProperties.Keys)
@@ -1112,11 +1111,13 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                     props = (Hashtable)pActorProperties[key];
                     newName = (string)props[ActorProperties.PlayerName];
 					newLevel = (string)props[ActorProperties.PlayerLevel];
+					newPhoto = (string)props[ActorProperties.PlayerPhoto];
+					newCoin = (string)props[ActorProperties.PlayerCoin];
 
                     target = this.GetPlayerWithId(actorNr);
                     if (target == null)
                     {
-						target = new PhotonPlayer(false, actorNr, newName, newLevel);
+						target = new PhotonPlayer(false, actorNr, newName, newLevel, newPhoto, newCoin);
                         this.AddNewPlayer(actorNr, target);
                     }
 
@@ -1323,20 +1324,20 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
 
         // CSU-----
-        //if (this.mPlayerphotoHasToBeUpdated)
-        //{
-        //    this.SendPlayerPhoto();
-        //}
+        if (this.mPlayerphotoHasToBeUpdated)
+        {
+            this.SendPlayerPhoto();
+        }
 
         if (this.mPlayerlevelHasToBeUpdated)
         {
             this.SendPlayerLevel();
         }
 
-        //if (this.mPlayercoinHasToBeUpdated)
-        //{
-        //    this.SendPlayerCoin();
-        //}
+        if (this.mPlayercoinHasToBeUpdated)
+        {
+            this.SendPlayerCoin();
+        }
         //---
 
         switch (operationResponse.OperationCode)
@@ -1614,7 +1615,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-	/*
+
     //CSU-------------
     private void SendPlayerPhoto()
     {
@@ -1637,7 +1638,6 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-	*/
 
     private void SendPlayerLevel()
     {
@@ -1660,7 +1660,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-	/*
+
     private void SendPlayerCoin()
     {
         if (this.State == ClientState.Joining)
@@ -1682,7 +1682,6 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             }
         }
     }
-    */
     //-----
 
     private Hashtable GetLocalActorProperties()
@@ -1695,6 +1694,8 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         Hashtable actorProperties = new Hashtable();
         actorProperties[ActorProperties.PlayerName] = this.PlayerName;
 		actorProperties[ActorProperties.PlayerLevel] = this.PlayerLevel;
+		actorProperties[ActorProperties.PlayerPhoto] = this.PlayerPhoto;
+		actorProperties[ActorProperties.PlayerCoin] = this.PlayerCoin;
         return actorProperties;
     }
 

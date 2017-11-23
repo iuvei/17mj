@@ -2580,19 +2580,19 @@ namespace com.Lobby
                     txtNum.text = String.Format("{0:#,0}", player_count);
                 }
 
-                ri.Photo = roomTotalDatas[_count * 4 + 1];
-                ri.Level = roomTotalDatas[_count * 4 + 2];
-                ri.Coin = roomTotalDatas[_count * 4 + 3];
+                //ri.Photo = roomTotalDatas[_count * 4 + 1];
+                //ri.Level = roomTotalDatas[_count * 4 + 2];
+                //ri.Coin = roomTotalDatas[_count * 4 + 3];
 
                 SetRoomListPhoto(roomTotalDatas[_count * 4 + 1], _img);
 
                 Button bt = g.GetComponent<Button> ();
 				bt.onClick.AddListener (delegate {
                     joinRoom (ri.Name);
-                    CryptoPrefs.SetString("OPPNAME", ri.Name);
-                    CryptoPrefs.SetString("OPPPHOTO", ri.Photo);
-                    CryptoPrefs.SetString("OPPLEVEL", ri.Level);
-                    CryptoPrefs.SetString("OPPCOIN", ri.Coin);
+                    //CryptoPrefs.SetString("OPPNAME", ri.Name);
+                    //CryptoPrefs.SetString("OPPPHOTO", ri.Photo);
+                    //CryptoPrefs.SetString("OPPLEVEL", ri.Level);
+                    //CryptoPrefs.SetString("OPPCOIN", ri.Coin);
                 });
 
                 _count += 1;

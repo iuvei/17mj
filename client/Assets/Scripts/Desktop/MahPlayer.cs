@@ -81,8 +81,12 @@ namespace com.Desktop
         //玩家昵称
         public Text playerName;
 
+        public Image playerPhoto;
+        public Text playerLevel;
+        public Text playerCoin;
+
         //行动完畢？
-		public bool actived = false;
+        public bool actived = false;
 
         //与PhotonPlayer中的玩家关联
         public PhotonPlayer photonPlayer;
@@ -123,7 +127,16 @@ namespace com.Desktop
 			if (photonPlayer != null) {
 				this.NickName = photonPlayer.NickName;
 				playerName.text = photonPlayer.NickName;
-			}
+                playerLevel.text = "Lv " + photonPlayer.Level;
+                playerCoin.text = String.Format("{0:#,0}", int.Parse(photonPlayer.Coin));
+
+                if (playerPhoto) {
+                    Texture2D newPhoto = new Texture2D(1, 1);
+                    newPhoto.LoadImage(System.Convert.FromBase64String(photonPlayer.Photo));
+                    newPhoto.Apply();
+                    playerPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                }
+            }
 
 			if (this.ID == PhotonNetwork.player.ID) {
 				HideMenu ();

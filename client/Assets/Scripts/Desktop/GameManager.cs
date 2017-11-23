@@ -188,10 +188,10 @@ namespace com.Desktop
                 _loserP = OverPanel.transform.Find("Loser");
 
                 if (_winnerP) {
-                    _winPhoto = _winnerP.transform.Find("outline/Photo").GetComponent<Image>();
+                    _winPhoto = _winnerP.transform.Find("PhotoMask/Photo").GetComponent<Image>();
                     _winName = _winnerP.transform.Find("Name").GetComponent<Text>();
                     _winLv = _winnerP.transform.Find("Lv").GetComponent<Text>();
-                    _winCoin = _winnerP.transform.Find("Coin").GetComponent<Text>();
+                    _winCoin = _winnerP.transform.Find("coinZone/Coin").GetComponent<Text>();
                 }
 
                 if (_loserP) {
@@ -396,7 +396,7 @@ namespace com.Desktop
                     newPhoto.Apply();
                     pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                     lv.text = "Lv " + aa.Level;
-                    coin.text = String.Format("{0:#,0}", aa.Coin);
+                    coin.text = String.Format("{0:#,0}", int.Parse(aa.Coin));
                     //Debug.Log("Lv = " + aa.Level);
                     txt.text = name;
 					PanelInvate.SetActive (true);
@@ -414,7 +414,7 @@ namespace com.Desktop
 		[PunRPC]
 		private void GameStart()
 		{
-			//Debug.LogError ("[RPC] GameStart()");
+			Debug.LogError ("[RPC] GameStart()");
 			LayoutStart();
 			RestView ();
 			if (OverPanel != null) {
@@ -1254,6 +1254,14 @@ namespace com.Desktop
 				Debug.LogError ("[RPC] 玩家(" + winner + ") 胡牌了!");
 				text.text = winner;
 
+                //Texture2D newPhoto = new Texture2D(1, 1);
+                //newPhoto.LoadImage(Convert.FromBase64String(PhotonNetwork.player.Photo));
+                //newPhoto.Apply();
+                //_winPhoto.sprite = mplayer.playerPhoto.sprite; //Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                _winName.text = winner;
+                _winLv.text = mplayer.playerLevel.text;
+                _winCoin.text = mplayer.playerCoin.text;
+
                 //傳送勝敗場數
                 string sToken = CryptoPrefs.GetString("USERTOKEN");
                 string sName = CryptoPrefs.GetString("USERNAME");
@@ -1265,22 +1273,30 @@ namespace com.Desktop
 
                 if (mplayer.ID == PhotonNetwork.player.ID) {
 					//Debug.LogError ("[RPC] 你贏了 ");
-                    SetWinnerInfo("Win");
+                    //SetWinnerInfo("Win");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
 
                     sRate = (sOldWin + 1) * 10000 / (sOldWin + sOldLose + 1);
                     MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
-				} else {
-                    SetWinnerInfo("Lose");
+
+                    Texture2D newPhoto = new Texture2D(1, 1);
+                    newPhoto.LoadImage(Convert.FromBase64String(PhotonNetwork.player.Photo));
+                    newPhoto.Apply();
+                    _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                } else {
+                    //SetWinnerInfo("Lose");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
 
                     sRate = (sOldWin) * 10000 / (sOldWin + sOldLose + 1);
                     MJApi.setUserLose(sToken, sName, sOldLose, sOldLose + 1, sRate, setUserLoseCallback);
-				}
+
+                    _winPhoto.sprite = mplayer.playerPhoto.sprite;
+                }
+
                 Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
             }
         }
@@ -1565,6 +1581,7 @@ namespace com.Desktop
         //畫面移入
         private void LayoutStart()
         {
+            Debug.Log("直播畫面 往右移");
             if (VideoBG) //直播畫面背景圖
                 VideoBG.color = _colorAplha;
 
@@ -1581,6 +1598,7 @@ namespace com.Desktop
 
 		private void LayoutEnd()
 		{
+            Debug.Log("直播畫面 往左移");
             if (VideoBG)  //直播畫面背景圖
                 VideoBG.color = _colorWhite;
 

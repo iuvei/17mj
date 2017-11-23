@@ -23,15 +23,7 @@ public class VideoRecordingBridge {
 	private static extern void _moveLeft ();
 
 	#elif UNITY_ANDROID
-	private static AndroidJavaObject live = null;
-	private static bool init = true;
-	public static void setup(){
-		if(init){
-            live = new AndroidJavaClass("com.biginnovation.live.LiveRec");
-            live.CallStatic("AddLiveView");
-            init = false;
-        }
-	}
+	private static AndroidJavaObject live = new AndroidJavaClass("com.biginnovation.live.LiveRec");
     #endif
 
 	public static void StartRecord(string str){
@@ -39,7 +31,6 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_startRecord (str);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
 		live.CallStatic("RecStart",str);
         #endif
     }
@@ -49,7 +40,6 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopRecord ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
 		live.CallStatic("RecStop");
 		#endif
 	}
@@ -59,7 +49,6 @@ public class VideoRecordingBridge {
         #if !UNITY_EDITOR && UNITY_IOS
 	    _startPlay (str,room);
         #elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
 		live.CallStatic("PlayStart",str,room);
         #endif
     }
@@ -70,7 +59,6 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_stopPlay ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
 		live.CallStatic("PlayStop");
 		#endif
 	}
@@ -80,7 +68,6 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_moveRight ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
 	    live.CallStatic("MoveRight");
 		#endif
 	}
@@ -90,7 +77,6 @@ public class VideoRecordingBridge {
 		#if !UNITY_EDITOR && UNITY_IOS
 		_moveLeft ();
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
 	    live.CallStatic("MoveLeft");
 		#endif
 	}
@@ -99,8 +85,6 @@ public class VideoRecordingBridge {
     {
         #if !UNITY_EDITOR && UNITY_IOS
         #elif !UNITY_EDITOR && UNITY_ANDROID
-		setup();
-		Debug.Log ("REConnect="+str);
         live.CallStatic("MoveLeft");
         #endif
     }

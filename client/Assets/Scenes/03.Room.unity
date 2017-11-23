@@ -9255,6 +9255,11 @@ Prefab:
       propertyPath: VideoBG
       value: 
       objectReference: {fileID: 553788081}
+    - target: {fileID: 114269646302095974, guid: acc6e2eccc03d8042b8a536949cefd40,
+        type: 2}
+      propertyPath: BackBtn
+      value: 
+      objectReference: {fileID: 1169243108}
     m_RemovedComponents:
     - {fileID: 114168195530333518, guid: acc6e2eccc03d8042b8a536949cefd40, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: acc6e2eccc03d8042b8a536949cefd40, type: 2}

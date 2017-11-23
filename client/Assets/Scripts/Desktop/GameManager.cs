@@ -57,7 +57,8 @@ namespace com.Desktop
 		public GameObject GameInfo;
 		public RectTransform abanPos;
 		public Button InvateBtn;
-		public Text Online;
+        public Button BackBtn;
+        public Text Online;
 		public Image OverPanel;
 		public GameObject PanelInvate;
 		public Text ChatText;
@@ -1545,8 +1546,14 @@ namespace com.Desktop
             if (VideoBG) //直播畫面背景圖
                 VideoBG.color = _colorAplha;
 
-            //VideoCanvas.transform.DOScaleX (1, 0);
-            AllCanvas.transform.DOMoveX (-14, 0, true);
+            if (InvateBtn)
+                InvateBtn.gameObject.SetActive(false);
+
+            if(BackBtn)
+                BackBtn.gameObject.SetActive(false);
+
+        //VideoCanvas.transform.DOScaleX (1, 0);
+        AllCanvas.transform.DOMoveX (-14, 0, true);
 			AllCanvas.transform.DOMoveX(0, 1, false).SetEase(Ease.InOutBack).OnComplete(ShowInfo);
 			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.MoveRight ();
@@ -1561,6 +1568,12 @@ namespace com.Desktop
             Debug.Log("直播畫面 往左移");
             if (VideoBG)  //直播畫面背景圖
                 VideoBG.color = _colorWhite;
+
+            if (InvateBtn)
+                InvateBtn.gameObject.SetActive(true);
+
+            if (BackBtn)
+                BackBtn.gameObject.SetActive(true);
 
             ExitSetting();
             OverPanel.gameObject.SetActive(false);

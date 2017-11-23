@@ -3520,7 +3520,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -643, y: 455}
+  m_AnchoredPosition: {x: -643, y: 440.8}
   m_SizeDelta: {x: 161, y: 129}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &343014089
@@ -3567,7 +3567,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &343742799
 GameObject:
   m_ObjectHideFlags: 0
@@ -10495,7 +10495,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 321275714}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

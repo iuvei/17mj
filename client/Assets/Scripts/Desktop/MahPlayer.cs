@@ -181,7 +181,9 @@ namespace com.Desktop
 				if (btnAuto != null) {
 					btnAuto.isOn = this._autoPlay;
 					btnAuto.onValueChanged.RemoveAllListeners ();
-				}
+                    btnAuto.transform.DOBlendableMoveBy(new Vector3(0, 0.2f, 0), 0.8f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+
+                }
 			}
         }
 

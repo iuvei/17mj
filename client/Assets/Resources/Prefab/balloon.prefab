@@ -265,6 +265,7 @@ MonoBehaviour:
   _balloonImg: {fileID: 114305862271094948}
   _particle: {fileID: 1721494109582008}
   _star: {fileID: 224413876204713630}
+  _clickEarn: 100
 --- !u!114 &114792899748510714
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -8,6 +8,7 @@ public class Balloon : MonoBehaviour {
     public Image _balloonImg;
     public GameObject _particle;
     public Transform _star;
+    public int _clickEarn = 5;
     private Sprite[] _sprite;
 
     void Start() {
@@ -26,7 +27,7 @@ public class Balloon : MonoBehaviour {
         _balloonImg.DOFade(0, 0.1f).SetEase(Ease.InSine);
         _particle.SetActive(true);
 
-        com.Lobby.Launcher.instance.ChangeCoin(2);
+        com.Lobby.Launcher.instance.ChangeCoin(_clickEarn);
 
         if (_star) {
             _star.gameObject.SetActive(true);

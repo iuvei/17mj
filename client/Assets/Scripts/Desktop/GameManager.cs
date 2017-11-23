@@ -1273,7 +1273,6 @@ namespace com.Desktop
 
                 if (mplayer.ID == PhotonNetwork.player.ID) {
 					//Debug.LogError ("[RPC] 你贏了 ");
-                    //SetWinnerInfo("Win");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.HU2);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.PAU);
@@ -1286,7 +1285,6 @@ namespace com.Desktop
                     newPhoto.Apply();
                     _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
                 } else {
-                    //SetWinnerInfo("Lose");
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);
 					nagiEffectPlayerB.ShowNagi (Nagieffect.NagiType.HU);
@@ -1298,45 +1296,6 @@ namespace com.Desktop
                 }
 
                 Debug.Log("目前勝場數 " + sOldWin + " ;目前敗場數 " + sOldLose + " ;勝率 " + sRate + "%");
-            }
-        }
-
-        private void SetWinnerInfo(string _PlayerResult) {
-            string sName = CryptoPrefs.GetString("USERNAME");
-            string sPhoto = CryptoPrefs.GetString("USERPHOTO");
-            string sLv = CryptoPrefs.GetString("USERLEVEL");
-            string sCoin = CryptoPrefs.GetString("USERCOIN");
-            //string oName = CryptoPrefs.GetString("OPPNAME");
-            //string oPhoto = CryptoPrefs.GetString("OPPPHOTO");
-            //string oLv = CryptoPrefs.GetString("OPPLEVEL");
-            //string oCoin = CryptoPrefs.GetString("OPPCOIN");
-
-            if (_PlayerResult == "Win") {
-                if (!string.IsNullOrEmpty(sPhoto))
-                {
-                    Texture2D newPhoto = new Texture2D(1, 1);
-                    newPhoto.LoadImage(Convert.FromBase64String(sPhoto));
-                    newPhoto.Apply();
-                    _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
-                }
-
-                _winName.text = sName;
-                _winLv.text = "Lv " + sLv;
-                _winCoin.text = String.Format("{0:0,0}", int.Parse(sCoin));
-            }
-            else if(_PlayerResult == "Lose")
-            {
-                //if (!string.IsNullOrEmpty(oPhoto))
-                //{
-                //    Texture2D newPhoto = new Texture2D(1, 1);
-                //    newPhoto.LoadImage(Convert.FromBase64String(oPhoto));
-                //    newPhoto.Apply();
-                //    _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
-                //}
-
-                //_winName.text = oName;
-                //_winLv.text = oLv;
-                //_winCoin.text = String.Format("{0:0,0}", int.Parse(oCoin));
             }
         }
 

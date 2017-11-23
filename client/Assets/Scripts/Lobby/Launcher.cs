@@ -316,7 +316,7 @@ namespace com.Lobby
             IniPlayerInfo();
             _createRoomType = new string[][] { _createRoomChipType, _createRoomCircleType, _createRoomTimeType };
             SettingInitAnim();
-            InvokeRepeating("AutoBirthBalloon", 3f, 8f);
+            InvokeRepeating("AutoBirthBalloon", 3f, 10f);
         }
 
 		public override void OnJoinedLobby()
@@ -2013,7 +2013,7 @@ namespace com.Lobby
         }
 
         IEnumerator RandomBalloon() {
-            int _time = UnityEngine.Random.Range(1, 5); //一次最多5顆
+            int _time = UnityEngine.Random.Range(0, 2); //一次最多1顆
             for (int i = 0; i < _time; i++)
             {
                 yield return new WaitForSeconds(1f);
@@ -2268,7 +2268,7 @@ namespace com.Lobby
 
         public void SetUserOnline()
         {
-            _randomOnlineUsers = UnityEngine.Random.Range(1, 100) * 1000;
+            _randomOnlineUsers = 123000; // UnityEngine.Random.Range(1, 100) * 1000;
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
 			//Debug.Log ("SetUserOnline("+sName+" "+sToken+")");
@@ -2570,7 +2570,6 @@ namespace com.Lobby
                 Text txtName = g.transform.Find("Name").GetComponent<Text>();
                 Text txtNum = g.transform.Find("People/Num").GetComponent<Text>();
                 Image _img = g.transform.Find("PhotoMask/Photo").GetComponent<Image>();
-
                 int player_count = ri.PlayerCount;
                 Hashtable cp = ri.CustomProperties;
 
@@ -2589,10 +2588,6 @@ namespace com.Lobby
                 Button bt = g.GetComponent<Button> ();
 				bt.onClick.AddListener (delegate {
                     joinRoom (ri.Name);
-                    //CryptoPrefs.SetString("OPPNAME", ri.Name);
-                    //CryptoPrefs.SetString("OPPPHOTO", ri.Photo);
-                    //CryptoPrefs.SetString("OPPLEVEL", ri.Level);
-                    //CryptoPrefs.SetString("OPPCOIN", ri.Coin);
                 });
 
                 _count += 1;

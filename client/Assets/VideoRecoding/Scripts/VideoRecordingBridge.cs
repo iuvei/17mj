@@ -22,7 +22,7 @@ public class VideoRecordingBridge {
 	[DllImport("__Internal")]
 	private static extern void _moveLeft ();
 
-	#elif UNITY_ANDROID
+	#elif !UNITY_EDITOR && UNITY_ANDROID
 	private static AndroidJavaObject live = new AndroidJavaClass("com.biginnovation.live.LiveRec");
     #endif
 

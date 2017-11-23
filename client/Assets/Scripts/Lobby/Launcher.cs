@@ -2599,7 +2599,8 @@ namespace com.Lobby
 
             if (_photoType == "0") //圖片隨機
             {
-                _photoImg.sprite = Resources.Load<Sprite>("Image/Rank/temp/" + UnityEngine.Random.Range(1, 8));
+                //_photoImg.sprite = Resources.Load<Sprite>("Image/Rank/temp/" + UnityEngine.Random.Range(1, 8));
+                _photoImg.sprite = Resources.Load<Sprite>("Image/defaultUserP");
             }
             else
             {

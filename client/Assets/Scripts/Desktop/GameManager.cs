@@ -266,12 +266,6 @@ namespace com.Desktop
                     //    }
                     //}
 
-                    //if (!PhotonNetwork.player.IsMasterClient) {
-                    //    PhotonNetwork.player.Photo = CryptoPrefs.GetString("USERPHOTO");
-                    //    PhotonNetwork.player.Level = CryptoPrefs.GetString("USERLEVEL");
-                    //    PhotonNetwork.player.Coin = CryptoPrefs.GetString("USERCOIN");
-                    //}
-
                     Hashtable cp = PhotonNetwork.room.customProperties;
 					string cname = (string)cp ["CRoomName"];
 					RoomUserName.text = cname;
@@ -387,14 +381,18 @@ namespace com.Desktop
 				name = aa.NickName;
 				if (PanelInvate != null) {
 					Text txt = PanelInvate.GetComponentInChildren<Text> ();
-                    Image pho = PanelInvate.transform.Find("Info/Photo").GetComponent<Image>();
+                    Image pho = PanelInvate.transform.Find("Info/PMask/Photo").GetComponent<Image>();
                     Text lv = PanelInvate.transform.Find("Info/Lv").GetComponent<Text>();
                     Text coin = PanelInvate.transform.Find("Info/Coin/UserCoin").GetComponent<Text>();
 
-                    Texture2D newPhoto = new Texture2D(1, 1);
-                    newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
-                    newPhoto.Apply();
-                    pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    if (!string.IsNullOrEmpty(aa.Photo))
+                    {
+                        Texture2D newPhoto = new Texture2D(1, 1);
+                        newPhoto.LoadImage(System.Convert.FromBase64String(aa.Photo));
+                        newPhoto.Apply();
+                        pho.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    }
+
                     lv.text = "Lv " + aa.Level;
                     coin.text = String.Format("{0:#,0}", int.Parse(aa.Coin));
                     //Debug.Log("Lv = " + aa.Level);
@@ -1280,10 +1278,13 @@ namespace com.Desktop
                     sRate = (sOldWin + 1) * 10000 / (sOldWin + sOldLose + 1);
                     MJApi.setUserWin(sToken, sName, sOldWin, sOldWin + 1, sRate, setUserWinCallback);
 
-                    Texture2D newPhoto = new Texture2D(1, 1);
-                    newPhoto.LoadImage(Convert.FromBase64String(PhotonNetwork.player.Photo));
-                    newPhoto.Apply();
-                    _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    if (!string.IsNullOrEmpty(PhotonNetwork.player.Photo))
+                    {
+                        Texture2D newPhoto = new Texture2D(1, 1);
+                        newPhoto.LoadImage(Convert.FromBase64String(PhotonNetwork.player.Photo));
+                        newPhoto.Apply();
+                        _winPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    }
                 } else {
 					playWinSound ();
 					nagiEffectPlayerA.ShowNagi (Nagieffect.NagiType.PAU);

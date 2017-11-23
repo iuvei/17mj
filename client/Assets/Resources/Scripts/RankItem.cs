@@ -44,7 +44,8 @@ public class RankItem : MonoBehaviour {
     {
         if (_photoType == "0") //名次三名以外 圖片隨機
         {
-            _photoImg.sprite = Resources.Load<Sprite>("Image/Rank/temp/" + Random.Range(1, 8));
+            //_photoImg.sprite = Resources.Load<Sprite>("Image/Rank/temp/" + Random.Range(1, 8));
+            _photoImg.sprite = Resources.Load<Sprite>("Image/defaultUserP");
         }
         else 
         {

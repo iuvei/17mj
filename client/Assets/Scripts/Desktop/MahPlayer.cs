@@ -131,10 +131,13 @@ namespace com.Desktop
                 playerCoin.text = String.Format("{0:#,0}", int.Parse(photonPlayer.Coin));
 
                 if (playerPhoto) {
-                    Texture2D newPhoto = new Texture2D(1, 1);
-                    newPhoto.LoadImage(System.Convert.FromBase64String(photonPlayer.Photo));
-                    newPhoto.Apply();
-                    playerPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    if (!string.IsNullOrEmpty(photonPlayer.Photo))
+                    {
+                        Texture2D newPhoto = new Texture2D(1, 1);
+                        newPhoto.LoadImage(System.Convert.FromBase64String(photonPlayer.Photo));
+                        newPhoto.Apply();
+                        playerPhoto.sprite = Sprite.Create(newPhoto, new Rect(0, 0, newPhoto.width, newPhoto.height), Vector2.zero);
+                    }
                 }
             }
 

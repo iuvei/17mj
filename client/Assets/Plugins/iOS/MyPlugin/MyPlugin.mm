@@ -92,7 +92,8 @@ static dispatch_once_t _onceToken;
 -(void)goToFirstTrailer1 {
     NSLog(@"goToFirstTrailer1()");
     NSString *arg = @"rtmp://catpunch.co/live/livestream";
-    [self startRecord:arg];
+    NSString *arg1 = @"True";
+    [self startRecord:arg :arg1];
 }
 
 -(void)goToFirstTrailer2 {
@@ -233,7 +234,7 @@ static dispatch_once_t _onceToken;
     self.configuration.frontMirror = YES;
 }
 
-- (void)setupLiveSession {
+- (void)setupLiveSession: (NSString *)beauty {
     NSLog(@"setupLiveSession()");
     //1. 初始化liveSession类
     self.liveSession = [[AlivcLiveSession alloc] initWithConfiguration:self.configuration];
@@ -260,7 +261,12 @@ static dispatch_once_t _onceToken;
     //[self.view addSubview:[self.liveSession previewView]];
     
     //开启美颜
-    [self.liveSession setEnableSkin:NO];
+
+    if ([beauty isEqualToString:@"True"]) {
+        [self.liveSession setEnableSkin:YES];
+    } else {
+        [self.liveSession setEnableSkin:NO];
+    }
     //缩放
     [self.liveSession alivcLiveVideoZoomCamera:1.0f];
     //聚焦
@@ -307,12 +313,12 @@ static dispatch_once_t _onceToken;
     [self setupConfiguration: url];
 }
 
--(void)startRecord: (NSString *)url
+-(void)startRecord: (NSString *)url :(NSString *)beauty
 {
     NSLog(@"startRecord()....%@", url);
     if(self.liveSession==nil)
         [self initRecord: url];
-    [self setupLiveSession];
+    [self setupLiveSession: beauty];
 }
 
 -(void)moveRight{
@@ -496,10 +502,11 @@ extern "C" {
         MyPlugin *obj = [MyPlugin sharedInstance];
         [obj stopRecord];
     }
-    void _startRecord (const char *str){
+    void _startRecord (const char *url, const char *beauty){
         MyPlugin *obj = [MyPlugin sharedInstance];
-        NSString *arg = [NSString stringWithUTF8String: str];
-        [obj startRecord : arg];
+        NSString *arg = [NSString stringWithUTF8String: url];
+        NSString *arg1 = [NSString stringWithUTF8String: beauty];
+        [obj startRecord :arg :arg1];
     }
     void _moveRight (){
         MyPlugin *obj = [MyPlugin sharedInstance];

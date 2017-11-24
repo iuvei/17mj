@@ -10,7 +10,7 @@ public class VideoRecordingBridge {
 
     #if UNITY_IOS
 	[DllImport("__Internal")]
-	private static extern void _startRecord (string str);
+	private static extern void _startRecord (string url, string beauty);
 	[DllImport("__Internal")]
 	private static extern void _stopRecord ();
 	[DllImport("__Internal")]
@@ -26,12 +26,12 @@ public class VideoRecordingBridge {
 	private static AndroidJavaObject live = new AndroidJavaClass("com.biginnovation.live.LiveRec");
     #endif
 
-	public static void StartRecord(string str){
-		//Debug.Log ("StartRecord('"+str+"')");
+	public static void StartRecord(string url, string beauty){
+		//Debug.Log ("StartRecord('"+url+"')");
 		#if !UNITY_EDITOR && UNITY_IOS
-		_startRecord (str);
+        _startRecord (url, beauty);
 		#elif !UNITY_EDITOR && UNITY_ANDROID
-		live.CallStatic("RecStart",str);
+        live.CallStatic("RecStart", url, beauty);
         #endif
     }
 

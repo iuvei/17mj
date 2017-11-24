@@ -227,14 +227,14 @@ namespace com.Desktop
 		public void StartLive()
 		{
 			//Debug.Log ("StartLive()");
-			//string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
+			string beauty = "True";
 			if (PhotonNetwork.room != null) {
 				string name = PhotonNetwork.room.Name;
 				string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
 				if (PhotonNetwork.isMasterClient) {
 					//Debug.Log ("[s] PhotonNetwork.isMasterClient");
 					#if UNITY_IOS || UNITY_ANDROID
-					VideoRecordingBridge.StartRecord (liveUrl);
+					VideoRecordingBridge.StartRecord (liveUrl, beauty);
 					#endif
 				} else {
 					//Debug.Log ("[s] !PhotonNetwork.isMasterClient");

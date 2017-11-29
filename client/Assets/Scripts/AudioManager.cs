@@ -20,6 +20,7 @@ public class AudioManager : MonoBehaviour
 	private bool bgm_enabled = false;
 	private bool sound_enabled = false;
     private bool vibrate_enabled = false;
+    private bool beauty_enabled = false;
 
     #region Singleton
     private static AudioManager _instance = null;
@@ -73,6 +74,7 @@ public class AudioManager : MonoBehaviour
 
         this.vibrate_enabled = PlayerPrefExtension.GetBool("Vibrate_enabled");
 
+        this.beauty_enabled = PlayerPrefExtension.GetBool("Beauty_enabled");
         //Debug.Log ("AudioManager loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
     }
 
@@ -161,6 +163,12 @@ public class AudioManager : MonoBehaviour
     {
         this.vibrate_enabled = isOn;
         PlayerPrefExtension.SetBool("Vibrate_enabled", isOn);
+    }
+
+    public void ControlBeauty(bool isOn)
+    {
+        this.beauty_enabled = isOn;
+        PlayerPrefExtension.SetBool("Beauty_enabled", isOn);
     }
 
     //public void unMuteBGM() {

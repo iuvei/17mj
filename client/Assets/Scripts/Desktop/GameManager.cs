@@ -226,12 +226,14 @@ namespace com.Desktop
 
 		public void StartLive()
 		{
-			//Debug.Log ("StartLive()");
-			string beauty = "True";
-			if (PhotonNetwork.room != null) {
+            //Debug.Log ("StartLive()");
+            string beauty;
+            beauty = PlayerPrefExtension.GetBool("Beauty_enabled")? "True" : "False";
+
+            if (PhotonNetwork.room != null) {
 				string name = PhotonNetwork.room.Name;
 				string liveUrl = "rtmp://17mj.ddns.net:9100/live/" + name;
-				if (PhotonNetwork.isMasterClient) {
+                if (PhotonNetwork.isMasterClient) {
 					//Debug.Log ("[s] PhotonNetwork.isMasterClient");
 					#if UNITY_IOS || UNITY_ANDROID
 					VideoRecordingBridge.StartRecord (liveUrl, beauty);

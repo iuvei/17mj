@@ -9,11 +9,13 @@ public class SetupSettingsUI : MonoBehaviour {
 	public Toggle BGM_Toggle;
 	public Toggle Sound_Toggle;
     public Toggle Vibrate_Toggle;
+    public Toggle Beauty_Toggle;
     private float bgm_volume;
 	private float sound_volume;
 	private bool bgm_enabled;
 	private bool sound_enabled;
     private bool vibrate_enabled;
+    private bool beauty_enabled;
     // Use this for initialization
     void Start () {
 		loadPLayerPrefs ();
@@ -43,7 +45,8 @@ public class SetupSettingsUI : MonoBehaviour {
 
         this.vibrate_enabled = PlayerPrefExtension.GetBool("Vibrate_enabled");
 
-        //Debug.Log ("SetupSettingsUI loadPLayerPrefs() bgm_enabled="+this.bgm_enabled);
+        this.beauty_enabled = PlayerPrefExtension.GetBool("Beauty_enabled");
+        //Debug.Log ("Beauty_enabled = ???  " + this.beauty_enabled);
     }
 
 	public void init_slider() {
@@ -70,6 +73,12 @@ public class SetupSettingsUI : MonoBehaviour {
         {
             Vibrate_Toggle.isOn = this.vibrate_enabled;
             Vibrate_Toggle.onValueChanged.AddListener(delegate { VibrateToggleValueChange(); });
+        }
+
+        if (Beauty_Toggle)
+        {
+            Beauty_Toggle.isOn = this.beauty_enabled;
+            Beauty_Toggle.onValueChanged.AddListener(delegate { BeautyToggleValueChange(); });
         }
     }
 
@@ -113,6 +122,13 @@ public class SetupSettingsUI : MonoBehaviour {
     {
         //Debug.Log("Vibrate_Toggle.isOn=" + Vibrate_Toggle.isOn);
         AudioManager.Instance.ControlVibrate(Vibrate_Toggle.isOn);
+        loadPLayerPrefs();
+    }
+
+    public void BeautyToggleValueChange()
+    {
+        //Debug.Log("Beauty_Toggle.isOn=" + Beauty_Toggle.isOn);
+        AudioManager.Instance.ControlBeauty(Beauty_Toggle.isOn);
         loadPLayerPrefs();
     }
 }

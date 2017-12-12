@@ -7,10 +7,12 @@ using DG.Tweening;
 public class AccountManager : MonoBehaviour {
 	public static AccountManager Instance = null;
 	public GameObject ConnectingPanel; // 連線中
-	private Transform _connectingSign;
+    public int GameType = 0;
+    private Transform _connectingSign;
 	private Text _connectingText;
     private bool _needShowConnect = false;
     private bool _needHideConnect = false;
+
     void Awake () {
 		if (Instance != null && Instance != this)
 		{

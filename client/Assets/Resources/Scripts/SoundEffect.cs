@@ -1,9 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 public class SoundEffect : MonoBehaviour {
+    public static SoundEffect Instance;
+
+    //public AudioClip _MoveSE;
+    //public AudioClip _FallSE;
+    //public AudioClip _DeleteSE;
+    //public AudioClip _OverSE;
+
     private bool _isFadeOut = false;
     private float _volume;
+
+
+    void Awake() {
+        Instance = this;
+    }
 
     public void PlayLoop(AudioClip clip) {
         SoundEffectSource.instance.AudioSource.clip = clip;
@@ -39,4 +54,27 @@ public class SoundEffect : MonoBehaviour {
             }
         }
     }
+
+
+    //public void PlayMove()
+    //{
+    //    if (SoundEffectSource.instance) SoundEffectSource.instance.AudioSource.PlayOneShot(_MoveSE);
+    //}
+
+    //public void PlayFall()
+    //{
+    //    if (SoundEffectSource.instance) SoundEffectSource.instance.AudioSource.PlayOneShot(_FallSE);
+    //}
+
+    //public void PlayDelete()
+    //{
+    //    if (SoundEffectSource.instance) SoundEffectSource.instance.AudioSource.PlayOneShot(_DeleteSE);
+    //}
+
+    //public void PlayOver()
+    //{
+    //    if (SoundEffectSource.instance) SoundEffectSource.instance.AudioSource.PlayOneShot(_OverSE);
+    //}
+
+    
 }

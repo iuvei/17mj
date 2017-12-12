@@ -425,8 +425,6 @@ namespace com.Lobby
 			//SetPlayerName();
 			this.Players = PhotonNetwork.playerList.ToList ();
 
-            //CSU PhotonPlayer aa = Players.Find(x => x.ID.Equals(player_a));
-
             UpdateRoomInfo ();
 
 
@@ -2153,6 +2151,16 @@ namespace com.Lobby
                     popupBG.GetComponent<Image>().DOFade(0, 0.3f);
                     StartCoroutine(HideGameObject(popupBG, 0.3f));
                 }
+            }
+        }
+
+        public void ClickGames(int _miniGame) {
+            if (loadingPanel)
+            {
+                loadingPanel.SetActive(true);
+                AccountManager.Instance.GameType = _miniGame;
+                EnterLoading.instance._sceneName = "05.Games";
+                EnterLoading.instance.StartLoading();
             }
         }
 

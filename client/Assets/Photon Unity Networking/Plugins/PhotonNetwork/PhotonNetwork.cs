@@ -28,7 +28,7 @@ using System.IO;
 public static class PhotonNetwork
 {
     /// <summary>Version number of PUN. Also used in GameVersion to separate client version from each other.</summary>
-    public const string versionPUN = "1.83";
+    public const string versionPUN = "1.87";
 
     /// <summary>Version string for your this build. Can be used to separate incompatible clients. Sent during connect.</summary>
     /// <remarks>This is only sent when you connect so that is also the place you set it usually (e.g. in ConnectUsingSettings).</remarks>
@@ -53,10 +53,6 @@ public static class PhotonNetwork
 
     /// <summary>Name of the PhotonServerSettings file (used to load and by PhotonEditor to save new files).</summary>
     internal const string serverSettingsAssetFile = "PhotonServerSettings";
-
-    /// <summary>Path to the PhotonServerSettings file (used by PhotonEditor).</summary>
-    internal const string serverSettingsAssetPath = "Assets/Photon Unity Networking/Resources/" + PhotonNetwork.serverSettingsAssetFile + ".asset";
-
 
     /// <summary>Serialized server settings, written by the Setup Wizard for use in ConnectUsingSettings.</summary>
     public static ServerSettings PhotonServerSettings = (ServerSettings)Resources.Load(PhotonNetwork.serverSettingsAssetFile, typeof(ServerSettings));
@@ -1170,8 +1166,7 @@ public static class PhotonNetwork
 
 
         #if UNITY_XBOXONE
-        networkingPeer.AuthMode = AuthModeOption.AuthOnceWss;
-        networkingPeer.EncryptionMode = EncryptionMode.DatagramEncryption;
+        networkingPeer.AuthMode = AuthModeOption.Auth;
         #endif
 
         if (UsePreciseTimer)
@@ -2207,7 +2202,7 @@ public static class PhotonNetwork
     /// <remarks>
     /// Operation is only available for lobbies of type SqlLobby. Note: You don't have to join that lobby.
     /// This is an async request.
-    /// 
+    ///
     /// When done, OnReceivedRoomListUpdate gets called. Use GetRoomList() to access it.
     /// </remarks>
     /// <see cref="http://doc.photonengine.com/en-us/pun/current/manuals-and-demos/matchmaking-and-lobby#sql_lobby_type"/>
@@ -2473,7 +2468,7 @@ public static class PhotonNetwork
     /// <param name="rotation">Rotation Quaternion to apply on instantiation.</param>
     /// <param name="group">The group for this PhotonView.</param>
     /// <returns>The new instance of a GameObject with initialized PhotonView.</returns>
-    public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, int group)
+    public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, byte group)
     {
         return Instantiate(prefabName, position, rotation, group, null);
     }
@@ -2488,7 +2483,7 @@ public static class PhotonNetwork
     /// <param name="group">The group for this PhotonView.</param>
     /// <param name="data">Optional instantiation data. This will be saved to it's PhotonView.instantiationData.</param>
     /// <returns>The new instance of a GameObject with initialized PhotonView.</returns>
-    public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, int group, object[] data)
+    public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, byte group, object[] data)
     {
         if (!connected || (InstantiateInRoomOnly && !inRoom))
         {
@@ -2548,7 +2543,7 @@ public static class PhotonNetwork
     /// <param name="group">The group for this PhotonView.</param>
     /// <param name="data">Optional instantiation data. This will be saved to it's PhotonView.instantiationData.</param>
     /// <returns>The new instance of a GameObject with initialized PhotonView.</returns>
-    public static GameObject InstantiateSceneObject(string prefabName, Vector3 position, Quaternion rotation, int group, object[] data)
+    public static GameObject InstantiateSceneObject(string prefabName, Vector3 position, Quaternion rotation, byte group, object[] data)
     {
         if (!connected || (InstantiateInRoomOnly && !inRoom))
         {
@@ -3048,11 +3043,11 @@ public static class PhotonNetwork
 
     /// <summary>Enable/disable receiving events from a given Interest Group.</summary>
     /// <remarks>
-    /// A client can tell the server which Interest Groups it's interested in. 
+    /// A client can tell the server which Interest Groups it's interested in.
     /// The server will only forward events for those Interest Groups to that client (saving bandwidth and performance).
-    /// 
+    ///
     /// See: https://doc.photonengine.com/en-us/pun/current/manuals-and-demos/interestgroupsinterestgroups
-    /// 
+    ///
     /// See: https://doc.photonengine.com/en-us/pun/current/manuals-and-demos/culling-demo
     /// </remarks>
     /// <param name="group">The interest group to affect.</param>
@@ -3084,7 +3079,7 @@ public static class PhotonNetwork
         {
             return;
         }
-        
+
         byte[] disableByteGroups = null;
         byte[] enableByteGroups = null;
 
@@ -3104,11 +3099,11 @@ public static class PhotonNetwork
 
     /// <summary>Enable/disable receiving on given Interest Groups (applied to PhotonViews).</summary>
     /// <remarks>
-    /// A client can tell the server which Interest Groups it's interested in. 
+    /// A client can tell the server which Interest Groups it's interested in.
     /// The server will only forward events for those Interest Groups to that client (saving bandwidth and performance).
-    /// 
+    ///
     /// See: https://doc.photonengine.com/en-us/pun/current/manuals-and-demos/interestgroupsinterestgroups
-    /// 
+    ///
     /// See: https://doc.photonengine.com/en-us/pun/current/manuals-and-demos/culling-demo
     /// </remarks>
     /// <param name="disableGroups">The interest groups to disable (or null).</param>
@@ -3132,9 +3127,9 @@ public static class PhotonNetwork
 
     /// <summary>Enable/disable sending on given group (applied to PhotonViews)</summary>
     /// <remarks>
-    /// This does not interact with the Photon server-side. 
+    /// This does not interact with the Photon server-side.
     /// It's just a client-side setting to suppress updates, should they be sent to one of the blocked groups.
-    /// 
+    ///
     /// This setting is not particularly useful, as it means that updates literally never reach the server or anyone else.
     /// Use with care.
     /// </remarks>
@@ -3173,9 +3168,9 @@ public static class PhotonNetwork
 
     /// <summary>Enable/disable sending on given groups (applied to PhotonViews)</summary>
     /// <remarks>
-    /// This does not interact with the Photon server-side. 
+    /// This does not interact with the Photon server-side.
     /// It's just a client-side setting to suppress updates, should they be sent to one of the blocked groups.
-    /// 
+    ///
     /// This setting is not particularly useful, as it means that updates literally never reach the server or anyone else.
     /// Use with care.
     /// <param name="enableGroups">The interest groups to enable sending on (or null).</param>
@@ -3311,6 +3306,74 @@ public static class PhotonNetwork
 
 
 #if UNITY_EDITOR
+
+
+	/// <summary>
+	/// Finds the asset path base on its name or search query: https://docs.unity3d.com/ScriptReference/AssetDatabase.FindAssets.html
+	/// </summary>
+	/// <returns>The asset path.</returns>
+	/// <param name="asset">Asset.</param>
+	public static string FindAssetPath(string asset)
+	{
+		string[] guids = AssetDatabase.FindAssets (asset, null);
+		if (guids.Length != 1)
+		{
+			return string.Empty;
+		} else
+		{
+			return AssetDatabase.GUIDToAssetPath (guids [0]);
+		}
+	}
+
+
+	/// <summary>
+	/// Finds the pun asset folder. Something like Assets/Photon Unity Networking/Resources/
+	/// </summary>
+	/// <returns>The pun asset folder.</returns>
+	public static string FindPunAssetFolder()
+	{
+		string _thisPath =	FindAssetPath("PhotonClasses");
+		string _PunFolderPath = string.Empty;
+
+		_PunFolderPath = GetParent(_thisPath,"Photon Unity Networking");
+
+		if (_PunFolderPath != null)
+		{
+			return "Assets" + _PunFolderPath.Substring(Application.dataPath.Length)+"/";
+		}
+
+		return "Assets/Photon Unity Networking/";
+	}
+
+	/// <summary>
+	/// Gets the parent directory of a path. Recursive Function, will return null if parentName not found
+	/// </summary>
+	/// <returns>The parent directory</returns>
+	/// <param name="path">Path.</param>
+	/// <param name="parentName">Parent name.</param>
+	public static string GetParent(string path, string parentName)
+	{
+		var dir = new DirectoryInfo(path);
+
+		if (dir.Parent == null)
+		{
+			return null;
+		}
+
+		if (string.IsNullOrEmpty(parentName))
+		{
+			return  dir.Parent.FullName;
+		}
+
+		if (dir.Parent.Name == parentName)
+		{
+			return dir.Parent.FullName;
+		}
+
+		return GetParent(dir.Parent.FullName, parentName);
+	}
+
+
     [Conditional("UNITY_EDITOR")]
     public static void CreateSettings()
     {
@@ -3333,7 +3396,13 @@ public static class PhotonNetwork
         // if still not loaded, create one
         if (PhotonNetwork.PhotonServerSettings == null)
         {
-            string settingsPath = Path.GetDirectoryName(PhotonNetwork.serverSettingsAssetPath);
+			string _PunResourcesPath = PhotonNetwork.FindPunAssetFolder();
+
+			_PunResourcesPath += "Resources/";
+
+
+			string serverSettingsAssetPath = _PunResourcesPath+ PhotonNetwork.serverSettingsAssetFile + ".asset";
+			string settingsPath = Path.GetDirectoryName(serverSettingsAssetPath);
             if (!Directory.Exists(settingsPath))
             {
                 Directory.CreateDirectory(settingsPath);
@@ -3343,7 +3412,7 @@ public static class PhotonNetwork
             PhotonNetwork.PhotonServerSettings = (ServerSettings)ScriptableObject.CreateInstance("ServerSettings");
             if (PhotonNetwork.PhotonServerSettings != null)
             {
-                AssetDatabase.CreateAsset(PhotonNetwork.PhotonServerSettings, PhotonNetwork.serverSettingsAssetPath);
+				AssetDatabase.CreateAsset(PhotonNetwork.PhotonServerSettings, serverSettingsAssetPath);
             }
             else
             {

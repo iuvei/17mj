@@ -27,6 +27,7 @@ public class MiniGames : MonoBehaviour {
         }
 
         GameType = AccountManager.Instance.GameType;
+        GameType = 2;
         SetGameType(GameType);
     }
 

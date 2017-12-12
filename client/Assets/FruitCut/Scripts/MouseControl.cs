@@ -38,9 +38,10 @@ public class MouseControl : MonoBehaviour {
     {
         if (hit.collider.gameObject.tag != "destroyed")
         {
-            hit.collider.gameObject.GetComponent<ObjectKill>().OnKill();
-
-
+			ObjectKill CC = hit.collider.gameObject.GetComponent<ObjectKill>();
+			if (CC) {
+				CC.OnKill();
+			}
             Destroy(hit.collider.gameObject);
 
             if (hit.collider.tag == "red") index = 0;

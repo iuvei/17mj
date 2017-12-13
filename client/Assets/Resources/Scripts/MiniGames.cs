@@ -27,7 +27,7 @@ public class MiniGames : MonoBehaviour {
         }
 
         GameType = AccountManager.Instance.GameType;
-        GameType = 2;
+        //GameType = 3;
         SetGameType(GameType);
     }
 
@@ -47,6 +47,10 @@ public class MiniGames : MonoBehaviour {
                 //_game2DPanels[1].SetActive(true);
                 //_game3DObjects[1].SetActive(true);
                 break;
+			case 3://拉霸 slot machine
+				//_game2DPanels[1].SetActive(true);
+				_game3DObjects[2].SetActive(true);
+			break;
         }
     }
 

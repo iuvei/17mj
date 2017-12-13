@@ -11,9 +11,12 @@ public class HighlightLine : MonoBehaviour {
         lineRenderers = GetComponentsInChildren<LineRenderer>();
         foreach (LineRenderer r in lineRenderers)
         {
-            r.SetWidth(0.02f, 0.02f);
-            r.SetVertexCount(2);
-            //r.SetColors(Color.cyan, Color.cyan);
+            //r.SetWidth(0.02f, 0.02f);
+			r.startWidth = 0.04f;
+			r.endWidth = 0.04f;
+			r.positionCount = 2;
+			//r.SetVertexCount(2);
+			r.SetColors(Color.cyan, Color.cyan);
         }
     }
 

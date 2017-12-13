@@ -13,7 +13,7 @@ public class Timer : MonoBehaviour {
     bool pause = false;
 
     public float timeAvailable = 30f; // 30 sec
-    float showTime = 0;
+    public float showTime = 0;
 
     public Text guiTimer;
 	public GameObject finishedUI;
@@ -54,9 +54,10 @@ public class Timer : MonoBehaviour {
             if (showTime <= 0)
             {
                 showTime = 0;
-
 				Pause();
 				finishedUI.SetActive(true);
+				MiniGames.Instance.PlayFruitFinishSound();
+				showTimeLeft = false;
             }
         }
 

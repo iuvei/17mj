@@ -30,8 +30,10 @@ public class MouseControl : MonoBehaviour {
     public GameObject[] splashPrefab;
     public GameObject[] splashFlatPrefab;
 
+	Timer timer;
+
 	void Start () {
-	
+		timer =  GetComponent<Timer>();
 	}
 
     void BlowObject(RaycastHit hit)
@@ -44,10 +46,16 @@ public class MouseControl : MonoBehaviour {
 			}
             Destroy(hit.collider.gameObject);
 
-            if (hit.collider.tag == "red") index = 0;
-            if (hit.collider.tag == "yellow") index = 1;
-            if (hit.collider.tag == "green") index = 2;
-
+			if (hit.collider.tag == "red") {
+				index = 0;
+				MiniGames.Instance.PlayFruitSplat1Sound ();
+			} else if (hit.collider.tag == "yellow") {
+				index = 1;
+				MiniGames.Instance.PlayFruitSplat2Sound ();
+			} else if (hit.collider.tag == "green") {
+				index = 2;
+				MiniGames.Instance.PlayFruitSplat3Sound ();
+			}
 
 			if (hit.collider.gameObject.tag != "bomb")
 			{
@@ -58,7 +66,12 @@ public class MouseControl : MonoBehaviour {
 	            Instantiate(splashFlatPrefab[index], splashPoint, Quaternion.identity);
 			}
 				
-            if (hit.collider.gameObject.tag != "bomb") points++; else points -= 5;
+			if (hit.collider.gameObject.tag != "bomb") {
+				points++;
+			} else {
+				MiniGames.Instance.PlayFruitBombExSound();
+				timer.timeAvailable = 0;
+			}
             points = points < 0 ? 0 : points;
 
             hit.collider.gameObject.tag = "destroyed";

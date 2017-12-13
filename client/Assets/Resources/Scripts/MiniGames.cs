@@ -27,7 +27,7 @@ public class MiniGames : MonoBehaviour {
         }
 
         GameType = AccountManager.Instance.GameType;
-        //GameType = 3;
+        GameType = 2;
         SetGameType(GameType);
     }
 
@@ -39,11 +39,13 @@ public class MiniGames : MonoBehaviour {
         {
             case 1: //俄羅斯方塊
             default:
+			    PlayBGM(BGM_name);
                 SetSounds();
                 //_game2DPanels[0].SetActive(true);
                 //_game3DObjects[0].SetActive(true);
                 break;
             case 2://水果飛鏢
+			    SetSounds();
                 //_game2DPanels[1].SetActive(true);
                 //_game3DObjects[1].SetActive(true);
                 break;
@@ -64,16 +66,24 @@ public class MiniGames : MonoBehaviour {
 
     private void SetSounds()
     {
-        PlayBGM(BGM_name);
+        //PlayBGM(BGM_name);
 
         string SE_Path = "Sounds/SE/Tetris/";
-        audioClips = Resources.LoadAll<AudioClip>(SE_Path);
+		string Fruit_Path = "Sounds/SE/Fruit/";
 
-        audioClips = new AudioClip[4];
+        audioClips = new AudioClip[10];
         audioClips[0] = Resources.Load<AudioClip>(SE_Path + "Move");
         audioClips[1] = Resources.Load<AudioClip>(SE_Path + "Fall");
         audioClips[2] = Resources.Load<AudioClip>(SE_Path + "Del");
         audioClips[3] = Resources.Load<AudioClip>(SE_Path + "Over");
+
+		audioClips[4] = Resources.Load<AudioClip>(Fruit_Path + "bomb");
+		audioClips[5] = Resources.Load<AudioClip>(Fruit_Path + "bomb_explode");
+		audioClips[6] = Resources.Load<AudioClip>(Fruit_Path + "finish");
+		audioClips[7] = Resources.Load<AudioClip>(Fruit_Path + "splat1");
+		audioClips[8] = Resources.Load<AudioClip>(Fruit_Path + "splat2");
+		audioClips[9] = Resources.Load<AudioClip>(Fruit_Path + "splat3");
+
     }
 
     private void PlayBGM(string _name)
@@ -102,6 +112,35 @@ public class MiniGames : MonoBehaviour {
         SoundEffect.Instance.PlayOnce(audioClips[3]);
     }
 
+	public void PlayFruitBombSound()
+	{
+		SoundEffect.Instance.PlayOnce(audioClips[4]);
+	}
+
+	public void PlayFruitBombExSound()
+	{
+		SoundEffect.Instance.PlayOnce(audioClips[5]);
+	}
+
+	public void PlayFruitFinishSound()
+	{
+		SoundEffect.Instance.PlayOnce(audioClips[6]);
+	}
+
+	public void PlayFruitSplat1Sound()
+	{
+		SoundEffect.Instance.PlayOnce(audioClips[7]);
+	}
+
+	public void PlayFruitSplat2Sound()
+	{
+		SoundEffect.Instance.PlayOnce(audioClips[8]);
+	}
+
+	public void PlayFruitSplat3Sound()
+	{
+		SoundEffect.Instance.PlayOnce(audioClips[9]);
+	}
 
     public void LoadLobbyScene() {
         if (loadingPanel)

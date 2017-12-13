@@ -466,7 +466,7 @@ public class SlotMachine : MonoBehaviour {
 
     public void GoMenu()
     {
-        Application.LoadLevel("Menu");
+		Application.LoadLevel("02.Lobby");
     }
 
     void Update()

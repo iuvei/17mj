@@ -1,4 +1,3 @@
-#if UNITY_PURCHASING
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,25 +5,21 @@ using UnityEngine.Purchasing;
 
 namespace UnityEngine.Purchasing
 {
-    public static class IAPConfigurationHelper
-    {
+    public static class IAPConfigurationHelper {
         /// Populate a ConfigurationBuilder with products from a ProductCatalog
         public static void PopulateConfigurationBuilder(ref ConfigurationBuilder builder, ProductCatalog catalog)
         {
-            foreach (var product in catalog.allProducts)
-            {
+            foreach (var product in catalog.allProducts) {
                 IDs ids = null;
 
-                if (product.allStoreIDs.Count > 0)
-                {
+                if (product.allStoreIDs.Count > 0) {
                     ids = new IDs();
-                    foreach (var storeID in product.allStoreIDs)
-                    {
+                    foreach (var storeID in product.allStoreIDs) {
                         ids.Add(storeID.id, storeID.store);
                     }
                 }
 
-#if UNITY_2017_2_OR_LATER
+                #if UNITY_2017_2_OR_LATER
 
                 var payoutDefinitions = new List<PayoutDefinition>();
                 foreach (var payout in product.Payouts) {
@@ -32,13 +27,12 @@ namespace UnityEngine.Purchasing
                 }
                 builder.AddProduct(product.id, product.type, ids, payoutDefinitions.ToArray());
 
-#else
+                #else
 
                 builder.AddProduct(product.id, product.type, ids);
 
-#endif
+                #endif
             }
         }
     }
 }
-#endif

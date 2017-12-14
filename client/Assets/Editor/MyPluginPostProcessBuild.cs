@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Collections;
-#if UNITY_5 && (UNITY_IOS || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS)
 using UnityEditor.iOS.Xcode;
 #endif
 using System.IO;
@@ -12,7 +12,7 @@ public class MyPluginPostProcessBuild
 	[PostProcessBuild]
 	public static void ChangeXcodePlist(BuildTarget buildTarget, string pathToBuiltProject)
 	{
-#if UNITY_5 && (UNITY_IOS || UNITY_TVOS)
+#if (UNITY_IOS || UNITY_TVOS)
 		if ( buildTarget == BuildTarget.iOS )
 		{
 			// Get plist

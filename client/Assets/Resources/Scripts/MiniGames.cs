@@ -15,7 +15,7 @@ public class MiniGames : MonoBehaviour {
     private GameObject childSetting;
     private AudioClip[] audioClips;
     private int GameType = 0;
-    private int GameTotalNum = 2; //遊戲種類
+    private int GameTotalNum = 3; //遊戲種類
 
     void Start()
     {
@@ -27,7 +27,7 @@ public class MiniGames : MonoBehaviour {
         }
 
         GameType = AccountManager.Instance.GameType;
-        GameType = 2;
+        //GameType = 2;
         SetGameType(GameType);
     }
 
@@ -51,7 +51,7 @@ public class MiniGames : MonoBehaviour {
                 break;
 			case 3://拉霸 slot machine
 				//_game2DPanels[1].SetActive(true);
-				_game3DObjects[2].SetActive(true);
+				//_game3DObjects[2].SetActive(true);
 			break;
         }
     }
@@ -59,9 +59,20 @@ public class MiniGames : MonoBehaviour {
     private void SetAllPanel(int _type) {
         for (int i = 0; i < GameTotalNum; i++)
         {
-            _game2DPanels[i].SetActive(i == (_type-1));
-            _game3DObjects[i].SetActive(i == (_type-1));
+            if(_game2DPanels[i]!=null)
+                _game2DPanels[i].SetActive(i == (_type-1));
+
+            if (_game3DObjects[i] != null)
+                _game3DObjects[i].SetActive(i == (_type-1));
         }
+    }
+
+    private void TurnOffPanel(int _type) {
+            if (_game2DPanels[_type - 1] != null)
+                _game2DPanels[_type - 1].SetActive(false);
+
+            if (_game3DObjects[_type - 1] != null)
+                _game3DObjects[_type - 1].SetActive(false);
     }
 
     private void SetSounds()
@@ -90,6 +101,10 @@ public class MiniGames : MonoBehaviour {
     {
         AudioClip ac = Resources.Load<AudioClip>("Sounds/BGM/" + _name);
         SoundEffect.Instance.PlayLoop(ac);
+    }
+    private void StopBGM()
+    {
+        SoundEffect.Instance.Stop();
     }
 
     public void PlayMoveSound()
@@ -143,6 +158,9 @@ public class MiniGames : MonoBehaviour {
 	}
 
     public void LoadLobbyScene() {
+        TurnOffPanel(GameType);
+        StopBGM();
+
         if (loadingPanel)
         {
             AccountManager.Instance.GameType = 0;

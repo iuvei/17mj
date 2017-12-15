@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: fruitCut
+  m_Shader: {fileID: 4800000, guid: e493330a0c32f4e4ea18d0e71651445b, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ButtonSpacebarSprite:
+        m_Texture: {fileID: 2800000, guid: 3d8675433a508ec47b8f895201eacf20, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 528fa5925ddee7d4685c1ed03e8d4474, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MotionBlurJitter:
+        m_Texture: {fileID: 2800000, guid: 31f5a8611c4ed1245b18456206e798dc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SliderHandleSprite:
+        m_Texture: {fileID: 2800000, guid: 0626b924325d1c34cafa6b22297f4e4f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_fruitL:
+        m_Texture: {fileID: 2800000, guid: f9cd7cbb61d3be34b8c73d989c566f94, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_fruitR:
+        m_Texture: {fileID: 2800000, guid: 51f9596cdfbd4d04abc69ff053b46a42, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_juice:
+        m_Texture: {fileID: 2800000, guid: 1b79e61d58e2d3f4c869975d3e549378, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_juice2png:
+        m_Texture: {fileID: 2800000, guid: 821a6546480b00940abb1023cf8204dd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_knief:
+        m_Texture: {fileID: 2800000, guid: 98152622d1a76f2479fd9565bb5fb23e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_top:
+        m_Texture: {fileID: 2800000, guid: f379d8c9aef3ca94884833d73d5a4fd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _bg:
+        m_Texture: {fileID: 2800000, guid: 00e08d454cde8c9489d5e8e291e9279c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _blur:
+        m_Texture: {fileID: 2800000, guid: 839aa732a30375741b11f6e8099fb8b7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _blur2:
+        m_Texture: {fileID: 2800000, guid: 2e631521713aeea409f041e605082ff4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _checker:
+        m_Texture: {fileID: 2800000, guid: 197595468a5aecd40bea9e6e3e1d0768, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _dots:
+        m_Texture: {fileID: 2800000, guid: a4015787bde2e1f40a6ef6875a85e45c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _dotsFlame:
+        m_Texture: {fileID: 2800000, guid: 8232b5b711e72f946b2039e6c4f4f373, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _flame:
+        m_Texture: {fileID: 2800000, guid: 6b50937b678fd4144877b602d623578a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _flameBlue:
+        m_Texture: {fileID: 2800000, guid: c18e85f5ed204ce43acc008630b70172, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fruitCut_mask0:
+        m_Texture: {fileID: 2800000, guid: a701c4d85aec9d744968f9ce9859ce27, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fruitCut_remap13:
+        m_Texture: {fileID: 2800000, guid: a35a226c2541d384a8b336602c97c1f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _smoke:
+        m_Texture: {fileID: 2800000, guid: 3a56997b82e6e2f4b9188e194bd481db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _viewWaterfall:
+        m_Texture: {fileID: 2800000, guid: 4a52fa413ae11e247910f225161ec955, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _water:
+        m_Texture: {fileID: 2800000, guid: 5e254b7b0b83a5e419f402ca40b38341, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _wave:
+        m_Texture: {fileID: 2800000, guid: fa3108da2fe38a748bfce58b4c9b5410, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _wave3:
+        m_Texture: {fileID: 2800000, guid: 2d2fb6cbf6b2a134a95d2dac1bdda490, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_ROOT: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image10: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image11: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image19: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image2: {r: 1, g: 0.62068975, b: 0, a: 0.978}
+    - _Color_image3: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image4: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image4copy: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image5: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image6: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image7: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image7copy: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image8: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image8copy: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image8copycopy: {r: 1, g: 1, b: 1, a: 1}

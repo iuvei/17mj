@@ -16,17 +16,21 @@ public class Logout : MonoBehaviour {
     }
 
     public void ClickLogout() {
-        GLoginOut();
-        FBLogout();
+    #if UNITY_ANDROID || UNITY_IOS && !UNITY_EDITOR
+            GLoginOut();
+            FBLogout();
+    #endif
+
         ClearCache();
 
         if (loadingPanel) {
             loadingPanel.SetActive(true);
             EnterLoading.instance.StartLoading();
-            if(AudioPanel)
-                Destroy(AudioPanel);
             if(AccountManagerPanel)
                 Destroy(AccountManagerPanel);
+            if (AudioPanel)
+                //Destroy(AudioPanel);
+                AudioPanel.SetActive(false);
         }
 
     }

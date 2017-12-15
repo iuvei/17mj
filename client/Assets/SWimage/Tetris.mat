@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Tetris
+  m_Shader: {fileID: 4800000, guid: 59b1482fee5bff64eb9047df82031cc0, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ButtonSpacebarSprite:
+        m_Texture: {fileID: 2800000, guid: 3d8675433a508ec47b8f895201eacf20, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DefaultParticle:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: e210535aa211905498db9b1d9ce805e2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MotionBlurJitter:
+        m_Texture: {fileID: 2800000, guid: 31f5a8611c4ed1245b18456206e798dc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tetris_mask0:
+        m_Texture: {fileID: 2800000, guid: 93d0ff5f7744bd94f892f6dbc7e231f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tetris_remap6:
+        m_Texture: {fileID: 2800000, guid: 48030e92ab416fc4d8c3655f6bbefda0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _activity_frame_02_top:
+        m_Texture: {fileID: 2800000, guid: f379d8c9aef3ca94884833d73d5a4fd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _blockW3:
+        m_Texture: {fileID: 2800000, guid: 5cf05ab05ac9e764589d6c087c914fb5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _dots:
+        m_Texture: {fileID: 2800000, guid: a4015787bde2e1f40a6ef6875a85e45c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _fireRing:
+        m_Texture: {fileID: 2800000, guid: 93d1538f15990654e92741164049adb5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _flameBlue:
+        m_Texture: {fileID: 2800000, guid: c18e85f5ed204ce43acc008630b70172, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _glowBall:
+        m_Texture: {fileID: 2800000, guid: 150f75127d9b4334c9843746d2293d72, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _glowBot:
+        m_Texture: {fileID: 2800000, guid: 47e576f4c5346ab47be98ebf3e505ff9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _lightning_beam_thin_glow:
+        m_Texture: {fileID: 2800000, guid: 35ae862830cf8fa4baa660be5e610464, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ramp:
+        m_Texture: {fileID: 2800000, guid: f0c751e3e6b99b549bfc463f96fc132f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ramp_1:
+        m_Texture: {fileID: 2800000, guid: f0c751e3e6b99b549bfc463f96fc132f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _redSquare:
+        m_Texture: {fileID: 2800000, guid: 5da80167d45fd46458c30ad4577e035d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tetris_T:
+        m_Texture: {fileID: 2800000, guid: 144852fe73bd1c04cbf0e64f62cad932, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tetris_bg2:
+        m_Texture: {fileID: 2800000, guid: d9d8a46d46948e74fa55554e0709f92e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tetris_blocks:
+        m_Texture: {fileID: 2800000, guid: 25a05c562c2ee8042876b89f0cb8f3cf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _treeTop:
+        m_Texture: {fileID: 2800000, guid: 2b4d016f5f313694288d5c4354684954, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _viewWaterfall:
+        m_Texture: {fileID: 2800000, guid: 4a52fa413ae11e247910f225161ec955, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _water:
+        m_Texture: {fileID: 2800000, guid: 5e254b7b0b83a5e419f402ca40b38341, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _wave:
+        m_Texture: {fileID: 2800000, guid: fa3108da2fe38a748bfce58b4c9b5410, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _wave3:
+        m_Texture: {fileID: 2800000, guid: 2d2fb6cbf6b2a134a95d2dac1bdda490, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _whiteDots:
+        m_Texture: {fileID: 2800000, guid: 88dcedc6aa43fc242859cbbdac84d64b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_ROOT: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image1: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image11: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image2: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image3: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image3copy: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image4: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image8: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_image9: {r: 1, g: 1, b: 1, a: 1}

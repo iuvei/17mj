@@ -62,17 +62,22 @@ public class FruitDispenser : MonoBehaviour {
 
     void Spawn(bool isBomb)
     {
-        float x = Random.Range(-3.1f, 3.1f);
+        //float x = Random.Range(-3.1f, 3.1f);
+        float x = Random.Range(-7f, 7f) ;
 
         z = Random.Range(14f, 19.8f);
 
         GameObject ins;
 
-		if (!isBomb)
-			ins = Instantiate (fruits [Random.Range (0, fruits.Length)], transform.position + new Vector3 (x, 0, z), Random.rotation) as GameObject;
+        if (!isBomb) {
+            ins = Instantiate(fruits[Random.Range(0, fruits.Length)], transform.position + new Vector3(x, 0, z), Random.rotation) as GameObject;
+            ins.transform.SetParent(transform.parent);
+        }
+			
 		else {
 			ins = Instantiate (bomb, transform.position + new Vector3 (x, 0, z), Random.rotation) as GameObject;
-			MiniGames.Instance.PlayFruitBombSound ();
+            ins.transform.SetParent(transform.parent);
+            MiniGames.Instance.PlayFruitBombSound ();
 		}
 
         float power = Random.Range(1.5f, 1.8f) * -Physics.gravity.y * 1.5f * powerScale;

@@ -11,7 +11,18 @@ public static class MJApi
 	private static string serverUrl = "https://17mj.ddns.net:9000/";
     private static string secretKey = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvbywbdGABb46cGzeevCMQU2LXvornsNkScfeCS9BmZ0KkebfYTvgvfLwUpl0QjR4LL5hHOYzaHxGQcVfvvY2wtiPRRMxGqhxVq";
 
-    public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
+	public static void getServerIP()
+	{
+		IPHostEntry thisIPHostEntry = Dns.GetHostEntry("17mj.ddns.net");
+		IPAddress ipaddress = thisIPHostEntry.AddressList[0];
+
+		if (!string.IsNullOrEmpty (ipaddress.ToString ())) {
+			string serverIP = ipaddress.ToString ();
+			serverUrl = "https://" + serverIP + ":9000/";
+		}
+	}
+
+	public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
     {
         string api = "V1/login";
         string auth = "Bearer " + secretKey;

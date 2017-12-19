@@ -15,6 +15,12 @@ public class OpenSceneManager : MonoBehaviour {
     private Animator _StartBtnAnim;        // START按鈕動畫
     private Button _StartBtn;
 
+	private void Awake()
+	{
+		MJApi.getServerIP ();
+	}
+
+
     void Start () {
 
         if (!_17NewTitle)

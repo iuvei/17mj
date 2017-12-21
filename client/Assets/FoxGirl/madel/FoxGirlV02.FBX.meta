@@ -1,0 +1,256 @@
+fileFormatVersion: 2
+guid: ae8ec26767e45184ea31acfaec1e4b0d
+timeCreated: 1513847177
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: handL002_skined_removeBone
+    100004: handR002_skined_removeBone
+    100006: L_chest
+    100008: L_ear
+    100010: M_bag01
+    100012: M_bag02
+    100014: M_bag_end
+    100016: Merchant
+    100018: Merchant Footsteps
+    100020: Merchant Head
+    100022: Merchant HeadNub
+    100024: Merchant L Calf
+    100026: Merchant L Clavicle
+    100028: Merchant L Foot
+    100030: Merchant L Forearm
+    100032: Merchant L Hand
+    100034: Merchant L Thigh
+    100036: Merchant L Toe0
+    100038: Merchant L Toe0Nub
+    100040: Merchant L UpperArm
+    100042: Merchant Neck
+    100044: Merchant Pelvis
+    100046: Merchant R Calf
+    100048: Merchant R Clavicle
+    100050: Merchant R Foot
+    100052: Merchant R Forearm
+    100054: Merchant R Hand
+    100056: Merchant R Thigh
+    100058: Merchant R Toe0
+    100060: Merchant R Toe0Nub
+    100062: Merchant R UpperArm
+    100064: Merchant Spine
+    100066: Merchant Spine1
+    100068: Merchant Spine2
+    100070: Merchant Tail
+    100072: Merchant Tail1
+    100074: Merchant Tail2
+    100076: Merchant TailNub
+    100078: Merchant_Rebody_noHat
+    100080: Object01
+    100082: Object015
+    100084: Object016
+    100086: Object018
+    100088: Object019
+    100090: Particle VADSiew 01
+    100092: Particle VieADw 01
+    100094: Particle VieDSw 01
+    100096: Particle View 01
+    100098: Particle View 01 1
+    100100: Particle View 01 2
+    100102: Particle View 01 3
+    100104: Particle View 0ASD1
+    100106: R_chest
+    100108: R_ear
+    400000: //RootNode
+    400002: handL002_skined_removeBone
+    400004: handR002_skined_removeBone
+    400006: L_chest
+    400008: L_ear
+    400010: M_bag01
+    400012: M_bag02
+    400014: M_bag_end
+    400016: Merchant
+    400018: Merchant Footsteps
+    400020: Merchant Head
+    400022: Merchant HeadNub
+    400024: Merchant L Calf
+    400026: Merchant L Clavicle
+    400028: Merchant L Foot
+    400030: Merchant L Forearm
+    400032: Merchant L Hand
+    400034: Merchant L Thigh
+    400036: Merchant L Toe0
+    400038: Merchant L Toe0Nub
+    400040: Merchant L UpperArm
+    400042: Merchant Neck
+    400044: Merchant Pelvis
+    400046: Merchant R Calf
+    400048: Merchant R Clavicle
+    400050: Merchant R Foot
+    400052: Merchant R Forearm
+    400054: Merchant R Hand
+    400056: Merchant R Thigh
+    400058: Merchant R Toe0
+    400060: Merchant R Toe0Nub
+    400062: Merchant R UpperArm
+    400064: Merchant Spine
+    400066: Merchant Spine1
+    400068: Merchant Spine2
+    400070: Merchant Tail
+    400072: Merchant Tail1
+    400074: Merchant Tail2
+    400076: Merchant TailNub
+    400078: Merchant_Rebody_noHat
+    400080: Object01
+    400082: Object015
+    400084: Object016
+    400086: Object018
+    400088: Object019
+    400090: Particle VADSiew 01
+    400092: Particle VieADw 01
+    400094: Particle VieDSw 01
+    400096: Particle View 01
+    400098: Particle View 01 1
+    400100: Particle View 01 2
+    400102: Particle View 01 3
+    400104: Particle View 0ASD1
+    400106: R_chest
+    400108: R_ear
+    2300000: handL002_skined_removeBone
+    2300002: handR002_skined_removeBone
+    3300000: handL002_skined_removeBone
+    3300002: handR002_skined_removeBone
+    4300000: Object01
+    4300002: Object015
+    4300004: handL002_skined_removeBone
+    4300006: handR002_skined_removeBone
+    4300008: Object018
+    4300010: Object019
+    4300012: Merchant_Rebody_noHat
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Merchant_Rebody_noHat
+    13700002: Object01
+    13700004: Object015
+    13700006: Object018
+    13700008: Object019
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #266'
+    second: {fileID: 2100000, guid: 24318b9e635469743a9393ae2f2e930b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #267'
+    second: {fileID: 2100000, guid: ad464337691faa843a3159e90f1bacde, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #269'
+    second: {fileID: 2100000, guid: 33fe0076a00c01543837d8e7fb0e33b6, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 91
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.00001
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

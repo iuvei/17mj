@@ -1,0 +1,55 @@
+==========================================
+Realtoon (Change - Fix Log)
+==========================================
+v1.0 (2016):
+
+- Initial Released
+
+==========================================
+v1.0.1 (2016):
+
+- New "Fresnel effect".
+- New control/function "Reduce White".
+- You can now enable/disable light falloff of a spotlight or pointlight.
+- Added 2 example scenes.
+- "FReflection Scale" is removed and changed it to Unity3d's "Tiling - Offset" to control the size.
+- All sliders are now 0 to 1..... values.
+- Some controls are renamed/corrected.
+
+==========================================
+v1.0.2 (2016):
+
+- Added "No Outline" (If you're not using the outline and want less draw calls).
+- New "Fade Transparency" (For smooth & fade transparency).
+- Added "Tutorials" pdf (Tutorials and tips on how to use realtoon, using the shader with receive shadows turned on and more).
+- Added 1 example scene.
+- Folder "RealToon Shader" renamed to "RealToon Shaders".
+- Default color changed to gray.
+- Updated example scene number 8.
+- Updated "Read Me First" pdf file.
+
+==========================================
+End of Version 1
+==========================================
+
+==========================================
+Start of Version 2
+==========================================
+V2.0.0 (2017)
+
+- New Multi & Single Light Mode.
+- New Cutout.
+- New Double Sided.
+- New Self Shadow PTexture feature.
+- New AO (Texture)
+- New Outline Noise
+- New added controls "Fresnel Hard edge, Fresnel Fill, Fresnel on Light/Shadow,
+Main Texture Color Self Shadow & Self Shadow at View Direction".
+- All new Examples.
+- Read me first is now changed to User Guide and its all new.
+- Some controls are rearranged and renamed.
+- You can now change Receive Shadows color.
+- Each version shader will have its own folder like "Version2, Version3, etc.".
+- Tutorials PDF removed just for now.
+
+(Read "User Guide" for more info about the new controls and new features)

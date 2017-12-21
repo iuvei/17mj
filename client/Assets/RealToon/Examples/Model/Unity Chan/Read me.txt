@@ -1,0 +1,3 @@
+This model "Unity Chan" is used only as an example.
+If you want to use this model and want to know the guidelines please visit 
+"http://unity-chan.com/" and contact them.

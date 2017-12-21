@@ -1,0 +1,193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: def_manga_mat
+  m_Shader: {fileID: 4800000, guid: 522a386e5041069469b9f3752c925b2f, type: 3}
+  m_ShaderKeywords: _ALPHABASECUTOUT_ON _ENABLEFRESNELONAMBIENTLIGHTDARK_ON _ENABLELIGHTFALLOFF_ON
+    _FRESNELONDARK_ON _FRESNELONLIGHT_ON _FRESNELVISIBLEONDARK_ON _HARDEDGEFRESNEL_ON
+    _MAINTEXTURECOLORAO_ON _MAINTEXTURECOLORSHADOW_ON _NODE_4845_ON _TEXTURECOLORAO_ON
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2450
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AOTexture:
+        m_Texture: {fileID: 2800000, guid: 27df2145d2720394c8b362ac88a66bf0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Diffuse:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EnvMapSampler:
+        m_Texture: {fileID: 2800000, guid: 44d020db90fd5ae4ea345969090687a3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FReflection:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FalloffSampler:
+        m_Texture: {fileID: 2800000, guid: 39083b0062b00af459504f23a97162b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlossMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 0.5, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 0f83c88893812674fb27a67cc3d624d9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskFReflection:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskSelfLit:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 220310ce5d028bd4fbf8c510edc4d316, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapSampler:
+        m_Texture: {fileID: 2800000, guid: 54a57c962fa43e14e9c13ad64e22b5ee, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RimLightSampler:
+        m_Texture: {fileID: 2800000, guid: 8073bf8eba43a72439ddf804cec5b97a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SelfShadowPTexture:
+        m_Texture: {fileID: 2800000, guid: 7212751e456c36d4f82f550e73edee9d, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - _SelfShadowTexture:
+        m_Texture: {fileID: 2800000, guid: acf2135974208c24999af3c4434fdff0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowPTexture:
+        m_Texture: {fileID: 2800000, guid: acf2135974208c24999af3c4434fdff0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularReflectionSampler:
+        m_Texture: {fileID: 2800000, guid: cff7600e2c49af944b50d9621671371e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 7c27718ee46561e4b890b49a4e76dfbf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _node_303:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _node_7838:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _node_8389:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _node_946:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AOIntensity: 0.123
+    - _AlphaBaseCutout: 1
+    - _Cutoff: 0.5
+    - _Cutout: 0
+    - _DepthBias: 0.00012
+    - _EdgeThickness: 1
+    - _EnableFresnelOnAmbientLightDark: 1
+    - _EnableLightFalloff: 1
+    - _FReflectionIntensity: 0
+    - _FresnelFill: 0.05
+    - _FresnelIntensity: 0.343
+    - _FresnelOnDark: 1
+    - _FresnelOnLight: 1
+    - _FresnelOnShadow: 0
+    - _FresnelVisibleOnDark: 1
+    - _FresnelVisibleOnDarkAmbientLight: 0
+    - _Gloss: 0.5
+    - _GlossIntensity: 0
+    - _Glossiness: 0.578
+    - _HardEdgeFresnel: 1
+    - _HideFresnelOnLight: 1
+    - _HideFresnelOnShadow: 1
+    - _LM: 0
+    - _LightMaskFresnel: 0
+    - _MainTextureColorAO: 1
+    - _MainTextureColorSelfShadow: 0
+    - _MainTextureColorShadow: 1
+    - _NormalIntensity: 1
+    - _Opacity: 1
+    - _OutlineNoiseIntensity: 0
+    - _OutlineWidth: 0.002
+    - _ReceiveShadowsIntensity: 1
+    - _ReduceWhite: 0
+    - _SM: 0
+    - _Saturation: 0
+    - _SelfLitIntensity: 0
+    - _SelfLitPower: 1
+    - _SelfShadowFollowCamera: 0
+    - _SelfShadowHardness: 0.931
+    - _SelfShadowIntensity: 1
+    - _SelfShadowMaskFresnel: 0
+    - _SelfShadowPTextureIntensity: 1
+    - _SelfShadowSize: 0.779
+    - _SelfShadowTextureIntensity: 0.438
+    - _SelfShadowViewDirection: 0
+    - _SelfShadowatViewDirection: 0
+    - _ShadowIntensity: 0.449
+    - _ShadowMaskFresnel: 0
+    - _ShadowPTextureIntensity: 0
+    - _ShadowsIntensity: 1
+    - _ShowAOonAmbientLight: 0
+    - _ShowAOonLight: 0
+    - _SoftGloss: 0
+    - _SpecularPower: 20
+    - _TextureColorAO: 1
+    - _TexturecolorAO: 0
+    - _Transparent: 0
+    - _node_11: 0
+    - _node_1581: 0.62
+    - _node_2086: 0
+    - _node_3478: 0.54
+    - _node_352: -1.18
+    - _node_36: 0
+    - _node_4130: 1.65
+    - _node_4845: 1
+    - _node_532: 0.53
+    - _node_5845: 2.52
+    - _node_664: 0
+    - _node_6971: 0
+    - _node_7046: 0.4
+    - _node_7090: 0
+    - _node_8296: 0
+    - _node_9439: -0.34
+    - _node_9912: 0
+    m_Colors:
+    - _Color: {r: 0.7647059, g: 0.7647059, b: 0.7647059, a: 1}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GlossColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SelfLitColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SelfShadowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _node_245: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _node_2935: {r: 0.46323532, g: 0.46323532, b: 0.46323532, a: 1}
+    - _node_9364: {r: 0.5661765, g: 0.5661765, b: 0.5661765, a: 1}

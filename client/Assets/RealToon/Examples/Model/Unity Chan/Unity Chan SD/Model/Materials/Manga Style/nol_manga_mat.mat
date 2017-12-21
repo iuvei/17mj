@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: nol_manga_mat
+  m_Shader: {fileID: 4800000, guid: 522a386e5041069469b9f3752c925b2f, type: 3}
+  m_ShaderKeywords: _ENABLELIGHTFALLOFF_ON _FRESNELONLIGHT_ON _FRESNELONSHADOW_ON
+    _HARDEDGEFRESNEL_ON _MAINTEXTURECOLORAO_ON _MAINTEXTURECOLORSHADOW_ON _SELFSHADOWMASKFRESNEL_ON
+    _SHADOWMASKFRESNEL_ON _SHOWAOONAMBIENTLIGHT_ON
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2450
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AOTexture:
+        m_Texture: {fileID: 2800000, guid: 27df2145d2720394c8b362ac88a66bf0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EnvMapSampler:
+        m_Texture: {fileID: 2800000, guid: 44d020db90fd5ae4ea345969090687a3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FReflection:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FalloffSampler:
+        m_Texture: {fileID: 2800000, guid: 39083b0062b00af459504f23a97162b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlossMask:
+        m_Texture: {fileID: 2800000, guid: 151a402eb523bf242aa83b91434f296d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: cf80d48c02142fe4bbe557defba70719, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskFReflection:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskSelfLit:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 220310ce5d028bd4fbf8c510edc4d316, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapSampler:
+        m_Texture: {fileID: 2800000, guid: 54a57c962fa43e14e9c13ad64e22b5ee, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RimLightSampler:
+        m_Texture: {fileID: 2800000, guid: 8073bf8eba43a72439ddf804cec5b97a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SelfShadowPTexture:
+        m_Texture: {fileID: 2800000, guid: 7212751e456c36d4f82f550e73edee9d, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowPTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularReflectionSampler:
+        m_Texture: {fileID: 2800000, guid: cff7600e2c49af944b50d9621671371e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 7c27718ee46561e4b890b49a4e76dfbf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AOIntensity: 0.236
+    - _Cutoff: 0.5
+    - _DepthBias: 0.00012
+    - _EdgeThickness: 1
+    - _EnableFresnelOnAmbientLightDark: 0
+    - _EnableLightFalloff: 1
+    - _FReflectionIntensity: 0
+    - _FresnelFill: -0.7
+    - _FresnelIntensity: 0.618
+    - _FresnelOnLight: 1
+    - _FresnelOnShadow: 1
+    - _FresnelVisibleOnDarkAmbientLight: 0
+    - _GlossIntensity: 0.26
+    - _Glossiness: 0.5
+    - _HardEdgeFresnel: 1
+    - _MainTextureColorAO: 1
+    - _MainTextureColorSelfShadow: 0
+    - _MainTextureColorShadow: 1
+    - _NormalIntensity: 1
+    - _OutlineNoiseIntensity: 0
+    - _OutlineWidth: 0.003
+    - _ReceiveShadowsIntensity: 1
+    - _ReduceWhite: 0
+    - _Saturation: 0
+    - _SelfLitIntensity: 0
+    - _SelfLitPower: 1
+    - _SelfShadowFollowCamera: 0
+    - _SelfShadowHardness: 0.923
+    - _SelfShadowIntensity: 1
+    - _SelfShadowMaskFresnel: 1
+    - _SelfShadowPTextureIntensity: 1
+    - _SelfShadowSize: 0.792
+    - _SelfShadowatViewDirection: 0
+    - _ShadowIntensity: 0.424
+    - _ShadowMaskFresnel: 1
+    - _ShadowPTextureIntensity: 0
+    - _ShowAOonAmbientLight: 1
+    - _ShowAOonLight: 0
+    - _SoftGloss: 0
+    - _SpecularPower: 20
+    - _Transparent: 0
+    m_Colors:
+    - _Color: {r: 0.7647059, g: 0.7647059, b: 0.7647059, a: 1}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GlossColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SelfLitColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SelfShadowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}

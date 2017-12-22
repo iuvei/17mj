@@ -126,7 +126,7 @@ ModelImporter:
     4300008: Object018
     4300010: Object019
     4300012: Merchant_Rebody_noHat
-    7400000: Take 001
+    7400000: Idle
     9500000: //RootNode
     13700000: Merchant_Rebody_noHat
     13700002: Object01
@@ -176,7 +176,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: Idle
       takeName: Take 001
       firstFrame: 0
       lastFrame: 91

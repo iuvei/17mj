@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System;
 
 public class EnterLoading : MonoBehaviour {
     public static EnterLoading instance;
@@ -13,6 +14,8 @@ public class EnterLoading : MonoBehaviour {
     public bool _autoToNextScene = false; // 是否載入完自動切換場景
     public bool _fadeOutBGM = false;      // 切換場景前是否要淡出背景音樂
     public bool _fadeOutAnim = true;      // 切換場景前是否要淡出目前場景
+
+    public Animator _3dmodel; //3D人物 
     private bool _isLoadedDone = false;
 
     //public Image guideImage;          //遊戲教學圖片輪播
@@ -46,6 +49,10 @@ public class EnterLoading : MonoBehaviour {
    
     IEnumerator DisplayLoadingScreen(string sceneName, float delayT)
     {
+        if (_3dmodel) {
+            _3dmodel.SetBool("Loading", true);
+        }
+
         if(delayT > 0)
             yield return new WaitForSeconds(delayT);
 
@@ -88,7 +95,13 @@ public class EnterLoading : MonoBehaviour {
             yield return new WaitForSeconds(1.5f);
         }
 
+        GC.Collect(); //釋放記憶體
         async.allowSceneActivation = true;  //進入下一場景
+
+        if (_3dmodel)
+        {
+            _3dmodel.SetBool("Loading", false);
+        }
     }
 
     private void SetLoadingPercentage(int progress) {

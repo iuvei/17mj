@@ -1310,7 +1310,8 @@ namespace com.Desktop
             if (status != WebExceptionStatus.Success)
             {
                 Debug.Log("setUserWinCallback Failed! " + result);
-            }
+			} else if (result == "The remote server returned an error: (410) Gone.") {
+			}
             else if (!string.IsNullOrEmpty(result))
             {
                 Debug.Log("CB: setUserWinCallback =  " + result);
@@ -1324,7 +1325,8 @@ namespace com.Desktop
             if (status != WebExceptionStatus.Success)
             {
                 Debug.Log("setUserLoseCallback Failed! " + result);
-            }
+			} else if (result == "The remote server returned an error: (410) Gone.") {
+			}
             else if (!string.IsNullOrEmpty(result))
             {
                 Debug.Log("CB: setUserLoseCallback =  " + result);

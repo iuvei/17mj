@@ -22,17 +22,6 @@ public static class MJApi
 		}
 	}
 
-	public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
-    {
-        string api = "V1/login";
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-        if(sType == "C1")
-            mail = StringToUnicode(mail);
-        string pdata = "[{\"Type\":\"" + sType + "\", \"Mail\":\"" + mail + "\", \"TnPass\":\"" + tnPass + "\"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
     private static string StringToUnicode(string srcText)
     {
         string dst = "";
@@ -65,31 +54,72 @@ public static class MJApi
         return dst;
     }
 
+	public static void setAuthCode(string mail, string code, RequestCallBack callback)
+	{
+		string api = "V1/setAuthCode";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		string pdata = "[{\"Mail\":\"" + mail + "\", \"Code\":\"" + code + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void getAuthCode(string mail, RequestCallBack callback)
+	{
+		string api = "V1/getAuthCode";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		string pdata = "[{\"Mail\":\"" + mail + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void setForgetPwd(string mail, string pwd, RequestCallBack callback)
+	{
+		string api = "V1/setForgetPwd";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		string pdata = "[{\"Mail\":\"" + mail + "\", \"PWD\":\"" + pwd + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void setBulletin(string type, string data, RequestCallBack callback)
+	{
+		string api = "V1/setBulletin";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		data = StringToUnicode(data);
+		string pdata = "[{\"Data\":\"" + data + "\", \"Type\":\"" + type + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void getBulletin(int count, RequestCallBack callback)
+	{
+		string api = "V1/getBulletin";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		string pdata = "[{\"Count\":\"" + count + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
+	public static void Login(string sType, string mail, string tnPass, RequestCallBack callback)
+	{
+		string api = "V1/login";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		if(sType == "C1")
+			mail = StringToUnicode(mail);
+		string pdata = "[{\"Type\":\"" + sType + "\", \"Device\":\"" + device + "\", \"Mail\":\"" + mail + "\", \"TnPass\":\"" + tnPass + "\"}]";
+		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
+	}
+
     public static void AddMember(string id, string mail, string pass, string name, string stype, RequestCallBack callback)
     {
         string api = "V1/addMember";
         string auth = "Bearer " + secretKey;
         string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
         name = StringToUnicode(name);
-        string pdata = "[{\"ID\":\"" + id + "\",\"Mail\":\"" + mail + "\", \"Pass\":\"" + pass + "\", \"Name\":\"" + name + "\", \"SType\":\"" + stype + "\"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
-	public static void setAuthCode(string mail, string code, RequestCallBack callback)
-    {
-		string api = "V1/setAuthCode";
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-		string pdata = "[{\"Mail\":\"" + mail + "\", \"Code\":\"" + code + "\"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
-    public static void getAuthCode(string mail, RequestCallBack callback)
-    {
-        string api = "V1/getAuthCode";
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-        string pdata = "[{\"Mail\":\"" + mail + "\"}]";
+		string pdata = "[{\"ID\":\"" + id + "\",  \"Device\":\"" + device + "\", \"Mail\":\"" + mail + "\", \"Pass\":\"" + pass + "\", \"Name\":\"" + name + "\", \"SType\":\"" + stype + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
@@ -97,9 +127,10 @@ public static class MJApi
     {
         string api = "V1/setUserPhoto";
         string auth = "Bearer " + secretKey;
-        name = StringToUnicode(name);
         string method = "POST";
-        string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
@@ -107,10 +138,11 @@ public static class MJApi
 	{
 		string api = "V1/getUserPhoto";
 		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
 		string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
 		data = StringToUnicode(data);
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Photo\":\"" + data + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
@@ -118,9 +150,10 @@ public static class MJApi
 	{
 		string api = "V1/setUserMail";
 		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Pwd\":\"" + pwd + "\", \"Mail\":\"" + data + "\"}]";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\",  \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Pwd\":\"" + pwd + "\", \"Mail\":\"" + data + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
@@ -128,9 +161,10 @@ public static class MJApi
 	{
 		string api = "V1/setUserPwd";
 		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Pwd\":\"" + pwd + "\",  \"Mail\":\"" + mail + "\", \"Old\":\"" + oldpwd + "\"}]";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Pwd\":\"" + pwd + "\",  \"Mail\":\"" + mail + "\", \"Old\":\"" + oldpwd + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
@@ -138,39 +172,22 @@ public static class MJApi
 	{
 		string api = "V1/setUserCoin";
 		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldCoin + "\", \"New\":\"" + newCoin + "\"}]";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldCoin + "\", \"New\":\"" + newCoin + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
     public static void setPlayerName(string token, string oName, string uName, RequestCallBack callback)
     {
         string api = "V1/setPlayerName";
+		string auth = "Bearer " + secretKey;
+		string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
         oName = StringToUnicode(oName);
         uName = StringToUnicode(uName);
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-        string pdata = "[{\"Token\":\"" + token + "\", \"uName\":\"" + uName + "\", \"oName\":\"" + oName + "\"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
-    public static void setBulletin(string type, string data, RequestCallBack callback)
-    {
-        string api = "V1/setBulletin";
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-        data = StringToUnicode(data);
-        string pdata = "[{\"Data\":\"" + data + "\", \"Type\":\"" + type + "\"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
-
-    public static void getBulletin(int count, RequestCallBack callback)
-    {
-        string api = "V1/getBulletin";
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-        string pdata = "[{\"Count\":\"" + count + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"uName\":\"" + uName + "\", \"oName\":\"" + oName + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
@@ -179,8 +196,9 @@ public static class MJApi
         string api = "V1/setUserItem";
         string auth = "Bearer " + secretKey;
         string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
         name = StringToUnicode(name);
-        string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\",  \"Id\":\"" + id + "\", \"OldCoin\":\"" + oldCoin + "\",  \"NewCoin\":\"" + newCoin + "\", \"Old\":\"" + old + "\", \"Num\":\"" + num + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\",  \"Id\":\"" + id + "\", \"OldCoin\":\"" + oldCoin + "\",  \"NewCoin\":\"" + newCoin + "\", \"Old\":\"" + old + "\", \"Num\":\"" + num + "\"}]";
         LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
     }
 
@@ -189,8 +207,9 @@ public static class MJApi
 		string api = "V1/getUserItem";
 		string auth = "Bearer " + secretKey;
 		string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
 	    name = StringToUnicode(name);
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Id\":\"" + id + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Id\":\"" + id + "\"}]";
 		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
 	}
 
@@ -208,9 +227,10 @@ public static class MJApi
 	{
 		string api = "V1/setUserWin";
 		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldWin + "\", \"New\":\"" + newWin + "\",  \"Rate\":\"" + rate + "\"}]";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldWin + "\", \"New\":\"" + newWin + "\",  \"Rate\":\"" + rate + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
@@ -218,28 +238,22 @@ public static class MJApi
 	{
 		string api = "V1/setUserLose";
 		string auth = "Bearer " + secretKey;
-		name = StringToUnicode(name);
 		string method = "POST";
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldLose + "\", \"New\":\"" + newLose + "\", \"Rate\":\"" + rate + "\"}]";
+		string device = SystemInfo.deviceUniqueIdentifier;
+		name = StringToUnicode(name);
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\", \"Old\":\"" + oldLose + "\", \"New\":\"" + newLose + "\", \"Rate\":\"" + rate + "\"}]";
 		LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
 	}
 
-	public static void getGameList(string token, string name, RequestCallBack callback)
+	public static void getRankList(string token, string name, RequestCallBack callback)
 	{
-		string api = "V1/getGameList";
+		string api = "V1/getRankList";
 		string auth = "Bearer " + secretKey;
 		string method = "POST";
+		string device = SystemInfo.deviceUniqueIdentifier;
 		name = StringToUnicode(name);
-		string pdata = "[{\"Token\":\"" + token + "\", \"Name\":\"" + name + "\"}]";
+		string pdata = "[{\"Token\":\"" + token + "\", \"Device\":\"" + device + "\", \"Name\":\"" + name + "\"}]";
 		LoginClient.Instance.SendRequest (serverUrl + api, auth, method, pdata, callback);
 	}
 
-    public static void setForgetPwd(string mail, string pwd, RequestCallBack callback)
-    {
-        string api = "V1/setForgetPwd";
-        string auth = "Bearer " + secretKey;
-        string method = "POST";
-        string pdata = "[{\"Mail\":\"" + mail + "\", \"PWD\":\"" + pwd + "\"}]";
-        LoginClient.Instance.SendRequest(serverUrl + api, auth, method, pdata, callback);
-    }
 }

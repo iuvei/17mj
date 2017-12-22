@@ -284,10 +284,11 @@ namespace com.Lobby
         public void setPhotoCallback(WebExceptionStatus status, string result)
         {
             _needHideConnect = true; //需要關閉連線視窗
-            if (status != WebExceptionStatus.Success)
-            {
-				Debug.Log("setPhotoCallback Failed! " + result);
-            }
+			if (status != WebExceptionStatus.Success) {
+				Debug.Log ("setPhotoCallback Failed! " + result);
+			} else if (result == "The remote server returned an error: (410) Gone.") {
+				
+			}
             else
             {
                 _setUserPhoto = true;
@@ -686,7 +687,6 @@ namespace com.Lobby
                 getRoomPhotoResult = "getRoomPhotoCallback Failed!";
                 Debug.Log("getRoomPhotoCallback Failed! " + result);
 			}
-
             Debug.Log("getRoomPhotoCallback " + result);
         }
 
@@ -1209,7 +1209,7 @@ namespace com.Lobby
             {
                 setItemResult = result;
                 Debug.Log("setItemCallback Failed! " + result);
-            }
+			}
             else if(!string.IsNullOrEmpty(result))
             {
                 Debug.Log(" setItemCallback  =  " + result);
@@ -1545,7 +1545,7 @@ namespace com.Lobby
             // 讀排行榜
             string sName = CryptoPrefs.GetString("USERNAME");
             string sToken = CryptoPrefs.GetString("USERTOKEN");
-            MJApi.getGameList(sToken, sName, getRankDataCallback);
+            MJApi.getRankList(sToken, sName, getRankDataCallback);
 			AccountManager.Instance.ShowConnecting (); //開啟連線視窗
 
             if (btmMenuBtns[0])
@@ -2082,9 +2082,8 @@ namespace com.Lobby
             _needHideConnect = true; //需要關閉連線視窗
             resetUserTypeResult = result;
             _resetUserType = true;
-            if (status != WebExceptionStatus.Success)
-			{
-				Debug.Log("setMailCallback Failed! " + result);
+			if (status != WebExceptionStatus.Success) {
+				Debug.Log ("setMailCallback Failed! " + result);
 			}
 			else if (!string.IsNullOrEmpty (result))
 			{
@@ -2100,7 +2099,7 @@ namespace com.Lobby
             if (status != WebExceptionStatus.Success)
             {
                 Debug.Log("setPwdCallback Failed! " + result);
-            }
+			}
             else if (!string.IsNullOrEmpty(result))
             {
                 Debug.Log("setPwdCallback =  " + result);
@@ -2341,8 +2340,8 @@ namespace com.Lobby
 			if (status != WebExceptionStatus.Success)
 			{
 				Debug.Log("setCoinCallback Failed! " + result);
+			} else if (result == "The remote server returned an error: (410) Gone.") {
 			}
-
 			else if (!string.IsNullOrEmpty (result))
 			{
                 setCoinResult = result;
@@ -2394,7 +2393,10 @@ namespace com.Lobby
                 if (resetUserTypeResult == "The remote server returned an error: (401) Unauthorized.")
                 {
                     _actionText.text = "此信箱已被註冊";
-                }
+				} 
+				else if (resetUserTypeResult == "The remote server returned an error: (410) Gone.") {
+					_actionText.text = "XXX";
+				}
                 else if (resetUserTypeResult != "OK")
                 {
                     _actionText.text = "綁定失敗";
@@ -2421,7 +2423,10 @@ namespace com.Lobby
                 if (resetPassResult == "The remote server returned an error: (401) Unauthorized.")
                 {
                     _actionText.text = "原始密碼輸入錯誤";
-                }
+				} 
+				else if (resetPassResult == "The remote server returned an error: (410) Gone.") {
+					_actionText.text = "XXX";
+				}
                 else if (resetPassResult != "OK")
                 {
                     _actionText.text = "密碼更改失敗";
@@ -2444,7 +2449,10 @@ namespace com.Lobby
                 if (resetNameResult == "The remote server returned an error: (401) Unauthorized.")
                 {
                     _actionText.text = "參數錯誤";
-                }
+				} 
+				else if (resetNameResult == "The remote server returned an error: (410) Gone.") {
+					_actionText.text = "XXXXXX";
+				}
                 else if (resetNameResult != "OK")
                 {
                     _actionText.text = "暱稱更改失敗";
@@ -2466,7 +2474,8 @@ namespace com.Lobby
                 if (setItemResult == "The remote server returned an error: (401) Unauthorized.")
                 {
                     _actionText.text = "購買失敗";
-                }
+				} else if (setItemResult == "The remote server returned an error: (410) Gone.") {
+				}
                 else if (setItemResult == "something wrong!")
                 {
                     _actionText.text = "發生不明錯誤";
@@ -2495,6 +2504,11 @@ namespace com.Lobby
                     actionDonePanel.SetActive(true);
                     _actionText.text = "發生錯誤";
                 }
+				else if(getItemNumResult == "The remote server returned an error: (410) Gone.")
+				{
+					actionDonePanel.SetActive(true);
+					_actionText.text = "發生錯誤XXX";
+				}
                 else
                 {
                     if (currentPage != SubPage.Shop)
@@ -2525,6 +2539,11 @@ namespace com.Lobby
                     actionDonePanel.SetActive(true);
                     _actionText.text = "發生錯誤";
                 }
+				else if(getRankResult == "The remote server returned an error: (410) Gone.")
+				{
+					actionDonePanel.SetActive(true);
+					_actionText.text = "發生錯誤XXX";
+				}
                 else
                 {
                     paintRankUI();
@@ -2546,7 +2565,10 @@ namespace com.Lobby
                 {
                     actionDonePanel.SetActive(true);
                     _actionText.text = "發生錯誤";
-                }
+				} else if (getRoomPhotoResult == "The remote server returned an error: (410) Gone.") {
+					actionDonePanel.SetActive(true);
+					_actionText.text = "XXX";
+				}
                 else
                 {
                     paintRoomUI(getRoomPhotoResult);

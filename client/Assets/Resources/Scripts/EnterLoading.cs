@@ -17,6 +17,7 @@ public class EnterLoading : MonoBehaviour {
 
     public Animator _3dmodel; //3D人物 
     private bool _isLoadedDone = false;
+    private FoxGirl _foxgirl;
 
     //public Image guideImage;          //遊戲教學圖片輪播
     //public Sprite[] guideImages;
@@ -34,6 +35,10 @@ public class EnterLoading : MonoBehaviour {
         //    Debug.Log("No Found Animator Component");
 
         //guideImageNum = guideImages.Length; //圖片輪播
+
+        if (_3dmodel) {
+            _foxgirl = _3dmodel.GetComponent<FoxGirl>();
+        }
     }
 
     // 準備進入遊戲場景
@@ -50,6 +55,8 @@ public class EnterLoading : MonoBehaviour {
     IEnumerator DisplayLoadingScreen(string sceneName, float delayT)
     {
         if (_3dmodel) {
+            _foxgirl.isShowToy = false;
+            _foxgirl.SetVisibality();
             _3dmodel.SetBool("Loading", true);
         }
 
@@ -101,6 +108,8 @@ public class EnterLoading : MonoBehaviour {
         if (_3dmodel)
         {
             _3dmodel.SetBool("Loading", false);
+            _foxgirl.isShowToy = true;
+            _foxgirl.SetVisibality();
         }
     }
 

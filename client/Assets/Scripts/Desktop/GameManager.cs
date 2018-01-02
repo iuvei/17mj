@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Net;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Colyseus;
 
 namespace com.Desktop
 {
@@ -110,6 +111,12 @@ namespace com.Desktop
 
 		private MahPlayer _activePlayer = null;
 		private string liveUrl = string.Empty;
+
+		private Client colClient;
+		private CRoom colRoom;
+		private string colToken = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvby";
+
+
         #endregion
 
         private void Awake()
@@ -299,8 +306,8 @@ namespace com.Desktop
 		}
 
 
-        void Start()
-        {
+		IEnumerator Start () {
+
 			//AudioManager.Instance.PlayBGM ("BGM_Playing");
             //只有主机有发牌的权利
 			if (!PhotonNetwork.connected)
@@ -309,21 +316,73 @@ namespace com.Desktop
 				// We must be connected to a photon server! Back to main menu
 				//Application.LoadLevel(Application.loadedLevel - 1);
 				PhotonNetwork.LoadLevel("02.Lobby");
-				return;
+				yield return 0;
 				//Connect();
 			}
 
 			if (PanelInvate != null) {
 				PanelInvate.SetActive (false);
 			}
-
-			//Debug.Log (PhotonNetwork.room);
-
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
-            //Debug.Log ("Start()");
-
             InitUILayout();
-        }
+
+			//Link Colyseus Room
+			String serverName = "17mj.ddns.net";
+			String port = "9200";
+			String roomName = "chat";
+			String uri = "wss://" + serverName + ":" + port;
+			Debug.Log ("Colyseus Room URL="+uri);
+
+			colClient = new Client(uri);
+			colClient.OnOpen += OnColOpen;
+			colClient.OnClose += OnColClose;
+			yield return StartCoroutine(colClient.Connect());
+
+			Dictionary<string, object> options = new Dictionary<string, object> ();
+			options.Add ("channel", PhotonNetwork.room.Name);
+
+			colRoom = colClient.Join(roomName, options);
+			colRoom.OnReadyToConnect += (sender, e) => StartCoroutine ( colRoom.Connect() );
+			colRoom.OnJoin += OnRoomJoined;
+			colRoom.Listen ("messages/:number", this.OnMessageAdded);
+
+			while (true) {
+				colClient.Recv();
+				if (colClient.error != null)
+					break;
+				yield return 0;
+			}
+			colRoomQuit ();
+		}
+
+
+		public void OnColOpen (object sender, EventArgs e)
+		{
+			Debug.Log("Connected to server. Client id: " + colClient.id);
+		}
+
+		public void OnColClose (object sender, EventArgs e)
+		{
+			Debug.Log("CONNECTION CLOSED");
+		}
+
+		public void OnRoomJoined (object sender, EventArgs e)
+		{
+			Debug.Log("Joined room successfully.");
+		}
+
+		public void OnMessageAdded (DataChange change)
+		{
+			Debug.Log ("OnMessageAdded");
+			Debug.Log (change.path["number"]);
+			Debug.Log (change.value);
+		}
+
+		public void colRoomQuit()
+		{
+			colRoom.Leave ();
+			colClient.Close();
+		}
 
         // 邀請玩麻將
         public void ClickInvatePlay() {
@@ -1430,7 +1489,6 @@ namespace com.Desktop
 		{
 			//Debug.Log ("OnApplicationPause(" + pauseStatus + ")");
 			if (pauseStatus == true) {
-				//	Back ();
 				StopLive();
 			}
 		}
@@ -1454,11 +1512,11 @@ namespace com.Desktop
 
         public void Back()
         {
-			//Debug.Log ("Back()");
 			#if UNITY_IOS || UNITY_ANDROID
 			VideoRecordingBridge.StopRecord ();
 			VideoRecordingBridge.StopPlay ();
 			#endif
+			colRoomQuit ();
 			AccountManager.Instance.ShowConnecting ();
 			//com.Lobby.Launcher.instance.ConnectPanelSwitch (true);
 			if (PhotonNetwork.connected) {
@@ -1477,6 +1535,7 @@ namespace com.Desktop
 			VideoRecordingBridge.StopRecord ();
 			VideoRecordingBridge.StopPlay ();
 			#endif
+			colRoomQuit ();
 			//SceneManager.LoadScene("02.Lobby");
 			PhotonNetwork.LoadLevel ("02.Lobby");
 			// back to main menu        

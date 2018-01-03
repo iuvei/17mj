@@ -1715,7 +1715,6 @@ namespace com.Desktop
             {
                 ShowChatMsg(ChatTalker.Self, false, ChatInput.text);
                 ChatInput.text = string.Empty;
-                //ChatMain.transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
             }
         }
 
@@ -1769,8 +1768,6 @@ namespace com.Desktop
                     msg.GetComponentInChildren<Text>().color = Color.white;
                     break;
                 case ChatTalker.Self:
-                    //msg.GetComponentInChildren<Text>().text = "自己："; // for Test
-                    //msg.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleLeft; // for Test
                     msg.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleRight;
                     break;
             }
@@ -1785,7 +1782,19 @@ namespace com.Desktop
                 msg.GetComponentInChildren<Text>().text += _str;
             }
 
-            ChatMain.transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+            //ChatMain.transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0.5f;
+            StartCoroutine("SetScrollBarTop");
+
+        }
+
+        private IEnumerator SetScrollBarTop() {
+            Canvas.ForceUpdateCanvases();
+
+            // Wait.
+            yield return null;
+
+            ChatMain.transform.parent.GetComponent<ScrollRect>().verticalScrollbar.value = 0f;
+            Canvas.ForceUpdateCanvases();
         }
     }
 }

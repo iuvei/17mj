@@ -241,9 +241,9 @@ namespace com.Lobby
             if (loadingPanel)
             {
                 loadingPanel.SetActive(true);
-                Text xx2 = loadingPanel.transform.Find("processbar/Text").GetComponent<Text>();
-                mySequence = DOTween.Sequence();
-                mySequence.Append(xx2.DOText("載入中...", 3)).SetLoops(-1, LoopType.Restart);
+                //Text xx2 = loadingPanel.transform.Find("processbar/Text").GetComponent<Text>();
+                //mySequence = DOTween.Sequence();
+                //mySequence.Append(xx2.DOText("載入中...", 3)).SetLoops(-1, LoopType.Restart);
             }
             //DontDestroyOnLoad (this.gameObject);
 
@@ -797,7 +797,9 @@ namespace com.Lobby
 				Text xx = loadingPanel.transform.Find ("processbar/processtext").GetComponent<Text> ();
                 xx.text = (t*100).ToString ()+"%";
                 Image pp = loadingPanel.transform.Find ("processbar/process").GetComponent<Image> ();
-				pp.fillAmount = t;
+                Transform _girl = loadingPanel.transform.Find("FoxGirl_tail");
+                if (_girl) _girl.localPosition = new Vector2(-500 + t * 1000, -140);
+                pp.fillAmount = t;
 				if(t>=1) {
 					StartCoroutine(HideLoading());
                     mySequence.Kill();

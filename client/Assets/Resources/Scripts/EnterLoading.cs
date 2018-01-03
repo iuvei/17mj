@@ -3,11 +3,13 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
+using DG.Tweening;
 
 public class EnterLoading : MonoBehaviour {
     public static EnterLoading instance;
     public string _sceneName; 
     public Text loadText;
+    public Text loadTextA;
     public Image loadImage;
     public float _delayTime = 0;
 
@@ -15,9 +17,8 @@ public class EnterLoading : MonoBehaviour {
     public bool _fadeOutBGM = false;      // 切換場景前是否要淡出背景音樂
     public bool _fadeOutAnim = true;      // 切換場景前是否要淡出目前場景
 
-    public Animator _3dmodel; //3D人物 
+    public Transform _runImg;
     private bool _isLoadedDone = false;
-    private FoxGirl _foxgirl;
 
     //public Image guideImage;          //遊戲教學圖片輪播
     //public Sprite[] guideImages;
@@ -36,9 +37,12 @@ public class EnterLoading : MonoBehaviour {
 
         //guideImageNum = guideImages.Length; //圖片輪播
 
-        if (_3dmodel) {
-            _foxgirl = _3dmodel.GetComponent<FoxGirl>();
+
+        if (_runImg) {
+            _runImg.localPosition = new Vector2(-500, -140);
         }
+
+        loadTextA.DOText("載入中...", 3).SetLoops(-1, LoopType.Restart);
     }
 
     // 準備進入遊戲場景
@@ -54,11 +58,6 @@ public class EnterLoading : MonoBehaviour {
    
     IEnumerator DisplayLoadingScreen(string sceneName, float delayT)
     {
-        if (_3dmodel) {
-            _foxgirl.isShowToy = false;
-            _foxgirl.SetVisibality();
-            _3dmodel.SetBool("Loading", true);
-        }
 
         if(delayT > 0)
             yield return new WaitForSeconds(delayT);
@@ -105,18 +104,18 @@ public class EnterLoading : MonoBehaviour {
         GC.Collect(); //釋放記憶體
         async.allowSceneActivation = true;  //進入下一場景
 
-        if (_3dmodel)
-        {
-            _3dmodel.SetBool("Loading", false);
-            _foxgirl.isShowToy = true;
-            _foxgirl.SetVisibality();
-        }
     }
 
     private void SetLoadingPercentage(int progress) {
-        //loadText.text = progress.ToString() + " %";
+        loadText.text = progress.ToString() + " %";
         loadImage.fillAmount = (float)progress / 100;
         //Debug.Log("async.progress = " + progress);
+
+        if (_runImg)
+        {
+            _runImg.localPosition = new Vector2(-500 + (float)progress*10, -140);
+            //Debug.Log("async.progress = " + progress);
+        }
     }
 
     //更換載入畫面教學圖片
@@ -129,4 +128,5 @@ public class EnterLoading : MonoBehaviour {
     {
         get { return _isLoadedDone; }
     }
+
 }

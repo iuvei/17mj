@@ -72,21 +72,21 @@ Material:
     - _ReceiveShadowsIntensity: 1
     - _ReduceWhite: 0
     - _Saturation: 1.03
-    - _SelfLitIntensity: 0.46
-    - _SelfLitPower: 1
+    - _SelfLitIntensity: 0.22
+    - _SelfLitPower: 0.65
     - _SelfShadowHardness: 1
     - _SelfShadowIntensity: 1
     - _SelfShadowSize: 0.56
     - _SelfShadowatViewDirection: 0
-    - _ShadowIntensity: 0
+    - _ShadowIntensity: 0.13
     - _ShadowPTextureIntensity: 0
     - _ShowAOonAmbientLight: 1
     - _ShowAOonLight: 0
     - _SoftGloss: 0
     - _Transparent: 0
     m_Colors:
-    - _Color: {r: 0.9029851, g: 0.8356924, b: 0.7614725, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlossColor: {r: 1, g: 1, b: 1, a: 1}
     - _SelfLitColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowColor: {r: 1, g: 0.5259634, b: 0.16176468, a: 1}

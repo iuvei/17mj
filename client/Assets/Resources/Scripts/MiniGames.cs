@@ -17,7 +17,7 @@ public class MiniGames : MonoBehaviour {
     private int GameType = 0;
     private int GameTotalNum = 3; //遊戲種類
 
-    void Start()
+    void Start() 
     {
         Instance = this;
 
@@ -27,7 +27,7 @@ public class MiniGames : MonoBehaviour {
         }
 
         GameType = AccountManager.Instance.GameType;
-        //GameType = 2;
+        //GameType = 1;
         SetGameType(GameType);
     }
 

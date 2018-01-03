@@ -83,7 +83,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: 6479715edb32a0e4d8cdef3323cd35c0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1fd673e698cc72743b788e4b7f3eac2e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -107,19 +107,19 @@ Material:
     - _MainTextureColorShadow: 0
     - _Metallic: 0
     - _Mode: 0
-    - _NormalIntensity: 2
+    - _NormalIntensity: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ReceiveShadowsIntensity: 1
+    - _ReceiveShadowsIntensity: 0
     - _ReduceWhite: 0
     - _Saturation: 0.5
-    - _SelfLitIntensity: 0.34
-    - _SelfLitPower: 0.9
+    - _SelfLitIntensity: 1
+    - _SelfLitPower: -0.01
     - _SelfShadowHardness: 1
     - _SelfShadowIntensity: 1
-    - _SelfShadowSize: 0.56
+    - _SelfShadowSize: 1
     - _SelfShadowatViewDirection: 0
-    - _ShadowIntensity: 0.04
+    - _ShadowIntensity: 0
     - _ShadowPTextureIntensity: 0
     - _ShowAOonAmbientLight: 1
     - _ShowAOonLight: 0
@@ -131,7 +131,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.9558824, g: 0.9060968, b: 0.85045415, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlossColor: {r: 1, g: 1, b: 1, a: 1}

@@ -1,0 +1,206 @@
+fileFormatVersion: 2
+guid: 3728fa2c70dab08418bac113ff5a0b00
+timeCreated: 1514533967
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: IK Chain001
+    100002: IK Chain003
+    100004: L_chest
+    100006: L_ear
+    100008: M_bag01
+    100010: M_bag02
+    100012: M_bag_end
+    100014: Merchant
+    100016: Merchant Footsteps
+    100018: Merchant Head
+    100020: Merchant HeadNub
+    100022: Merchant L Calf
+    100024: Merchant L Clavicle
+    100026: Merchant L Foot
+    100028: Merchant L Forearm
+    100030: Merchant L Hand
+    100032: Merchant L Thigh
+    100034: Merchant L Toe0
+    100036: Merchant L Toe0Nub
+    100038: Merchant L UpperArm
+    100040: Merchant Neck
+    100042: Merchant Pelvis
+    100044: Merchant R Calf
+    100046: Merchant R Clavicle
+    100048: Merchant R Foot
+    100050: Merchant R Forearm
+    100052: Merchant R Hand
+    100054: Merchant R Thigh
+    100056: Merchant R Toe0
+    100058: Merchant R Toe0Nub
+    100060: Merchant R UpperArm
+    100062: Merchant Spine
+    100064: Merchant Spine1
+    100066: Merchant Spine2
+    100068: Merchant Tail
+    100070: Merchant Tail1
+    100072: Merchant Tail2
+    100074: //RootNode
+    100076: MJ_NuigurumiOK
+    100078: NuigurumDummy
+    100080: R_chest
+    100082: R_ear
+    400000: IK Chain001
+    400002: IK Chain003
+    400004: L_chest
+    400006: L_ear
+    400008: M_bag01
+    400010: M_bag02
+    400012: M_bag_end
+    400014: Merchant
+    400016: Merchant Footsteps
+    400018: Merchant Head
+    400020: Merchant HeadNub
+    400022: Merchant L Calf
+    400024: Merchant L Clavicle
+    400026: Merchant L Foot
+    400028: Merchant L Forearm
+    400030: Merchant L Hand
+    400032: Merchant L Thigh
+    400034: Merchant L Toe0
+    400036: Merchant L Toe0Nub
+    400038: Merchant L UpperArm
+    400040: Merchant Neck
+    400042: Merchant Pelvis
+    400044: Merchant R Calf
+    400046: Merchant R Clavicle
+    400048: Merchant R Foot
+    400050: Merchant R Forearm
+    400052: Merchant R Hand
+    400054: Merchant R Thigh
+    400056: Merchant R Toe0
+    400058: Merchant R Toe0Nub
+    400060: Merchant R UpperArm
+    400062: Merchant Spine
+    400064: Merchant Spine1
+    400066: Merchant Spine2
+    400068: Merchant Tail
+    400070: Merchant Tail1
+    400072: Merchant Tail2
+    400074: //RootNode
+    400076: MJ_NuigurumiOK
+    400078: NuigurumDummy
+    400080: R_chest
+    400082: R_ear
+    4300000: MJ_NuigurumiOK
+    7400000: ToyJump
+    9500000: //RootNode
+    13700000: MJ_NuigurumiOK
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #270'
+    second: {fileID: 2100000, guid: f71007b409b74b84aa42d1da57733f0f, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: ToyJump
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 18
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.00001
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -62,8 +62,14 @@ namespace com.Desktop
         public Text Online;
 		public Image OverPanel;
 		public GameObject PanelInvate;
-		public Text ChatText;
-		public GameObject PanelAlert;
+        public enum ChatTalker { System, Other, Self};
+        public Text ChatMain;
+        public GameObject ChatText;
+        public GameObject ChatImg;
+        public GameObject ChatItem;
+        public InputField ChatInput;
+        public GameObject ChatIconPanel;
+        public GameObject PanelAlert;
 		public Text RoomUserName;
         public RectTransform SettingCanvas;
         public RectTransform _invitePlayPop;
@@ -262,8 +268,9 @@ namespace com.Desktop
 			if (PhotonNetwork.room != null) {
 				string name = PhotonNetwork.room.Name;
 				if (ChatText != null) {
-					ChatText.text += "房間編號: #"+name+"\n";
-				}
+					//ChatText.text += "房間編號: #"+name+"\n";
+                    ShowChatMsg(ChatTalker.System, false, "房間編號: #" + name);
+                }
 				if (RoomUserName != null) {
                     //PhotonNetwork.playerList
                     //PhotonPlayer mp = null;
@@ -280,8 +287,10 @@ namespace com.Desktop
 					string cname = (string)cp ["CRoomName"];
 					RoomUserName.text = cname;
 					if (ChatText != null) {
-						ChatText.text += "房間名稱: "+cname+"的房間\n";
-						ChatText.text += "你進入這個房間\n";
+                        ShowChatMsg(ChatTalker.System, false, "房間名稱: " + cname + "的房間");
+                        ShowChatMsg(ChatTalker.System, false, "你進入這個房間");
+      //                  ChatText.text += "房間名稱: "+cname+"的房間\n";
+						//ChatText.text += "你進入這個房間\n";
 					}
 				}
 
@@ -326,8 +335,8 @@ namespace com.Desktop
 			AudioManager.Instance.PlayBGM ("BGM_Playing");
             InitUILayout();
 
-			//Link Colyseus Room
-			String serverName = "17mj.ddns.net";
+            //Link Colyseus Room
+            String serverName = "17mj.ddns.net";
 			String port = "9200";
 			String roomName = "chat";
 			String uri = "wss://" + serverName + ":" + port;
@@ -559,8 +568,8 @@ namespace com.Desktop
 			if (Online != null) {
 				Online.text = PhotonNetwork.playerList.Length.ToString();
 			}
-			if (ChatText != null) {
-				ChatText.text += player.NickName+"進入這個房間\n";
+			if (ChatMain != null) {
+                ChatMain.text += player.NickName+"進入這個房間\n";
 			}
             int ppl =  PhotonNetwork.room.PlayerCount;
 			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
@@ -576,8 +585,8 @@ namespace com.Desktop
 			string cname = (string)cp ["CRoomName"];
 			if (player.NickName==cname) {
 				Debug.LogError("[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳");
-				if (ChatText != null) {
-					ChatText.text += "[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳\n";
+				if (ChatMain != null) {
+                    ChatMain.text += "[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳\n";
 				}
 				//房主離開 結束遊戲房 回到大廳
 				PhotonNetwork.LeaveRoom();
@@ -585,14 +594,14 @@ namespace com.Desktop
 			} else {
 				int ppl =  PhotonNetwork.room.PlayerCount;
 				photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
-				if (ChatText != null) {
-					ChatText.text += player.NickName+"離開這個房間\n";
+				if (ChatMain != null) {
+                    ChatMain.text += player.NickName+"離開這個房間\n";
 				}
 				foreach (MahPlayer mp in Users) {
 					if (mp.photonPlayer!=null && player.ID == mp.photonPlayer.ID) {
 						GameStop ();
-						if (ChatText != null) {
-							ChatText.text += "終止麻將遊戲！\n";
+						if (ChatMain != null) {
+                            ChatMain.text += "終止麻將遊戲！\n";
 						}
 					}
 				}
@@ -1700,5 +1709,83 @@ namespace com.Desktop
 			this._isgameover = false;
 			photonView.RPC ("GameStart", PhotonTargets.All, null);
 		}
+
+        public void SendChatMsg() {
+            if (ChatInput && ChatInput.text != string.Empty)
+            {
+                ShowChatMsg(ChatTalker.Self, false, ChatInput.text);
+                ChatInput.text = string.Empty;
+                //ChatMain.transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+            }
+        }
+
+        public void ShowChatIconPanel()
+        {
+            if (ChatIconPanel)
+                ChatIconPanel.SetActive(!ChatIconPanel.activeSelf);
+        }
+
+        public void SendChatIcon(int _iconIndex){
+            string _imgType;
+            switch (_iconIndex) {
+                default:
+                case 1:
+                    _imgType = "01";
+                    break;
+                case 2:
+                    _imgType = "02";
+                    break;
+                case 3:
+                    _imgType = "03";
+                    break;
+                case 4:
+                    _imgType = "04";
+                    break;
+                case 5:
+                    _imgType = "05";
+                    break;
+                case 6:
+                    _imgType = "06";
+                    break;
+            }
+            ShowChatMsg(ChatTalker.Self, true, _imgType);
+            ChatIconPanel.SetActive(false);
+        }
+
+        private void ShowChatMsg(ChatTalker _talker, bool _isImg, string _str) {
+            GameObject msg = Instantiate(ChatItem);
+            //GameObject msg = Instantiate(_isImg ? ChatImg: ChatText);
+            Transform rectT = msg.GetComponent<Transform>();
+            rectT.localScale = Vector3.one*0.01f;
+            msg.transform.SetParent(ChatMain.transform);
+
+            switch (_talker) {
+                case ChatTalker.System:
+                    msg.GetComponentInChildren<Text>().text = "[系統] ";
+                    msg.GetComponentInChildren<Text>().color = Color.yellow;
+                    break;
+                case ChatTalker.Other:
+                    msg.GetComponentInChildren<Text>().text = "路人：";
+                    msg.GetComponentInChildren<Text>().color = Color.white;
+                    break;
+                case ChatTalker.Self:
+                    //msg.GetComponentInChildren<Text>().text = "自己："; // for Test
+                    //msg.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleLeft; // for Test
+                    msg.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleRight;
+                    break;
+            }
+
+
+            if (_isImg)
+            {
+                msg.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>("Image/Items/" + _str);
+            }
+            else {
+                msg.GetComponentInChildren<Image>().gameObject.SetActive(false);
+                msg.GetComponentInChildren<Text>().text += _str;
+            }
+
+            ChatMain.transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        }
     }
 }

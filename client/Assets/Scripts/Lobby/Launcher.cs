@@ -95,6 +95,8 @@ namespace com.Lobby
         public enum SubPage { Main, List, Shop, Deposit, Bag, Rank, Active, Setting };
         #endregion
 
+        public Logout _logoutScript;
+
         #region PRIVATE 
         private string _roomname = string.Empty;
 		private byte _roommax = 2;
@@ -188,10 +190,12 @@ namespace com.Lobby
         private string getOnlineResult = string.Empty;
         private string getRankResult = string.Empty;
         private string getRoomPhotoResult = string.Empty;
+        private string setUserPhotoResult = string.Empty;
         private int _randomOnlineUsers;
         private int _currentItemId = 0;
         private SubPage currentPage = SubPage.Main;
         private RoomInfo[] _roomLists;
+        private bool _ERRLogout = false;
 
 
         [SerializeField]
@@ -284,18 +288,13 @@ namespace com.Lobby
         public void setPhotoCallback(WebExceptionStatus status, string result)
         {
             _needHideConnect = true; //需要關閉連線視窗
-			if (status != WebExceptionStatus.Success) {
-				Debug.Log ("setPhotoCallback Failed! " + result);
-			} else if (result == "The remote server returned an error: (410) Gone.") {
-				
+            setUserPhotoResult = result;
+            _setUserPhoto = true;
+            if (status != WebExceptionStatus.Success) {
+                setUserPhotoResult = "setPhotoCallback Failed!";
+                //Debug.Log ("setPhotoCallback Failed! " + result);
 			}
-            else
-            {
-                _setUserPhoto = true;
-                                       
-            }
-
-            Debug.Log("setPhotoCallback =  " + result);
+            //Debug.Log("setPhotoCallback =  " + result);
         }
 
         void Start()
@@ -2342,7 +2341,6 @@ namespace com.Lobby
 			if (status != WebExceptionStatus.Success)
 			{
 				Debug.Log("setCoinCallback Failed! " + result);
-			} else if (result == "The remote server returned an error: (410) Gone.") {
 			}
 			else if (!string.IsNullOrEmpty (result))
 			{
@@ -2375,7 +2373,12 @@ namespace com.Lobby
 
 			if (_setCoin) {
                 _setCoin = false;
-                if (Int32.TryParse(setCoinResult, out localCoin)) {
+                if (setCoinResult == "The remote server returned an error: (410) Gone.") {
+                    _ERRLogout = true;
+                    actionDonePanel.SetActive(true);
+                    _actionText.text = "帳號異常，請重新登入";
+                }
+                else if (Int32.TryParse(setCoinResult, out localCoin)) {
                     CryptoPrefs.SetString("USERCOIN", setCoinResult);
                     SetPlayerCoins();
                 }
@@ -2397,7 +2400,8 @@ namespace com.Lobby
                     _actionText.text = "此信箱已被註冊";
 				} 
 				else if (resetUserTypeResult == "The remote server returned an error: (410) Gone.") {
-					_actionText.text = "XXX";
+                    _ERRLogout = true;
+                    _actionText.text = "帳號異常，請重新登入";
 				}
                 else if (resetUserTypeResult != "OK")
                 {
@@ -2427,7 +2431,8 @@ namespace com.Lobby
                     _actionText.text = "原始密碼輸入錯誤";
 				} 
 				else if (resetPassResult == "The remote server returned an error: (410) Gone.") {
-					_actionText.text = "XXX";
+                    _ERRLogout = true;
+                    _actionText.text = "帳號異常，請重新登入";
 				}
                 else if (resetPassResult != "OK")
                 {
@@ -2453,7 +2458,8 @@ namespace com.Lobby
                     _actionText.text = "參數錯誤";
 				} 
 				else if (resetNameResult == "The remote server returned an error: (410) Gone.") {
-					_actionText.text = "XXXXXX";
+                    _ERRLogout = true;
+                    _actionText.text = "帳號異常，請重新登入";
 				}
                 else if (resetNameResult != "OK")
                 {
@@ -2477,7 +2483,9 @@ namespace com.Lobby
                 {
                     _actionText.text = "購買失敗";
 				} else if (setItemResult == "The remote server returned an error: (410) Gone.") {
-				}
+                    _ERRLogout = true;
+                    _actionText.text = "帳號異常，請重新登入"; 
+                }
                 else if (setItemResult == "something wrong!")
                 {
                     _actionText.text = "發生不明錯誤";
@@ -2508,8 +2516,9 @@ namespace com.Lobby
                 }
 				else if(getItemNumResult == "The remote server returned an error: (410) Gone.")
 				{
-					actionDonePanel.SetActive(true);
-					_actionText.text = "發生錯誤XXX";
+                    _ERRLogout = true;
+                    actionDonePanel.SetActive(true);
+					_actionText.text = "帳號異常，請重新登入";
 				}
                 else
                 {
@@ -2543,8 +2552,9 @@ namespace com.Lobby
                 }
 				else if(getRankResult == "The remote server returned an error: (410) Gone.")
 				{
-					actionDonePanel.SetActive(true);
-					_actionText.text = "發生錯誤XXX";
+                    _ERRLogout = true;
+                    actionDonePanel.SetActive(true);
+					_actionText.text = "帳號異常，請重新登入";
 				}
                 else
                 {
@@ -2555,7 +2565,21 @@ namespace com.Lobby
             if (_setUserPhoto)
             {
                 _setUserPhoto = false;
-                SetPlayerPhotos();
+
+                if (setUserPhotoResult == "setPhotoCallback Failed!") {
+                    actionDonePanel.SetActive(true);
+                    _actionText.text = "發生錯誤";
+                }
+                else if(setUserPhotoResult == "The remote server returned an error: (410) Gone.")
+                {
+                    _ERRLogout = true;
+                    actionDonePanel.SetActive(true);
+                    _actionText.text = "帳號異常，請重新登入";
+                }
+                else
+                {
+                    SetPlayerPhotos();
+                }
             }
 
             if (_getRoomPhoto)
@@ -2568,8 +2592,9 @@ namespace com.Lobby
                     actionDonePanel.SetActive(true);
                     _actionText.text = "發生錯誤";
 				} else if (getRoomPhotoResult == "The remote server returned an error: (410) Gone.") {
-					actionDonePanel.SetActive(true);
-					_actionText.text = "XXX";
+                    _ERRLogout = true;
+                    actionDonePanel.SetActive(true);
+					_actionText.text = "帳號異常，請重新登入";
 				}
                 else
                 {
@@ -2782,6 +2807,10 @@ namespace com.Lobby
         public void ClickActionDoneBtn() {
             actionDonePanel.SetActive(false);
             _actionText.text = string.Empty;
+            if (_ERRLogout)
+            {
+                _logoutScript.ClickLogout();
+            }
         }
 
 
@@ -2824,8 +2853,10 @@ namespace com.Lobby
         {
             string uFirstLogin = CryptoPrefs.GetString("USERFLOGIN");
             string uTotalLogin = CryptoPrefs.GetString("USERLOGINTOTAL");
-            int _tLoginTime = (int.Parse(uTotalLogin) == 0) ? 1 : int.Parse(uTotalLogin);
-            //Debug.Log("登入總次數 = " + _tLoginTime);
+            
+            int _tLoginTime = (string.IsNullOrEmpty(uTotalLogin)) ? 1 : int.Parse(uTotalLogin);
+            Debug.Log("登入總次數 = " + _tLoginTime);
+
             int _takedDay = (uFirstLogin == "T") ? _tLoginTime - 1 : _tLoginTime;
             DateTime myDate = DateTime.Now;
             int maxDay = 30;

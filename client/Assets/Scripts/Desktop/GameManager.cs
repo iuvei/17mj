@@ -62,6 +62,7 @@ namespace com.Desktop
         public Button BackBtn;
         public Text Online;
 		public Image OverPanel;
+        public GameObject actionDonePanel;
 		public GameObject PanelInvate;
         public enum ChatTalker { System, Other, Self};
         public Text ChatMain;
@@ -95,6 +96,9 @@ namespace com.Desktop
         private Text _losName;
         private Text _losLv;
         private Text _losCoin;
+
+        private Text _actionText;
+        private bool _ERRLogout = false;
 
         #region 
         /// <summary>
@@ -215,6 +219,9 @@ namespace com.Desktop
                     _losCoin = _loserP.transform.Find("Coin").GetComponent<Text>();
                 }
             }
+
+            if (actionDonePanel)
+                _actionText = actionDonePanel.transform.Find("main/Txt").GetComponent<Text>();
         }
 
 		private void OnFailedToConnect(NetworkConnectionError error)
@@ -479,7 +486,7 @@ namespace com.Desktop
 				//mplayer.handlePon (_lastDaPai);
 				List<PhotonPlayer> all = PhotonNetwork.playerList.ToList ();
 				PhotonPlayer aa = all.Find(x => x.ID.Equals (player_a));
-				name = aa.NickName;
+				string name = aa.NickName;
 				if (PanelInvate != null) {
 					Text txt = PanelInvate.GetComponentInChildren<Text> ();
                     Image pho = PanelInvate.transform.Find("Info/PMask/Photo").GetComponent<Image>();
@@ -599,7 +606,8 @@ namespace com.Desktop
 				Online.text = PhotonNetwork.playerList.Length.ToString();
 			}
 			if (ChatMain != null) {
-                ChatMain.text += player.NickName+"進入這個房間\n";
+                //ChatMain.text += player.NickName+"進入這個房間\n";
+                ShowChatMsg(ChatTalker.Other, false, player.NickName + "進入這個房間");
 			}
             int ppl =  PhotonNetwork.room.PlayerCount;
 			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
@@ -616,7 +624,8 @@ namespace com.Desktop
 			if (player.NickName==cname) {
 				Debug.LogError("[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳");
 				if (ChatMain != null) {
-                    ChatMain.text += "[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳\n";
+                    //ChatMain.text += "[房主] "+player.NickName+"離開房間, 房間關閉, 所有人回到大廳\n";
+                    ShowChatMsg(ChatTalker.System, false, "[房主] " + player.NickName + "離開房間, 房間關閉, 所有人回到大廳");
 				}
 				//房主離開 結束遊戲房 回到大廳
 				PhotonNetwork.LeaveRoom();
@@ -625,13 +634,15 @@ namespace com.Desktop
 				int ppl =  PhotonNetwork.room.PlayerCount;
 				photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
 				if (ChatMain != null) {
-                    ChatMain.text += player.NickName+"離開這個房間\n";
+                    //ChatMain.text += player.NickName+"離開這個房間\n";
+                    ShowChatMsg(ChatTalker.Other, false, player.NickName + "離開這個房間");
 				}
 				foreach (MahPlayer mp in Users) {
 					if (mp.photonPlayer!=null && player.ID == mp.photonPlayer.ID) {
 						GameStop ();
 						if (ChatMain != null) {
-                            ChatMain.text += "終止麻將遊戲！\n";
+                            //ChatMain.text += "終止麻將遊戲！\n";
+                            ShowChatMsg(ChatTalker.System, false, "終止麻將遊戲！");
 						}
 					}
 				}
@@ -1408,7 +1419,6 @@ namespace com.Desktop
             if (status != WebExceptionStatus.Success)
             {
                 Debug.Log("setUserWinCallback Failed! " + result);
-			} else if (result == "The remote server returned an error: (410) Gone.") {
 			}
             else if (!string.IsNullOrEmpty(result))
             {
@@ -1423,7 +1433,6 @@ namespace com.Desktop
             if (status != WebExceptionStatus.Success)
             {
                 Debug.Log("setUserLoseCallback Failed! " + result);
-			} else if (result == "The remote server returned an error: (410) Gone.") {
 			}
             else if (!string.IsNullOrEmpty(result))
             {
@@ -1435,15 +1444,42 @@ namespace com.Desktop
         {
             if (_readyWinAdd) {
                 _readyWinAdd = false;
-                CryptoPrefs.SetString("USERWIN", _readyWinAddresult);
+                if (_readyWinAddresult == "The remote server returned an error: (410) Gone.")
+                {
+                    actionDonePanel.SetActive(true);
+                    _ERRLogout = true;
+                    _actionText.text = "帳號異常，結束對弈";
+                }
+                else {
+                    CryptoPrefs.SetString("USERWIN", _readyWinAddresult);
+                }
             }
 
             if (_readyLoseAdd)
             {
                 _readyLoseAdd = false;
-                CryptoPrefs.SetString("USERLOSE", _readyLoseAddresult);
+                if (_readyLoseAddresult == "The remote server returned an error: (410) Gone.")
+                {
+                    actionDonePanel.SetActive(true);
+                    _ERRLogout = true;
+                    _actionText.text = "帳號異常，結束對弈";
+                }
+                else
+                {
+                    CryptoPrefs.SetString("USERLOSE", _readyLoseAddresult);
+                }
             }
 
+        }
+
+        public void ClickActionDoneBtn()
+        {
+            actionDonePanel.SetActive(false);
+            _actionText.text = string.Empty;
+            if (_ERRLogout)
+            {
+                photonView.RPC("ExitGame", PhotonTargets.All, null);
+            }
         }
 
         private IEnumerator _OverPanel(float time = 0.1f)

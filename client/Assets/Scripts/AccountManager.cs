@@ -38,6 +38,7 @@ public class AccountManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (_needShowConnect) {
+            Time.timeScale = 0;
             _needShowConnect = false;
             ConnectingPanel.SetActive(true);
             //PlayConnectingAnim();
@@ -47,6 +48,7 @@ public class AccountManager : MonoBehaviour {
         {
             _needHideConnect = false;
             ConnectingPanel.SetActive(false);
+            Time.timeScale = 1;
             //StopConnectingAnim();
         }
     }
@@ -63,7 +65,7 @@ public class AccountManager : MonoBehaviour {
 		}
 	}
 	public void ConnectingAnim() {
-		_connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
+        _connectingSign.DOLocalRotate(new Vector3(0, 0, 180), 1.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
 		_connectingText.DOText("連線中...", 3).SetLoops(-1, LoopType.Restart);
 	}
 

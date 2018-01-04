@@ -96,8 +96,6 @@ public class ForgotUI : MonoBehaviour
             {
                 //重置所有欄位 回登入頁
                 UIManager.instance.ExitForgotPage();
-			} else if (setUserPwdCbResult == "The remote server returned an error: (410) Gone.") {
-
 			}
             else
             {

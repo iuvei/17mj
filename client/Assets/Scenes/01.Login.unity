@@ -719,12 +719,21 @@ Prefab:
       propertyPath: _gLoginBtn.Array.data[1]
       value: 
       objectReference: {fileID: 1259344515}
+    - target: {fileID: 1699482372768078, guid: 33db82c80757d4d9b8248362511bc53e, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33db82c80757d4d9b8248362511bc53e, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &745518905 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1797909378584736, guid: 33db82c80757d4d9b8248362511bc53e,
+    type: 2}
+  m_PrefabInternal: {fileID: 745518904}
+--- !u!224 &745518906 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224379330469620042, guid: 33db82c80757d4d9b8248362511bc53e,
     type: 2}
   m_PrefabInternal: {fileID: 745518904}
 --- !u!1 &754898566 stripped
@@ -2399,7 +2408,7 @@ GameObject:
   - component: {fileID: 1233902632}
   - component: {fileID: 1233902631}
   m_Layer: 0
-  m_Name: FoxGirl_tail (1)
+  m_Name: FoxGirl_tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2654,7 +2663,7 @@ GameObject:
   - component: {fileID: 1382854421}
   - component: {fileID: 1382854420}
   - component: {fileID: 1382854424}
-  m_Layer: 21
+  m_Layer: 0
   m_Name: Effect Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2813,6 +2822,92 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224798375437413838, guid: 00097b7523e99e5478941c7381653fae,
     type: 2}
   m_PrefabInternal: {fileID: 828418901}
+--- !u!1 &1530586739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1530586740}
+  - component: {fileID: 1530586743}
+  - component: {fileID: 1530586742}
+  - component: {fileID: 1530586741}
+  m_Layer: 5
+  m_Name: MJ
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1530586740
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1530586739}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -21, y: -143, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 745518906}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -21, y: -143}
+  m_SizeDelta: {x: 201, y: 359}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &1530586741
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1530586739}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e6c641825344b68469a68d2a71639bc0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &1530586742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1530586739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: c0de73180a410c24eb15a6b1803ec857, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1530586743
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1530586739}
 --- !u!1001 &1546317354
 Prefab:
   m_ObjectHideFlags: 0
@@ -3119,7 +3214,7 @@ GameObject:
   - component: {fileID: 2071073808}
   - component: {fileID: 2071073807}
   m_Layer: 0
-  m_Name: NuiguDice (1)
+  m_Name: NuiguDice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3197,7 +3292,7 @@ SpriteRenderer:
   m_Size: {x: 2.01, y: 3.59}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!224 &2108264905 stripped
 RectTransform:

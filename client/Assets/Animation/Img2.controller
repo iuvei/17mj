@@ -5,13 +5,13 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: NscreenShot_17
+  m_Name: Img2
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
-    m_StateMachine: {fileID: 1107249313594453726}
+    m_StateMachine: {fileID: 1107448748146603428}
     m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
@@ -21,13 +21,13 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
---- !u!1102 &1102276831250763938
+--- !u!1102 &1102056208832797594
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: NuigurumiRunAnimation
+  m_Name: ConnectMJAnim2
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -40,19 +40,19 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 1b5c0e7b38e39d242a36c68fcf596bea, type: 2}
+  m_Motion: {fileID: 7400000, guid: 2cdbbb98fb38ce24f9a3646ee7b8bd74, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &1102345273291930230
+--- !u!1102 &1102952205356711190
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: NuigurumiRunAnim2
+  m_Name: ConnectMJAnimInPlace
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -65,13 +65,38 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7cbc394a6556f7845affcec677024ef9, type: 2}
+  m_Motion: {fileID: 7400000, guid: 39178adc208145947b6e11e2b0a75b77, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1107 &1107249313594453726
+--- !u!1102 &1102952908817578370
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: ConnectMJAnim
+  m_Speed: 0.65
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 9667afa417b35c0458444b3f968b701a, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1107 &1107448748146603428
 AnimatorStateMachine:
   serializedVersion: 5
   m_ObjectHideFlags: 1
@@ -80,11 +105,14 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 1102276831250763938}
-    m_Position: {x: 240, y: 120, z: 0}
+    m_State: {fileID: 1102952908817578370}
+    m_Position: {x: 216, y: 156, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 1102345273291930230}
-    m_Position: {x: 228, y: 216, z: 0}
+    m_State: {fileID: 1102952205356711190}
+    m_Position: {x: 192, y: 228, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102056208832797594}
+    m_Position: {x: 120, y: 288, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -94,4 +122,4 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 1102345273291930230}
+  m_DefaultState: {fileID: 1102056208832797594}

@@ -607,7 +607,7 @@ namespace com.Desktop
 			}
 			if (ChatMain != null) {
                 //ChatMain.text += player.NickName+"進入這個房間\n";
-                ShowChatMsg(ChatTalker.Other, false, player.NickName + "進入這個房間");
+                ShowChatMsg(ChatTalker.System, false, player.NickName + "進入這個房間");
 			}
             int ppl =  PhotonNetwork.room.PlayerCount;
 			photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
@@ -635,7 +635,7 @@ namespace com.Desktop
 				photonView.RPC ("BroadcastOnlinePpl", PhotonTargets.All, ppl);
 				if (ChatMain != null) {
                     //ChatMain.text += player.NickName+"離開這個房間\n";
-                    ShowChatMsg(ChatTalker.Other, false, player.NickName + "離開這個房間");
+                    ShowChatMsg(ChatTalker.System, false, player.NickName + "離開這個房間");
 				}
 				foreach (MahPlayer mp in Users) {
 					if (mp.photonPlayer!=null && player.ID == mp.photonPlayer.ID) {
@@ -1790,7 +1790,7 @@ namespace com.Desktop
                     msg.GetComponentInChildren<Text>().color = Color.yellow;
                     break;
                 case ChatTalker.Other:
-                    msg.GetComponentInChildren<Text>().text = "路人：";
+                    //msg.GetComponentInChildren<Text>().text = "";
                     msg.GetComponentInChildren<Text>().color = Color.white;
                     break;
                 case ChatTalker.Self:

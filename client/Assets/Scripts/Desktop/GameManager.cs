@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Net;
+using Facebook.MiniJSON;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Colyseus;
 
@@ -121,8 +122,7 @@ namespace com.Desktop
 		private Client colClient;
 		private CRoom colRoom;
 		private string colToken = "KQgZFQFLWL0qyRjCbgpEIYUhjYjmZOvby";
-
-
+		private string sToken = string.Empty;
         #endregion
 
         private void Awake()
@@ -340,6 +340,8 @@ namespace com.Desktop
 			String port = "9200";
 			String roomName = "chat";
 			String uri = "wss://" + serverName + ":" + port;
+			String authToken = colToken + PhotonNetwork.room.Name;
+			sToken = CryptoPrefs.GetString ("USERTOKEN");
 			Debug.Log ("Colyseus Room URL="+uri);
 
 			colClient = new Client(uri);
@@ -349,11 +351,12 @@ namespace com.Desktop
 
 			Dictionary<string, object> options = new Dictionary<string, object> ();
 			options.Add ("channel", PhotonNetwork.room.Name);
+			options.Add ("token", authToken);
 
 			colRoom = colClient.Join(roomName, options);
 			colRoom.OnReadyToConnect += (sender, e) => StartCoroutine ( colRoom.Connect() );
 			colRoom.OnJoin += OnRoomJoined;
-			colRoom.Listen ("messages/:number", this.OnMessageAdded);
+			colRoom.Listen ("messages/:number", this.OnMessage);
 
 			while (true) {
 				colClient.Recv();
@@ -380,11 +383,38 @@ namespace com.Desktop
 			Debug.Log("Joined room successfully.");
 		}
 
-		public void OnMessageAdded (DataChange change)
+		public void OnMessage (DataChange change)
 		{
-			Debug.Log ("OnMessageAdded");
-			Debug.Log (change.path["number"]);
+			Debug.Log ("OnMessage");
+			//Debug.Log (change.path["number"]);
 			Debug.Log (change.value);
+
+			string uType = string.Empty;
+			string uId = string.Empty;
+			string uText = string.Empty;
+
+			IDictionary dict = Json.Deserialize (change.value.ToString()) as IDictionary;
+			if (dict ["Type"] != null &&  dict ["Id"] != null && dict ["Text"] != null) {
+				uType = dict ["Type"].ToString ();
+				uId = dict ["Id"].ToString ();
+				uText = dict ["Text"].ToString ();
+				if (!string.IsNullOrEmpty (uType) && !string.IsNullOrEmpty (uId) && !string.IsNullOrEmpty (uText)) {
+					if (string.Compare (uType, "0") == 0) {
+						if (string.Compare (uId, sToken) == 0) {
+							ShowChatMsg (ChatTalker.Self, false, uText);
+						} else {
+							ShowChatMsg (ChatTalker.Other, false, uText);
+						}
+					} else if (string.Compare (uType, "1") == 0) {
+						if (string.Compare (uId, sToken) == 0) {
+							ShowChatMsg (ChatTalker.Self, true, uText);
+						} else {
+							ShowChatMsg (ChatTalker.Other, true, uText);
+						}
+					}
+				}
+			}
+
 		}
 
 		public void colRoomQuit()
@@ -1426,58 +1456,6 @@ namespace com.Desktop
             OverPanel.gameObject.SetActive(true);
         }
 
-        /*
-        private void OnEvent(byte eventcode, object content, int senderid)
-        {
-			if (eventcode == (byte)GameCommand.ONEMORETIME)
-            {
-				//Debug.LogError ("OnEvent(GameCommand.ONEMORETIME)");
-                OneMoreMahjong();
-            }
-        }
-        */
-		/*
-        public void OneMoreMahjong()
-        {
-			Debug.Log ("OneMoreMahjong()");
-            //只有主机有发牌的权利
-            if (!PhotonNetwork.isMasterClient)
-            {
-                //Text text = OverPanel.GetComponentInChildren<Text>();
-                //text.text = "等待房主确认...";
-				ShowAlert("等待房主同意", 5.0f);
-                return;
-            }
-			//Debug.Log ("[s] OneMoreMahjong()");
-
-			photonView.RPC("OneMore", PhotonTargets.MasterClient, null);
-        }
-		*/
-
-		/*
-        [PunRPC]
-        private void OneMore()
-        {
-			//Debug.LogError ("[RPC] OneMore()");
-			if (OverPanel != null) {
-				OverPanel.gameObject.SetActive (false);
-			}
-
-            RestView();
-
-            //只有主机有发牌的权利
-            if (!PhotonNetwork.isMasterClient)
-            {
-                return;
-            }
-			//Invoke ("", 5);
-			//Invoke ("InvateYES", 5.0f);
-			//Invoke ("InvateYES", 5.0f);
-			//StartCoroutine("ReadyPlay");
-			//InvateYES();
-        }
-		*/
-
         private void RestView()
         {
 			//Debug.Log ("[s] RestView("+panels.Length+")");
@@ -1713,7 +1691,13 @@ namespace com.Desktop
         public void SendChatMsg() {
             if (ChatInput && ChatInput.text != string.Empty)
             {
-                ShowChatMsg(ChatTalker.Self, false, ChatInput.text);
+				Dictionary<string, object> data = new Dictionary<string, object> ();
+				data.Add ("type", "0");
+				data.Add ("id", sToken);
+				data.Add ("text", ChatInput.text);
+				colRoom.Send(data);
+
+                //ShowChatMsg(ChatTalker.Self, false, ChatInput.text);
                 ChatInput.text = string.Empty;
             }
         }
@@ -1747,7 +1731,13 @@ namespace com.Desktop
                     _imgType = "06";
                     break;
             }
-            ShowChatMsg(ChatTalker.Self, true, _imgType);
+			Dictionary<string, object> data = new Dictionary<string, object> ();
+			data.Add ("type", "1");
+			data.Add ("id", sToken);
+			data.Add ("text", _imgType);
+			colRoom.Send(data);
+
+            //ShowChatMsg(ChatTalker.Self, true, _imgType);
             ChatIconPanel.SetActive(false);
         }
 

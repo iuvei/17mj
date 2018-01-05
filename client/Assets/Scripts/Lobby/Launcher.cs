@@ -391,30 +391,6 @@ namespace com.Lobby
 			//Debug.Log ("nickname="+PhotonNetwork.player.NickName);
         }
 
-        public override void OnReceivedRoomListUpdate()
-        {
-			//Debug.Log("OnReceivedRoomListUpdate()");
-			/*
-            RoomInLobby[] ts = LobbyPanel.GetComponentsInChildren<RoomInLobby>();
-            foreach (RoomInLobby t in ts)
-            {
-                Destroy(t.gameObject);
-            }
-
-            RoomInfo[] rooms = PhotonNetwork.GetRoomList();
-            foreach (RoomInfo room in rooms)
-            {
-                GameObject g = GameObject.Instantiate(Resources.Load("Lobby/RoomItem") as GameObject);
-                RoomInLobby ril = g.GetComponent<RoomInLobby>();
-
-                ril.t.text = room.Name;
-                g.name = room.Name;
-                g.transform.SetParent(LobbyPanel);
-                g.transform.localScale = Vector3.one;
-            }
-            */
-        }
-
         public override void OnJoinedRoom()
         {
 			AccountManager.Instance.HideConnecting ();

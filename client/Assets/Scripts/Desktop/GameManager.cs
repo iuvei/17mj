@@ -142,35 +142,6 @@ namespace com.Desktop
             }
         }
 
-		/*
-		private void Connect()
-		{
-			//isConnecting = true;
-			//setProcess (0.1f);
-			//已經連接上了服務器
-			if (PhotonNetwork.connected)
-			{
-				//setProcess (1.0f);
-				//Debug.Log("Connected");
-				//if (loadingPanel) {
-				//	loadingPanel.SetActive (false);
-				//}
-			}
-			else
-			{
-				//setProcess (0.7f);
-				PhotonNetwork.ConnectUsingSettings(_gameVersion);
-				//我们不加入大厅 这里不需要得到房间列表所以不用加入大厅去
-				PhotonNetwork.autoJoinLobby = true;
-
-				//#关键
-				//这里保证所有主机上调用 PhotonNetwork.LoadLevel() 的时候主机和客户端能同时进入新的场景
-				PhotonNetwork.automaticallySyncScene = true;
-			}
-		}
-		*/
-
-
 		/// <summary>
 		/// 成功连接到大厅
 		/// </summary>
@@ -183,20 +154,6 @@ namespace com.Desktop
 			//loadingPanel.SetActive (false);
 			//}
 		}
-
-
-		public override void OnJoinedLobby()
-		{
-			Debug.LogError (this.name+".OnJoinedLobby()");
-			//if (PhotonNetwork.room == null) {
-			//	if (PhotonNetwork.CreateRoom(PhotonNetwork.playerName, new RoomOptions { MaxPlayers = 100 }, null))
-			//	{
-			//		//Debug.Log("CreateRoom() 成功 ! roomname="+PhotonNetwork.playerName);
-			//		//StartCoroutine(ChangeRoom());
-			//	}
-			//}
-		}
-
 
         private void InitUILayout() {
             if (OverPanel) {
@@ -348,6 +305,7 @@ namespace com.Desktop
 			String roomName = "chat";
 			String uri = "wss://" + serverName + ":" + port;
 			String authToken = colToken + PhotonNetwork.room.Name;
+
 			sToken = CryptoPrefs.GetString ("USERTOKEN");
 			Debug.Log ("Colyseus Room URL="+uri);
 
@@ -1730,7 +1688,7 @@ namespace com.Desktop
 				Dictionary<string, object> data = new Dictionary<string, object> ();
 				data.Add ("type", "0");
 				data.Add ("id", sToken);
-				data.Add ("text", ChatInput.text);
+				data.Add ("text", PhotonNetwork.player.NickName + " : " + ChatInput.text);
 				colRoom.Send(data);
 
                 //ShowChatMsg(ChatTalker.Self, false, ChatInput.text);

@@ -537,6 +537,11 @@ namespace com.Lobby
 			}
 		}
 
+		public void playStoryMode(int level)
+		{
+			PhotonNetwork.LoadLevel("04.Story");
+		}
+
 		/// <summary>
 		/// Hides the room list.
 		/// </summary>

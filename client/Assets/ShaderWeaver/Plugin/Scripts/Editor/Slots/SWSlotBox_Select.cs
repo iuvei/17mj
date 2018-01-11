@@ -28,7 +28,7 @@ namespace ShaderWeaver
 
 			if (EditorGUIUtility.editingTextField == false) {
 				Vector2 mp = Event.current.mousePosition;
-				if (Event.current.type == EventType.keyUp) {
+				if (Event.current.type == EventType.KeyUp) {
 					for (int i = 0; i < slots.Count; i++) {
 						var item = slots [i];
 						if (item.hotkey != KeyCode.Escape && item.hotkey == Event.current.keyCode) {

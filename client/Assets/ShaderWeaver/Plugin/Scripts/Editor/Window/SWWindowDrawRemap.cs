@@ -303,7 +303,7 @@ namespace ShaderWeaver
 
 
 
-			if (Event.current.type == EventType.keyDown) {
+			if (Event.current.type == EventType.KeyDown) {
 				if (Event.current.keyCode == KeyCode.Return) {
 					node.data.dirty = true;
 					SWTextureProcess.ProcessRemap_Dir (node.textureEx,node.texChildResized, new Vector2(remap.x,-remap.y),precise,pixelBack);
@@ -345,7 +345,7 @@ namespace ShaderWeaver
 				}
 			}
 			//Key Command
-			if (Event.current.type == EventType.keyDown) {
+			if (Event.current.type == EventType.KeyDown) {
 				if (Event.current.keyCode == KeyCode.Return) {
 					node.data.dirty = true;
 					SWTextureProcess.ProcessRemap_Line (node.textureEx, info, brushSizeUV);

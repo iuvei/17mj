@@ -24,11 +24,8 @@ namespace com.Lobby
         public Text nameField;
 
         public GameObject lobbyPanel;
-
         public GameObject waitroomPanel;
-
 		public GameObject loadingPanel;
-
 		//public GameObject settingPanel;
         public RectTransform settingSign;
         public GameObject settingDropdown;
@@ -93,6 +90,7 @@ namespace com.Lobby
 		public List<PhotonPlayer> Players = new List<PhotonPlayer>();
 
         public enum SubPage { Main, List, Shop, Deposit, Bag, Rank, Active, Setting };
+		public GameObject storyPanel;
         #endregion
 
         public Logout _logoutScript;
@@ -523,6 +521,20 @@ namespace com.Lobby
                     StartCoroutine(reloadRoomlist());
                 }
             }
+		}
+
+		public void showStoryMap()
+		{
+			if (storyPanel) {
+				storyPanel.SetActive (true);
+			}
+		}
+
+		public void hideStoryMap()
+		{
+			if (storyPanel) {
+				storyPanel.SetActive (false);
+			}
 		}
 
 		/// <summary>

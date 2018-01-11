@@ -130,7 +130,7 @@ namespace ShaderWeaver
 		public void KeyCommands()
 		{
 			mousePos = Event.current.mousePosition;
-			if(Event.current.type == EventType.keyDown)
+			if(Event.current.type == EventType.KeyDown)
 			{
 				KeyCmd_HotkeyDown (Event.current.keyCode);
 
@@ -139,7 +139,7 @@ namespace ShaderWeaver
 					KeyCmd_Delete ();
 				}
 			}
-			if(Event.current.type == EventType.keyUp)
+			if(Event.current.type == EventType.KeyUp)
 			{
 				KeyCmd_HotkeyUp (Event.current.keyCode);
 				KeyCmd_CopyPaste ();

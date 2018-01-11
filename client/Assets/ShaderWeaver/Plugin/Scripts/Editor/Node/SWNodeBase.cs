@@ -429,7 +429,7 @@ namespace ShaderWeaver
 		protected virtual void DrawNodeWindow(int id) {
 			if ((this is SWNodeRoot) || !titleEditing) {
 				GUI.Label (rectTop, data.name, SWEditorUI.Style_Get (SWCustomStyle.eNodeTitle));
-				if (Event.current.type == EventType.mouseUp &&
+				if (Event.current.type == EventType.MouseUp &&
 				    rectTop.Contains (Event.current.mousePosition)) {
 					titleEditing = true;
 					nameEditing = data.name;

@@ -43,7 +43,7 @@ namespace ShaderWeaver
 
 
 
-				if (Event.current.type == EventType.mouseUp) {
+				if (Event.current.type == EventType.MouseUp) {
 					if (regionTarget.Contains (mp)) {
 						Vector2 posInRect = mp;
 						delegat (moving,posInRect);

@@ -89,7 +89,7 @@ namespace ShaderWeaver
 				GUI.color = Color.white;
 				GUI.Label (rect, item.content, SWEditorUI.Style_Get (SWCustomStyle.eTxtLight));
 				window.Tooltip_Rec (item.eTooltip,rect,-8);
-				if (window.IsOperatingWindow() && Event.current.type == EventType.mouseDown) {
+				if (window.IsOperatingWindow() && Event.current.type == EventType.MouseDown) {
 					if (rect.Contains (mp)) {
 						OnClick (item,mp);
 					}

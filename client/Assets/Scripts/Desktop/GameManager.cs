@@ -705,7 +705,7 @@ namespace com.Desktop
         }
 
         /// <summary>
-        /// 发牌
+        /// 發牌
         /// </summary>
 		void doDispatchPai()
         {
